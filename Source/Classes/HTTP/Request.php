@@ -13,7 +13,7 @@ class Request
 	
 	protected $statusCode = 200;
 	
-	protected $statusMesssages = [
+	protected static $statusMesssages = [
 		100 => 'Continue',
 		101 => 'Switching Protocols',
 		102 => 'Processing',
@@ -84,12 +84,12 @@ class Request
 
 	public static function getStatusMesssages()
 	{
-		return $statusMesssages;
+		return self::$statusMesssages;
 	}
 
 	public static function getStatusMesssage($code)
 	{
-		return $statusMesssages[$code] ?? "";
+		return self::$statusMesssages[$code] ?? "";
 	}
 
 	public static function getBrowserInfo() :array 
@@ -119,6 +119,11 @@ class Request
 		return null;
 	}
 	
+	public static function getUrlPath() :string
+	{
+		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	}
+
 	public static function getServerTime() 
 	{
 		return self::getServerArguments('REQUEST_TIME');
@@ -142,7 +147,7 @@ class Request
 	/**
 	 * Get Request Uniform Resource Identifier
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getURI() 
 	{
@@ -152,7 +157,7 @@ class Request
 	/**
 	 * The physical path of the temporary IIS application pool configuration.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getTemporaryIISApplicationPhysicalPathOfPoolConfiguration() 
 	{
@@ -162,7 +167,7 @@ class Request
 	/**
 	 * The metabase path of the application.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getIISApplicationMetabasePath() 
 	{
@@ -174,7 +179,7 @@ class Request
 	 * It does not mean that the user was authenticated if AUTH_TYPE contains a value and the authentication scheme is not Basic or integrated Windows authentication. 
 	 * The server allows authentication schemes it does not natively support because an ISAPI filter may be able to handle that particular scheme.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getIISAuthenticateType() 
 	{
@@ -184,7 +189,7 @@ class Request
 	/**
 	 * The password provided by the client to authenticate using Basic Authentication.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getIISAuthenticatePassword() 
 	{
@@ -194,7 +199,7 @@ class Request
 	/**
 	 * The name of the application pool that is running the IIS worker process handling the request.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getIISApplicationPoolID() 
 	{
@@ -204,7 +209,7 @@ class Request
 	/**
 	 * The physical path of the application.
 	 *
-	 * @return String
+	 * @return string
 	 */
 	public static function getIISApplicationPhysicalPath() 
 	{

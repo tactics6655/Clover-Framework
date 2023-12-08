@@ -4,8 +4,31 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\Reflection;
 
+use ReflectionClass;
+use Reflector;
+
 class Handler 
 {
+
+    public static function getClassMethods(ReflectionClass $class)
+    {
+        return $class->getMethods();
+    }
+
+    public static function isSubClassOf(ReflectionClass $class, string $className)
+    {
+        return $class->isSubclassOf($className);
+    }
+
+    public static function isInterfaceClassDescriptor(ReflectionClass $class)
+    {
+        return $class->isInterface();
+    }
+
+    public static function isAbstractClassDescriptor(ReflectionClass $class)
+    {
+        return $class->isAbstract();
+    }
 
     public static function getAnnotations(Reflector $reflector, string $annotationName) : array
     {
@@ -23,7 +46,7 @@ class Handler
 	
     public static function Class($class)
     {
-        $reflection = new \ReflectionClass($class);
+        $reflection = new ReflectionClass($class);
 
         return $reflection;
     }
