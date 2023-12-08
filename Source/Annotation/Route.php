@@ -1,0 +1,21 @@
+<?php
+
+namespace Xanax\Annotation;
+
+use Attribute;
+
+#[Attribute(Attribute::TARGET_CLASS|Attribute::TARGET_METHOD)]
+final class Route
+{
+    public $holder;    
+    
+    public $method;
+
+    public $pattern;
+
+    public function __construct(string $method, string $pattern)
+    {
+        $this->method = $method;
+        $this->pattern = $pattern;
+    }
+}

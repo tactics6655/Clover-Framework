@@ -1,0 +1,74 @@
+{
+  "name": "kdps/xanax",
+  "version": "0.0.1",
+  "type": "project",
+  "description": "PHP Framework or Libraries",
+  "keywords": ["php framework", "php library"],
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0.0",
+    "ext-json": "*",
+    "ezyang/htmlpurifier": ">=4.10.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "james-heinrich/getid3": "^1.9",
+    "phpmailer/phpmailer": "^6.1"
+  },
+  "require-dev": {
+      "symfony/var-dumper": "^4.3"
+  },
+  "archive": {
+      "exclude": ["!html", "html/**/*"]
+  },
+  "authors": [
+      {
+          "name": "kdps",
+          "email": "kdp7584@gmail.com",
+          "role": "Developer"
+      }
+  ],
+  "support": {
+      "issues": "https://github.com/kdps/Xanax/issues",
+      "source": "https://github.com/kdps/Xanax"
+  },
+  "autoload": {
+    "psr-4": {
+      "Xanax\\": "Classes/Source/",
+      "Xanax\\": "Plugins/",
+      "Iamport\\RestClient\\": "iamport/"
+    },
+    "files": [
+    ],
+    "classmap": [
+      ""
+    ],
+    "exclude-from-classmap": [
+        "/html/"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Xanax\\": "Classes/Source/",
+      "Xanax\\": "Plugins/",
+      "Iamport\\RestClient\\": "iamport/"
+    },
+    "files": [
+    ],
+    "classmap": [
+      ""
+    ],
+    "exclude-from-classmap": [
+        "/html/"
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable"
+}
