@@ -17,7 +17,7 @@ class OperationSystem
 		ini_set('display_startup_errors', $displayErrors ? 'On' : 'Off');
 	}
 
-	public static function setDisplayErrors(string $displayErrors) :void
+	public static function setDisplayErrors(string $displayErrors)
 	{
 		ini_set('display_errors', $displayErrors);
 	}

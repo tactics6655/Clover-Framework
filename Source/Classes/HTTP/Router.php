@@ -10,6 +10,7 @@ use Xanax\Classes\File\Functions as FileFunctions;
 use Xanax\Annotation\Route;
 use Xanax\Annotation\Prefix;
 use Xanax\Classes\Reflection\Handler as ReflectionHandler;
+use Xanax\Classes\Directory\Handler as DirectoryHandler;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -19,6 +20,8 @@ class Router
 {
 
 	private $middlewares = array();
+
+	private static $container = array();
 
 	private static $variable_regex = '/^({\w*})$/';
 
@@ -33,6 +36,11 @@ class Router
 	private static $segments;
 
 	private static $global_prefix;
+
+	public static function setContainer($container)
+	{
+		self::$container = $container;
+	}
 
 	private static function addPrefix($pattern)
 	{
@@ -78,6 +86,16 @@ class Router
 		self::Set(HTTPRequestMethod::POST, $pattern, $callback);
 	}
 
+	public static function fromDirectory($path)
+	{
+		$fileList = DirectoryHandler::getList($path, 'file', true);
+
+		foreach ($fileList as $file)
+		{
+			self::fromFile($file);
+		}
+	}
+
 	public static function fromFile($path)
 	{
 		$class_names = FileFunctions::getClassName($path);
@@ -96,6 +114,7 @@ class Router
 				}
 
 				$annotations = ReflectionHandler::getAnnotations($method, Route::class);
+		
 				if (isset($annotations[0]))
 				{
 					$descriptor = $annotations[0];
@@ -147,6 +166,11 @@ class Router
 
 	public static function setSegments()
 	{
+		if (!isset(self::$routes[self::$method]))
+		{
+			return;
+		}
+
 		foreach (self::$routes[self::$method] as $key => $route)
 		{
 			if (!isset($route['pattern']))
@@ -204,6 +228,11 @@ class Router
 
 		self::setSegments();
 
+		if (!isset(self::$routes[self::$method]))
+		{
+			return false;
+		}
+
 		$routes = self::$routes[self::$method];
 
 		if (!isset($routes))
@@ -240,7 +269,9 @@ class Router
 				if (class_exists($method_name[0]))
 				{
 					$caller = new $method_name[0];
-					$return = call_user_func(array($caller, $method_name[1]));
+					//$return = call_user_func(array($caller, $method_name[1]));
+
+					$return = ReflectionHandler::Invoke($caller, $method_name[1], self::$container);
 				}
 			}
 		}

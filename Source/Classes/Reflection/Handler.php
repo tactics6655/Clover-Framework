@@ -105,7 +105,7 @@ class Handler
 		return $reflection->newInstance(...$dependencies);
 	}
 
-	public static function Invoke($class, $method)
+	public static function Invoke($class, $method, $arguments = [])
 	{
 		$reflection = self::Method($class, $method);
 		$parameters = self::getMethodParameters($reflection);
@@ -117,8 +117,17 @@ class Handler
 
 			if ($type && self::isNamedType($type)) 
             {
-				$name = $parameter->getClass()->newInstance();
-				array_push($dependencies, $name);
+                if (8 === PHP_MAJOR_VERSION) 
+                {
+                    $reflectionClass = new ReflectionClass($parameter->getType()->getName());
+
+                    array_push($dependencies, $reflectionClass->newInstance());
+                }
+                else
+                {
+                    $name = $parameter->getClass()->newInstance();
+                    array_push($dependencies, $name);
+                }
 			} 
             else 
             {
@@ -135,7 +144,15 @@ class Handler
 			$initClass = $class;
 		}
 
-		$reflection->invoke($initClass, ...$dependencies);
+        if (isset($arguments) && !empty($arguments))
+        {
+            $r = new ReflectionClass($initClass);
+            $instance = $r->newInstance($arguments);
+
+            return $reflection->invoke($instance, ...$dependencies);
+        }
+
+		return $reflection->invoke($initClass, ...$dependencies);
 	}
 
 }

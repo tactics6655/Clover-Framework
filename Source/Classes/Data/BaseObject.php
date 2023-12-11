@@ -5,25 +5,25 @@ namespace Xanax\Classes\Data;
 class BaseObject 
 {
 
-    protected static $data;
+    protected static $raw_data;
 
     public function __construct($data) 
     {
-        $this->data = $data;
+        $this->raw_data = $data;
     }
 
     public function __toString() 
     {
-        return implode(" ", $this->data);
+        return implode(" ", $this->raw_data);
     }
 
     public function Map($method)
     {
-        $data = $method($this->data);
+        $data = $method($this->raw_data);
 
         if (isset($data))
         {
-            $this->data = $data;
+            $this->raw_data = $data;
         }
 
         return $this;

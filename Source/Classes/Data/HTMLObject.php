@@ -7,14 +7,14 @@ use Xanax\Classes\Data\HTMLHandler as HTMLHandler;
 class HTMLObject extends StringObject
 {
 
-    protected static $data;
+    protected static $raw_data;
     private $handler;
 
     public function __construct($data) 
     {
         parent::__construct($data);
 
-        $this->data = $data;
+        $this->raw_data = $data;
 
         $this->handler = new HTMLHandler();
     }
@@ -26,7 +26,7 @@ class HTMLObject extends StringObject
 
     public function unhtmlSpecialChars()
     {
-        return $this->handler->unhtmlSpecialChars($this->data);
+        return $this->handler->unhtmlSpecialChars($this->raw_data);
     }
 
 }

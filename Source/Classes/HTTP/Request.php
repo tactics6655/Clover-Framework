@@ -13,6 +13,22 @@ class Request
 	
 	protected $statusCode = 200;
 	
+	protected static $safeMethods = [
+		HTTPRequestMethod::GET,
+		HTTPRequestMethod::HEAD,
+		HTTPRequestMethod::OPTIONS,
+		HTTPRequestMethod::TRACE
+	];
+
+	protected static $idempotentMethods = [
+		HTTPRequestMethod::DELETE,
+		HTTPRequestMethod::GET,
+		HTTPRequestMethod::HEAD,
+		HTTPRequestMethod::OPTIONS,
+		HTTPRequestMethod::PUT,
+		HTTPRequestMethod::TRACE,
+	];
+
 	protected static $statusMesssages = [
 		100 => 'Continue',
 		101 => 'Switching Protocols',
@@ -124,6 +140,16 @@ class Request
 		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 	}
 
+	public static function getForwarededPorto() 
+	{
+		return self::getServerArguments('HEADER_X_FORWARDED_PROTO');
+	}
+
+	public static function getOverrideMethod() 
+	{
+		return self::getServerArguments('X-HTTP-METHOD-OVERRIDE');
+	}
+	
 	public static function getServerTime() 
 	{
 		return self::getServerArguments('REQUEST_TIME');
@@ -379,6 +405,16 @@ class Request
 		return null;
 	}
 
+	public static function isIdempotentMethod(HTTPRequestMethod $method)
+	{
+		return in_array(strtoupper(self::getRequestMethod()), self::$idempotentMethods);
+	}
+
+	public static function isSafeMethod(HTTPRequestMethod $method)
+	{
+		return in_array(strtoupper(self::getRequestMethod()), self::$safeMethods);
+	}
+	
 	public static function isHead() 
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::HEAD) ? true : false;

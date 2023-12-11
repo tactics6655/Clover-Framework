@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\CMS\Component;
+namespace Xanax\Framework\Component;
 
 class Container
 {

@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\OperationSystem;
 
-class Apache 
+class Apache
 {
+
+    public static function isModRewriteEnabled()
+    {
+        return in_array('mod_rewrite', apache_get_modules());
+    }
+
     public static function terminateProcess() :void
     {
         apache_child_terminate();

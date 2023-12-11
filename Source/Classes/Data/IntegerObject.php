@@ -7,16 +7,16 @@ use Xanax\Classes\Data\BaseObject as BaseObject;
 class IntegerObject extends BaseObject
 {
 
-    protected static $data;
+    protected static $raw_data;
 
     public function __construct($data) 
     {
-        $this->data = $data;
+        $this->raw_data = $data;
     }
 
     public function __toString() 
     {
-        return (string)($this->data);
+        return (string)($this->raw_data);
     }
 
 	public static function isNumeric($string)
