@@ -159,18 +159,6 @@ class StringHandler
 		return $result;
 	}
 
-	public static function integerToBytes($integer)
-	{
-		$length = strlen($integer);
-
-		for ($i = $length - 1; $i >= 0; $i--)
-		{
-			$result .= chr(floor($integer / pow(256, $i)));
-		}
-
-		return $result;
-	}
-
 	public static function toUpperCase($text, Encoding $encoding = Encoding::UTF_8)
 	{
 		if (function_exists('mb_strupper'))
@@ -268,9 +256,28 @@ class StringHandler
 		return $string == '' ? '' : substr(md5($string), -$length);
 	}
 
+	public function entrip($name, $length = 10) 
+	{
+		if (preg_match('/^(.+?)#(.+)$/', $name, $match)) 
+		{
+			list(, $name, $pass) = $match;
+			$salt = substr($pass . 'H.', 1, 2);
+			$salt = preg_replace('/[^\.-z]/', '.', $salt);
+			$salt = strtr($salt, ':;<=>?@[\\]^_`', 'ABCDEFGabcdef');
+			$trip = crypt($pass, $salt);
+			$trip = substr($trip, -$length);
+			$name = $name . '◆' . $trip;
+		} 
+		else 
+		{
+			$name = str_replace('◆', '◇', $name);
+		}
+		return $name;
+	}
+	
 	public static function getMd5Uniqid($length = 20)
     	{
-		$id = md5(uniqid(mt_rand(), true));
+		$id = md5(uniqid(\mt_rand(), true));
 		$id = substr($id, -$length);
 
 		return $id;

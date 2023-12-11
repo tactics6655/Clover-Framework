@@ -24,4 +24,63 @@ class IntegerObject extends BaseObject
 		return is_numeric($string);
 	}
 
+	public static function toBytes(int $integer)
+	{
+		$length = strlen($integer);
+
+		for ($i = $length - 1; $i >= 0; $i--)
+		{
+			$result .= chr(floor($integer / pow(256, $i)));
+		}
+
+		return $result;
+	}
+
+    public static function roundUp($value, $places)
+    {
+        $mult = pow(10, abs($places)); 
+		return $places < 0 ?
+		ceil($value / $mult) * $mult :
+		ceil($value * $mult) / $mult;
+    }
+
+    //http://sandbox.onlinephpfunctions.com/code/777ac7c4528357ee21426ad7cab6dcdbdd00edf0
+    public static function baseConvert($str, $frombase=10, $tobase=36) 
+    {
+        $str = trim($str); 
+
+        if (intval($frombase) != 10) 
+        {
+            $len = strlen($str); 
+            $q = 0; 
+
+            for ($i=0; $i<$len; $i++) 
+            {
+                $r = base_convert($str[$i], $frombase, 10); 
+                $q = bcadd(bcmul($q, $frombase), $r); 
+            } 
+        } 
+        else 
+        {
+            $q = $str; 
+        }
+        
+        if (intval($tobase) != 10) 
+        {	
+            $s = ''; 
+            while (bccomp($q, '0', 0) > 0) 
+            {
+                $r = intval(bcmod($q, $tobase)); 
+                $s = base_convert($r, 10, $tobase) . $s; 
+                $q = bcdiv($q, $tobase, 0); 
+            } 
+        } 
+        else 
+        {
+            $s = $q; 
+        }
+        
+        return $s; 
+    }
+
 }

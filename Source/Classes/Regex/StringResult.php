@@ -16,7 +16,7 @@ class StringResult
   
   public function getSingleton(array $result)
   {
-      return new static ($result);
+      return new \static ($result);
   }
   
   public function Get()

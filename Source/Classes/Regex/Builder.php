@@ -25,7 +25,7 @@ class Builder
 	
 	public function Repetition($expression, $repeat) 
 	{
-		return "\b${expression}{${repeat}}\b";
+		return "\\b${expression}\{${repeat}\}\b";
 	}
 
 	public function setComment($content) 

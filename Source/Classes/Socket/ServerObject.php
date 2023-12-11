@@ -34,14 +34,14 @@ class ServerObject
 
 		if (!$this->getAcceptedClientInArray()) 
 		{
-			$arrayAcceptedSocketInfo = [];
-			$arrayAcceptedSocket     = [];
+			$this->arrayAcceptedSocketInfo = [];
+			$this->arrayAcceptedSocket     = [];
 		}
 	}
 
 	public function getAcceptedClientInArray() 
 	{
-		if (count($arrayAcceptedSocketInfo) === 0) 
+		if (count($this->arrayAcceptedSocketInfo) === 0) 
 		{
 			return false;
 		}
@@ -51,7 +51,7 @@ class ServerObject
 
 	public function hasAcceptedClientInArray() 
 	{
-		if ($this->getAcceptedarrayClient() > 0) 
+		if ($this->getAcceptedClientInArray() > 0) 
 		{
 			return true;
 		}
@@ -59,7 +59,8 @@ class ServerObject
 		return false;
 	}
 
-	public function selectArrayClient($timeout = 10, $write = null, $except = null) :void {
+	public function selectArrayClient($timeout = 10, $write = null, $except = null)
+	{
 		$this->arrayAcceptedSocketCount = $this->SocketHandlerClass->Select($this->arrayAcceptedSocket, $timeout, $write, $except);
 	}
 

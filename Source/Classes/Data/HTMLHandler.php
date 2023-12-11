@@ -412,6 +412,55 @@ class HTMLHandler extends StringHandler
 		return str_replace($entity, $symbol, $string);
 	}
 
+	public function autolink($string, $file = '') 
+	{
+		$regexp = array(
+			'/[a-z\d\-_.+]+@([a-z\d\-]+\.)+[a-z]{2,7}/i',
+			'/(?<!")(https?|ftp):\/\/([a-z\d\-]+\.)+[a-z]{2,7}([\w!#$%()*+,\-.\/:;=?@~\[\]]|&amp|&#039|&#39)*/'
+		);
+		
+		$anchor = array(
+			'<a href="mailto:$0">$0</a>',
+			'<a href="$0">$0</a>'
+		);
+		
+		return preg_replace($regexp, $anchor, $string);
+	}
+	
+	public function replace($match) 
+	{
+		list($target, $name, $attr) = $match;
+		$name = strToLower($name);
+		$value = end($match);
+
+		if (strpos($value, '<') !== false) 
+		{
+			return $target;
+		}
+		
+		if (preg_match('/script|style|link|html|body|frame/', $name)) 
+		{
+			return $target;
+		}
+		
+		if ($attr !== '') 
+		{
+			if (preg_match('/ on|about:|script:|@import|behaviou?r|binding|boundary|cookie|eval|expression|include-source|xmlhttp/i', $attr)) 
+			{
+				return $target;
+			}
+			
+			$attr = str_replace('*/', '*/  ', $attr);
+			$attr = str_replace('&quot;', '"', $attr);
+			$attr = preg_replace('/ {2,}/', ' ', $attr);
+			$attr = str_replace('=" ', '="', $attr);
+			$attr = str_replace(' "', '"', $attr);
+			$attr = preg_replace('/^ [a-z]+/ie', "strToLower('$0');", $attr);
+		}
+		
+		return "<$name$attr>$value</$name>";
+	}
+	
 	public function entityToTag($string, $names)
 	{
 		$attr = ' ([a-z]+)=&quot;([\w!#$%()*+,\-.\/:;=?@~\[\] ]|&amp|&#039|&#39)+&quot;';

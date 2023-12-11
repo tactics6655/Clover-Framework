@@ -604,6 +604,25 @@ class Request
 
 		return false;
 	}
+	
+	public static function isMatchHost($hosts) {
+		$host = $_SERVER['REMOTE_HOST'];
+
+		$regexp = preg_quote($hosts, '#');
+		$regexp = str_replace(',', '|', $regexp);
+		$regexp = str_replace('\*', '.+', $regexp);
+		return preg_match("#$regexp#", $host);
+	}
+
+	public static function isMatchUserAgent($agents) {
+		$agent = $_SERVER['HTTP_USER_AGENT'];
+		$agent = preg_replace('/[\r\n]/', '', $agent);
+
+		$regexp = preg_quote($agents, '#');
+		$regexp = str_replace(',', '|', $regexp);
+		$regexp = str_replace('\*', '.+', $regexp);
+		return preg_match("#$regexp#", $agent);
+	}
 
 	public static function isCrawler() 
 	{

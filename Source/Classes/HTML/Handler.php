@@ -45,9 +45,6 @@ class Handler
 			case "week":
 				$html = "<input type=\"week\" name=\"{$name}\" value=\"{$value}\">";
 				break;
-			case "week":
-				$html = "<input type=\"week\" name=\"{$name}\" value=\"{$value}\">";
-				break;
 			case "file":
 				$html = "<input type=\"file\" name=\"{$name}\" value=\"{$value}\">";
 				break;
@@ -86,6 +83,11 @@ class Handler
 		return $result;
 	}
 
+	public static function generateAudioTag($source, $tags = [])
+	{
+		return self::generateElement('audio', '', $tags, false);
+	}
+
 	public static function generateElement($type, $content, $attributes = [], $close = false)
 	{
 		$html = sprintf('%s%s', '<', $type);
@@ -102,9 +104,13 @@ class Handler
 		{
 			foreach ($attributes as $key => $val) 
 			{
-				if (isset($key))
+				if (isset($key) && !is_bool($val))
 				{
 					$pairs[] = sprintf('%s="%s"', $key, $val);
+				}
+				else if (isset($key) && is_bool($val) && $val)
+				{
+					$pairs[] = sprintf('%s', $key);
 				}
 			}
 

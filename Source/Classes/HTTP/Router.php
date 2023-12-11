@@ -231,7 +231,7 @@ class Router
 
 			if (is_callable($route['callback']))
 			{
-				call_user_func_array($route['callback'], self::$arguments);
+				$return = call_user_func_array($route['callback'], self::$arguments ?? array());
 			}
 			else
 			{
@@ -240,10 +240,12 @@ class Router
 				if (class_exists($method_name[0]))
 				{
 					$caller = new $method_name[0];
-					call_user_func(array($caller, $method_name[1]));
+					$return = call_user_func(array($caller, $method_name[1]));
 				}
 			}
 		}
+
+		return $return;
 	}
 
 }

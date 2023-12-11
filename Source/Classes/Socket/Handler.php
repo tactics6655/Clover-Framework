@@ -16,9 +16,9 @@ class Handler implements SocketHandlerInterface
 	 * Protocol = [SOL_TCP, SOL_UDP]
 	 *
 	 */
-	public function Create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :resource 
+	public function Create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :\Socket|bool|resource 
 	{
-		return socket_create($domain, $type, $protocol);
+		return \socket_create($domain, $type, $protocol);
 	}
 
 	public function getPeerName($socketHandler) :array 
@@ -53,17 +53,17 @@ class Handler implements SocketHandlerInterface
 	
 	public function Listen($socketHandler) :bool 
 	{
-		socket_listen($socketHandler);
+		return socket_listen($socketHandler);
 	}
 
 	public function Bind($socketHandler, $address, $port) :bool 
 	{
-		socket_bind($socketHandler, $address, $port);
+		return socket_bind($socketHandler, $address, $port);
 	}
 
-	public function readPacket($socketHandler, $length, $type = PHP_BINARY_READ) :string 
+	public function readPacket($socketHandler, $length, $type = PHP_BINARY_READ) :bool|string 
 	{
-		socket_read($socketHandler, $length, $type);
+		return socket_read($socketHandler, $length, $type);
 	}
 
 	public function writeSocket($socketHandler, $buffer, $length = -1) :int 

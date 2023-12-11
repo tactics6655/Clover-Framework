@@ -1,5 +1,7 @@
 <?php
 
+namespace Xanax\Implement;
+
 interface SocketHandlerInterface {
 	
 	public function Create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :resource;

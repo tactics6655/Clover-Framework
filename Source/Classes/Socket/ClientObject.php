@@ -31,7 +31,7 @@ class ClientObject
 	}
 
 	// Close socket
-	public function Close() : void 
+	public function Close() :void 
 	{
 		$this->SocketHandlerClass->Close();
 	}
