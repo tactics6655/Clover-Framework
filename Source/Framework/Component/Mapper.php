@@ -3,8 +3,8 @@
 namespace Xanax\Framework\Component;
 
 use Xanax\Framework\Component\Renderer;
+use Xanax\Framework\Component\Resource;
 use Xanax\Classes\HTTP\Request as HTTPRequest;
-use Xanax\Classes\HTTP\Router as Router;
 use Xanax\Classes\OperationSystem as OperationSystem;
 
 class Mapper
@@ -47,8 +47,15 @@ class Mapper
 
     private $container;
 
-    public function __construct()
+    private $options;
+
+    private $environment;
+
+    public function __construct($options, $environment)
     {
+        $this->options = $options ?? [];
+        $this->environment = $environment ?? [];
+
         $this->method = HTTPRequest::getRequestMethod();
         $this->accept_encoding = HTTPRequest::getAcceptEncoding();
         $this->remote_ip_address = HTTPRequest::getRemoteIP()->__toString();
@@ -78,25 +85,20 @@ class Mapper
     {
         $this->container = new Container();
         $this->container->Set("Renderer",  new Renderer());
+        $this->container->Set("Resource",  new Resource());
     }
 
     public function matchRunner()
     {
+        $this->setContainer();
+        
         if ($this->isCommentLineInterface())
         {
 
         }
         else
         {
-            $this->setContainer();
-
-            Router::fromDirectory('./App/Controller');
-
-            Router::setContainer($this->container);
-
-            $response = Router::Run();
-
-            echo $response;
+            return new HttpKernel($this->container);
         }
     }
 }

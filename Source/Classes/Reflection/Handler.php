@@ -105,7 +105,7 @@ class Handler
 		return $reflection->newInstance(...$dependencies);
 	}
 
-	public static function Invoke($class, $method, $arguments = [])
+	public static function Invoke($class, $method, $append_parameters = [], $arguments = [])
 	{
 		$reflection = self::Method($class, $method);
 		$parameters = self::getMethodParameters($reflection);
@@ -149,7 +149,7 @@ class Handler
             $r = new ReflectionClass($initClass);
             $instance = $r->newInstance($arguments);
 
-            return $reflection->invoke($instance, ...$dependencies);
+            return $reflection->invoke($instance, ...array_merge($dependencies, $append_parameters));
         }
 
 		return $reflection->invoke($initClass, ...$dependencies);

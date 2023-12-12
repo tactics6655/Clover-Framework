@@ -25,9 +25,9 @@ class FileHandlerMessage
 		return "Don't use Phar protocol";
 	}
 
-	public static function getFileIsNotExistsMessage()
+	public static function getFileIsNotExistsMessage($filePath)
 	{
-		return "File doesn't Exist";
+		return "'${filePath}' File doesn't Exist";
 	}
 	
 }

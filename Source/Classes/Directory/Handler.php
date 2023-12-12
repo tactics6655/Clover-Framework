@@ -438,7 +438,21 @@ class Handler implements DirectoryHandlerInterface
 			$di = new RecursiveDirectoryIterator($path);
 			foreach (new RecursiveIteratorIterator($di) as $filename => $file) 
 			{
-				if ($includePath) 
+				if (strtoupper($type) == 'FILE')
+				{
+					$passed = is_file($filename);
+				}
+				else if (strtoupper($type) == 'PATH')
+				{
+					$passed = is_dir($filename);
+				}
+	
+				if (!$passed)
+				{
+					continue;
+				}
+	
+				if ($includePath)
 				{
 					array_push($directoryList, $filename);
 				}

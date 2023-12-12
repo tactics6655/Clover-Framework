@@ -6,6 +6,7 @@ use Xanax\Classes\OperationSystem;
 use Xanax\Framework\Component\Mapper;
 use Xanax\Framework\Enumeration\Environment;
 use Xanax\Classes\ArrayObject;
+use Xanax\Classes\HTTP\Router as Router;
 
 class Runtime
 {
@@ -27,8 +28,9 @@ class Runtime
 
     private function setMapping()
     {
-        $mapper = new Mapper();
-        $mapper->matchRunner();
+        $mapper = new Mapper($this->options, $this->environment);
+        $runner = $mapper->matchRunner();
+        $runner->Run()->printBody();
     }
 
     private function setOption($key, $default = null)

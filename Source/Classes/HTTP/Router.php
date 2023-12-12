@@ -9,6 +9,7 @@ use Xanax\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 use Xanax\Classes\File\Functions as FileFunctions;
 use Xanax\Annotation\Route;
 use Xanax\Annotation\Prefix;
+use Xanax\Annotation\Middleware;
 use Xanax\Classes\Reflection\Handler as ReflectionHandler;
 use Xanax\Classes\Directory\Handler as DirectoryHandler;
 
@@ -84,7 +85,7 @@ class Router
 
 	public static function fromDirectory($path)
 	{
-		$fileList = DirectoryHandler::getList($path, 'file', true);
+		$fileList = DirectoryHandler::getList($path, 'file', true, true);
 
 		foreach ($fileList as $file)
 		{
@@ -115,9 +116,15 @@ class Router
 			$prefix_annotation = ReflectionHandler::getAnnotations($class, Prefix::class);
 			if (isset($prefix_annotation[0])) 
 			{
-				$descriptor->pattern = $descriptor->pattern . $prefix_annotation[0]->value;
+				$descriptor->pattern = $prefix_annotation[0]->value.$descriptor->pattern;
 			}
 			$descriptor->holder = [$class->getName(), $method->getName()];
+
+			$middleware_annotation = ReflectionHandler::getAnnotations($class, Middleware::class);
+			if (isset($middleware_annotation[0])) 
+			{
+				$descriptor->middleware = $middleware_annotation[0]->value;
+			}
 
 			$annotations = $descriptor;
 		}
@@ -263,12 +270,12 @@ class Router
 
 		if (!isset($method_name))
 		{
-			return ReflectionHandler::Invoke($callback, $method_name, (self::$arguments ?? array()));
+			return ReflectionHandler::Invoke($callback, $method_name, (self::$arguments ?? array()), []);
 		}
 
 		if (is_object($callback))
 		{
-			return ReflectionHandler::Invoke($callback, $method_name, self::$container);
+			return ReflectionHandler::Invoke($callback, $method_name, (self::$arguments ?? array()), self::$container);
 		}
 	}
 
@@ -297,14 +304,14 @@ class Router
 
 			if (count($route['segment']) != count($url_path_segments))
 			{
-				return false;
+				continue;
 			}
 	
 			$isValid = self::isValidRoute($route, $url_path_segments);
 
 			if (!$isValid)
 			{
-				return false;
+				continue;
 			}
 
 			$callback = $route['callback'];

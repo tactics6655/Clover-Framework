@@ -1042,12 +1042,12 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		ob_start();
