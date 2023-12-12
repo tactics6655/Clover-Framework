@@ -18,7 +18,6 @@ use Reflector;
 
 class Router
 {
-
 	private $middlewares = array();
 
 	private static $container = array();
@@ -51,10 +50,7 @@ class Router
 	{
 		$pattern = self::addPrefix($pattern);
 
-		self::$routes[(string)$method][] = array(
-			'pattern' => $pattern,
-			'callback' => $callback,
-		);
+		self::addRoute((string)$method, $pattern, $callback);
 	}
 
 	public static function Group($pattern, $callback)
@@ -96,52 +92,72 @@ class Router
 		}
 	}
 
+	private static function getAnnotationFromClassName($class_name)
+	{
+		$annotations = [];
+
+		$class = new ReflectionClass($class_name);
+
+		foreach ($class->getMethods() as $method) 
+		{
+			if ($method->isStatic() || $method->isPrivate() || $method->isProtected()) 
+			{
+				continue;
+			}
+
+			$route_annotation = ReflectionHandler::getAnnotations($method, Route::class);
+			if (!isset($route_annotation[0]))
+			{
+				continue;
+			}
+
+			$descriptor = $route_annotation[0];
+			$prefix_annotation = ReflectionHandler::getAnnotations($class, Prefix::class);
+			if (isset($prefix_annotation[0])) 
+			{
+				$descriptor->pattern = $descriptor->pattern . $prefix_annotation[0]->value;
+			}
+			$descriptor->holder = [$class->getName(), $method->getName()];
+
+			$annotations = $descriptor;
+		}
+
+		return $annotations;
+	}
+
 	public static function fromFile($path)
 	{
 		$class_names = FileFunctions::getClassName($path);
 
-		$results = [];
+		$annotations = [];
 
 		foreach ($class_names as $class_name)
 		{
-			$class = new ReflectionClass($class_name);
-
-			foreach ($class->getMethods() as $method) {
-				if ($method->isStatic() ||
-					$method->isPrivate() ||
-					$method->isProtected()) {
-					continue;
-				}
-
-				$annotations = ReflectionHandler::getAnnotations($method, Route::class);
-		
-				if (isset($annotations[0]))
-				{
-					$descriptor = $annotations[0];
-					
-					$prefix = ReflectionHandler::getAnnotations($class, Prefix::class);
-					if (isset($prefix[0])) {
-						$descriptor->pattern = $descriptor->pattern . $prefix[0]->value;
-					}
-					$descriptor->holder = [$class->getName(), $method->getName()];
-
-					$results[] = $descriptor;
-				}
-			}
+			$annotations[] = self::getAnnotationFromClassName($class_name);
 		}
 
-		foreach ($results as $result)
+		foreach ($annotations as $annotation)
 		{
-			if (!isset(self::$routes[(string)$result->method]))
-			{
-				self::$routes[(string)$result->method] = array();
-			}
+			$method = $annotation->method ?? "";
+			$pattern = $annotation->pattern ?? "";
+			$holder = $annotation->holder ?? [];
+			$callback = join('::', $holder);
 
-			self::$routes[(string)$result->method][] = array(
-				'pattern' => $result->pattern,
-				'callback' => join('::', $result->holder)
-			);
+			self::addRoute($method, $pattern, $callback);
 		}
+	}
+
+	private static function addRoute($method, $pattern, $callback)
+	{
+		if (!isset(self::$routes[$method]))
+		{
+			self::$routes[$method] = [];
+		}
+
+		self::$routes[$method][] = array(
+			'pattern' => $pattern,
+			'callback' => $callback
+		);
 	}
 
 	public static function Delete($pattern, $callback)
@@ -166,12 +182,9 @@ class Router
 
 	public static function setSegments()
 	{
-		if (!isset(self::$routes[self::$method]))
-		{
-			return;
-		}
+		$routes = self::getRoute(self::$method);
 
-		foreach (self::$routes[self::$method] as $key => $route)
+		foreach ($routes as $key => $route)
 		{
 			if (!isset($route['pattern']))
 			{
@@ -180,19 +193,21 @@ class Router
 
 			$segments = explode('/', trim($route['pattern'] ?? "", '/'));
 
-			if (count($segments) > 0)
+			if (count($segments) <= 0)
 			{
-				self::$routes[self::$method][$key]['segment'] = array();
-				self::$routes[self::$method][$key]['parameter'] = array();
+				continue;
+			}
 
-				foreach ($segments as $segment)
+			self::$routes[self::$method][$key]['segment'] = [];
+			self::$routes[self::$method][$key]['parameter'] = [];
+
+			foreach ($segments as $segment)
+			{
+				self::$routes[self::$method][$key]['segment'][] = $segment;
+
+				if (preg_match(self::$variable_regex, $segment))
 				{
-					self::$routes[self::$method][$key]['segment'][] = $segment;
-
-					if (preg_match(self::$variable_regex, $segment))
-					{
-						self::$routes[self::$method][$key]['parameter'][] = $segment;
-					}
+					self::$routes[self::$method][$key]['parameter'][] = $segment;
 				}
 			}
 		}
@@ -221,62 +236,81 @@ class Router
 		return true;
 	}
 
-	public static function Run()
+	private static function Has($method)
 	{
-		self::$url_path = HTTPRequest::getUrlPath();
+		return isset(self::$routes[$method]);
+	}
+
+	private static function getRoute($method)
+	{
+		return self::$routes[$method];
+	}
+
+	private static function callMethod($callback)
+	{
+		if (!is_callable($callback) && is_string($callback))
+		{
+			$static_method_arguments = explode('::', $callback);
+
+			$class_name = $static_method_arguments[0];
+			$method_name = $static_method_arguments[1];
+		}
+
+		if (class_exists($class_name))
+		{
+			$callback = new $class_name;
+		}
+
+		if (!isset($method_name))
+		{
+			return ReflectionHandler::Invoke($callback, $method_name, (self::$arguments ?? array()));
+		}
+
+		if (is_object($callback))
+		{
+			return ReflectionHandler::Invoke($callback, $method_name, self::$container);
+		}
+	}
+
+	public static function Run($reflection = true)
+	{
 		self::$method = HTTPRequest::getRequestMethod();
+
+		if (!self::Has(self::$method))
+		{
+			return false;
+		}
 
 		self::setSegments();
 
-		if (!isset(self::$routes[self::$method]))
-		{
-			return false;
-		}
-
-		$routes = self::$routes[self::$method];
-
-		if (!isset($routes))
-		{
-			return false;
-		}
-
-		$segments = explode('/', trim(self::$url_path, '/'));
+		$routes = self::getRoute(self::$method);
+		$url_path_segments = HTTPRequest::getUrlPathSegments();
 
 		for ($i = 0; $i < count($routes); $i++)
 		{
 			$route = $routes[$i];
 
-			if (count($route['segment']) != count($segments))
+			if (!is_countable($route['segment']) || !is_countable($url_path_segments))
+			{
+				return false;
+			}
+
+			if (count($route['segment']) != count($url_path_segments))
 			{
 				return false;
 			}
 	
-			$isValid = self::isValidRoute($route, $segments);
+			$isValid = self::isValidRoute($route, $url_path_segments);
 
 			if (!$isValid)
 			{
 				return false;
 			}
 
-			if (is_callable($route['callback']))
-			{
-				$return = call_user_func_array($route['callback'], self::$arguments ?? array());
-			}
-			else
-			{
-				$method_name = explode('::', $route['callback']);
-				
-				if (class_exists($method_name[0]))
-				{
-					$caller = new $method_name[0];
-					//$return = call_user_func(array($caller, $method_name[1]));
+			$callback = $route['callback'];
 
-					$return = ReflectionHandler::Invoke($caller, $method_name[1], self::$container);
-				}
-			}
+			return self::callMethod($callback);
 		}
-
-		return $return;
 	}
 
 }

@@ -42,11 +42,6 @@ class ArrayObject
 		return natsort($array);
 	}
 
-	public static function assignValues(array $array)
-	{
-		return list($array);
-	}
-
 	public static function sortByKeyInReverseOrder(array $array)
 	{
 		return krsort($array);
@@ -55,6 +50,17 @@ class ArrayObject
 	public static function sortByKey(array $array)
 	{
 		return ksort($array);
+	}
+
+	public static function setDeep($array, $value)
+	{
+		$current = &$array;
+        foreach ($array as $key)
+        {
+            $current = &$current[$key];
+        }
+
+        $current = $value;
 	}
 
 	public static function fetchKey(array $array)

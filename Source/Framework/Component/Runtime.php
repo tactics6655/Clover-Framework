@@ -5,6 +5,7 @@ namespace Xanax\Framework\Component;
 use Xanax\Classes\OperationSystem;
 use Xanax\Framework\Component\Mapper;
 use Xanax\Framework\Enumeration\Environment;
+use Xanax\Classes\ArrayObject;
 
 class Runtime
 {
@@ -38,13 +39,7 @@ class Runtime
     private function setEnvironment($key, $value)
     {
         $array = is_array($key) ? $key : [$key];
-        $current = &$this->environment;
-        foreach ($array as $key)
-        {
-            $current = &$current[$key];
-        }
-
-        $current = $value;
+        ArrayObject::setDeep($array, $value);
     }
 
     protected function applyOptions()

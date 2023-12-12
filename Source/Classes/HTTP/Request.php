@@ -135,6 +135,11 @@ class Request
 		return null;
 	}
 	
+	public static function getUrlPathSegments($preset = null)
+	{
+		return explode('/', trim($preset ?? self::getUrlPath(), '/'));
+	}
+
 	public static function getUrlPath() :string
 	{
 		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -393,6 +398,17 @@ class Request
 		}
 
 		return null;
+	}
+
+	public static function parseAcceptLanguage($field)
+	{
+		$fields = explode(",", $field);
+
+		return array_reduce($fields, function ($res, $el) { 
+			list($l, $q) = array_merge(explode(';q=', $el), [1]); 
+			$res[$l] = (float) $q; 
+			return $res; 
+		}, []);
 	}
 
 	public static function getAcceptLanguage() 

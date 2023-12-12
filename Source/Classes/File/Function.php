@@ -130,7 +130,7 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getCreatedDate($filePath)
+	public static function getCreatedDate($filePath) :bool|int
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -157,7 +157,7 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getLastModifiedTime(string $fileName)
+	public static function getLastModifiedTime(string $fileName) :bool|int
 	{
 		$fileName = self::convertToNomalizePath($fileName);
 
@@ -922,7 +922,7 @@ class Functions
 	 *
 	 * @return int
 	 */
-	public static function getSize(string $filePath, bool $humanReadable = false, FileSizeUnit $type): int
+	public static function getSize(string $filePath, bool $humanReadable = false, FileSizeUnit $type = FileSizeUnit::LONG): int
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1360,7 +1360,7 @@ class Functions
 	 *
 	 * @return mixed
 	 */
-	public static function getHeaderType(string $filePath) :mixed
+	public static function getHeaderType(string $filePath) :string|bool
 	{
 		$size = filesize($filePath);
 		$size = $size > 100 ? 100 : $size;
@@ -1608,8 +1608,8 @@ class Functions
 			return 'MUS';
 		} 
 		else if ($fileDescription === 0x1C /* M4A */) 
-		{ //ftypM4A
-			return 'M4A';
+		{
+			return 'M4A'; //ftypM4A
 		} 
 		else if ($fileDescription === 0x2D2D2D2D) 
 		{
@@ -1849,14 +1849,14 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Open($filePath, $mode, $use_include_path = false): mixed
+	public static function Open($filePath, $mode, $use_include_path = false): bool|\resource
 	{
 		$handler = fopen($filePath, $mode);
 
 		return $handler;
 	}
 
-	public static function generateHashByContents($algorithm = 'md5', $filePath, $rawContents): string
+	public static function generateHashByContents(string $algorithm = 'md5', string $filePath, bool|null $rawContents = true): string
 	{
 		$return = hash_file($algorithm, $filePath, $rawContents);
 

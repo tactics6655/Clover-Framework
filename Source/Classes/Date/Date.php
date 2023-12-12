@@ -3,31 +3,32 @@
 class Date
 {
 	
-	private $date = '';
-
-	public function __construct($date) 
+	public static function toUTC($seconds, $format = 'Y-m-d H:i:s')
 	{
-		$this->date = $date;
+		$dt = new DateTime('@' . $seconds);
+        $dt->setTimezone(new DateTimeZone('UTC'));
+
+        return $dt->format($format);
 	}
-	
+
 	public function stringToTime($string, $format) 
 	{
 		return strtotime($string, $format);
 	}
 	
-	public function getDateArray() 
+	public function getDateArray($date) 
 	{
-		return getdate($this->date);
+		return getdate($date);
 	}
 	
-	public function parseString($format) 
+	public function parseString($date, $format) 
 	{
-		return strptime($this->date, $format);
+		return strptime($date, $format);
 	}
 	
-	public function timeToString() 
+	public function timeToString($date) 
 	{
-		return strftime($this->date);
+		return strftime($date);
 	}
 	
 	public function getTime() 

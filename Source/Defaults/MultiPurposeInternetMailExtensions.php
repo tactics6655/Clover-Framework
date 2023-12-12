@@ -8,12 +8,11 @@ return [
     'cpt' => [
         'type' => 'application/mac-compactpro'
     ],
-    'cpt' => [
-        'type' => 'application/mac-compactpro'
-    ],
     
     /* Text */
-
+    '323' => [
+        'type' => 'text/h323'
+    ],
     'sgml' => [
         'type' => 'text/sgml'
     ],
@@ -211,6 +210,9 @@ return [
 
     /* Compression */
 
+    'acx' => [
+        'type' => 'application/internet-property-stream'
+    ],
     'cab' => [
         'type' => 'application/vnd.ms-cab-compressed'
     ],

@@ -94,16 +94,18 @@ class Handler implements DirectoryHandlerInterface
 		return $return;
 	}
 
-	public static function makeMultiple(Array $pathList, int $mode = 644)
+	public static function makeMultiple(array $pathList, int $mode = 644)
 	{
 		foreach ($pathList as $path) 
 		{
-			if (!is_dir($path)) 
+			if (self::isDirectory($path)) 
 			{
-				if (!mkdir($path, $mode, true)) 
-				{
-					return false;
-				}
+				continue;
+			}
+
+			if (!mkdir($path, $mode, true)) 
+			{
+				return false;
 			}
 		}
 
@@ -191,29 +193,29 @@ class Handler implements DirectoryHandlerInterface
 			throw new DirectoryIsNotExistsException();
 		}
 
-		if ($this->isEmpty($directoryPath) || $this->Empty($directoryPath)) 
-		{
-			$iterator = new RecursiveIteratorIterator(
-				new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS),
-				RecursiveIteratorIterator::CHILD_FIRST
-			);
-
-			$iterator->setMaxDepth(-1); // Absolutely delete folders
-
-			foreach ($iterator as $fileInformation) 
-			{
-				if ($fileInformation->isDir()) 
-				{
-					if (unlink($fileInformation->getRealPath()) === false) 
-					{
-						return false;
-					}
-				}
-			}
-		} 
-		else 
+		if (!$this->isEmpty($directoryPath) || !$this->Empty($directoryPath)) 
 		{
 			return false;
+		}
+
+		$iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS),
+			RecursiveIteratorIterator::CHILD_FIRST
+		);
+
+		$iterator->setMaxDepth(-1); // Absolutely delete folders
+
+		foreach ($iterator as $fileInformation) 
+		{
+			if (!$fileInformation->isDir()) 
+			{
+				continue;
+			}
+			
+			if (unlink($fileInformation->getRealPath()) === false) 
+			{
+				return false;
+			}
 		}
 
 		return true;
@@ -327,28 +329,30 @@ class Handler implements DirectoryHandlerInterface
 
 		foreach ($iterator as $folderPath => $fileInformation) 
 		{
-			if ($fileInformation->isDir()) 
+			if (!$fileInformation->isDir()) 
 			{
-				$folderPath       = $fileInformation->getPathName();
-				$newDirectoryName = preg_replace($replacement, $string, $folderPath);
-
-				if ($folderPath === $newDirectoryName) 
-				{
-					continue;
-				}
-
-				if (!self::isDirectory($folderPath)) 
-				{
-					return false;
-				}
-
-				if (self::isDirectory($newDirectoryName)) 
-				{
-					return false;
-				}
-
-				rename($folderPath, $newDirectoryName);
+				continue;
 			}
+
+			$folderPath       = $fileInformation->getPathName();
+			$newDirectoryName = preg_replace($replacement, $string, $folderPath);
+
+			if ($folderPath === $newDirectoryName) 
+			{
+				continue;
+			}
+
+			if (!self::isDirectory($folderPath)) 
+			{
+				return false;
+			}
+
+			if (self::isDirectory($newDirectoryName)) 
+			{
+				return false;
+			}
+
+			rename($folderPath, $newDirectoryName);
 		}
 
 		return true;
@@ -377,40 +381,42 @@ class Handler implements DirectoryHandlerInterface
 
 		foreach ($iterator as $path => $fileInformation) 
 		{
-			if ($fileInformation->isDir()) 
+			if (!$fileInformation->isDir()) 
 			{
-				$rootDirectory = $fileInformation->getPathName();
+				continue;
+			}
 
-				foreach (scandir($rootDirectory) as $targetFilename) 
+			$rootDirectory = $fileInformation->getPathName();
+
+			foreach (scandir($rootDirectory) as $targetFilename) 
+			{
+				$filePath = sprintf('%s/%s', $rootDirectory, $targetFilename);
+
+				$newFileName = $targetFilename;
+
+				if (@preg_match($replacement, null) === true) 
 				{
-					$filePath = sprintf('%s/%s', $rootDirectory, $targetFilename);
-
-					$newFileName = $targetFilename;
-
-					if (@preg_match($replacement, null) === true) 
-					{
-						$newFileName = preg_replace($replacement, $string, $targetFilename);
-					}
-
-					$newFileName = sprintf('%s/%s', $rootDirectory, $newFileName);
-
-					if ($filePath === $newFileName) 
-					{
-						continue;
-					}
-
-					if (!FileHandler::isExists($filePath)) 
-					{
-						return false;
-					}
-
-					if (!FileHandler::isExists($newFileName)) 
-					{
-						return false;
-					}
-
-					rename($filePath, $newFileName);
+					$newFileName = preg_replace($replacement, $string, $targetFilename);
 				}
+
+				$newFileName = sprintf('%s/%s', $rootDirectory, $newFileName);
+
+				if ($filePath === $newFileName) 
+				{
+					continue;
+				}
+
+				if (!FileHandler::isExists($filePath)) 
+				{
+					return false;
+				}
+
+				if (!FileHandler::isExists($newFileName)) 
+				{
+					return false;
+				}
+
+				rename($filePath, $newFileName);
 			}
 		}
 
@@ -427,46 +433,7 @@ class Handler implements DirectoryHandlerInterface
 
 		$directoryList = array();
 
-		if (!$includeSubdirectory) 
-		{
-			while (false !== ($file = readdir($handle))) 
-			{
-				if (!isset($type)) 
-				{
-					if ($includePath)
-					{
-						array_push($directoryList,$path.'/'.$file);
-					}
-					else
-					{
-						array_push($directoryList,$file);
-					}
-				}
-				else if (strtoupper($type) == 'FILE' && is_file($path.'/'.$file)) 
-				{
-					if ($includePath)
-					{
-						array_push($directoryList,$path.'/'.$file);
-					}
-					else
-					{
-						array_push($directoryList,$file);
-					}
-				}
-				else if (strtoupper($type) == 'PATH' && is_dir($path.'/'.$file)) 
-				{
-					if ($includePath)
-					{
-						array_push($directoryList, $path.'/'.$file);
-					}
-					else
-					{
-						array_push($directoryList, $file);
-					}
-				}
-			}
-		}
-		else
+		if ($includeSubdirectory) 
 		{
 			$di = new RecursiveDirectoryIterator($path);
 			foreach (new RecursiveIteratorIterator($di) as $filename => $file) 
@@ -480,8 +447,40 @@ class Handler implements DirectoryHandlerInterface
 					array_push($directoryList, $file->getFilename());
 				}
 			}
+
+			return $directoryList;
 		}
-		
+	
+		while (false !== ($file = readdir($handle))) 
+		{
+			$passed = true;
+
+			$file_path = $path.'/'.$file;
+
+			if (strtoupper($type) == 'FILE')
+			{
+				$passed = is_file($file_path);
+			}
+			else if (strtoupper($type) == 'PATH')
+			{
+				$passed = is_dir($file_path);
+			}
+
+			if (!$passed)
+			{
+				continue;
+			}
+
+			if ($includePath)
+			{
+				array_push($directoryList, $file_path);
+			}
+			else
+			{
+				array_push($directoryList, $file);
+			}
+		}
+
 		return $directoryList;
 	}
 
