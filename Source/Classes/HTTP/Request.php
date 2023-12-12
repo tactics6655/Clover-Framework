@@ -98,6 +98,22 @@ class Request
 		599 => 'Network Connect Timeout Error',
 	];
 
+	public static function flushLightSpeedResponseData()
+	{
+		if (function_exists('litespeed_finish_request'))
+		{
+			litespeed_finish_request();
+		}
+	}
+
+	public static function flushFastCgiResponseData()
+	{
+		if (function_exists('litespeed_finish_request'))
+		{
+			litespeed_finish_request();
+		}
+	}
+
 	public static function getStatusMesssages()
 	{
 		return self::$statusMesssages;

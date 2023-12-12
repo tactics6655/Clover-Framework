@@ -52,9 +52,9 @@ class ArrayObject
 		return ksort($array);
 	}
 
-	public static function setDeep($array, $value)
+	public static function setDeep(&$original, $array, $value)
 	{
-		$current = &$array;
+		$current = &$original;
         foreach ($array as $key)
         {
             $current = &$current[$key];

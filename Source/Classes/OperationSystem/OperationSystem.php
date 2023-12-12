@@ -137,6 +137,24 @@ class OperationSystem
 		return $_SERVER['GATEWAY_INTERFACE'];
 	}
 
+	public static function getMainServerSoftware()
+	{
+		return array_key_first(self::parseServerServerSoftware());
+	}
+
+	public static function parseServerServerSoftware()
+	{
+		$software = self::getServerSoftware();
+
+		$softwares = explode(' ', $software);
+
+		return array_reduce($softwares, function ($res, $el) { 
+			list($software, $version) = array_merge(explode('/', $el), [1]); 
+			$res[$software] = (float) $version; 
+			return $res; 
+		}, []);
+	}
+
 	public static function getServerSoftware()
 	{
 		return $_SERVER['SERVER_SOFTWARE'];
