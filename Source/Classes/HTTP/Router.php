@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP;
 
+use Xanax\Classes\HTTP\Router\Route as RouteObject;
 use Xanax\Classes\HTTP\Request as HTTPRequest;
 use Xanax\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 use Xanax\Classes\File\Functions as FileFunctions;
@@ -14,8 +15,6 @@ use Xanax\Classes\Reflection\Handler as ReflectionHandler;
 use Xanax\Classes\Directory\Handler as DirectoryHandler;
 
 use ReflectionClass;
-use ReflectionMethod;
-use Reflector;
 
 class Router
 {
@@ -161,10 +160,7 @@ class Router
 			self::$routes[$method] = [];
 		}
 
-		self::$routes[$method][] = array(
-			'pattern' => $pattern,
-			'callback' => $callback
-		);
+		self::$routes[$method][] = new RouteObject($pattern, $callback);
 	}
 
 	public static function Delete($pattern, $callback)
@@ -187,96 +183,14 @@ class Router
 		self::Set(HTTPRequestMethod::PATCH, $pattern, $callback);
 	}
 
-	public static function setSegments()
-	{
-		$routes = self::getRoute(self::$method);
-
-		foreach ($routes as $key => $route)
-		{
-			if (!isset($route['pattern']))
-			{
-				continue;
-			}
-
-			$segments = explode('/', trim($route['pattern'] ?? "", '/'));
-
-			if (count($segments) <= 0)
-			{
-				continue;
-			}
-
-			self::$routes[self::$method][$key]['segment'] = [];
-			self::$routes[self::$method][$key]['parameter'] = [];
-
-			foreach ($segments as $segment)
-			{
-				self::$routes[self::$method][$key]['segment'][] = $segment;
-
-				if (preg_match(self::$variable_regex, $segment))
-				{
-					self::$routes[self::$method][$key]['parameter'][] = $segment;
-				}
-			}
-		}
-	}
-
-	protected static function isValidRoute($route, $segments)
-	{
-		for ($z = 0; $z < count($segments); $z++)
-		{
-			$segment = $segments[$z];
-			$route_segment = $route['segment'][$z];
-
-			if (preg_match(self::$variable_regex, $route_segment, $match))
-			{
-				self::$arguments[] = $segment;
-
-				continue;
-			}
-
-			if ($route_segment != $segment)
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	private static function Has($method)
 	{
 		return isset(self::$routes[$method]);
 	}
 
-	private static function getRoute($method)
+	private static function getRoute($method) 
 	{
 		return self::$routes[$method];
-	}
-
-	private static function callMethod($callback)
-	{
-		if (!is_callable($callback) && is_string($callback))
-		{
-			$static_method_arguments = explode('::', $callback);
-
-			$class_name = $static_method_arguments[0];
-			$method_name = $static_method_arguments[1];
-		}
-
-		if (class_exists($class_name))
-		{
-			$callback = new $class_name;
-		}
-
-		if (!isset($method_name))
-		{
-			return ReflectionHandler::Invoke($callback, $method_name, (self::$arguments ?? array()), []);
-		}
-
-		if (is_object($callback))
-		{
-			return ReflectionHandler::Invoke($callback, $method_name, (self::$arguments ?? array()), self::$container);
-		}
 	}
 
 	public static function Run($reflection = true)
@@ -288,36 +202,22 @@ class Router
 			return false;
 		}
 
-		self::setSegments();
-
 		$routes = self::getRoute(self::$method);
-		$url_path_segments = HTTPRequest::getUrlPathSegments();
+		$urlPathSegments = HTTPRequest::getUrlPathSegments();
 
-		for ($i = 0; $i < count($routes); $i++)
+		foreach ($routes as $route)
 		{
-			$route = $routes[$i];
-
-			if (!is_countable($route['segment']) || !is_countable($url_path_segments))
-			{
-				return false;
-			}
-
-			if (count($route['segment']) != count($url_path_segments))
-			{
-				continue;
-			}
-	
-			$isValid = self::isValidRoute($route, $url_path_segments);
-
-			if (!$isValid)
+			$match = $route->match($urlPathSegments);
+			
+			if (!$match)
 			{
 				continue;
 			}
 
-			$callback = $route['callback'];
-
-			return self::callMethod($callback);
+			return $route->handle(self::$container);
 		}
+
+		return false;
 	}
 
 }

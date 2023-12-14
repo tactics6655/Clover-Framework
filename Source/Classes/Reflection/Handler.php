@@ -111,6 +111,7 @@ class Handler
 		$parameters = self::getMethodParameters($reflection);
 
 		$dependencies = [];
+
 		foreach ($parameters as $parameter) 
         {
 			$type = $parameter->getType();
@@ -146,8 +147,8 @@ class Handler
 
         if (isset($arguments) && !empty($arguments))
         {
-            $r = new ReflectionClass($initClass);
-            $instance = $r->newInstance($arguments);
+            $class = new ReflectionClass($initClass);
+            $instance = $class->newInstance($arguments);
 
             return $reflection->invoke($instance, ...array_merge($dependencies, $append_parameters));
         }
