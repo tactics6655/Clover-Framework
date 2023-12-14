@@ -16,6 +16,10 @@ class Route
 
     private $arguments;
 
+    private $regex = [
+        'digit' => '^\d{1,}$'
+    ];
+
     public function __construct($pattern, $callback)
     {
         $this->pattern = $pattern; 
@@ -26,70 +30,54 @@ class Route
     {
         if (!is_callable($this->callback) && is_string(($this->callback)))
 		{
-			$static_method_arguments = explode('::', $this->callback);
-
-			$class_name = $static_method_arguments[0];
-			$method_name = $static_method_arguments[1];
+			$statiMethodArguments = explode('::', $this->callback);
+			$className = $statiMethodArguments[0];
+			$methodName = $statiMethodArguments[1];
 		}
 
-		if (class_exists($class_name))
+		if (class_exists($className))
 		{
-			$callback = new $class_name;
+			$callback = new $className;
 		}
 
 		if (!isset($method_name))
 		{
-			return ReflectionHandler::Invoke($callback, $method_name, ($this->arguments ?? array()), []);
+			return ReflectionHandler::Invoke($callback, $methodName, ($this->arguments ?? array()), []);
 		}
 
 		if (is_object($callback))
 		{
-			return ReflectionHandler::Invoke($callback, $method_name, ($this->arguments ?? array()), $container);
+			return ReflectionHandler::Invoke($callback, $methodName, ($this->arguments ?? array()), $container);
 		}
     }
 
-    public function match($segments)
+    public function match($urlSegments)
     {
         if (empty($this->pattern))
         {
             return false;
         }
 
-        $separated_segments = explode('/', trim($this->pattern ?? "", '/'));
+        $separatedSegments = explode('/', trim($this->pattern ?? "", '/'));
 
-        if (count($separated_segments) <= 0)
+        if (count($separatedSegments) <= 0)
         {
             return false;
         }
 
-        $parameters = [];
-        $parameters['segments'] = [];
-        $parameters['parameters'] = [];
-
-        foreach ($separated_segments as $segment)
-        {
-            $parameters['segments'][] = $segment;
-
-            if (preg_match('/^({\w*})$/', $segment))
-            {
-                $parameters['parameters'][] = $segment;
-            }
-        }
-
-        for ($z = 0; $z < count($segments); $z++)
+        for ($z = 0; $z < count($separatedSegments); $z++)
 		{
-            $segment = $segments[$z];
+            $segment = $urlSegments[$z];
+            $routeSegment = $separatedSegments[$z];
 
-            $route_segment =  $parameters['segments'][$z];
-
-			if (preg_match('/^({\w*})$/', $route_segment, $match))
+			if (preg_match('/^({\w*})$/', $routeSegment, $match))
 			{
 				$this->arguments[] = $segment;
 
 				continue;
 			}
 
-			if ($route_segment != $segment)
+			if ($routeSegment != $segment)
 			{
 				return false;
 			}
