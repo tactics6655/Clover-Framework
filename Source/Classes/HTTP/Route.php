@@ -40,7 +40,7 @@ class Route
 			$callback = new $className;
 		}
 
-		if (!isset($method_name))
+		if (!isset($methodName))
 		{
 			return ReflectionHandler::Invoke($callback, $methodName, ($this->arguments ?? array()), []);
 		}
