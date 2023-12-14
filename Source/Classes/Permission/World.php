@@ -7,7 +7,7 @@ class World extends Permission
 
 	private static $mode;
 
-	public function __constructor()
+	public function __construct()
 	{
 		self::$mode = parent::getMode();
 	}

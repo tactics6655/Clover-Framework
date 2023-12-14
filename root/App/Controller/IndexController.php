@@ -6,11 +6,24 @@ use Xanax\Framework\Component\Middleware\ModuleMiddleware;
 
 use Xanax\Annotation;
 
+use Xanax\Plugin\NaverPapago;
+
 #[Annotation\Prefix('/')]
 class IndexController extends BaseController
 {
-    #[Annotation\Route('GET', '/{mid}')]
-    public function index(HTTPRequest $request, $mid)
+    #[Annotation\Route('GET', '/translate')]
+    public function translate()
+    {
+        $this->setTitle('translate');
+
+        $papago = new NaverPapago('ek3aVfWELzBXr1iVeMoi', 'yK6OP2Asdh');
+        $translate = $papago->translate('Hello World');
+
+        return $this->render('App/Template/test.php', ['ip' => $translate]);
+    }
+
+    #[Annotation\Route('GET', '/')]
+    public function index(HTTPRequest $request)
     {
         $ip = $request->getRemoteIP();
 

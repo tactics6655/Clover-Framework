@@ -12,7 +12,7 @@ class Permission
 {
 	private static $mode;
 	
-	public function __constructor($mode)
+	public function __construct($mode)
 	{
 		self::$mode = $mode;
 	}

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Xanax\Classes\File;
 
 use Xanax\Enumeration\FileMode;
+use Xanax\Enumeration\FileSizeUnit;
 
 // Classes
 
@@ -58,7 +59,7 @@ class Handler implements FileHandlerInterface
 		$this->directoryHandler = isset($directoryHandler) ? $directoryHandler : new DirectoryHandler($this);
 	}
 
-	public static function generateHashByContents($algorithm = 'md5', $filePath, $rawContents): string
+	public static function generateHashByContents($algorithm = 'md5', $filePath = '', $rawContents = ''): string
 	{
 		return FileFunctions::generateHashByContents($algorithm, $filePath, $rawContents);
 	}
@@ -305,9 +306,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::Delete($filePath);
 	}
 
-	public static function getSize(string $filePath, bool $humanReadable = false): int
+	public static function getSize(string $filePath, bool $humanReadable = false, ?FileSizeUnit $type = NULL): int
 	{
-		return FileFunctions::getSize($filePath, $humanReadable);
+		return FileFunctions::getSize($filePath, $humanReadable, $type);
 	}
 
 	public static function Copy(string $filePath, string $destination): bool

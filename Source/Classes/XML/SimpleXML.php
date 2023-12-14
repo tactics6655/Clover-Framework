@@ -6,7 +6,7 @@ class SimpleXML {
 	
 	private $data;
 	
-	public function __constructor() 
+	public function __construct() 
 	{
 	}
 	

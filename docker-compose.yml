@@ -5,7 +5,7 @@ services:
       image: adminer
       restart: always
       ports:
-        - 8091:8080
+        - 8092:8080
     mariadb:
         image: mariadb:latest
         restart: unless-stopped

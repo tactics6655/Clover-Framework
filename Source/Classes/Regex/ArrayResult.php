@@ -15,7 +15,7 @@ class ArrayResult
 
 	private $matches;
 
-	public function __constructor(array $result)
+	public function __construct(array $result)
 	{
 		$this->boolean = $result['Boolean'] ?? false;
 		$this->pattern = $result['Pattern'] ?? "";

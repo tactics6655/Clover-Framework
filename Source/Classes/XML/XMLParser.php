@@ -7,7 +7,7 @@ class XMLParser
 
 	private $parser;
 
-	public function __constructor() 
+	public function __construct() 
 	{
 		$this->parser = xml_parser_create();
 		$this->setObject();

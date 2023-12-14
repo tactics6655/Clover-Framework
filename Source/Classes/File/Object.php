@@ -65,6 +65,8 @@ class FileObject implements FileObjectInterface
 	// If the length does not match the contents written, it is returned to the original file
 	private $recoveryMode = false;
 
+	private $directoryHandler;
+
 	public function __construct(string $filePath, bool $recoveryMode = false, string $mode = 'w')
 	{
 		$this->fileHandlerClass = new FileHandler();
@@ -89,26 +91,25 @@ class FileObject implements FileObjectInterface
 
 	public function getAcceptExtension(array $extension)
 	{
-		return $acceptExtension;
+		return $this->acceptExtension;
 	}
 
 	public function setAcceptExtension($extension)
 	{
-		$acceptExtension = is_array($extension) ? $extension : [$extension];
+		$this->acceptExtension = is_array($extension) ? $extension : [$extension];
 	}
 
 	private function setRecoveryFile()
 	{
 		do
 		{
-			$this->temporaryPath = sprintf('%s.%s.%s', $this->filePath, uniqid(rand(), true), $this->fileExtension);
+			$this->temporaryPath = sprintf('%s.%s.%s', $this->filePath, uniqid('', true), $this->fileExtension);
 		}
 		while ($this->fileHandlerClass->isFile($this->temporaryPath));
 
-		$isReadOnlyMode = $this->mode === 'a';
 		$isFileExists = FileHandler::isExists($this->filePath);
 
-		if ($isReadOnlyMode && $isFileExists)
+		if ($isFileExists)
 		{
 			$fileContent = file_get_contents($this->filePath, true);
 			file_put_contents($this->temporaryPath, $fileContent);
@@ -144,11 +145,11 @@ class FileObject implements FileObjectInterface
 		$invalidFileSize = $currentFileSize === -1 ? true : false;
 		$correctFileSize = ($currentFileSize === (int)$this->writeContentLength);
 
-		$isFileExists = $this->fileHandlerClass->isFile($filePath);
+		$isFileExists = $this->fileHandlerClass->isFile($this->temporaryPath);
 
-		if ($this->recoveryMode && $isFileExists)
+		if ($this->recoveryMode && !$isFileExists)
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($this->temporaryPath));
 		}
 
 		if ($this->recoveryMode && !$invalidFileSize && !$correctFileSize)
@@ -221,7 +222,7 @@ class FileObject implements FileObjectInterface
 	{
 		if (!FileHandler::isExists($this->getFilePath()))
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($this->getFilePath()));
 		}
 
 		$bool = false;
@@ -241,11 +242,11 @@ class FileObject implements FileObjectInterface
 		return $bool;
 	}
 
-	public function injectFileIsNotExistsException() :void
+	public function injectFileIsNotExistsException()
 	{
-		if ($this->recoveryMode && $this->fileHandlerClass->isFile($this->filePath))
+		if ($this->recoveryMode && !$this->fileHandlerClass->isFile($this->temporaryPath))
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($this->temporaryPath));
 		}
 	}
 
@@ -427,7 +428,7 @@ class FileObject implements FileObjectInterface
 
 		if ($fileIsNotExists)
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($this->getFilePath()));
 		}
 
 		$this->fileHandler = fopen($this->getFilePath(), $this->mode);

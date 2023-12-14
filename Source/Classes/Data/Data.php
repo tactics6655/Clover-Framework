@@ -16,7 +16,7 @@ class Data
 {
 	private static $data;
 
-	public function __constructor($data)
+	public function __construct($data)
 	{
 		self::$data = $data;
 	}
@@ -50,6 +50,10 @@ class Data
 		else if (getType(self::$data == 'NULL'))
 		{
 			return new NullObject(self::$data);
+		}
+		else
+		{
+			return self::$data;
 		}
 	}
 

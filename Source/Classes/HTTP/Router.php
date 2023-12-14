@@ -126,7 +126,7 @@ class Router
 				$descriptor->middleware = $middleware_annotation[0]->value;
 			}
 
-			$annotations = $descriptor;
+			$annotations[] = $descriptor;
 		}
 
 		return $annotations;
@@ -140,7 +140,7 @@ class Router
 
 		foreach ($class_names as $class_name)
 		{
-			$annotations[] = self::getAnnotationFromClassName($class_name);
+			$annotations = array_merge($annotations, self::getAnnotationFromClassName($class_name));
 		}
 
 		foreach ($annotations as $annotation)

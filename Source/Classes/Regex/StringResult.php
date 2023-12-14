@@ -6,7 +6,7 @@ use Xanax\Traits\Regex\Error;
 
 class StringResult
 {
-  public function __constructor(array $result)
+  public function __construct(array $result)
   {
     $this->boolean = $result['Boolean'];
     $this->pattern = $result['Pattern'];

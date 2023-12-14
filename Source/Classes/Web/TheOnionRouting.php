@@ -11,7 +11,7 @@ class TheOnionRouting
 	private static $internetProtocolClass;
 	private static $requestHandlerClass;
 
-	public function __constructor() 
+	public function __construct() 
 	{
 		self::$internetProtocolClass = new InternetProtocol();
 		self::$requestHandlerClass = new RequestHandler();

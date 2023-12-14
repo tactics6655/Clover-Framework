@@ -22,7 +22,6 @@ class HttpKernel
     public function Run()
     {
         Router::fromDirectory('./App/Controller');
-        Router::fromDirectory('./App/BaseController');
     
         Router::setContainer($this->container);
         

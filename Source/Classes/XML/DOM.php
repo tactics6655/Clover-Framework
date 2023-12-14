@@ -7,7 +7,7 @@ class DOM
   
 	private $dom;
 
-	public function __constructor() 
+	public function __construct() 
 	{
 		$this->dom = new \DOMDocument;
 	}

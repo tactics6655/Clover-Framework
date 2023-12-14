@@ -5,33 +5,33 @@ namespace Xanax\Implement;
 interface FileSystemInterface
 {
 
-	public function getCurrentInode();
+	public static function getCurrentInode();
 
-	public function getStat($filePath): array;
+	public static function getStat($filePath): array;
 
-	public function getDeviceNumber($filePath);
+	public static function getDeviceNumber($filePath);
 
-	public function getInodeNumber($filePath);
+	public static function getInodeNumber($filePath);
 
-	public function getProtectionNumber($filePath);
+	public static function getProtectionNumber($filePath);
 
-	public function getLinkNumber($filePath);
+	public static function getLinkNumber($filePath);
 
-	public function getOwnerUserID($filePath);
+	public static function getOwnerUserID($filePath);
 
-	public function getOwnerGroupID($filePath);
+	public static function getOwnerGroupID($filePath);
 
-	public function getDeviceType($filePath);
+	public static function getDeviceType($filePath);
 
-	public function getSizeOfByte($filePath);
+	public static function getSizeOfByte($filePath);
 
-	public function getLastAccessTime($filePath);
+	public static function getLastAccessTime($filePath);
 
-	public function getLastModifiedTime($filePath);
+	public static function getLastModifiedTime($filePath);
 
-	public function getLastInodeModifiedTime($filePath);
+	public static function getLastInodeModifiedTime($filePath);
 
-	public function getIOBlockSize($filePath);
+	public static function getIOBlockSize($filePath);
 
-	public function get512ByteAllocatedBlocks($filePath);
+	public static function get512ByteAllocatedBlocks($filePath);
 }
