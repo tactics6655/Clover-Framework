@@ -4,9 +4,13 @@ use Xanax\Classes\HTTP\Request as HTTPRequest;
 use Xanax\Framework\Component\BaseController;
 use Xanax\Framework\Component\Middleware\ModuleMiddleware;
 
+use Xanax\Classes\Pagination\Dynamic as DynamicPagination;
+
 use Xanax\Annotation;
 
 use Xanax\Plugin\NaverPapago;
+
+use Xanax\Classes\Database\Driver\SqLite;
 
 #[Annotation\Prefix('/')]
 class IndexController extends BaseController
@@ -17,7 +21,7 @@ class IndexController extends BaseController
         $this->setTitle('translate');
 
         $papago = new NaverPapago('ek3aVfWELzBXr1iVeMoi', 'yK6OP2Asdh');
-        $translate = $papago->translate('Hello World');
+        $translate = $papago->translate('Hello World', 'en', 'ja');
 
         return $this->render('App/Template/test.php', ['ip' => $translate]);
     }

@@ -19,14 +19,15 @@ class NaverPapago
         $this->clientSecret = $clientSecret;
     }
 
-    public function translate($text)
+    public function translate($text, $source, $target)
     {
 		$headers = array(
 			sprintf("X-Naver-Client-Id: %s", $this->clientId),
 			sprintf("X-Naver-Client-Secret: %s", $this->clientSecret)
 		);
 
-        $postData = 'source=ko&target=en&text=만나서 반갑습니다.';
+        $text = urlencode($text);
+        $postData = "source=${source}&target=${target}&text=${text}";
 
         $cURL = new ClientURL();
 		$cURL->Option->setURL($this->requestUrl)
