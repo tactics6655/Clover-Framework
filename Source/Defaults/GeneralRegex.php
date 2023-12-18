@@ -8,5 +8,10 @@ return [
     'hiraganaorkatakana' => '^[ぁ-んァ-ン]{1,}$',
     'french' => '^[a-zàâçéèêëîïôûùüÿñæœ .-]*$',
     'hiragana' => '^[ぁ-ん]{1,}$',
-    'korean' => '^[\u3131-\uD79D]{1,}$'
+    'katakana' => '^([ァ-ヶー]+)$',
+    'korean' => '^[\u3131-\uD79D]{1,}$',
+    'url' => '^(http\:\/\/)*[.a-zA-Z0-9-]+\.[a-zA-Z]+$',
+    'email' => '^[^"\'@]+@[._a-zA-Z0-9-]+\.[a-zA-Z]+$',
+    'query_parameter' => '([^=&?]+)=([^&#]*)',
+    'whitespace' => '[\\x20\\t\\r\\n\\f]'
 ];

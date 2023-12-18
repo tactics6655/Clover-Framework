@@ -1,16 +1,16 @@
 <?php
 
 use Xanax\Classes\HTTP\Request as HTTPRequest;
+use Xanax\Classes\Database\Driver\SqLite;
+use Xanax\Classes\Pagination\Dynamic as DynamicPagination;
+use Xanax\Classes\File\Functions;
+
 use Xanax\Framework\Component\BaseController;
 use Xanax\Framework\Component\Middleware\ModuleMiddleware;
-
-use Xanax\Classes\Pagination\Dynamic as DynamicPagination;
 
 use Xanax\Annotation;
 
 use Xanax\Plugin\NaverPapago;
-
-use Xanax\Classes\Database\Driver\SqLite;
 
 #[Annotation\Prefix('/')]
 class IndexController extends BaseController
