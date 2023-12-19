@@ -34,7 +34,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	public function disableCache(bool $bool)
 	{
-		$this->setOption(CURLOPT_FRESH_CONNECT, $bool);
+		$this->setOption(\CURLOPT_FRESH_CONNECT, $bool);
 
 		return $this->returnContext();
 	}
@@ -46,14 +46,14 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setURL(string $url)
 	{
-		$this->setOption(CURLOPT_URL, $url);
+		$this->setOption(\CURLOPT_URL, $url);
 
 		return $this->returnContext();
 	}
 
 	public function setForbidenReuse(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_FORBID_REUSE, $bool);
+		$this->setOption(\CURLOPT_FORBID_REUSE, $bool);
 
 		return $this->returnContext();
 	}
@@ -65,7 +65,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setUploadReady(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_UPLOAD, $bool);
+		$this->setOption(\CURLOPT_UPLOAD, $bool);
 
 		return $this->returnContext();
 	}
@@ -77,7 +77,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setSSLVerifypeer(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_SSL_VERIFYPEER, $bool);
+		$this->setOption(\CURLOPT_SSL_VERIFYPEER, $bool);
 
 		return $this->returnContext();
 	}
@@ -89,14 +89,14 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setTimeout(bool $timeout = true)
 	{
-		$this->setOption(CURLOPT_TIMEOUT, $timeout);
+		$this->setOption(\CURLOPT_TIMEOUT, $timeout);
 
 		return $this->returnContext();
 	}
 
 	public function setCRLF(bool $timeout = true)
 	{
-		$this->setOption(CURLOPT_CRLF, $timeout);
+		$this->setOption(\CURLOPT_CRLF, $timeout);
 
 		return $this->returnContext();
 	}
@@ -108,7 +108,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setPostField($fields)
 	{
-		$this->setOption(CURLOPT_POSTFIELDS, $fields);
+		$this->setOption(\CURLOPT_POSTFIELDS, $fields);
 
 		return $this->returnContext();
 	}
@@ -126,13 +126,25 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
+	 * Redirects that a HTTP server sends in a 30x response
+	 *
+	 * @return \Xanax\Classes\ClientURLOption
+	 */
+	public function setFollowRedirects(bool $bool = true)
+	{
+		$this->setOption(\CURLOPT_FOLLOWLOCATION, $bool);
+
+		return $this->returnContext();
+	}
+
+	/**
 	 * Follow HTTP 3xx redirects
 	 *
 	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setFollowLocationHeader(int $size = 0)
 	{
-		$this->setOption(CURLOPT_FOLLOWLOCATION, $size);
+		$this->setOption(\CURLOPT_FOLLOWLOCATION, $size);
 
 		return $this->returnContext();
 	}
@@ -144,133 +156,133 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setFTPUseEPSV(int $size = 0)
 	{
-		$this->setOption(CURLOPT_FTP_USE_EPSV, $size);
+		$this->setOption(\CURLOPT_FTP_USE_EPSV, $size);
 
 		return $this->returnContext();
 	}
 
 	public function setInterface($interface)
 	{
-		$this->setOption(CURLOPT_INTERFACE, $interface);
+		$this->setOption(\CURLOPT_INTERFACE, $interface);
 
 		return $this->returnContext();
 	}
 
 	public function setRange($range)
 	{
-		$this->setOption(CURLOPT_RANGE, $range);
+		$this->setOption(\CURLOPT_RANGE, $range);
 
 		return $this->returnContext();
 	}
 
 	public function setProxyAuthentication($authentication)
 	{
-		$this->setOption(CURLOPT_PROXYAUTH, $authentication);
+		$this->setOption(\CURLOPT_PROXYAUTH, $authentication);
 
 		return $this->returnContext();
 	}
 
 	public function setProxy($proxy)
 	{
-		$this->setOption(CURLOPT_PROXY, $proxy);
+		$this->setOption(\CURLOPT_PROXY, $proxy);
 
 		return $this->returnContext();
 	}
 
 	public function setProxyUserPassword($password)
 	{
-		$this->setOption(CURLOPT_PROXYUSERPWD, $password);
+		$this->setOption(\CURLOPT_PROXYUSERPWD, $password);
 
 		return $this->returnContext();
 	}
 
 	public function setProxyPort($port)
 	{
-		$this->setOption(CURLOPT_PROXYPORT, $port);
+		$this->setOption(\CURLOPT_PROXYPORT, $port);
 
 		return $this->returnContext();
 	}
 
 	public function setCookieFile($file)
 	{
-		$this->setOption(CURLOPT_COOKIEFILE, $file);
+		$this->setOption(\CURLOPT_COOKIEFILE, $file);
 
 		return $this->returnContext();
 	}
 
 	public function setBufferSize($size)
 	{
-		$this->setOption(CURLOPT_BUFFERSIZE, $size);
+		$this->setOption(\CURLOPT_BUFFERSIZE, $size);
 
 		return $this->returnContext();
 	}
 
 	public function enableTCPFastOpen($enable)
 	{
-		$this->setOption(CURLOPT_TCP_FASTOPEN, $enable);
+		$this->setOption(\CURLOPT_TCP_FASTOPEN, $enable);
 
 		return $this->returnContext();
 	}
 
 	public function setNoProgress($number)
 	{
-		$this->setOption(CURLOPT_NOPROGRESS, $number);
+		$this->setOption(\CURLOPT_NOPROGRESS, $number);
 
 		return $this->returnContext();
 	}
 
 	public function setProgressCallback($name)
 	{
-		$this->setOption(CURLOPT_PROGRESSFUNCTION, $name);
+		$this->setOption(\CURLOPT_PROGRESSFUNCTION, $name);
 
 		return $this->returnContext();
 	}
 
 	public function setMaxRedirects(int $number)
 	{
-		$this->setOption(CURLOPT_MAXREDIRS, $number);
+		$this->setOption(\CURLOPT_MAXREDIRS, $number);
 
 		return $this->returnContext();
 	}
 
 	public function setCookieJar(string $jar)
 	{
-		$this->setOption(CURLOPT_COOKIEJAR, $jar);
+		$this->setOption(\CURLOPT_COOKIEJAR, $jar);
 
 		return $this->returnContext();
 	}
 
 	public function setProxyType($type)
 	{
-		$this->setOption(CURLOPT_PROXYTYPE, $type);
+		$this->setOption(\CURLOPT_PROXYTYPE, $type);
 
 		return $this->returnContext();
 	}
 
 	public function enableTCPKeepAlive(bool $enable)
 	{
-		$this->setOption(CURLOPT_TCP_KEEPALIVE, $enable);
+		$this->setOption(\CURLOPT_TCP_KEEPALIVE, $enable);
 
 		return $this->returnContext();
 	}
 
 	public function setHeaderOut(bool $enable)
 	{
-		$this->setOption(CURLINFO_HEADER_OUT, $enable);
+		$this->setOption(\CURLINFO_HEADER_OUT, $enable);
 
 		return $this->returnContext();
 	}
 
 	public function setFileHandler($filePointer)
 	{
-		$this->setOption(CURLOPT_FILE, $filePointer);
+		$this->setOption(\CURLOPT_FILE, $filePointer);
 
 		return $this->returnContext();
 	}
 
 	public function setProxyTunnel(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_HTTPPROXYTUNNEL, $bool);
+		$this->setOption(\CURLOPT_HTTPPROXYTUNNEL, $bool);
 
 		return $this->returnContext();
 	}
@@ -282,7 +294,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setVerbose(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_VERBOSE, $bool);
+		$this->setOption(\CURLOPT_VERBOSE, $bool);
 
 		return $this->returnContext();
 	}
@@ -294,7 +306,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setDnsUseGlobalCache(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_DNS_USE_GLOBAL_CACHE, $bool);
+		$this->setOption(\CURLOPT_DNS_USE_GLOBAL_CACHE, $bool);
 
 		return $this->returnContext();
 	}
@@ -306,14 +318,14 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setUserAgent($userAgent = '')
 	{
-		$this->setOption(CURLOPT_USERAGENT, $userAgent);
+		$this->setOption(\CURLOPT_USERAGENT, $userAgent);
 
 		return $this->returnContext();
 	}
 
 	public function setAcceptEncoding($encoding = '')
 	{
-		$this->setOption(CURLOPT_ENCODING, $encoding);
+		$this->setOption(\CURLOPT_ENCODING, $encoding);
 
 		return $this->returnContext();
 	}
@@ -325,7 +337,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setCookieHeader($cookieData = '')
 	{
-		$this->setOption(CURLOPT_COOKIE, $cookieData);
+		$this->setOption(\CURLOPT_COOKIE, $cookieData);
 
 		return $this->returnContext();
 	}
@@ -337,7 +349,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function useCookieSession(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_COOKIESESSION, $bool);
+		$this->setOption(\CURLOPT_COOKIESESSION, $bool);
 
 		return $this->returnContext();
 	}
@@ -349,7 +361,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setMaximumConnectionCount(bool $maximumConnection = true)
 	{
-		$this->setOption(CURLOPT_MAXCONNECTS, $maximumConnection);
+		$this->setOption(\CURLOPT_MAXCONNECTS, $maximumConnection);
 
 		return $this->returnContext();
 	}
@@ -361,7 +373,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setAutoReferer(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_AUTOREFERER, $bool);
+		$this->setOption(\CURLOPT_AUTOREFERER, $bool);
 
 		return $this->returnContext();
 	}
@@ -373,7 +385,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setBodyEmpty(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_NOBODY, $bool);
+		$this->setOption(\CURLOPT_NOBODY, $bool);
 
 		return $this->returnContext();
 	}
@@ -383,7 +395,7 @@ class ClientURLOption implements ClientURLOptionInterface
 		if ($useMilliseconds) {
 			return $this->setConnectionTimeoutMilliseconds($timeout);
 		} else {
-			$this->setOption(CURLOPT_CONNECTTIMEOUT, $timeout);
+			$this->setOption(\CURLOPT_CONNECTTIMEOUT, $timeout);
 
 			return $this->returnContext();
 		}
@@ -396,7 +408,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setConnectionTimeoutMilliseconds(bool $timeout = true)
 	{
-		$this->setOption(CURLOPT_CONNECTTIMEOUT_MS, $timeout);
+		$this->setOption(\CURLOPT_CONNECTTIMEOUT_MS, $timeout);
 
 		return $this->returnContext();
 	}
@@ -410,14 +422,14 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	public function setTransferText(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_TRANSFERTEXT, $bool);
+		$this->setOption(\CURLOPT_TRANSFERTEXT, $bool);
 
 		return $this->returnContext();
 	}
 
 	public function setBinaryTransfer(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_BINARYTRANSFER, $bool);
+		$this->setOption(\CURLOPT_BINARYTRANSFER, $bool);
 
 		return $this->returnContext();
 	}
@@ -436,7 +448,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setMaximumSendSpeed(int $bytePerSeconds = 1000)
 	{
-		$this->setOption(CURLOPT_MAX_SEND_SPEED_LARGE, $bytePerSeconds);
+		$this->setOption(\CURLOPT_MAX_SEND_SPEED_LARGE, $bytePerSeconds);
 
 		return $this->returnContext();
 	}
@@ -455,7 +467,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setMaximumReceiveSpeed(int $bytePerSeconds = 1000)
 	{
-		$this->setOption(CURLOPT_MAX_RECV_SPEED_LARGE, $bytePerSeconds);
+		$this->setOption(\CURLOPT_MAX_RECV_SPEED_LARGE, $bytePerSeconds);
 
 		return $this->returnContext();
 	}
@@ -471,9 +483,9 @@ class ClientURLOption implements ClientURLOptionInterface
 				return implode(': ', $header);
 			}, self::$options);
 
-			$this->setOption(CURLOPT_HTTPHEADER, $headers);
+			$this->setOption(\CURLOPT_HTTPHEADER, $headers);
 		} else {
-			$this->setOption(CURLOPT_HTTPHEADER, $headerData);
+			$this->setOption(\CURLOPT_HTTPHEADER, $headerData);
 		}
 
 		return $this->returnContext();
@@ -518,7 +530,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setHeaders($headers = [])
 	{
-		$this->setOption(CURLOPT_HTTPHEADER, $headers);
+		$this->setOption(\CURLOPT_HTTPHEADER, $headers);
 
 		return $this->returnContext();
 	}
@@ -530,7 +542,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setPort(bool $port = true)
 	{
-		$this->setOption(CURLOPT_PORT, $port);
+		$this->setOption(\CURLOPT_PORT, $port);
 
 		return $this->returnContext();
 	}
@@ -542,7 +554,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setPostMethod(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_POST, $bool);
+		$this->setOption(\CURLOPT_POST, $bool);
 
 		return $this->returnContext();
 	}
@@ -554,14 +566,14 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setGetMethod(bool $bool = true)
 	{
-		$this->setOption(CURLOPT_HTTPGET, $bool);
+		$this->setOption(\CURLOPT_HTTPGET, $bool);
 
 		return $this->returnContext();
 	}
 
 	public function setHeaderCallback($method)
 	{
-		curl_setopt(self::$session, CURLOPT_HEADERFUNCTION, $method);
+		curl_setopt(self::$session, \CURLOPT_HEADERFUNCTION, $method);
 	}
 
 	private function receiveResponseHeader()
@@ -579,81 +591,81 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	private function setAnySafeAuthentication()
 	{
-		return $this->setAuthentication(CURLAUTH_ANYSAFE);
+		return $this->setAuthentication(\CURLAUTH_ANYSAFE);
 	}
 
 	private function setAnyAuthentication()
 	{
-		return $this->setAuthentication(CURLAUTH_ANY);
+		return $this->setAuthentication(\CURLAUTH_ANY);
 	}
 
 	private function setNTLMAuthentication()
 	{
-		return $this->setAuthentication(CURLAUTH_NTLM);
+		return $this->setAuthentication(\CURLAUTH_NTLM);
 	}
 
 	private function setGSSNegotiateAuthentication()
 	{
-		return $this->setAuthentication(CURLAUTH_GSSNEGOTIATE);
+		return $this->setAuthentication(\CURLAUTH_GSSNEGOTIATE);
 	}
 
 	private function setDigestAuthentication()
 	{
-		return $this->setAuthentication(CURLAUTH_DIGEST);
+		return $this->setAuthentication(\CURLAUTH_DIGEST);
 	}
 
 	private function setNoneHTTPVersion()
 	{
-		return $this->setHTTPVersion(CURL_HTTP_VERSION_NONE);
+		return $this->setHTTPVersion(\CURL_HTTP_VERSION_NONE);
 	}
 
 	private function setHTTPVersion_1_0()
 	{
-		return $this->setHTTPVersion(CURL_HTTP_VERSION_1_0);
+		return $this->setHTTPVersion(\CURL_HTTP_VERSION_1_0);
 	}
 
 	private function setHTTPVersion_1_1()
 	{
-		return $this->setHTTPVersion(CURL_HTTP_VERSION_1_1);
+		return $this->setHTTPVersion(\CURL_HTTP_VERSION_1_1);
 	}
 
 	private function setHTTPVersion_2_0()
 	{
-		return $this->setHTTPVersion(CURL_HTTP_VERSION_2_0);
+		return $this->setHTTPVersion(\CURL_HTTP_VERSION_2_0);
 	}
 
 	private function setHTTPVersion_2_TLS()
 	{
-		return $this->setHTTPVersion(CURL_HTTP_VERSION_2TLS);
+		return $this->setHTTPVersion(\CURL_HTTP_VERSION_2TLS);
 	}
 
 	private function setLowSpeedLimitTime($value)
 	{
-		return $this->setOption(CURLOPT_LOW_SPEED_TIME, $value);
+		return $this->setOption(\CURLOPT_LOW_SPEED_TIME, $value);
 	}
 
 	private function setHTTPPriorKnowledge()
 	{
-		return $this->setHTTPVersion(CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
+		return $this->setHTTPVersion(\CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
 	}
 
 	private function setHTTPVersion($version)
 	{
-		$this->setOption(CURLOPT_HTTP_VERSION, $version);
+		$this->setOption(\CURLOPT_HTTP_VERSION, $version);
 
 		return $this->returnContext();
 	}
 
 	private function setAuthentication($authentication)
 	{
-		$this->setOption(CURLOPT_HTTPAUTH, $authentication);
+		$this->setOption(\CURLOPT_HTTPAUTH, $authentication);
 
 		return $this->returnContext();
 	}
 
 	private function setCustomMethod($method)
 	{
-		$this->setOption(CURLOPT_CUSTOMREQUEST, $method);
+		$this->setOption(\CURLOPT_CUSTOMREQUEST, $method);
 
 		return $this->returnContext();
 	}
@@ -710,7 +722,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	public function setReturnTransfer(bool $hasResponse = true)
 	{
-		$this->setOption(CURLOPT_RETURNTRANSFER, $hasResponse);
+		$this->setOption(\CURLOPT_RETURNTRANSFER, $hasResponse);
 
 		return $this->returnContext();
 	}
@@ -722,7 +734,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	 */
 	public function setReturnHeader(bool $hasResponse = true)
 	{
-		$this->setOption(CURLOPT_HEADER, $hasResponse);
+		$this->setOption(\CURLOPT_HEADER, $hasResponse);
 
 		return $this->returnContext();
 	}

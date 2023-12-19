@@ -21,32 +21,30 @@ class NaverPapago
 
     public function translate($text, $source, $target)
     {
-		$headers = array(
-			sprintf("X-Naver-Client-Id: %s", $this->clientId),
-			sprintf("X-Naver-Client-Secret: %s", $this->clientSecret)
-		);
+        $headers = array(
+            sprintf("X-Naver-Client-Id: %s", $this->clientId),
+            sprintf("X-Naver-Client-Secret: %s", $this->clientSecret)
+        );
 
         $text = urlencode($text);
         $postData = "source=${source}&target=${target}&text=${text}";
 
         $cURL = new ClientURL();
-		$cURL->option->setURL($this->requestUrl)
-					 ->setPostMethod(true)
-					 ->setHeaders($headers)
-					 ->setReturnTransfer(true)
-					 ->setPostField($postData)
-					 ->setAutoReferer(true)
-					 ->setReturnHeader(false)
-					 ->disableCache(true);
+        $cURL->option->setURL($this->requestUrl)
+            ->setPostMethod(true)
+            ->setHeaders($headers)
+            ->setReturnTransfer(true)
+            ->setPostField($postData)
+            ->setAutoReferer(true)
+            ->setReturnHeader(false)
+            ->disableCache(true);
 
-		$result = $cURL->execute();
+        $result = $cURL->execute();
 
-        if (JSONHandler::isJSON($result->__toString()))
-        {
+        if (JSONHandler::isJSON($result->__toString())) {
             $json = JSONHandler::decode($result);
 
-            if (isset($json->message->result->translatedText))
-            {
+            if (isset($json->message->result->translatedText)) {
                 return $json->message->result->translatedText;
             }
         }

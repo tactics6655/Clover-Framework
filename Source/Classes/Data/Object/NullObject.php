@@ -4,7 +4,8 @@ namespace Xanax\Classes\Data;
 
 use Xanax\Classes\Data\BaseObject as BaseObject;
 
-class DoubleObject extends BaseObject
+#[\AllowDynamicProperties]
+class NullObject extends BaseObject
 {
 
     protected static $raw_data;
@@ -16,6 +17,6 @@ class DoubleObject extends BaseObject
 
     public function __toString()
     {
-        return $this->raw_data;
+        return (string)$this->raw_data;
     }
 }

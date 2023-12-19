@@ -4,6 +4,7 @@ namespace Xanax\Classes\Data;
 
 use Xanax\Classes\Data\HTMLHandler as HTMLHandler;
 
+#[\AllowDynamicProperties]
 class HTMLObject extends StringObject
 {
 

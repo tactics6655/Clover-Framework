@@ -4,6 +4,7 @@ namespace Xanax\Classes\Data;
 
 use Xanax\Classes\Data\BaseObject as BaseObject;
 
+#[\AllowDynamicProperties]
 class IntegerObject extends BaseObject
 {
 
@@ -27,6 +28,8 @@ class IntegerObject extends BaseObject
     public static function toBytes(int $integer)
     {
         $length = strlen($integer);
+
+        $result = "";
 
         for ($i = $length - 1; $i >= 0; $i--) {
             $result .= chr(floor($integer / pow(256, $i)));

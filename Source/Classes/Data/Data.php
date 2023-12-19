@@ -14,7 +14,7 @@ use Xanax\Classes\Data\Identifier as Identifier;
 
 class Data
 {
-	private static $data;
+	protected static $data;
 
 	public function __construct($data)
 	{

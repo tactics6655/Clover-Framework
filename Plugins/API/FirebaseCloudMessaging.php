@@ -5,7 +5,7 @@ namespace Xanax\Plugin;
 use Xanax\Classes\ClientURL;
 use Xanax\Classes\Data\StringHandler;
 
-class FirebaseCloudMessaging 
+class FirebaseCloudMessaging
 {
 
 	private $ServerApiKey;
@@ -20,68 +20,66 @@ class FirebaseCloudMessaging
 	private $NotificationContent = array();
 	private $Topic = '';
 
-	public function __construct() 
+	public function __construct()
 	{
 		$this->RequestUrl = "https://fcm.googleapis.com/fcm/send";
 	}
 
-	public function setDataContent($dataContent) 
+	public function setDataContent($dataContent)
 	{
-		if (is_array($dataContent)) 
-		{
+		if (is_array($dataContent)) {
 			$this->DataContent = $dataContent;
 		}
 	}
 
-	public function setNotificationContent($notificationContent) 
+	public function setNotificationContent($notificationContent)
 	{
-		if (is_array($notificationContent)) 
-		{
+		if (is_array($notificationContent)) {
 			$this->NotificationContent = $notificationContent;
 		}
 	}
 
-	public function setTopic($topic) 
+	public function setTopic($topic)
 	{
 		$this->Topic = $topic;
 	}
 
-	public function setServerApiKey($key) 
+	public function setServerApiKey($key)
 	{
 		$this->ServerApiKey = $key;
 	}
 
-	public function addRegistrationId($identifier) 
+	public function addRegistrationId($identifier)
 	{
-		$this->RegistrationIds [] = $identifier;
+		$this->RegistrationIds[] = $identifier;
 	}
 
-	public function getMulticastId() 
+	public function getMulticastId()
 	{
 		return array_key_exists("multicast_id", $this->ResultData) ? $this->ResultData['multicast_id'] : -1;
 	}
 
-	public function isSuccess() 
+	public function isSuccess()
 	{
 		return array_key_exists("success", $this->ResultData) ? $this->ResultData['success'] === 1 : 0;
 	}
 
-	public function setClickAction($clickAction) 
+	public function setClickAction($clickAction)
 	{
 		$this->ClickAction = $clickAction;
 	}
 
-	public function getResults() 
+	public function getResults()
 	{
 		return is_object($this->ResultData) ? $this->ResultData->results : $this->ResultData;
 	}
 
-	public function setBadgeCount($count) 
+	public function setBadgeCount($count)
 	{
 		$this->BadgeCount = $count;
 	}
 
-	public function send($title, $body, $message) 
+	public function send($title, $body, $message)
 	{
 		$headers = array(
 			sprintf("Authorization: key=%s", $this->ServerApiKey),
@@ -130,26 +128,22 @@ class FirebaseCloudMessaging
 
 		$cURL = new ClientURL();
 		$cURL->option->setURL($this->RequestUrl)
-					 ->setPostMethod(true)
-					 ->setHeaders($headers)
-					 ->setReturnTransfer(true)
-					 ->setPostField(json_encode($postData))
-					 ->setAutoReferer(true)
-					 ->setReturnHeader(false)
-					 ->disableCache(true);
+			->setPostMethod(true)
+			->setHeaders($headers)
+			->setReturnTransfer(true)
+			->setPostField(json_encode($postData))
+			->setAutoReferer(true)
+			->setReturnHeader(false)
+			->disableCache(true);
 
 		$result = $cURL->execute();
 
 		$isJson = StringHandler::isJson($result);
 
-		if ($isJson) 
-		{
+		if ($isJson) {
 			$this->ResultData = json_decode($result);
-		}
-		else 
-		{
+		} else {
 			$this->ResultData = $result;
 		}
 	}
-
 }

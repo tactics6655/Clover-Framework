@@ -4,7 +4,8 @@ namespace Xanax\Classes\Data;
 
 use Xanax\Classes\Data\BaseObject as BaseObject;
 
-class NullObject extends BaseObject
+#[\AllowDynamicProperties]
+class BooleanObject extends BaseObject
 {
 
     protected static $raw_data;

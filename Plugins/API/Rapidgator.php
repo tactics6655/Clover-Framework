@@ -4,10 +4,10 @@ include('./vendor/autoload.php');
 
 use Xanax\Classes\ClientURL as ClientURL;
 
-class Rapidgator 
+class Rapidgator
 {
 
-    public function loginInformation($token) 
+    public function loginInformation($token)
     {
         $query = http_build_query(array(
             'token' => $token
@@ -15,16 +15,16 @@ class Rapidgator
 
         $cURL = new ClientURL();
         $cURL->option->setURL("https://rapidgator.net/api/v2/user/info")
-                     ->setReturnTransfer(true)
-                     ->setPostMethod()
-                     ->setPostField($query);
+            ->setReturnTransfer(true)
+            ->setPostMethod()
+            ->setPostField($query);
 
         $result = $cURL->execute();
 
         return $result;
     }
 
-    public function fileInformation($file_id, $token) 
+    public function fileInformation($file_id, $token)
     {
         $query = http_build_query(array(
             'file_id' => $file_id,
@@ -33,16 +33,16 @@ class Rapidgator
 
         $cURL = new ClientURL();
         $cURL->option->setURL("https://rapidgator.net/api/v2/file/info")
-                     ->setReturnTransfer(true)
-                     ->setPostMethod()
-                     ->setPostField($query);
+            ->setReturnTransfer(true)
+            ->setPostMethod()
+            ->setPostField($query);
 
         $result = $cURL->execute();
 
         return $result;
     }
-    
-    public function download($file_id, $token) 
+
+    public function download($file_id, $token)
     {
         $query = http_build_query(array(
             'file_id' => $file_id,
@@ -51,16 +51,16 @@ class Rapidgator
 
         $cURL = new ClientURL();
         $cURL->option->setURL("https://rapidgator.net/api/v2/file/download")
-                     ->setReturnTransfer(true)
-                     ->setPostMethod()
-                     ->setPostField($query);
+            ->setReturnTransfer(true)
+            ->setPostMethod()
+            ->setPostField($query);
 
         $result = $cURL->execute();
 
         return $result;
     }
-    
-    public function login($email, $password) 
+
+    public function login($email, $password)
     {
         $query = http_build_query(array(
             'login' => $email,
@@ -69,13 +69,12 @@ class Rapidgator
 
         $cURL = new ClientURL();
         $cURL->option->setURL("https://rapidgator.net/api/v2/user/login")
-                     ->setReturnTransfer(true)
-                     ->setPostMethod()
-                     ->setPostField($query);
+            ->setReturnTransfer(true)
+            ->setPostMethod()
+            ->setPostField($query);
 
         $result = $cURL->execute();
 
         return $result;
     }
-    
 }

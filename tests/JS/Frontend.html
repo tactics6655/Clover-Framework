@@ -1,34 +1,34 @@
-
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
 
-<meta charset="utf-8">
+	<meta charset="utf-8">
 
-<title>Xanax CoreJS Example</title>
+	<title>Xanax CoreJS Example</title>
 
-<script src="./../Frontend/coreJS/jquery-3.3.1.min.js"></script>
-<script src="./../Frontend/coreJS/dist/config.js"></script>
-<script src="./../Frontend/coreJS/dist/variables.js"></script>
-<script src="./../Frontend/coreJS/dist/coreJs.js"></script>
+	<script src="./../Frontend/coreJS/jquery-3.3.1.min.js"></script>
+	<script src="./../Frontend/coreJS/dist/config.js"></script>
+	<script src="./../Frontend/coreJS/dist/variables.js"></script>
+	<script src="./../Frontend/coreJS/dist/coreJs.js"></script>
 
 <body>
 	<button id="basic">Play basic sound</button>
 </body>
 
 <script>
-var isStarted = false;
-function playSound() {
-	let [oscillatorContext, audioContext] = $.core.Audio.createOscillatorContext();
-	$.core.Audio.setMidiFrequency(oscillatorContext, audioContext.currentTime, 60);
-	
-	if (!isStarted) {
-		oscillatorContext.start(0);
-		isStarted = true;
-	} else {
-		audioContext.resume();
-	}
-}
+	var isStarted = false;
+	function playSound() {
+		let [oscillatorContext, audioContext] = $.core.Audio.createOscillatorContext();
+		$.core.Audio.setMidiFrequency(oscillatorContext, audioContext.currentTime, 60);
 
-document.getElementById('basic').addEventListener('click', () => {playSound()});
+		if (!isStarted) {
+			oscillatorContext.start(0);
+			isStarted = true;
+		} else {
+			audioContext.resume();
+		}
+	}
+
+	document.getElementById('basic').addEventListener('click', () => { playSound() });
 </script>
