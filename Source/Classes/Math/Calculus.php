@@ -1,4 +1,5 @@
 <?php
 
-class Calculus {
+class Calculus
+{
 }

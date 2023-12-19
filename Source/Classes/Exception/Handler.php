@@ -4,52 +4,47 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\Exception;
 
-class Handler 
+class Handler
 {
 
-	public function setError($errorRaised, $errorMessage, $fileName, $lineNumber, $context, callable $callback) 
+	public function setError($errorRaised, $errorMessage, $fileName, $lineNumber, $context, callable $callback)
 	{
-		$previous = set_error_handler(function ($errorRaised, $errorMessage, $fileName, $lineNumber, $context) use (&$previous, $callback) 
-		{
-			if ($previous && is_callable($callback)) 
-			{
+		$previous = set_error_handler(function ($errorRaised, $errorMessage, $fileName, $lineNumber, $context) use (&$previous, $callback) {
+			if ($previous && is_callable($callback)) {
 				$callback($errorRaised, $errorMessage, $fileName, $lineNumber, $context);
-			} 
-			else 
-			{
+			} else {
 				return false;
 			}
 		});
 	}
-	
-	public function clearLastError() : Void 
+
+	public function clearLastError(): Void
 	{
 		error_clear_last();
 	}
-	
-	public function getLastError() : Array 
+
+	public function getLastError(): array
 	{
 		return error_get_last();
 	}
-	
-	public function setException(callable $exceptionFunction) 
+
+	public function setException(callable $exceptionFunction)
 	{
 		set_exception_handler($exceptionFunction);
 	}
-	
-	public function restorePreviousErrorStack() 
+
+	public function restorePreviousErrorStack()
 	{
 		restore_error_handler();
 	}
-	
-	public function restorePreviousExceptionStack() 
+
+	public function restorePreviousExceptionStack()
 	{
 		restore_exception_handler();
 	}
-	
-	public function trigger($errorMessage) 
+
+	public function trigger($errorMessage)
 	{
 		trigger_error($errorMessage);
 	}
-	
 }

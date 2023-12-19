@@ -12,12 +12,12 @@ class Apache
         return in_array('mod_rewrite', apache_get_modules());
     }
 
-    public static function terminateProcess() :void
+    public static function terminateProcess(): void
     {
         apache_child_terminate();
     }
 
-    public static function getLoadedModulesList() :array
+    public static function getLoadedModulesList(): array
     {
         return apache_get_modules();
     }
@@ -66,5 +66,4 @@ class Apache
     {
         return getallheaders();
     }
-
 }

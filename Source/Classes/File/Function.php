@@ -38,26 +38,24 @@ class Functions
 	public static function getClassName($filePath)
 	{
 		$declared = get_declared_classes();
-		
+
 		require_once $filePath;
 
 		return array_diff(get_declared_classes(), $declared);
 	}
 
-    public static function isCorrectName(string $fileName)
-    {
-        if (strlen($fileName) > \PHP_MAXPATHLEN)
-        {
-            return false;
-        }
-        
-        return true;
-    }
+	public static function isCorrectName(string $fileName)
+	{
+		if (strlen($fileName) > \PHP_MAXPATHLEN) {
+			return false;
+		}
+
+		return true;
+	}
 
 	public static function getCharacter($stream): string
 	{
-		if (!self::isValidHandler($stream)) 
-		{
+		if (!self::isValidHandler($stream)) {
 			throw new InvalidFileHandler(FileHandlerMessage::getInvalidFileHandler());
 		}
 
@@ -66,8 +64,7 @@ class Functions
 
 	public static function getLine($stream, int $length): string
 	{
-		if (!self::isValidHandler($stream)) 
-		{
+		if (!self::isValidHandler($stream)) {
 			throw new InvalidFileHandler(FileHandlerMessage::getInvalidFileHandler());
 		}
 
@@ -106,15 +103,13 @@ class Functions
 		$fileObject = new FileObject($filePath, true, $mode);
 		$fileObject->startHandle();
 
-		if (!$fileObject->successToStartHandle()) 
-		{
+		if (!$fileObject->successToStartHandle()) {
 			return false;
 		}
 
 		$fileObject->writeContent($content);
 
-		if (!$fileObject->successToWriteContent()) 
-		{
+		if (!$fileObject->successToWriteContent()) {
 			return false;
 		}
 
@@ -130,17 +125,15 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getCreatedDate($filePath) :bool|int
+	public static function getCreatedDate($filePath): bool|int
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			return false;
 		}
 
@@ -157,17 +150,15 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getLastModifiedTime(string $fileName) :bool|int
+	public static function getLastModifiedTime(string $fileName): bool|int
 	{
 		$fileName = self::convertToNomalizePath($fileName);
 
-		if (!self::isExists($fileName)) 
-		{
+		if (!self::isExists($fileName)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
-		if (!self::isFile($fileName)) 
-		{
+		if (!self::isFile($fileName)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
@@ -198,8 +189,7 @@ class Functions
 	{
 		$return = null;
 
-		if (function_exists("pathinfo")) 
-		{
+		if (function_exists("pathinfo")) {
 			$return = pathinfo($filePath, PATHINFO_EXTENSION);
 		}
 
@@ -233,28 +223,23 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			return false;
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
-		if (!self::isValidHandler($filePath) && !self::isFile($filePath)) 
-		{
+		if (!self::isValidHandler($filePath) && !self::isFile($filePath)) {
 			return false;
 		}
 
-		if (!self::isValidHandler($filePath)) 
-		{
+		if (!self::isValidHandler($filePath)) {
 			$filePath = self::open($filePath, FileMode::READ_OVERWRITE);
 		}
 
-		if (!flock($filePath, LOCK_EX)) 
-		{
+		if (!flock($filePath, LOCK_EX)) {
 			return true;
 		}
 
@@ -300,8 +285,7 @@ class Functions
 	 */
 	public static function unlock($fileHandler): void
 	{
-		if (!self::isValidHandler($fileHandler)) 
-		{
+		if (!self::isValidHandler($fileHandler)) {
 			throw new InvalidFileHandler(FileHandlerMessage::getInvalidFileHandler());
 		}
 
@@ -318,8 +302,7 @@ class Functions
 	 */
 	public static function setPermission(string $filePath, int $mode): bool
 	{
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
@@ -336,8 +319,7 @@ class Functions
 	 */
 	public static function changeGroup(string $filePath, string $group): bool
 	{
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
@@ -353,15 +335,13 @@ class Functions
 	 */
 	public static function lock($fileHandler, $mode = FileMode::READ_ONLY)
 	{
-		if (!self::isValidHandler($fileHandler)) 
-		{
+		if (!self::isValidHandler($fileHandler)) {
 			throw new InvalidFileHandler(FileHandlerMessage::getInvalidFileHandler());
 		}
 
 		$mode = strtolower($mode);
 
-		switch ($mode) 
-		{
+		switch ($mode) {
 			case FileMode::READ_ONLY:
 				flock($fileHandler, LOCK_SH); // Lock of read mode
 				break;
@@ -382,8 +362,7 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
@@ -403,14 +382,13 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (self::getType($filePath) === 'unknown') 
-		{
+		if (self::getType($filePath) === 'unknown') {
 			return true;
 		}
 
 		return false;
 	}
-    
+
 	/**
 	 * Get a basename of file
 	 *
@@ -435,13 +413,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
@@ -459,13 +435,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			return false;
 		}
 
@@ -487,17 +461,13 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!$overwrite && self::isFile($filePath)) 
-		{
+		if (!$overwrite && self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if ($stream === true) 
-		{
+		if ($stream === true) {
 			file_put_contents($filePath, $content, FILE_APPEND | LOCK_EX);
-		} 
-		else 
-		{
+		} else {
 			self::write($filePath, $content, 'a');
 		}
 
@@ -526,18 +496,15 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (FileValidation::isPharProtocol($filePath)) 
-		{
+		if (FileValidation::isPharProtocol($filePath)) {
 			throw new StupidIdeaException(FileHandlerMessage::getDoNotUsePharProtocolMessage($filePath));
 		}
 
@@ -563,8 +530,7 @@ class Functions
 		$realBasePath = realpath($basePath);
 		$realFilePath = realpath(dirname($filePath));
 
-		if ($realFilePath === false || strncmp($realFilePath, $realBasePath, strlen($realBasePath)) !== 0) 
-		{
+		if ($realFilePath === false || strncmp($realFilePath, $realBasePath, strlen($realBasePath)) !== 0) {
 			return false;
 		}
 
@@ -583,8 +549,7 @@ class Functions
 		$executeResult = array();
 		exec('file -i ' . $filePath, $executeResult);
 
-		if (isset($executeResult[0])) 
-		{
+		if (isset($executeResult[0])) {
 			$charset = explode('charset=', $executeResult[0]);
 			return isset($charset[1]) ? $charset[1] : null;
 		}
@@ -603,18 +568,15 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (FileSystemHandler::getCurrentInode() === self::getInode($filePath)) 
-		{
+		if (FileSystemHandler::getCurrentInode() === self::getInode($filePath)) {
 			return true;
 		}
 
@@ -632,13 +594,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -647,8 +607,7 @@ class Functions
 
 	public static function closeProcess($processResource)
 	{
-		if (getType($processResource) !== 'resource') 
-		{
+		if (getType($processResource) !== 'resource') {
 			throw new InvalidTypeException("");
 		}
 
@@ -668,12 +627,9 @@ class Functions
 	{
 		$result = null;
 
-		if (function_exists("mime_content_type")) 
-		{
+		if (function_exists("mime_content_type")) {
 			$result = self::getMIMEContentTypeFromMagicMIME($filePath);
-		} 
-		else if (function_exists("finfo_open") && function_exists("finfo_file")) 
-		{
+		} else if (function_exists("finfo_open") && function_exists("finfo_file")) {
 			$result = self::getMIMEContentTypeFromAlaMimetypeExtension($filePath);
 		}
 
@@ -689,8 +645,7 @@ class Functions
 	 */
 	public static function getMIMEContentTypeFromAlaMimetypeExtension($filePath)
 	{
-		if (!(function_exists("finfo_open") || function_exists("finfo_file"))) 
-		{
+		if (!(function_exists("finfo_open") || function_exists("finfo_file"))) {
 			throw new FunctionIsNotExistsException(FunctionMessage::getFunctionIsNotFileMessage());
 		}
 
@@ -712,20 +667,17 @@ class Functions
 	 */
 	public static function getMIMEContentTypeFromMagicMIME($filePath)
 	{
-		if (!function_exists("mime_content_type")) 
-		{
+		if (!function_exists("mime_content_type")) {
 			throw new FunctionIsNotExistsException(FunctionMessage::getFunctionIsNotFileMessage());
 		}
 
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
 		}
 
@@ -743,13 +695,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -765,8 +715,7 @@ class Functions
 	 */
 	public static function getPointerLocation($fileHandler)
 	{
-		if (!self::isValidHandler($fileHandler)) 
-		{
+		if (!self::isValidHandler($fileHandler)) {
 			throw new InvalidFileHandler(FileHandlerMessage::getInvalidFileHandler());
 		}
 
@@ -794,13 +743,11 @@ class Functions
 	 */
 	public static function isValidHandler($fileHandler)
 	{
-		if (getType($fileHandler) !== 'resource') 
-		{
+		if (getType($fileHandler) !== 'resource') {
 			return false;
 		}
 
-		if (get_resource_type($fileHandler) !== 'stream') 
-		{
+		if (get_resource_type($fileHandler) !== 'stream') {
 			return false;
 		}
 
@@ -820,13 +767,11 @@ class Functions
 		$filePath    = self::convertToNomalizePath($filePath);
 		$destination = self::convertToNomalizePath($destination);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			return false;
 		}
 
@@ -849,13 +794,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -876,25 +819,19 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!FileValidation::isReadable($filePath)) 
-		{
+		if (!FileValidation::isReadable($filePath)) {
 			return false;
 		}
 
-		if (FileValidation::hasSubfolderSyntax($filePath)) 
-		{
-			if ($filePath === null) 
-			{
+		if (FileValidation::hasSubfolderSyntax($filePath)) {
+			if ($filePath === null) {
 				throw new StupidIdeaException(FileHandlerMessage::getDoNotUseSubDirectorySyntaxMessage());
-			} 
-			else if (!self::isContainFolder($containDirectory, $filePath)) 
-			{
+			} else if (!self::isContainFolder($containDirectory, $filePath)) {
 				return false;
 			}
 		}
 
-		if (FileValidation::isPharProtocol($filePath)) 
-		{
+		if (FileValidation::isPharProtocol($filePath)) {
 			throw new StupidIdeaException(FileHandlerMessage::getDoNotUsePharProtocolMessage());
 		}
 
@@ -905,8 +842,7 @@ class Functions
 
 	public static function getSizeUnit(FileSizeUnit $type)
 	{
-		switch ($type)
-		{
+		switch ($type) {
 			case FileSizeUnit::LONG:
 				return ['B', 'Kilo B', 'Mega B', 'Giga B', 'Tera B', 'Peta B', 'Exa B', 'Zetta B', 'Yotta B'];
 			default:
@@ -926,31 +862,24 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		self::clearStatusCache($filePath);
 
-		if ($humanReadable) 
-		{
-			if (file_exists($filePath)) 
-			{
+		if ($humanReadable) {
+			if (file_exists($filePath)) {
 				$bytes = (int) filesize($filePath);
-			} 
-			else 
-			{
+			} else {
 				$bytes = (int)is_int($filePath) ? $filePath : -1;
 			}
 
-			if ($bytes > 0) 
-			{
+			if ($bytes > 0) {
 				$sizes            = self::getSizeUnit($type ?? FileSizeUnit::LONG);
 				$measure          = strlen((string) ($bytes >> 10));
 				$factor           = $bytes < (1024 ** 6) ? ($measure > 1 ? floor((($measure - 1) / 3) + 1) : 1) : floor((strlen($bytes) - 1) / 3);
@@ -1045,13 +974,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -1059,14 +986,10 @@ class Functions
 
 		extract($data);
 
-		if (isset($filePath)) 
-		{
-			if (file_exists($filePath)) 
-			{
+		if (isset($filePath)) {
+			if (file_exists($filePath)) {
 				@include $filePath;
-			} 
-			else
-			{
+			} else {
 				throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 			}
 		}
@@ -1074,7 +997,7 @@ class Functions
 		$return = ob_get_contents();
 
 		ob_end_clean();
-		
+
 		return $return;
 	}
 
@@ -1092,13 +1015,11 @@ class Functions
 		$source      = self::convertToNomalizePath($source);
 		$destination = self::convertToNomalizePath($destination);
 
-		if (!self::isExists($source)) 
-		{
+		if (!self::isExists($source)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($source));
 		}
 
-		if (!self::isFile($destination)) 
-		{
+		if (!self::isFile($destination)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($source));
 		}
 
@@ -1121,8 +1042,7 @@ class Functions
 		$filePath = self::convertToNomalizePath($filePath);
 
 		$fileObject = new FileObject($filePath, false, $mode);
-		if (!$fileObject->isEnoughFreeSpace()) 
-		{
+		if (!$fileObject->isEnoughFreeSpace()) {
 			self::$lastError = 'Disk space is not enough';
 
 			return false;
@@ -1130,22 +1050,17 @@ class Functions
 
 		$fileObject->startHandle();
 
-		if (!$fileObject->successToStartHandle()) 
-		{
+		if (!$fileObject->successToStartHandle()) {
 			return false;
 		}
 
-		if (!$fileObject->hasReadedContent()) 
-		{
+		if (!$fileObject->hasReadedContent()) {
 			return false;
 		}
 
-		if ($length === -1) 
-		{
+		if ($length === -1) {
 			$fileObject->readAllContent();
-		} 
-		else 
-		{
+		} else {
 			$fileObject->readContent($length);
 		}
 
@@ -1165,8 +1080,7 @@ class Functions
 	 */
 	public static function getSymbolicLink(string $symbolicLink)
 	{
-		if (!self::isSymbolicLink($symbolicLink)) 
-		{
+		if (!self::isSymbolicLink($symbolicLink)) {
 			return false;
 		}
 
@@ -1179,8 +1093,7 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (is_link($filePath) && self::getType($filePath) === 'link') 
-		{
+		if (is_link($filePath) && self::getType($filePath) === 'link') {
 			return true;
 		}
 
@@ -1198,8 +1111,7 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (self::getType($filePath) === 'file') 
-		{
+		if (self::getType($filePath) === 'file') {
 			return true;
 		}
 
@@ -1237,13 +1149,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			return false;
 		}
 
@@ -1264,13 +1174,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			return true;
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			return true;
 		}
 
@@ -1291,13 +1199,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -1316,13 +1222,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -1365,23 +1269,19 @@ class Functions
 	 *
 	 * @return mixed
 	 */
-	public static function getHeaderType(string $filePath) :string|bool
+	public static function getHeaderType(string $filePath): string|bool
 	{
 		$size = filesize($filePath);
 		$size = $size > 100 ? 100 : $size;
 
-		if ($size <= 4) 
-		{
+		if ($size <= 4) {
 			return false;
 		}
 
 		$header = self::read($filePath, $size);
-		if ($header) 
-		{
+		if ($header) {
 			$bigEndianUnpack = unpack('N', $header);
-		} 
-		else 
-		{
+		} else {
 			return false;
 		}
 
@@ -1519,228 +1419,118 @@ class Functions
 			'4294676676'
 		];
 
-		if (in_array($fileDescription, $exeFileHeader)) 
-		{
+		if (in_array($fileDescription, $exeFileHeader)) {
 			return 'EXE';
-		} 
-		else if (in_array($fileDescription, $oggFileHeader)) 
-		{
+		} else if (in_array($fileDescription, $oggFileHeader)) {
 			return 'OGG';
-		} 
-		else if (in_array($fileDescription, $mp3FileHeader)) 
-		{
+		} else if (in_array($fileDescription, $mp3FileHeader)) {
 			return 'MP3';
-		} 
-		else if ($fileDescription === 0x4D546864 /* MThd */ || $fileDescription === 0xB7075) 
-		{
+		} else if ($fileDescription === 0x4D546864 /* MThd */ || $fileDescription === 0xB7075) {
 			return 'MID';
-		} 
-		else if (in_array($fileDescription, $jpgFileHeader)) 
-		{
+		} else if (in_array($fileDescription, $jpgFileHeader)) {
 			return 'JPG';
-		} 
-		else if ($fileDescription === 0x2E0000EA) 
-		{
+		} else if ($fileDescription === 0x2E0000EA) {
 			return 'GBA';
-		} 
-		else if ($fileDescription === 0x4F676753) 
-		{
+		} else if ($fileDescription === 0x4F676753) {
 			return 'OGG/OGA/OGV';
-		} 
-		else if ($fileDescription === 0x38425053) 
-		{
+		} else if ($fileDescription === 0x38425053) {
 			return 'PSD';
-		} 
-		else if ($fileDescription === 0x4E45531A /* NES */) 
-		{
+		} else if ($fileDescription === 0x4E45531A /* NES */) {
 			return 'NES';
-		} 
-		else if ($fileDescription === 0x494E4458) 
-		{
+		} else if ($fileDescription === 0x494E4458) {
 			return 'IDX';
-		} 
-		else if ($fileDescription === 0x4C5A4950) 
-		{
+		} else if ($fileDescription === 0x4C5A4950) {
 			return 'LZ';
-		} 
-		else if ($fileDescription === 0x44303031) 
-		{
+		} else if ($fileDescription === 0x44303031) {
 			return 'ISO';
-		}
-		else if ($fileDescription === 0x79703367) 
-		{
+		} else if ($fileDescription === 0x79703367) {
 			return '3GP/3G2';
-		} 
-		else if ($fileDescription === 0x54444546) 
-		{
-			return 'TDEF'
-			;
-		} 
-		else if ($fileDescription === 0x664C6143) 
-		{
+		} else if ($fileDescription === 0x54444546) {
+			return 'TDEF';
+		} else if ($fileDescription === 0x664C6143) {
 			return 'FLAG';
-		} 
-		else if ($fileDescription === 0xC3130) 
-		{
+		} else if ($fileDescription === 0xC3130) {
 			return 'ZIP';
-		} 
-		else if ($fileDescription === 0x504B0304 /* PK, KPZIP/PPTX */) 
-		{
+		} else if ($fileDescription === 0x504B0304 /* PK, KPZIP/PPTX */) {
 			return 'ZIP/PPTX';
-		} 
-		else if ($fileDescription === 0x46383761 /* GIF8 (GIF87a) */ || $fileDescription === 0x47494638 /* GIF8 (GIF89a) */) 
-		{
+		} else if ($fileDescription === 0x46383761 /* GIF8 (GIF87a) */ || $fileDescription === 0x47494638 /* GIF8 (GIF89a) */) {
 			return 'GIF';
-		} 
-		else if ($fileDescription === 0x4D5A6C00) 
-		{
+		} else if ($fileDescription === 0x4D5A6C00) {
 			return 'DLL';
-		} 
-		else if ($fileDescription === 0x4C000000 /* LLNK */) 
-		{
+		} else if ($fileDescription === 0x4C000000 /* LLNK */) {
 			return 'LNK';
-		} 
-		else if ($fileDescription === 0x5B7B3030 || $fileDescription === 0x5B444546) 
-		{
+		} else if ($fileDescription === 0x5B7B3030 || $fileDescription === 0x5B444546) {
 			return 'URL';
-		} 
-		else if ($fileDescription === 0x89504E47 /* PNG */) 
-		{
+		} else if ($fileDescription === 0x89504E47 /* PNG */) {
 			return 'PNG';
-		} 
-		else if ($fileDescription === 0x454E4947) 
-		{
+		} else if ($fileDescription === 0x454E4947) {
 			return 'MUS';
-		} 
-		else if ($fileDescription === 0x1C /* M4A */) 
-		{
+		} else if ($fileDescription === 0x1C /* M4A */) {
 			return 'M4A'; //ftypM4A
-		} 
-		else if ($fileDescription === 0x2D2D2D2D) 
-		{
+		} else if ($fileDescription === 0x2D2D2D2D) {
 			return 'CAP';
-		} 
-		else if ($fileDescription === 0x4D534654) 
-		{
+		} else if ($fileDescription === 0x4D534654) {
 			return 'TLB';
-		} 
-		else if ($fileDescription === 0xA050101) 
-		{
+		} else if ($fileDescription === 0xA050101) {
 			return 'PCX';
-		} 
-		else if ($fileDescription === 0x64343A69) 
-		{
+		} else if ($fileDescription === 0x64343A69) {
 			return 'TORRENTDATA';
-		} 
-		else if ($fileDescription === 0x6431303A) 
-		{
+		} else if ($fileDescription === 0x6431303A) {
 			return 'DAT';
-		} 
-		else if ($fileDescription === 0x4F676753) 
-		{
+		} else if ($fileDescription === 0x4F676753) {
 			return 'OGG';
-		} 
-		else if ($fileDescription === 0x50445431) 
-		{
+		} else if ($fileDescription === 0x50445431) {
 			return 'PDF';
-		} 
-		else if ($fileDescription === 0x100) 
-		{
+		} else if ($fileDescription === 0x100) {
 			return 'ICODATA';
-		} 
-		else if ($fileDescription === 0xFFFE2300) 
-		{
+		} else if ($fileDescription === 0xFFFE2300) {
 			return 'AIMPPL4';
-		} 
-		else if ($fileDescription === 0x49545346) 
-		{
+		} else if ($fileDescription === 0x49545346) {
 			return 'CHM';
-		} 
-		else if ($fileDescription === 0xD0CF11E0) 
-		{
+		} else if ($fileDescription === 0xD0CF11E0) {
 			return 'MSI';
-		} 
-		else if ($fileDescription === 0x52494646 /* RIFF */) 
-		{
+		} else if ($fileDescription === 0x52494646 /* RIFF */) {
 			return 'AVI/WAV/CPR';
-		} 
-		else if ($fileDescription === 0x50494646) 
-		{
+		} else if ($fileDescription === 0x50494646) {
 			return 'WAV';
-		} 
-		else if (in_array($fileDescription, $bmpFileHeader)) 
-		{
+		} else if (in_array($fileDescription, $bmpFileHeader)) {
 			return 'BMP';
-		} 
-		else if (in_array($fileDescription, $xp3FileHeader)) 
-		{
+		} else if (in_array($fileDescription, $xp3FileHeader)) {
 			return 'XP3';
-		} 
-		else if ($fileDescription === 0x3026B275) 
-		{
+		} else if ($fileDescription === 0x3026B275) {
 			return 'WMV';
-		} 
-		else if (in_array($fileDescription, $swfFileHeader)) 
-		{
+		} else if (in_array($fileDescription, $swfFileHeader)) {
 			return 'SWF';
-		} 
-		else if ($fileDescription === 0x1A45DFA3) 
-		{
+		} else if ($fileDescription === 0x1A45DFA3) {
 			return 'WEBM';
-		} 
-		else if ($fileDescription === 20 || $fileDescription === 32 /* MP4 (ftypisom isomiso2avc1mp41) */) 
-		{
+		} else if ($fileDescription === 20 || $fileDescription === 32 /* MP4 (ftypisom isomiso2avc1mp41) */) {
 			return 'MP4';
-		} 
-		else if ($fileDescription === 0x25504446 /* PDF*/) 
-		{
+		} else if ($fileDescription === 0x25504446 /* PDF*/) {
 			return 'PDF';
-		} 
-		else if ($fileDescription === 0x52617221 /* Rar! */) 
-		{
+		} else if ($fileDescription === 0x52617221 /* Rar! */) {
 			return 'RAR';
-		} 
-		else if ($fileDescription === 0x45474741) 
-		{
+		} else if ($fileDescription === 0x45474741) {
 			return 'EGG';
-		} 
-		else if ($fileDescription === 0x60EA2900) 
-		{
+		} else if ($fileDescription === 0x60EA2900) {
 			return 'ARJ';
-		} 
-		else if ($fileDescription === 0) 
-		{
+		} else if ($fileDescription === 0) {
 			return 'EMPTY';
-		} 
-		else if ($fileDescription === 0x64383A61) 
-		{
+		} else if ($fileDescription === 0x64383A61) {
 			return 'TORRENT';
-		} 
-		else if ($fileDescription === 0x5B4E575A /* NWZ */) 
-		{
+		} else if ($fileDescription === 0x5B4E575A /* NWZ */) {
 			return 'NWC';
-		} 
-		else if ($fileDescription === 0x464C5601) 
-		{
+		} else if ($fileDescription === 0x464C5601) {
 			return 'FLV';
-		} 
-		else if ($fileDescription === 0x213C6172) 
-		{
+		} else if ($fileDescription === 0x213C6172) {
 			return 'IPK';
-		} 
-		else if ($fileDescription === 0x556E6974) 
-		{
+		} else if ($fileDescription === 0x556E6974) {
 			return 'UnityFS';
-		} 
-		else if ($fileDescription === 0x3C3F7068) 
-		{
+		} else if ($fileDescription === 0x3C3F7068) {
 			return 'PHP';
-		} 
-		else if ($fileDescription === 0x3C3F786D) 
-		{
+		} else if ($fileDescription === 0x3C3F786D) {
 			return 'XML';
-		} 
-		
+		}
+
 		return false;
 	}
 
@@ -1755,13 +1545,11 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
@@ -1784,26 +1572,21 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (!self::isExists($filePath)) 
-		{
+		if (!self::isExists($filePath)) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		if (!self::isFile($filePath)) 
-		{
+		if (!self::isFile($filePath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		$fileHandler = self::open($filePath, 'rb');
-		if ($fileHandler === false) 
-		{
+		if ($fileHandler === false) {
 			return false;
 		}
 
-		if ($fileHandler) 
-		{
-			while (!feof($fileHandler)) 
-			{
+		if ($fileHandler) {
+			while (!feof($fileHandler)) {
 				print(@fread($fileHandler, $bufferSize > 0 ? $bufferSize : (1024 * 8)));
 				ob_flush();
 				flush();
@@ -1828,16 +1611,12 @@ class Functions
 
 		$filePath = self::convertToNomalizePath($filePath);
 
-		if (function_exists("pathinfo")) 
-		{
+		if (function_exists("pathinfo")) {
 			$return = self::getExtensionByFilePath($filePath);
-		} 
-		else 
-		{
+		} else {
 			$dotExists = strrchr($filePath, '.');
 
-			if ($dotExists !== false) 
-			{
+			if ($dotExists !== false) {
 				$return = substr($dotExists, 1);
 			}
 		}
@@ -1891,8 +1670,7 @@ class Functions
 		// https://stackoverflow.com/questions/30107521/check-if-same-image-has-already-been-uploaded-by-comparing-base64
 
 		// First check if file are not the same size as the fastest method
-		if (filesize($firstPath) !== filesize($secondPath)) 
-		{
+		if (filesize($firstPath) !== filesize($secondPath)) {
 			return false;
 		}
 
@@ -1904,8 +1682,7 @@ class Functions
 		fclose($fp1);
 		fclose($fp2);
 
-		if (!$chunksAreEqual) 
-		{
+		if (!$chunksAreEqual) {
 			return false;
 		}
 
@@ -1913,12 +1690,10 @@ class Functions
 		// SHA1 calculates a bit faster than MD5
 		$firstChecksum  = sha1_file($firstPath);
 		$secondChecksum = sha1_file($secondPath);
-		if ($firstChecksum != $secondChecksum) 
-		{
+		if ($firstChecksum != $secondChecksum) {
 			return false;
 		}
 
 		return true;
 	}
-
 }

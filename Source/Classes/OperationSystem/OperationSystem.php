@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Xanax\Classes;
 
-class OperationSystem 
+class OperationSystem
 {
 
 	public static function setDefaultDateTimeZone($timeZoneId)
@@ -22,7 +22,7 @@ class OperationSystem
 		ini_set('display_errors', $displayErrors);
 	}
 
-	public static function setErrorReportingLevel(int $level) :int
+	public static function setErrorReportingLevel(int $level): int
 	{
 		return error_reporting($level);
 	}
@@ -32,27 +32,27 @@ class OperationSystem
 		return phpversion();
 	}
 
-	public static function isCommandLineInterface() 
+	public static function isCommandLineInterface()
 	{
 		return (php_sapi_name() === 'cli');
 	}
 
-	public static function getBuiltOperationSystemString() 
+	public static function getBuiltOperationSystemString()
 	{
 		return PHP_OS;
 	}
-	
-	public static function getIntergerSize() 
+
+	public static function getIntergerSize()
 	{
 		return PHP_INT_SIZE;
 	}
-	
-	public static function getMaximumIntergerSize() 
+
+	public static function getMaximumIntergerSize()
 	{
 		return PHP_INT_MAX;
 	}
-	
-	public static function is4BitOSBitOS() 
+
+	public static function is4BitOSBitOS()
 	{
 		if (PHP_INT_MAX == 0x7) // Maximum value of 4-bit sign integer
 		{
@@ -62,7 +62,7 @@ class OperationSystem
 		return false;
 	}
 
-	public static function is8BitOSBitOS() 
+	public static function is8BitOSBitOS()
 	{
 		if (PHP_INT_MAX == 0x7F) // Maximum value of 8-bit sign integer
 		{
@@ -72,7 +72,7 @@ class OperationSystem
 		return false;
 	}
 
-	public static function is16BitOS() 
+	public static function is16BitOS()
 	{
 		if (self::getIntergerSize() == 2 || self::getMaximumIntergerSize() == 0x7FFF) // Maximum value of 16-bit sign integer
 		{
@@ -82,7 +82,7 @@ class OperationSystem
 		return false;
 	}
 
-	public static function is32BitOS() 
+	public static function is32BitOS()
 	{
 		if (self::getIntergerSize() == 4 || self::getMaximumIntergerSize() == 0x7FFFFFFF) // Maximum value of 32-bit sign integer
 		{
@@ -92,7 +92,7 @@ class OperationSystem
 		return false;
 	}
 
-	public static function is64BitOS() 
+	public static function is64BitOS()
 	{
 		if (self::getIntergerSize() == 8 || self::getMaximumIntergerSize() == 0x7FFFFFFFFFFFFFFF) // Maximum value of 64-bit sign integer
 		{
@@ -102,7 +102,7 @@ class OperationSystem
 		return false;
 	}
 
-	public static function is128BitOS() 
+	public static function is128BitOS()
 	{
 		if (self::getMaximumIntergerSize() == 0x80000000000000000000000000000000) // Maximum value of 128-bit sign integer
 		{
@@ -112,7 +112,7 @@ class OperationSystem
 		return false;
 	}
 
-	public static function is256BitOS() 
+	public static function is256BitOS()
 	{
 		if (self::getMaximumIntergerSize() == 0x8000000000000000000000000000000000000000000000000000000000000000) // Maximum value of 256-bit sign integer
 		{
@@ -122,11 +122,11 @@ class OperationSystem
 		return false;
 	}
 
-	public static function isIIS() 
+	public static function isIIS()
 	{
 		return (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false);
 	}
-	
+
 	public static function getHomePath()
 	{
 		return $_SERVER['HOME'];
@@ -148,10 +148,10 @@ class OperationSystem
 
 		$softwares = explode(' ', $software);
 
-		return array_reduce($softwares, function ($res, $el) { 
-			list($software, $version) = array_merge(explode('/', $el), [1]); 
-			$res[$software] = (float) $version; 
-			return $res; 
+		return array_reduce($softwares, function ($res, $el) {
+			list($software, $version) = array_merge(explode('/', $el), [1]);
+			$res[$software] = (float) $version;
+			return $res;
 		}, []);
 	}
 
@@ -160,16 +160,16 @@ class OperationSystem
 		return $_SERVER['SERVER_SOFTWARE'];
 	}
 
-	public static function getShortOperationSystemString() 
+	public static function getShortOperationSystemString()
 	{
 		return strtoupper(substr(self::getBuiltOperationSystemString(), 0, 3));
 	}
-	
-	public static function isWindows() 
+
+	public static function isWindows()
 	{
 		return (self::getShortOperationSystemString() === 'WIN');
 	}
-	
+
 	public static function isSessionUseCookies()
 	{
 		return ini_get('session.use_cookies');
@@ -185,12 +185,12 @@ class OperationSystem
 		return ini_get('upload_max_filesize');
 	}
 
-	public static function isShortOpenTagAllowed() 
+	public static function isShortOpenTagAllowed()
 	{
 		return ini_get('short_open_tag') == 1;
 	}
 
-	public static function isFileUploadAllowed() 
+	public static function isFileUploadAllowed()
 	{
 		return ini_get('file_uploads') == 1;
 	}
@@ -224,13 +224,10 @@ class OperationSystem
 	{
 		$cpu_numbers = 0;
 
-		if (self::getFamily() == 'Windows')
-		{
+		if (self::getFamily() == 'Windows') {
 			$cpu_numbers = getenv("NUMBER_OF_PROCESSORS") + 0;
-		}
-		else
-		{
-			$cpu_numbers = substr_count(file_get_contents("/proc/cpuinfo"),"processor");
+		} else {
+			$cpu_numbers = substr_count(file_get_contents("/proc/cpuinfo"), "processor");
 		}
 
 		return (int) $cpu_numbers;

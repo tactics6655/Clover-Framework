@@ -1,5 +1,5 @@
 <?php
 
-class Scalar {
-
+class Scalar
+{
 }

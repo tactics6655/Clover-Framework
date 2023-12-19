@@ -2,8 +2,9 @@
 
 namespace Xanax\Implement;
 
-interface ImageHandlerInterface {
-	
+interface ImageHandlerInterface
+{
+
 	public function isAnimated($filename);
 
 	public function drawRepeat($imageResource, $width, $height);
@@ -14,11 +15,11 @@ interface ImageHandlerInterface {
 
 	public function ratioResize($imageResource, $resizeWidth, $resizeHeight);
 
-	public function filter ($imageResource, string $type, ...$args);
+	public function filter($imageResource, string $type, ...$args);
 
 	public function draw($imageResource, $format);
 
-	public function pickColor($imageResource, $x, $y) :array;
+	public function pickColor($imageResource, $x, $y): array;
 
 	public function drawText($imageResource, $fontSize, $x, $y, $text, $red, $green, $blue);
 
@@ -28,7 +29,7 @@ interface ImageHandlerInterface {
 
 	public static function getType($filePath);
 
-	public static function create($filePath, $imageResource, $outputPath, $quality = 100 );
+	public static function create($filePath, $imageResource, $outputPath, $quality = 100);
 
 	public function flip($imageResource, $type);
 
@@ -49,5 +50,4 @@ interface ImageHandlerInterface {
 	public static function getInstance($filePath);
 
 	public function hexToRgb($hex);
-	
 }

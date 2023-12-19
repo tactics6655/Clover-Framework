@@ -6,7 +6,7 @@ use Xanax\Classes\HTML\Handler as HTMLHandler;
 
 use Xanax\Classes\ClientURL;
 
-class Bosh 
+class Bosh
 {
     private $user = "";
 
@@ -15,11 +15,11 @@ class Bosh
     private $domain;
 
     private $rid;
-    
+
     private $sid;
 
     private $bosh_server = "";
-    
+
     public function __construct($user, $password, $domain)
     {
         $this->user = $user;
@@ -38,7 +38,7 @@ class Bosh
             ->setCharset('UTF-8')
             ->setFollowRedirects(true)
             ->setVerbose(true)
-			->setReturnTransfer(true);
+            ->setReturnTransfer(true);
 
         return $cURL->execute();
     }
@@ -156,5 +156,4 @@ class Bosh
 
         return HTMLHandler::generateElement("body", "", $attributes, true);
     }
-    
 }

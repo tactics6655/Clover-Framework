@@ -2,5 +2,6 @@
 
 namespace Xanax\Classes\Hash;
 
-class MD5 {
+class MD5
+{
 }

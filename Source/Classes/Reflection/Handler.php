@@ -7,7 +7,7 @@ namespace Xanax\Classes\Reflection;
 use ReflectionClass;
 use Reflector;
 
-class Handler 
+class Handler
 {
 
     public static function getClassMethods(ReflectionClass $class)
@@ -30,7 +30,7 @@ class Handler
         return $class->isAbstract();
     }
 
-    public static function getAnnotations(Reflector $reflector, string $annotationName) : array
+    public static function getAnnotations(Reflector $reflector, string $annotationName): array
     {
         $result = [];
 
@@ -43,7 +43,7 @@ class Handler
 
         return $result;
     }
-	
+
     public static function class($class)
     {
         $reflection = new ReflectionClass($class);
@@ -72,88 +72,71 @@ class Handler
         return $parameters;
     }
 
-    public static function isNamedType($parameter) 
+    public static function isNamedType($parameter)
     {
         return $parameter instanceof \ReflectionNamedType;
     }
 
-	public static function getClassReflection($class)
-	{
-		$reflection = self::class($class);
-		$parameters = self::getParameters($reflection);
+    public static function getClassReflection($class)
+    {
+        $reflection = self::class($class);
+        $parameters = self::getParameters($reflection);
 
-		$dependencies = [];
+        $dependencies = [];
 
-		foreach ($parameters as $parameter) 
-        {
-			$type = $parameter->getType();
+        foreach ($parameters as $parameter) {
+            $type = $parameter->getType();
 
-			if ($type && self::isNamedType($type)) 
-            {
-				$name = $parameter->getClass()->newInstance();
-				array_push($dependencies, $name);
-			} 
-            else 
-            {
-				if (!$parameter->isOptional()) 
-                {
-					throw new Exception("Can not resolve parameters");
-				}
-			}
-		}
+            if ($type && self::isNamedType($type)) {
+                $name = $parameter->getClass()->newInstance();
+                array_push($dependencies, $name);
+            } else {
+                if (!$parameter->isOptional()) {
+                    throw new Exception("Can not resolve parameters");
+                }
+            }
+        }
 
-		return $reflection->newInstance(...$dependencies);
-	}
+        return $reflection->newInstance(...$dependencies);
+    }
 
-	public static function invoke($class, $method, $append_parameters = [], $arguments = [])
-	{
-		$reflection = self::method($class, $method);
-		$parameters = self::getMethodParameters($reflection);
+    public static function invoke($class, $method, $append_parameters = [], $arguments = [])
+    {
+        $reflection = self::method($class, $method);
+        $parameters = self::getMethodParameters($reflection);
 
-		$dependencies = [];
+        $dependencies = [];
 
-		foreach ($parameters as $parameter) 
-        {
-			$type = $parameter->getType();
+        foreach ($parameters as $parameter) {
+            $type = $parameter->getType();
 
-			if ($type && self::isNamedType($type)) 
-            {
-                if (8 === PHP_MAJOR_VERSION) 
-                {
+            if ($type && self::isNamedType($type)) {
+                if (8 === PHP_MAJOR_VERSION) {
                     $reflectionClass = new ReflectionClass($parameter->getType()->getName());
 
                     array_push($dependencies, $reflectionClass->newInstance());
-                }
-                else
-                {
+                } else {
                     $name = $parameter->getClass()->newInstance();
                     array_push($dependencies, $name);
                 }
-			} 
-            else 
-            {
-				$name = $parameter->getName();
-			}
-		}
+            } else {
+                $name = $parameter->getName();
+            }
+        }
 
-		if (!is_object($class)) 
-        {
-			$initClass = self::getClassReflection($class);
-		} 
-        else 
-        {
-			$initClass = $class;
-		}
+        if (!is_object($class)) {
+            $initClass = self::getClassReflection($class);
+        } else {
+            $initClass = $class;
+        }
 
-        if (isset($arguments) && !empty($arguments))
-        {
+        if (isset($arguments) && !empty($arguments)) {
             $class = new ReflectionClass($initClass);
             $instance = $class->newInstance($arguments);
 
             return $reflection->invoke($instance, ...array_merge($dependencies, $append_parameters));
         }
 
-		return $reflection->invoke($initClass, ...$dependencies);
-	}
-
+        return $reflection->invoke($initClass, ...$dependencies);
+    }
 }

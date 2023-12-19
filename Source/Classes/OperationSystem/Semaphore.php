@@ -13,5 +13,4 @@ class Semaphore
 
         return false;
     }
-
 }

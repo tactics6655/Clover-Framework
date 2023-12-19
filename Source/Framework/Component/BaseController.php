@@ -18,7 +18,7 @@ class BaseController
     {
         return new Response($body, $resource);
     }
-    
+
     public function addHeadCssFile($filename)
     {
         $this->container->get('Resource')->addGenericCssFile($filename);
@@ -42,5 +42,4 @@ class BaseController
 
         return $this->response($render, $resources);
     }
-
 }

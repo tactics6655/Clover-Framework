@@ -8,7 +8,7 @@ return [
     'cpt' => [
         'type' => 'application/mac-compactpro'
     ],
-    
+
     /* Text */
     '323' => [
         'type' => 'text/h323'
@@ -255,7 +255,7 @@ return [
     ],
 
     /* Document */
-    
+
     'word' => [
         'type' => 'application/msword',
         'array' => array('application/msword', 'application/octet-stream')
@@ -281,9 +281,9 @@ return [
     'pptx' => [
         'type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
     ],
-    
+
     /* MS Office */
-    
+
     'doc' => [
         'type' => 'application/msword'
     ],
@@ -299,9 +299,9 @@ return [
     'excel' => [
         'type' => 'application/vnd.ms-excel'
     ],
-    
+
     /* Adobe */
-    
+
     'pdf' => [
         'type' => 'application/pdf'
     ],
@@ -318,22 +318,22 @@ return [
     'ps' => [
         'type' => 'application/postscript'
     ],
-    
+
     /* Open Office */
-    
+
     'odt' => [
         'type' => 'application/vnd.oasis.opendocument.text'
     ],
     'ods' => [
         'type' => 'application/vnd.oasis.opendocument.spreadsheet'
     ],
-    
+
     /* Font */
-    
+
     'ttf' => [
         'type' => 'application/x-font-ttf'
     ],
-    
+
     /* Application */
 
     'class' => [
@@ -461,4 +461,3 @@ return [
         'type' => 'application/rdf'
     ]
 ];
-?>

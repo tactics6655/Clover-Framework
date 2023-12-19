@@ -8,8 +8,8 @@ class Redis
 {
 
 	private $cache;
-	
-	public function __construct() 
+
+	public function __construct()
 	{
 		$this->cache = new Redis();
 	}
@@ -22,9 +22,8 @@ class Redis
 	public function compareVersion($host, $port = '6379')
 	{
 		preg_match('/redis_version:(.*?)\n/', $this->conn->info(), $info);
-			
-		if (version_compare(trim($info[1]), '1.2') < 0)
-		{
+
+		if (version_compare(trim($info[1]), '1.2') < 0) {
 			return false;
 		}
 
@@ -57,8 +56,7 @@ class Redis
 	{
 		$data = '';
 
-		if ($this->cache->exists($key))
-		{
+		if ($this->cache->exists($key)) {
 			$data = $this->cache->get($key);
 		}
 

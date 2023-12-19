@@ -9,48 +9,41 @@ use Xanax\Classes\File\Handler as FileHandler;
 use Xanax\Enumeration\UploadedFile;
 use Xanax\Enumeration\UploadedFileError;
 
-class Handler 
+class Handler
 {
-	
-	public static function get($name, $key = UploadedFile::NAME) 
+
+	public static function get($name, $key = UploadedFile::NAME)
 	{
-		if (preg_match('/^([A-Za-z0-9-_]{1,})\[[A-Za-z0-9-_]{1,}\]$/', $name, $match)) 
-		{
+		if (preg_match('/^([A-Za-z0-9-_]{1,})\[[A-Za-z0-9-_]{1,}\]$/', $name, $match)) {
 			return isset($_FILES[$match[1]][$key][$match[2]]) ? $_FILES[$match[1]][UploadedFile::NAME][$match[2]] : null;
-		} 
-		else 
-		{
-			if ($key === UploadedFile::NAME) 
-			{
+		} else {
+			if ($key === UploadedFile::NAME) {
 				return isset($_FILES[$name]) ? $_FILES[$name] : null;
-			} 
-			else 
-			{
+			} else {
 				return isset($_FILES[$name][$key]) ? $_FILES[$name][$key] : null;
 			}
 		}
 	}
 
-	public static function move($name, $filePath) 
+	public static function move($name, $filePath)
 	{
 		$temporaryName = self::getTemporaryName($name);
 
 		$result = move_uploaded_file($temporaryName,  $filePath);
-		
+
 		return $result;
 	}
-	
-	public static function isUploaded($name, $filePath) 
+
+	public static function isUploaded($name, $filePath)
 	{
 		$temporaryName = self::getTemporaryName($name);
-		
+
 		return file_exists(sprintf("%s/%s", $filePath, $temporaryName));
 	}
-	
-	public static function getErrorMessageFromCode($error) 
+
+	public static function getErrorMessageFromCode($error)
 	{
-		switch ($error) 
-		{
+		switch ($error) {
 			case \UPLOAD_ERR_OK:
 				$response = UploadedFileError::UPLOAD_ERR_OK;
 				break;
@@ -83,10 +76,9 @@ class Handler
 		return $response;
 	}
 
-	public static function hasError($name) 
+	public static function hasError($name)
 	{
-		if (self::getFileError($name) === UPLOAD_ERR_OK) 
-		{
+		if (self::getFileError($name) === UPLOAD_ERR_OK) {
 			return false;
 		}
 
@@ -98,44 +90,42 @@ class Handler
 		return is_uploaded_file($_FILES[$name][UploadedFile::TEMPORARY_NAME]);
 	}
 
-	public static function hasItem() 
+	public static function hasItem()
 	{
 		return (count($_FILES) > 0);
 	}
 
-	public static function getTemporaryName($name) 
+	public static function getTemporaryName($name)
 	{
 		return self::get($name, UploadedFile::TEMPORARY_NAME);
 	}
 
-	public static function getFileType($name) 
+	public static function getFileType($name)
 	{
 		return self::get($name, UploadedFile::TYPE);
 	}
 
-	public static function getFileName($name) 
+	public static function getFileName($name)
 	{
 		return self::get($name, UploadedFile::NAME);
 	}
 
-	public static function getFileSize($name) 
+	public static function getFileSize($name)
 	{
 		return self::get($name, UploadedFile::SIZE);
 	}
 
-	public static function getFileError($name) 
+	public static function getFileError($name)
 	{
 		return self::get($name, UploadedFile::ERROR);
 	}
 
-	public static function isExists($name = UploadedFile::TEMPORARY_NAME) 
+	public static function isExists($name = UploadedFile::TEMPORARY_NAME)
 	{
-		if (self::get($name) === null) 
-		{
+		if (self::get($name) === null) {
 			return false;
 		}
 
 		return true;
 	}
-	
 }

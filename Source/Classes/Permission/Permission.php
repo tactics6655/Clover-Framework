@@ -11,7 +11,7 @@ use Xanax\Classes\Permission\World as World;
 class Permission
 {
 	private static $mode;
-	
+
 	public function __construct($mode)
 	{
 		self::$mode = $mode;
@@ -26,35 +26,34 @@ class Permission
 	{
 		return (self::$mode & 0x0100);
 	}
-	
+
 	public function isSpecialCharacters()
 	{
 		return (self::$mode & 0x0020);
 	}
-	
+
 	public function isDirectory()
 	{
 		return (self::$mode & 0x0040);
 	}
-	
+
 	public function isBlockSpecial()
 	{
 		return (self::$mode & 0x6000);
 	}
-	
+
 	public function isRegular()
 	{
 		return (self::$mode & 0x0800);
 	}
-	
+
 	public function isSymbolicLink()
 	{
 		return (self::$mode & 0xA000);
 	}
-	
+
 	public function isSocket()
 	{
 		return (self::$mode & 0xC000);
 	}
-	
 }

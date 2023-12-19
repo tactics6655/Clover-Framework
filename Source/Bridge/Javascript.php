@@ -1,4 +1,5 @@
 <?php
 
-class Javascript {
+class Javascript
+{
 }

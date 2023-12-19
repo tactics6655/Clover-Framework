@@ -8,125 +8,125 @@ class Builder
 {
 
 	// http://vs-shop.cloudsite.ir/manual/kr/language.variables.basics.php
-	public function validPHPVariableName() 
+	public function validPHPVariableName()
 	{
 		return "[a-zA-Z_\x7f-\xff]";
 	}
-	
-	public function negativeSet($expression) 
+
+	public function negativeSet($expression)
 	{
 		return "[^${expression}]";
 	}
-	
-	public function url() 
+
+	public function url()
 	{
 		return "(?<=(([\<a href])))?(?2)?(?>)(?1)(?=[http|https]).{4,5}[A-Za-z]\:\/\/\b[0-9a-zA-Z\?\=.\/\_\-]{1,}\b";
 	}
-	
-	public function repetition($expression, $repeat) 
+
+	public function repetition($expression, $repeat)
 	{
 		return "\\b${expression}\{${repeat}\}\b";
 	}
 
-	public function setComment($content) 
+	public function setComment($content)
 	{
-		return "(?#${content})"; 
+		return "(?#${content})";
 	}
-	
-	public function recursion() 
+
+	public function recursion()
 	{
 		return "(?R)";
 	}
-	
+
 	// Subroutine
-	
-	public function namedSubroutine($name) 
+
+	public function namedSubroutine($name)
 	{
 		return "(?P>${$name})";
 	}
-	
-	public function numericSubroutine($number) 
+
+	public function numericSubroutine($number)
 	{
 		return "(?${$number})"; // isEqual \g'${$number}'
 	}
-	
-	public function numericPrecedingSubroutine($number) 
+
+	public function numericPrecedingSubroutine($number)
 	{
 		return "(?-${$number})";
 	}
-	
-	public function numericNextSubroutine($number) 
+
+	public function numericNextSubroutine($number)
 	{
 		return "(?+${$number})";
 	}
-	
-	public function backreferenceNumericSubroutine($expression, $number) 
+
+	public function backreferenceNumericSubroutine($expression, $number)
 	{
 		return "(${expression})\g<${number}>";
 	}
-	
+
 	// Condition
-	
-	public function condition($expression, $then, $else) 
+
+	public function condition($expression, $then, $else)
 	{
 		return "(?(?=${expression})${then}|${else})";
 	}
-	
-	public function namedConditionGroupingWhenValid($name, $expression, $condition, $then, $else) 
+
+	public function namedConditionGroupingWhenValid($name, $expression, $condition, $then, $else)
 	{
 		return "(?<${name}>${expression})?${condition}(?(${name})${then}|${else})";
 	}
-	
-	public function conditionGrouping($expression, $condition, $then, $else) 
+
+	public function conditionGrouping($expression, $condition, $then, $else)
 	{
 		return "(${expression})?${condition}(?(1)${then}|${else})";
 	}
-	
+
 	// Mode
-	
-	public function turnOnFreeSpacingMode() 
+
+	public function turnOnFreeSpacingMode()
 	{
-		return "(?x)";	
+		return "(?x)";
 	}
-	
-	public function makeCaseInsensitive() 
+
+	public function makeCaseInsensitive()
 	{
-		return "(?i)";	
+		return "(?i)";
 	}
-	
-	public function makeCaseSensitive() 
+
+	public function makeCaseSensitive()
 	{
-		return "(?c)";	
+		return "(?c)";
 	}
 
 	// Only supported by Tcl
-	public function turnOffFreeSpacingMode() 
+	public function turnOffFreeSpacingMode()
 	{
-		return "(?t)";	
+		return "(?t)";
 	}
-	
+
 	// String
-	
-	public function keepOut() 
+
+	public function keepOut()
 	{
 		return "\K";
-	} 
-	
-	public function unicodeCategory() 
+	}
+
+	public function unicodeCategory()
 	{
 		return "\p{L}";
 	}
 
-	public function getAnyWordMoreThanOne() 
+	public function getAnyWordMoreThanOne()
 	{
 		return "\w+";
 	}
 
-	public function getAnyWordMoreThanOneWithoutBlank() 
+	public function getAnyWordMoreThanOneWithoutBlank()
 	{
 		return "\S+";
 	}
-	
+
 	public function alphanumericCharacters()
 	{
 		return "\w";
@@ -163,67 +163,67 @@ class Builder
 	}
 
 	// Groupping
-	
-	public function balancingGroup($captureSubtract, $expression) 
+
+	public function balancingGroup($captureSubtract, $expression)
 	{
 		return "(?<${captureSubtract}>${expression})";
 	}
-	
-	public function branchResetGroup($subexpression) 
+
+	public function branchResetGroup($subexpression)
 	{
 		return "(?|${subexpression})";
 	}
-	
-	public function atomicGroup($name, $subexpression) 
+
+	public function atomicGroup($name, $subexpression)
 	{
 		return "(?>${subexpression})";
 	}
-	
-	public function namedCapturingGroup($name, $subexpression) 
+
+	public function namedCapturingGroup($name, $subexpression)
 	{
 		return "(?P<${name}>${subexpression})";
 	}
-	
-	public function noneCapturingGroup($subexpression) 
+
+	public function noneCapturingGroup($subexpression)
 	{
 		return "(?:${subexpression})";
 	}
 
 	// Expression
-	
-	public function nodeWithoutAfterSpecifyAttributes($node, $attribute) 
+
+	public function nodeWithoutAfterSpecifyAttributes($node, $attribute)
 	{
 		return "(<${node} .*?)(?:${attribute}=\".*\")?(.*?\/>)";
 	}
 
-	public function nodeWithoutSpecifyAttributes($node, $attribute) 
+	public function nodeWithoutSpecifyAttributes($node, $attribute)
 	{
 		return "(<${node} .*?)(?:${attribute}=\".*\")(.*?\/>)";
 	}
-	
-	public function positiveLookbehind() 
+
+	public function positiveLookbehind()
 	{
 		return "?<=";
 	}
-	
-	public function negativeLookbehind() 
+
+	public function negativeLookbehind()
 	{
 		return "?<!";
 	}
-	
-	public function positiveLookahead() 
+
+	public function positiveLookahead()
 	{
 		return "?=";
 	}
-	
-	public function negativeLookahead() 
+
+	public function negativeLookahead()
 	{
 		return "?!";
 	}
-	
+
 	// Block
-	
-	public function blockTag($name) 
+
+	public function blockTag($name)
 	{
 		return "<${name}>.*?<\/${name}>";
 	}
@@ -239,15 +239,14 @@ class Builder
 	{
 		return "[^ ]";
 	}
-	
-	public function getFileName() 
+
+	public function getFileName()
 	{
 		return "([^.\/]+)\.?[^.\/]*$";
 	}
-	
-	public function numberFormat() 
+
+	public function numberFormat()
 	{
 		return "(?<=\d)(?=(\d\d\d)+(?!\d))";
 	}
-
 }

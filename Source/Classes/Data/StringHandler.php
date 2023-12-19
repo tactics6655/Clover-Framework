@@ -23,8 +23,7 @@ class StringHandler
 	{
 		$isGreaterThanRequiredVersion = PHPValidation::versionGreaterThanCurrent("8.0");
 
-		if ($isGreaterThanRequiredVersion && function_exists("str_contains"))
-		{
+		if ($isGreaterThanRequiredVersion && function_exists("str_contains")) {
 			return str_contains($haystack, $needle);
 		}
 
@@ -40,8 +39,7 @@ class StringHandler
 
 	public static function pad($string, $length, $padString = " ", $type, $encoding = Encoding::UTF8)
 	{
-		if (function_exists("mb_str_pad"))
-		{
+		if (function_exists("mb_str_pad")) {
 			return mb_str_pad($string, $length, $padString, $type, $encoding);
 		}
 
@@ -67,8 +65,7 @@ class StringHandler
 	{
 		$isGreaterThanRequiredVersion = PHPValidation::versionGreaterThanCurrent("8.0");
 
-		if ($isGreaterThanRequiredVersion && function_exists("str_ends_with"))
-		{
+		if ($isGreaterThanRequiredVersion && function_exists("str_ends_with")) {
 			return str_ends_with($haystack, $needle);
 		}
 
@@ -79,8 +76,7 @@ class StringHandler
 	{
 		$isGreaterThanRequiredVersion = PHPValidation::versionGreaterThanCurrent("8.0");
 
-		if ($isGreaterThanRequiredVersion && function_exists("str_contains"))
-		{
+		if ($isGreaterThanRequiredVersion && function_exists("str_contains")) {
 			return str_starts_with($haystack, $needle);
 		}
 
@@ -89,22 +85,18 @@ class StringHandler
 
 	public static function indexOf(string $haystack, string $needle, int $offset = 0, Encoding $encoding = Encoding::UTF_8)
 	{
-		if (function_exists('mb_strpos'))
-		{
-			return mb_strpos($haystack, $needle, $offset,'');
+		if (function_exists('mb_strpos')) {
+			return mb_strpos($haystack, $needle, $offset, '');
 		}
 
 		return strpos($haystack, $needle, $offset);
 	}
 
-	public static function substringMultibyte($string, $start, $length, $prefix = '...') 
+	public static function substringMultibyte($string, $start, $length, $prefix = '...')
 	{
-		if (mb_strlen($string) > (int)$length) 
-		{
-			return mb_substr($string, $start, (int)$length).$prefix;
-		}
-		else 
-		{
+		if (mb_strlen($string) > (int)$length) {
+			return mb_substr($string, $start, (int)$length) . $prefix;
+		} else {
 			return mb_substr($string, $start, (int)$length);
 		}
 	}
@@ -132,8 +124,7 @@ class StringHandler
 		$byteOrderMark = "EFBBBF";
 		$result = "";
 
-		switch($encoding)
-		{
+		switch ($encoding) {
 			case Encoding::UTF_8:
 				$byteOrderMark = "EFBBBF";
 				break;
@@ -155,8 +146,7 @@ class StringHandler
 
 		$hexString = self::substring(self::binaryToHex($text), 0, 6);
 
-		if ($hexString === $byteOrderMark)
-		{
+		if ($hexString === $byteOrderMark) {
 			$find = pack('H*', $byteOrderMark);
 			$result = preg_replace("/^$find/", '', $text);
 		}
@@ -166,8 +156,7 @@ class StringHandler
 
 	public static function toUpperCase($text, Encoding $encoding = Encoding::UTF_8)
 	{
-		if (function_exists('mb_strupper'))
-		{
+		if (function_exists('mb_strupper')) {
 			return mb_strtoupper($text, $encoding);
 		}
 
@@ -203,18 +192,14 @@ class StringHandler
 		return bin2hex($binaryText);
 	}
 
-	public static function getMaxAllocationSize(string $string) :int
+	public static function getMaxAllocationSize(string $string): int
 	{
 		$memory_limit = ini_get('memory_limit');
 
-		if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches))
-		{
-			if ($matches[2] == 'M')
-			{
+		if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
+			if ($matches[2] == 'M') {
 				$memory_limit = $matches[1] * 1024 * 1024;
-			}
-			else if ($matches[2] == 'K')
-			{
+			} else if ($matches[2] == 'K') {
 				$memory_limit = $matches[1] * 1024;
 			}
 		}
@@ -226,8 +211,7 @@ class StringHandler
 
 	public static function repeat(string $string, int $multiplier)
 	{
-		if (self::getMaxAllocationSize($string) > $multiplier)
-		{
+		if (self::getMaxAllocationSize($string) > $multiplier) {
 			// Memory allocated error
 			throw new MemoryAllocatedException("Memory Allocated");
 		}
@@ -241,8 +225,7 @@ class StringHandler
 		$charactersLength = strlen($characters);
 		$randomString = '';
 
-		for ($i = 0; $i < $length; $i++)
-		{
+		for ($i = 0; $i < $length; $i++) {
 			$randomString .= $characters[rand(0, $charactersLength - 1)];
 		}
 
@@ -257,14 +240,13 @@ class StringHandler
 	}
 
 	public static function getMD5String($string, $length = 32)
-    	{
+	{
 		return $string == '' ? '' : substr(md5($string), -$length);
 	}
 
-	public function entrip($name, $length = 10) 
+	public function entrip($name, $length = 10)
 	{
-		if (preg_match('/^(.+?)#(.+)$/', $name, $match)) 
-		{
+		if (preg_match('/^(.+?)#(.+)$/', $name, $match)) {
 			list(, $name, $pass) = $match;
 			$salt = substr($pass . 'H.', 1, 2);
 			$salt = preg_replace('/[^\.-z]/', '.', $salt);
@@ -272,16 +254,14 @@ class StringHandler
 			$trip = crypt($pass, $salt);
 			$trip = substr($trip, -$length);
 			$name = $name . '◆' . $trip;
-		} 
-		else 
-		{
+		} else {
 			$name = str_replace('◆', '◇', $name);
 		}
 		return $name;
 	}
-	
+
 	public static function getMd5Uniqid($length = 20, $prefix = '')
-    	{
+	{
 		$id = md5(uniqid($prefix, true));
 		$id = substr($id, -$length);
 
@@ -294,12 +274,11 @@ class StringHandler
 	}
 
 	public static function intergerToBytes(string $string)
-    	{
+	{
 		$length = strlen($string);
 		$result = '';
 
-		for ($i = $length - 1; $i >= 0; $i--)
-		{
+		for ($i = $length - 1; $i >= 0; $i--) {
 			$result .= chr(floor($string / pow(256, $i)));
 		}
 
@@ -307,12 +286,11 @@ class StringHandler
 	}
 
 	public static function hexToBinary(string $string)
-    	{
+	{
 		$length = strlen($string);
 		$result = '';
 
-		for ($i = 0; $i < $length; $i += 2)
-		{
+		for ($i = 0; $i < $length; $i += 2) {
 			$result .= chr(hexdec(substr($string, $i, 2)));
 		}
 
@@ -320,7 +298,7 @@ class StringHandler
 	}
 
 	public static function removeNullBytes(string $string)
-    	{
+	{
 		$clean = str_replace("\x00", '', $string);
 		$clean = str_replace("\0", '', $string);
 		$clean = str_replace(chr(0), '', $string);
@@ -351,35 +329,24 @@ class StringHandler
 
 		$isWindows = OperationSystem::isWindows();
 
-		if (function_exists('random_bytes'))
-		{
-			try
-			{
+		if (function_exists('random_bytes')) {
+			try {
 				$output = random_bytes($bytes);
-			}
-			catch (\Exception $e)
-			{
+			} catch (\Exception $e) {
 				$output = false;
 			}
 		}
 
-		if ($output === false)
-		{
-			if (function_exists('mcrypt_create_iv') && !$isWindows)
-			{
+		if ($output === false) {
+			if (function_exists('mcrypt_create_iv') && !$isWindows) {
 				$output = mcrypt_create_iv($length, \MCRYPT_DEV_URANDOM);
-			}
-			else if (function_exists('openssl_random_pseudo_bytes') && !$isWindows)
-			{
+			} else if (function_exists('openssl_random_pseudo_bytes') && !$isWindows) {
 				$output = openssl_random_pseudo_bytes($length);
-			}
-			else if (function_exists('mcrypt_create_iv') && $isWindows)
-			{
+			} else if (function_exists('mcrypt_create_iv') && $isWindows) {
 				$output = mcrypt_create_iv($bytes, \MCRYPT_RAND);
 			}
 		}
 
 		return $output;
 	}
-
 }

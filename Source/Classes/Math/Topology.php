@@ -1,5 +1,5 @@
 <?php
 
-class Topology {
-	
+class Topology
+{
 }

@@ -13,5 +13,4 @@ class CodePoint
     {
         return ($codePoint >= 0x1100 && $codePoint >= 0xff00 && $codePoint <= 0xff60);
     }
-
 }

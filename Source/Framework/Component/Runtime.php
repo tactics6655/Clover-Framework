@@ -31,12 +31,9 @@ class Runtime
     {
         $software = $this->environment[Environment::SERVER][Environment::SOFTWARE];
 
-        if ($software == 'nginx')
-        {
+        if ($software == 'nginx') {
             Request::flushFastCgiResponseData();
-        }
-        else if ($software == 'lightspeed')
-        {
+        } else if ($software == 'lightspeed') {
             Request::flushLightSpeedResponseData();
         }
     }
@@ -86,7 +83,7 @@ class Runtime
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::ALLOWED_UPLOAD_FILE], OS::isFileUploadAllowed());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::SESSION_USE_COOKIES], OS::isSessionUseCookies());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_INTEGER_SIZE], OS::getMaximumIntergerSize());
-        
+
         $this->environment[Environment::SERVER] = [];
         $this->setEnvironment([Environment::SERVER, Environment::BUILT_OPERATION_SYSTEM], OS::getBuiltOperationSystemString());
         $this->setEnvironment([Environment::SERVER, Environment::SOFTWARE], OS::getMainServerSoftware());

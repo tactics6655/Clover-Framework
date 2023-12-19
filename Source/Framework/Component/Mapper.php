@@ -72,7 +72,7 @@ class Mapper
         $this->query_string = HTTPRequest::getQueryString()->__toString();
         $this->request_url = HTTPRequest::getRequestURL()->__toString();
         $this->url_path = HTTPRequest::getUrlPath();
-        
+
         $this->is_commnadline_interface = OperationSystem::isCommandLineInterface();
     }
 
@@ -91,13 +91,9 @@ class Mapper
     public function matchRunner()
     {
         $this->setContainer();
-        
-        if ($this->isCommentLineInterface())
-        {
 
-        }
-        else
-        {
+        if ($this->isCommentLineInterface()) {
+        } else {
             return new HttpKernel($this->container);
         }
     }

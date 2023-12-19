@@ -10,98 +10,98 @@ class Header
 	{
 		header($data);
 	}
-	
-	public static function responseWithKeyAndArray(String $header, Array $pair)
+
+	public static function responseWithKeyAndArray(String $header, array $pair)
 	{
-		array_walk($pair, create_function('&$i,$k','$i:" $k:$i;";'));
-		
+		array_walk($pair, create_function('&$i,$k', '$i:" $k:$i;";'));
+
 		$responseData = implode($pair, "");
-		
+
 		self::response($responseData);
 	}
-	
-	public static function responseWithArray(Array $pair)
+
+	public static function responseWithArray(array $pair)
 	{
-		array_walk($pair, create_function('&$i,$k','$i:" $k:$i;";'));
-		
+		array_walk($pair, create_function('&$i,$k', '$i:" $k:$i;";'));
+
 		$responseData = implode($pair, "");
-		
+
 		self::response($responseData);
 	}
-	
+
 	public static function responseWithKey($key, $value)
 	{
 		$responseData = "$key : $value";
-		
+
 		self::response($responseData);
 	}
-	
+
 	public static function responseContentType($value)
 	{
 		self::responseWithKey('Content-Type', $value);
 	}
-	
+
 	public static function responseContentTransferEncoding($value)
 	{
 		self::responseWithKey('Content-Transfer-Encoding', $value);
 	}
-	
+
 	public static function responseContentDisposition($value)
 	{
 		self::responseWithKey('Content-Disposition', $value);
 	}
-	
+
 	public static function responseXXSSProtection($value)
 	{
 		self::responseWithKey('X-XSS-Protection', $value);
 	}
-	
+
 	public static function responseXContentTypeOption($value)
 	{
 		self::responseWithKey('X-Content-Type-Options', $value);
 	}
-	
+
 	public static function responseP3P()
 	{
 		self::responseWithKey('P3P', 'CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 	}
-	
+
 	public static function responseConnection($value)
 	{
 		self::responseWithKey('Connection', $value);
 	}
-	
+
 	public static function responseContentEncoding($value)
 	{
 		self::responseWithKey('Content-Encoding', $value);
 	}
-	
+
 	public static function responseContentLength($value)
 	{
 		self::responseWithKey('Content-Length', $value);
 	}
-	
+
 	public static function responseRedirectLocation($value)
 	{
 		self::responseWithKey('Location', $value);
 	}
-	
+
 	public static function responseStatus($responseCode = '200', $responseMessage = 'OK', $protocol = 'HTTP', $protocolVersion = '1.0')
 	{
 		$responseData = sprintf("%s/%s %s %s", $protocol, $protocolVersion, $responseCode, $responseMessage);
-		
+
 		self::response($responseData);
 	}
-	
+
 	public static function responseStatusByCode($code)
 	{
 		$responseMessage = self::getStatusMessageByCode($code);
-		
+
 		//TODO throw
-		
+
 		self::responseStatus($code, $responseMessage);
 	}
-	
+
 	public static function fileAttachment($fileName)
 	{
 		header("Content-Disposition: attachment; filename=$fileName");
@@ -110,9 +110,8 @@ class Header
 	public static function getStatusMessageByCode($code)
 	{
 		$stateMessage = '';
-		
-		switch($code) 
-		{
+
+		switch ($code) {
 			case "200":
 				$stateMessage = 'OK';
 				break;
@@ -164,18 +163,17 @@ class Header
 			default:
 				break;
 		}
-		
+
 		return $stateMessage;
 	}
-	
+
 	public static function responseXSSBlock()
 	{
 		self::XXSSProtection('mode=block');
 	}
-	
+
 	public static function responseNoSniff()
 	{
 		self::XContentTypeOption('nosniff');
 	}
-	
 }

@@ -140,5 +140,4 @@ class Identifier extends Data
   {
     return strtotime(parent::$data !== false);
   }
-
 }

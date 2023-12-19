@@ -43,7 +43,7 @@ class Router
 
 	private static function addPrefix($pattern)
 	{
-		return self::$global_prefix.$pattern;
+		return self::$global_prefix . $pattern;
 	}
 
 	private static function set(string $method, $pattern, $callback)
@@ -57,8 +57,7 @@ class Router
 	{
 		self::$global_prefix = $pattern;
 
-		if (is_callable($callback))
-		{
+		if (is_callable($callback)) {
 			call_user_func($callback);
 		}
 
@@ -86,8 +85,7 @@ class Router
 	{
 		$fileList = DirectoryHandler::getList($path, 'file', true, true);
 
-		foreach ($fileList as $file)
-		{
+		foreach ($fileList as $file) {
 			self::fromFile($file);
 		}
 	}
@@ -98,30 +96,25 @@ class Router
 
 		$class = new ReflectionClass($class_name);
 
-		foreach ($class->getMethods() as $method) 
-		{
-			if ($method->isStatic() || $method->isPrivate() || $method->isProtected()) 
-			{
+		foreach ($class->getMethods() as $method) {
+			if ($method->isStatic() || $method->isPrivate() || $method->isProtected()) {
 				continue;
 			}
 
 			$route_annotation = ReflectionHandler::getAnnotations($method, Route::class);
-			if (!isset($route_annotation[0]))
-			{
+			if (!isset($route_annotation[0])) {
 				continue;
 			}
 
 			$descriptor = $route_annotation[0];
 			$prefix_annotation = ReflectionHandler::getAnnotations($class, Prefix::class);
-			if (isset($prefix_annotation[0])) 
-			{
-				$descriptor->pattern = $prefix_annotation[0]->value.$descriptor->pattern;
+			if (isset($prefix_annotation[0])) {
+				$descriptor->pattern = $prefix_annotation[0]->value . $descriptor->pattern;
 			}
 			$descriptor->holder = [$class->getName(), $method->getName()];
 
 			$middleware_annotation = ReflectionHandler::getAnnotations($class, Middleware::class);
-			if (isset($middleware_annotation[0])) 
-			{
+			if (isset($middleware_annotation[0])) {
 				$descriptor->middleware = $middleware_annotation[0]->value;
 			}
 
@@ -137,13 +130,11 @@ class Router
 
 		$annotations = [];
 
-		foreach ($class_names as $class_name)
-		{
+		foreach ($class_names as $class_name) {
 			$annotations = array_merge($annotations, self::getAnnotationFromClassName($class_name));
 		}
 
-		foreach ($annotations as $annotation)
-		{
+		foreach ($annotations as $annotation) {
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
 			$holder = $annotation->holder ?? [];
@@ -155,8 +146,7 @@ class Router
 
 	private static function addRoute($method, $pattern, $callback)
 	{
-		if (!isset(self::$routes[$method]))
-		{
+		if (!isset(self::$routes[$method])) {
 			self::$routes[$method] = [];
 		}
 
@@ -188,7 +178,7 @@ class Router
 		return isset(self::$routes[$method]);
 	}
 
-	private static function getRoute($method) 
+	private static function getRoute($method)
 	{
 		return self::$routes[$method];
 	}
@@ -197,20 +187,17 @@ class Router
 	{
 		self::$method = HTTPRequest::getRequestMethod();
 
-		if (!self::has(self::$method))
-		{
+		if (!self::has(self::$method)) {
 			return false;
 		}
 
 		$routes = self::getRoute(self::$method);
 		$urlPathSegments = HTTPRequest::getUrlPathSegments();
 
-		foreach ($routes as $route)
-		{
+		foreach ($routes as $route) {
 			$match = $route->match($urlPathSegments);
-			
-			if (!$match)
-			{
+
+			if (!$match) {
 				continue;
 			}
 
@@ -219,5 +206,4 @@ class Router
 
 		return false;
 	}
-
 }

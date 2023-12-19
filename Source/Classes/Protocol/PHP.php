@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 namespace Xanax\Classes\Protocol;
-class PHP {
+
+class PHP
+{
 
 	public const _STANDARD_ERROR_ = "php://stderr";
 
@@ -21,44 +23,43 @@ class PHP {
 
 	public const _OUTPUT_ = "php://output";
 
-	public function getStandardError() 
+	public function getStandardError()
 	{
 		return _STANDARD_ERROR_;
 	}
 
-	public function getStandardOutput() 
+	public function getStandardOutput()
 	{
 		return _STANDARD_OUTPUT_;
 	}
 
-	public function getStandardInput() 
+	public function getStandardInput()
 	{
 		return _STANDARD_INPUT_;
 	}
 
-	public function getFilter() 
+	public function getFilter()
 	{
 		return _FILTER_;
 	}
 
-	public function getTemporary() 
+	public function getTemporary()
 	{
 		return _TEMPORARY_;
 	}
 
-	public function getMemory() 
+	public function getMemory()
 	{
 		return _MEMORY_;
 	}
 
-	public function getInput() 
+	public function getInput()
 	{
 		return _INPUT_;
 	}
 
-	public function getOutput() 
+	public function getOutput()
 	{
 		return _OUTPUT_;
 	}
-
 }

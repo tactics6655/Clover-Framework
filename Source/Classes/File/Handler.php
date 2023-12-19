@@ -326,7 +326,7 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::changeUmask($mask);
 	}
 
-	public static function getHeaderType(string $filePath) :mixed
+	public static function getHeaderType(string $filePath): mixed
 	{
 		return FileFunctions::getHeaderType($filePath);
 	}

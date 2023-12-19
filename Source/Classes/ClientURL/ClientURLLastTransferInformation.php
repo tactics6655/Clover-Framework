@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Xanax\Classes;
 
-class ClientURLLastTransferInformation 
+class ClientURLLastTransferInformation
 {
-	
+
 	private static $session;
 
 	public function __construct($session)
@@ -16,8 +16,7 @@ class ClientURLLastTransferInformation
 
 	private function getInformation(?int $key = -1)
 	{
-		if (isset($key) && $key > 0)
-		{
+		if (isset($key) && $key > 0) {
 			return curl_getinfo(self::$session, $key);
 		}
 
@@ -328,5 +327,4 @@ class ClientURLLastTransferInformation
 	{
 		return $this->getInformation();
 	}
-	
 }

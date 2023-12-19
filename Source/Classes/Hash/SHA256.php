@@ -2,5 +2,6 @@
 
 namespace Xanax\Classes\Hash;
 
-class SHA256 {
+class SHA256
+{
 }

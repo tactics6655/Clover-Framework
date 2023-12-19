@@ -26,13 +26,10 @@ class Apc
 	public function get($key, $limit)
 	{
 		$cache = apc_fetch($key, $limit);
-		if ($limit > 0 && $limit > $cache[0])
-		{
+		if ($limit > 0 && $limit > $cache[0]) {
 			$this->delete($key);
 		}
 
 		return $cache[1];
 	}
 }
-
-?>

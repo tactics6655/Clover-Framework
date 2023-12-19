@@ -55,12 +55,11 @@ class ArrayObject
 	public static function setDeep(&$original, $array, $value)
 	{
 		$current = &$original;
-        foreach ($array as $key)
-        {
-            $current = &$current[$key];
-        }
+		foreach ($array as $key) {
+			$current = &$current[$key];
+		}
 
-        $current = $value;
+		$current = $value;
 	}
 
 	public static function fetchKey(array $array)
@@ -80,28 +79,25 @@ class ArrayObject
 
 	public static function isTraversable($array)
 	{
-		if ($array instanceof \Traversable)
-		{
+		if ($array instanceof \Traversable) {
 			return true;
 		}
 
 		return false;
 	}
-	
+
 	public static function getDepth(array $array)
 	{
 		$depth = 0;
 		$arrayReclusive = new \RecursiveArrayIterator($array);
 		$iteratorReclusive = new \RecursiveIteratorIterator($arrayReclusive);
 
-		foreach ($iteratorReclusive as $iterator)
-		{
-				$currentDepth = $iterator->getDepth();
+		foreach ($iteratorReclusive as $iterator) {
+			$currentDepth = $iterator->getDepth();
 
-				$depth = $currentDepth > $depth ? $currentDepth : $depth;
+			$depth = $currentDepth > $depth ? $currentDepth : $depth;
 		}
 
 		return $depth;
 	}
-
 }

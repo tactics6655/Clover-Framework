@@ -1,5 +1,5 @@
 <?php
 
-class Trigonometry {
-	
+class Trigonometry
+{
 }

@@ -8,10 +8,8 @@ class FileValidation
 {
 	public static function isReadable($filename)
 	{
-		if (PHPValidation::versionGreaterThanCurrent('5.3.0'))
-		{
-			if (strlen($filename) >= PHP_MAXPATHLEN)
-			{
+		if (PHPValidation::versionGreaterThanCurrent('5.3.0')) {
+			if (strlen($filename) >= PHP_MAXPATHLEN) {
 				return false;
 			}
 		}
@@ -28,8 +26,7 @@ class FileValidation
 	{
 		$regexr = '/^(http||https):\/\//i';
 
-		if (preg_match($regexr, $filePath))
-		{
+		if (preg_match($regexr, $filePath)) {
 			return true;
 		}
 
@@ -45,8 +42,7 @@ class FileValidation
 	{
 		$regexr = '/^phar:\/\/.*/i';
 
-		if (preg_match($regexr, $filePath))
-		{
+		if (preg_match($regexr, $filePath)) {
 			return true;
 		}
 
@@ -62,8 +58,7 @@ class FileValidation
 	{
 		$regexr = '/..\/$/i';
 
-		if (preg_match($regexr, $filePath))
-		{
+		if (preg_match($regexr, $filePath)) {
 			return true;
 		}
 
@@ -79,8 +74,7 @@ class FileValidation
 	{
 		$regexr = '/^.*\.[A-Za-z0-9]{1,5}$/i';
 
-		if (preg_match($regexr, $filePath))
-		{
+		if (preg_match($regexr, $filePath)) {
 			return true;
 		}
 

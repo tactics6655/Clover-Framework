@@ -5,19 +5,19 @@ namespace Xanax\Classes\Web;
 use Xanax\Classes\Web\InternetProtocol as InternetProtocol;
 use Xanax\Classes\HTTP\Request as RequestHandler;
 
-class TheOnionRouting 
+class TheOnionRouting
 {
 
 	private static $internetProtocolClass;
 	private static $requestHandlerClass;
 
-	public function __construct() 
+	public function __construct()
 	{
 		self::$internetProtocolClass = new InternetProtocol();
 		self::$requestHandlerClass = new RequestHandler();
 	}
 
-	public function isExitNode() 
+	public function isExitNode()
 	{
 		$ipAddress = self::$requestHandlerClass::getRemoteIP();
 		$serverPort = self::$requestHandlerClass::getPort();
@@ -28,5 +28,4 @@ class TheOnionRouting
 
 		return $hostName === '127.0.0.2';
 	}
-	
 }

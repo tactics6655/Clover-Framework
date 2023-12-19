@@ -4,23 +4,23 @@ namespace Xanax\Enumeration;
 
 abstract class HTTPRequestMethod
 {
-    const GET = 'GET'; 
-    
-    const POST = 'POST'; 
+    const GET = 'GET';
 
-    const DELETE = 'DELETE'; 
+    const POST = 'POST';
 
-    const OPTIONS = 'OPTIONS'; 
+    const DELETE = 'DELETE';
 
-    const PUT = 'PUT'; 
+    const OPTIONS = 'OPTIONS';
 
-    const PATCH = 'PATCH'; 
+    const PUT = 'PUT';
 
-    const HEAD = 'HEAD'; 
+    const PATCH = 'PATCH';
 
-    const PURGE = 'PURGE'; 
+    const HEAD = 'HEAD';
 
-    const TRACE = 'TRACE'; 
+    const PURGE = 'PURGE';
 
-    const CONNECT = 'CONNECT'; 
+    const TRACE = 'TRACE';
+
+    const CONNECT = 'CONNECT';
 }

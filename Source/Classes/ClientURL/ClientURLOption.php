@@ -10,7 +10,7 @@ use Xanax\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
 
 use Xanax\Enumeration\HTTPRequestMethod;
 
-class ClientURLOption implements ClientURLOptionInterface 
+class ClientURLOption implements ClientURLOptionInterface
 {
 
 	private static $session;
@@ -201,28 +201,28 @@ class ClientURLOption implements ClientURLOptionInterface
 	public function setBufferSize($size)
 	{
 		$this->setOption(CURLOPT_BUFFERSIZE, $size);
-		
+
 		return $this->returnContext();
 	}
 
 	public function enableTCPFastOpen($enable)
 	{
 		$this->setOption(CURLOPT_TCP_FASTOPEN, $enable);
-		
+
 		return $this->returnContext();
 	}
 
 	public function setNoProgress($number)
 	{
 		$this->setOption(CURLOPT_NOPROGRESS, $number);
-		
+
 		return $this->returnContext();
 	}
 
 	public function setProgressCallback($name)
 	{
 		$this->setOption(CURLOPT_PROGRESSFUNCTION, $name);
-		
+
 		return $this->returnContext();
 	}
 
@@ -380,12 +380,9 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	public function setConnectionTimeout(bool $timeout = true, bool $useMilliseconds = false)
 	{
-		if ($useMilliseconds)
-		{
+		if ($useMilliseconds) {
 			return $this->setConnectionTimeoutMilliseconds($timeout);
-		} 
-		else 
-		{
+		} else {
 			$this->setOption(CURLOPT_CONNECTTIMEOUT, $timeout);
 
 			return $this->returnContext();
@@ -467,19 +464,15 @@ class ClientURLOption implements ClientURLOptionInterface
 	{
 		$headerData = [$key, $value];
 
-		if (!$overwrite)
-		{
+		if (!$overwrite) {
 			array_push(self::$options, $headerData);
 
-			$headers = array_map(function ($header)
-			{
+			$headers = array_map(function ($header) {
 				return implode(': ', $header);
 			}, self::$options);
 
 			$this->setOption(CURLOPT_HTTPHEADER, $headers);
-		} 
-		else 
-		{
+		} else {
 			$this->setOption(CURLOPT_HTTPHEADER, $headerData);
 		}
 
@@ -565,7 +558,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	public function setHeaderCallback($method)
 	{
 		curl_setopt(self::$session, CURLOPT_HEADERFUNCTION, $method);
@@ -573,12 +566,10 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	private function receiveResponseHeader()
 	{
-		$this->setHeaderCallback(function ($ch, $header) use (&$headers)
-		{
+		$this->setHeaderCallback(function ($ch, $header) use (&$headers) {
 			$matches = array();
-		
-			if ( preg_match('/^([^:]+)\s*:\s*([^\x0D\x0A]*)\x0D?\x0A?$/', $header, $matches) )
-			{
+
+			if (preg_match('/^([^:]+)\s*:\s*([^\x0D\x0A]*)\x0D?\x0A?$/', $header, $matches)) {
 				$headers[$matches[1]][] = $matches[2];
 			}
 
@@ -606,22 +597,22 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->setAuthentication(CURLAUTH_GSSNEGOTIATE);
 	}
 
-	private function setDigestAuthentication() 
+	private function setDigestAuthentication()
 	{
 		return $this->setAuthentication(CURLAUTH_DIGEST);
 	}
 
-	private function setNoneHTTPVersion() 
+	private function setNoneHTTPVersion()
 	{
 		return $this->setHTTPVersion(CURL_HTTP_VERSION_NONE);
 	}
 
-	private function setHTTPVersion_1_0() 
+	private function setHTTPVersion_1_0()
 	{
 		return $this->setHTTPVersion(CURL_HTTP_VERSION_1_0);
 	}
 
-	private function setHTTPVersion_1_1() 
+	private function setHTTPVersion_1_1()
 	{
 		return $this->setHTTPVersion(CURL_HTTP_VERSION_1_1);
 	}
@@ -717,7 +708,7 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->setCustomMethod(HTTPRequestMethod::DELETE);
 	}
 
-	public function setReturnTransfer(bool $hasResponse = true) 
+	public function setReturnTransfer(bool $hasResponse = true)
 	{
 		$this->setOption(CURLOPT_RETURNTRANSFER, $hasResponse);
 
@@ -729,11 +720,10 @@ class ClientURLOption implements ClientURLOptionInterface
 	 *
 	 * @return \Xanax\Classes\ClientURLOption
 	 */
-	public function setReturnHeader(bool $hasResponse = true) 
+	public function setReturnHeader(bool $hasResponse = true)
 	{
 		$this->setOption(CURLOPT_HEADER, $hasResponse);
 
 		return $this->returnContext();
 	}
-
 }

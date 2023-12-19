@@ -1,5 +1,5 @@
 <?php
 
-class Vector {
-	
+class Vector
+{
 }

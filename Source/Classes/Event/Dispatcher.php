@@ -20,21 +20,18 @@ class Dispatcher implements EventDispatcherInterface
 	 */
 	public function dispatch($event, string $eventName = null)
 	{
-		if (\is_object($event)) 
-		{
+		if (\is_object($event)) {
 			$eventName = $eventName ?? \get_class($event);
 		}
 
-		if (!$eventName) 
-		{
+		if (!$eventName) {
 			$eventName = $event;
 			$event     = new EventInstance();
 		}
 
 		$listeners = $this->getListeners($eventName);
 
-		if ($listeners) 
-		{
+		if ($listeners) {
 			$this->callListeners($listeners, $eventName, $event);
 		}
 	}
@@ -48,8 +45,7 @@ class Dispatcher implements EventDispatcherInterface
 	 */
 	protected function callListeners(iterable $listeners, string $eventName, object $event)
 	{
-		foreach ($listeners as $listener) 
-		{
+		foreach ($listeners as $listener) {
 			$listener($event, $eventName, $this);
 		}
 	}
@@ -62,8 +58,7 @@ class Dispatcher implements EventDispatcherInterface
 	 */
 	public function removeListener(string $eventName, callable $listener)
 	{
-		if (!$this->hasListener($eventName)) 
-		{
+		if (!$this->hasListener($eventName)) {
 			return false;
 		}
 	}
@@ -78,7 +73,7 @@ class Dispatcher implements EventDispatcherInterface
 	 * 
 	 * @Iterable listeners
 	 */
-	public function getListenersCount(?iterable $listeners = array()) :int
+	public function getListenersCount(?iterable $listeners = array()): int
 	{
 		return count($listeners || $this->getListeners());
 	}
@@ -88,24 +83,20 @@ class Dispatcher implements EventDispatcherInterface
 	 * 
 	 * @String eventName
 	 */
-	public function hasListener(string $eventName) :bool
+	public function hasListener(string $eventName): bool
 	{
-		if ($eventName !== null) 
-		{
+		if ($eventName !== null) {
 			$listener = $this->getListeners($eventName);
 
 			return !empty($listener);
 		}
 
-		if ($this->getListenersCount() <= 0) 
-		{
+		if ($this->getListenersCount() <= 0) {
 			return false;
 		}
 
-		foreach ($this->getListeners() as $listenerItem) 
-		{
-			if ($listenerItem) 
-			{
+		foreach ($this->getListeners() as $listenerItem) {
+			if ($listenerItem) {
 				return true;
 			}
 		}
@@ -113,29 +104,24 @@ class Dispatcher implements EventDispatcherInterface
 		return false;
 	}
 
-	public function addListener(string $eventName, callable $listener) :void
+	public function addListener(string $eventName, callable $listener): void
 	{
-		if (isset($this->listeners[$eventName])) 
-		{
+		if (isset($this->listeners[$eventName])) {
 			$this->listeners[$eventName][] = $listener;
-		}
-		else
-		{
+		} else {
 			$this->listeners[$eventName] = [$listener];
 		}
 	}
 
-	public function emit(object $event) :object
+	public function emit(object $event): object
 	{
 		$listeners = $this->getListeners(get_class($event)) ?? [];
 
-		if (count($listeners) <= 0) 
-		{
+		if (count($listeners) <= 0) {
 			//return false;
 		}
 
-		foreach ($listeners as $listener) 
-		{
+		foreach ($listeners as $listener) {
 			$listener($event);
 		}
 

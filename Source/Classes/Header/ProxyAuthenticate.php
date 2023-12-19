@@ -20,5 +20,4 @@ class ProxyAuthenticate extends Header
 
 		$this->response($data);
 	}
-
 }

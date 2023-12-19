@@ -4,13 +4,13 @@ namespace Xanax\Annotation;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_CLASS|Attribute::TARGET_METHOD)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class Route
 {
     public $middleware;
 
-    public $holder;    
-    
+    public $holder;
+
     public $method;
 
     public $pattern;

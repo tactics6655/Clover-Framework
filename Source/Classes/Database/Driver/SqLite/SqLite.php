@@ -23,12 +23,12 @@ class SqLite
         return $this->connection->lastErrorMsg();
     }
 
-    public function fetchArray(\SQLite3Result $result) :array|bool
+    public function fetchArray(\SQLite3Result $result): array|bool
     {
         return $result->fetchArray(SQLITE3_ASSOC);
     }
 
-    public function query($sql) :\SQLite3Result|bool
+    public function query($sql): \SQLite3Result|bool
     {
         return $this->connection->query($sql);
     }
@@ -42,5 +42,4 @@ class SqLite
     {
         return $this->connection->exec("INSERT INTO 'Person' ('Name') VALUES ('bskyvision');");
     }
-
 }

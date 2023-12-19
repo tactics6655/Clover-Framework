@@ -4,7 +4,7 @@ namespace Xanax\Message\FileHandler;
 
 class FileHandlerMessage
 {
-	
+
 	public static function getTargetIsNotFileMessage()
 	{
 		return 'Target is not File';
@@ -29,5 +29,4 @@ class FileHandlerMessage
 	{
 		return "'${filePath}' File doesn't Exist";
 	}
-	
 }

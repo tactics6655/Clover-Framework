@@ -1,5 +1,5 @@
 <?php
 
-class SimpleCrypto {
-
+class SimpleCrypto
+{
 }

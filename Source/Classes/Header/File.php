@@ -11,40 +11,33 @@ use Xanax\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
 class File extends Header
 {
 
-	public static function responseWithKeyAndArray(String $header, Array $pair)
+	public static function responseWithKeyAndArray(String $header, array $pair)
 	{
-		if (function_exists('create_function')) 
-		{
+		if (function_exists('create_function')) {
 			array_walk($pair, \create_function('&$i,$k', '$i=" $k=$i;";'));
-		}
-		else 
-		{
-			array_walk($pair, function(&$i,$k) 
-			{
-				$i = $k ."=".$i.";"; 
+		} else {
+			array_walk($pair, function (&$i, $k) {
+				$i = $k . "=" . $i . ";";
 			});
 		}
-		
+
 		$responseData = implode("", $pair);
-		
-		parent::response($header.";". $responseData);
+
+		parent::response($header . ";" . $responseData);
 	}
-	
+
 	public static function responseWithCharset($application, $characterSet)
 	{
-		$characterSet = Array("charset" => $characterSet);
+		$characterSet = array("charset" => $characterSet);
 
-		self::responseWithKeyAndArray("Content-Type:".$application, $characterSet);
+		self::responseWithKeyAndArray("Content-Type:" . $application, $characterSet);
 	}
 
-	public static function responseWithOption($application, $characterSet) 
+	public static function responseWithOption($application, $characterSet)
 	{
-		if ($characterSet) 
-		{
+		if ($characterSet) {
 			self::responseWithCharset($application, $characterSet);
-		} 
-		else 
-		{
+		} else {
 			self::response('application/zip; charset=UTF-8');
 		}
 	}
@@ -53,7 +46,7 @@ class File extends Header
 	{
 		self::responseWithOption(MIME::getContentTypeFromExtension($mime), $characterSet);
 	}
-	
+
 	public static function fileZip($characterSet = Encoding::UTF_8)
 	{
 		self::responseWithOption("application/zip", $characterSet);

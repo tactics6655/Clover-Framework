@@ -438,5 +438,3 @@ return [
     'zu_ZA' => array('name' =>  "Zulu (South Africa)"),
     'zu' => array('name' =>  "Zulu")
 ];
-
-?>

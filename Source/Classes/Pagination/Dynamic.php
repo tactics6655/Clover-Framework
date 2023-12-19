@@ -33,21 +33,16 @@ class Dynamic
 		$last_page = ceil($document_count / $item_count);
 		$last_page = ($last_page < 0) ? 1 : $last_page;
 
-		if ($last_page > $list_count) 
-		{
-			if ($current_page > $last_page - ($list_count - 1)) 
-			{
+		if ($last_page > $list_count) {
+			if ($current_page > $last_page - ($list_count - 1)) {
 				$page_margin = $last_page - $list_count;
 				$first_page  = $page_margin < $list_count ? 0 : -1;
-			} 
-			else if ($current_page > $half_page_count) 
-			{
+			} else if ($current_page > $half_page_count) {
 				$page_margin = $current_page - ($half_page_count);
 				$first_page  = $page_margin > $list_count ? 0 : -1;
 			}
 
-			if ($current_page > $last_page - ($list_count - 1) && $current_page < $last_page - ($half_page_count - 1)) 
-			{
+			if ($current_page > $last_page - ($list_count - 1) && $current_page < $last_page - ($half_page_count - 1)) {
 				$page_margin = $current_page - $half_page_count;
 				$first_page  = $page_margin > $list_count ? 0 : -1;
 			}
@@ -130,13 +125,12 @@ class Dynamic
 	{
 		$page = $this->first_page + (++$this->point);
 
-		if ($page > ($this->list_count) || $this->getCurrentPage() > $this->last_page) 
-		{
+		if ($page > ($this->list_count) || $this->getCurrentPage() > $this->last_page) {
 			$this->point = 0;
 
 			return false;
-		} 
-			
+		}
+
 		return true;
 	}
 

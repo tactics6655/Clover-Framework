@@ -1,4 +1,5 @@
 <?php
 
-class ViewObject {
+class ViewObject
+{
 }

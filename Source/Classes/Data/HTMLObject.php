@@ -10,7 +10,7 @@ class HTMLObject extends StringObject
     protected static $raw_data;
     private $handler;
 
-    public function __construct($data) 
+    public function __construct($data)
     {
         parent::__construct($data);
 
@@ -28,5 +28,4 @@ class HTMLObject extends StringObject
     {
         return $this->handler->unhtmlSpecialChars($this->raw_data);
     }
-
 }

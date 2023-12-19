@@ -56,5 +56,4 @@ class CacheControl extends Header
 	{
 		$this->response('no-cache');
 	}
-
 }

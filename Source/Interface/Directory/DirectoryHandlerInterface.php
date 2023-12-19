@@ -2,8 +2,9 @@
 
 namespace Xanax\Implement;
 
-interface DirectoryHandlerInterface {
-	
+interface DirectoryHandlerInterface
+{
+
 	public function getFreeSpace($prefix = '/');
 
 	public function renameInnerFiles(string $directoryPath, $replacement, $string = null);
@@ -33,5 +34,4 @@ interface DirectoryHandlerInterface {
 	public function empty(string $directoryPath);
 
 	public static function getSize(string $directoryPath);
-	
 }

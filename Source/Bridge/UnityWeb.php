@@ -1,4 +1,5 @@
 <?php
 
-class UnityWeb {
+class UnityWeb
+{
 }

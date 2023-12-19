@@ -30,14 +30,13 @@ class Response
         echo $this->body;
     }
 
-    public function preAppendBody($body)  
-    {   
-        $this->body = $body.$this->body;
+    public function preAppendBody($body)
+    {
+        $this->body = $body . $this->body;
     }
 
     public function appendBody($body)
     {
         $this->body .= $body;
     }
-
 }

@@ -10,6 +10,5 @@ class ModuleController extends BaseController
 {
     public function __invoke()
     {
-        
     }
 }

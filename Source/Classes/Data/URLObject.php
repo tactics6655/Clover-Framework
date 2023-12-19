@@ -10,14 +10,14 @@ class URLObject extends StringObject
 
     protected static $raw_data;
 
-    public function __construct($data) 
+    public function __construct($data)
     {
         $this->raw_data = $data;
 
         parent::__construct($data);
     }
 
-    public function __toString() 
+    public function __toString()
     {
         return $this->raw_data;
     }
@@ -46,5 +46,4 @@ class URLObject extends StringObject
 
         return $this;
     }
-
 }

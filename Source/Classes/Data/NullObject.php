@@ -9,14 +9,13 @@ class NullObject extends BaseObject
 
     protected static $raw_data;
 
-    public function __construct($data) 
+    public function __construct($data)
     {
         $this->raw_data = $data;
     }
 
-    public function __toString() 
+    public function __toString()
     {
         return (string)$this->raw_data;
     }
-
 }

@@ -8,14 +8,12 @@ class Handler
 {
 	public static function getInputTag($type, $name, $value, $list = array())
 	{
-		switch ($type) 
-		{
+		switch ($type) {
 			case "option":
-				foreach($list as $val) 
-				{
-					$html .= "<option ".(($value == $val) ? "selected " : "")."value=\"{$val}\">{$val}</option>";
+				foreach ($list as $val) {
+					$html .= "<option " . (($value == $val) ? "selected " : "") . "value=\"{$val}\">{$val}</option>";
 				}
-				
+
 				$html = "<select name=\"{$name}\">{$html}</select>";
 				break;
 			case "textarea":
@@ -49,17 +47,16 @@ class Handler
 				$html = "<input type=\"file\" name=\"{$name}\" value=\"{$value}\">";
 				break;
 			case "radio":
-				foreach($list as $val) 
-				{
-					$html .= "<input ".(($value == $val) ? "checked " : "")."name=\"{$name}\" type=\"radio\" value=\"{$val}\">{$val}</input>";
+				foreach ($list as $val) {
+					$html .= "<input " . (($value == $val) ? "checked " : "") . "name=\"{$name}\" type=\"radio\" value=\"{$val}\">{$val}</input>";
 				}
-				
+
 				break;
 			default:
 				$html = "<input style=\"width:100%\" type=\"text\" class=\"text itx\" name=\"{$name}\" value=\"{$value}\"></input>";
 				break;
 		}
-		
+
 		return $html;
 	}
 
@@ -67,15 +64,11 @@ class Handler
 	{
 		$result = '';
 
-		foreach ($attributes as $key => $val) 
-		{
+		foreach ($attributes as $key => $val) {
 			$pair = sprintf("'%s'", $val);
-			if ($result) 
-			{
+			if ($result) {
 				$result = $result . ',' . $pair;
-			} 
-			else 
-			{
+			} else {
 				$result = $pair;
 			}
 		}
@@ -92,24 +85,15 @@ class Handler
 	{
 		$html = sprintf('%s%s', '<', $type);
 
-		if (empty($attributes)) 
-		{
+		if (empty($attributes)) {
 			$html .= '';
-		} 
-		else if (is_string($attributes)) 
-		{
+		} else if (is_string($attributes)) {
 			$html .= ' ' . $attributes;
-		} 
-		else if (is_array($attributes)) 
-		{
-			foreach ($attributes as $key => $val) 
-			{
-				if (isset($key) && !is_bool($val))
-				{
+		} else if (is_array($attributes)) {
+			foreach ($attributes as $key => $val) {
+				if (isset($key) && !is_bool($val)) {
 					$pairs[] = sprintf('%s="%s"', $key, $val);
-				}
-				else if (isset($key) && is_bool($val) && $val)
-				{
+				} else if (isset($key) && is_bool($val) && $val) {
 					$pairs[] = sprintf('%s', $key);
 				}
 			}

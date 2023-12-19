@@ -78,8 +78,7 @@ class FileObject implements FileObjectInterface
 		$this->fileExtension = $this->fileHandlerClass->getExtension($this->filePath);
 
 		$this->recoveryMode = $recoveryMode;
-		if ($this->recoveryMode)
-		{
+		if ($this->recoveryMode) {
 			$this->setRecoveryFile();
 		}
 	}
@@ -101,42 +100,36 @@ class FileObject implements FileObjectInterface
 
 	private function setRecoveryFile()
 	{
-		do
-		{
+		do {
 			$this->temporaryPath = sprintf('%s.%s.%s', $this->filePath, uniqid('', true), $this->fileExtension);
-		}
-		while ($this->fileHandlerClass->isFile($this->temporaryPath));
+		} while ($this->fileHandlerClass->isFile($this->temporaryPath));
 
 		$isFileExists = FileHandler::isExists($this->filePath);
 
-		if ($isFileExists)
-		{
+		if ($isFileExists) {
 			$fileContent = file_get_contents($this->filePath, true);
 			file_put_contents($this->temporaryPath, $fileContent);
 		}
 	}
 
-	public function hasWriteContentLength() :bool
+	public function hasWriteContentLength(): bool
 	{
-		if ($this->writeContentLength === -1)
-		{
+		if ($this->writeContentLength === -1) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public function closeFileHandle() :bool
+	public function closeFileHandle(): bool
 	{
 		fclose($this->fileHandler);
 
-		if (!$this->recoveryMode)
-		{
+		if (!$this->recoveryMode) {
 			return true;
 		}
 
-		if ($this->recoveryMode && !$this->hasWriteContentLength())
-		{
+		if ($this->recoveryMode && !$this->hasWriteContentLength()) {
 			return true;
 		}
 
@@ -147,21 +140,17 @@ class FileObject implements FileObjectInterface
 
 		$isFileExists = $this->fileHandlerClass->isFile($this->temporaryPath);
 
-		if ($this->recoveryMode && !$isFileExists)
-		{
+		if ($this->recoveryMode && !$isFileExists) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($this->temporaryPath));
 		}
 
-		if ($this->recoveryMode && !$invalidFileSize && !$correctFileSize)
-		{
+		if ($this->recoveryMode && !$invalidFileSize && !$correctFileSize) {
 			$this->fileHandlerClass->delete($filePath);
 			return false;
 		}
 
-		if ($this->recoveryMode)
-		{
-			if ($this->fileHandlerClass->copy($filePath, $this->filePath))
-			{
+		if ($this->recoveryMode) {
+			if ($this->fileHandlerClass->copy($filePath, $this->filePath)) {
 				$this->fileHandlerClass->delete($filePath);
 			}
 		}
@@ -169,12 +158,11 @@ class FileObject implements FileObjectInterface
 		return true;
 	}
 
-	public function seek(int $offset) :bool
+	public function seek(int $offset): bool
 	{
 		$seek = fseek($this->fileHandler, $offset, SEEK_SET);
 
-		if ($seek === 0)
-		{
+		if ($seek === 0) {
 			$this->seekOffset = $offset;
 
 			return true;
@@ -183,34 +171,31 @@ class FileObject implements FileObjectInterface
 		return false;
 	}
 
-	public function hasMode($readMode = null) :bool
+	public function hasMode($readMode = null): bool
 	{
-		if (in_array(($readMode || $this->mode), $this->createIfModeEmpty))
-		{
+		if (in_array(($readMode || $this->mode), $this->createIfModeEmpty)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public function isReadable($readMode = null) :bool
+	public function isReadable($readMode = null): bool
 	{
-		if (in_array(($readMode || $this->mode), $this->readModeList))
-		{
+		if (in_array(($readMode || $this->mode), $this->readModeList)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public function appendContent($filePath) :void
+	public function appendContent($filePath): void
 	{
 		$fileHandler = fopen($filePath, 'r');
 
 		$line = fgets($fileHandler);
 
-		while ($line !== false)
-		{
+		while ($line !== false) {
 			fputs($this->fileHandler, $line);
 			$line = fgets($fileHandler);
 		}
@@ -218,23 +203,18 @@ class FileObject implements FileObjectInterface
 		fclose($fileHandler);
 	}
 
-	public function isEqualByLine(string $string) :bool
+	public function isEqualByLine(string $string): bool
 	{
-		if (!FileHandler::isExists($this->getFilePath()))
-		{
+		if (!FileHandler::isExists($this->getFilePath())) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($this->getFilePath()));
 		}
 
 		$bool = false;
 
-		while ($isEqual = fgets($this->fileHandler))
-		{
-			if ($isEqual === $string)
-			{
+		while ($isEqual = fgets($this->fileHandler)) {
+			if ($isEqual === $string) {
 				$bool = true;
-			}
-			else
-			{
+			} else {
 				$bool = false;
 			}
 		}
@@ -244,20 +224,19 @@ class FileObject implements FileObjectInterface
 
 	public function injectFileIsNotExistsException()
 	{
-		if ($this->recoveryMode && !$this->fileHandlerClass->isFile($this->temporaryPath))
-		{
+		if ($this->recoveryMode && !$this->fileHandlerClass->isFile($this->temporaryPath)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($this->temporaryPath));
 		}
 	}
 
-	public function isLocked() :bool
+	public function isLocked(): bool
 	{
 		$this->injectFileIsNotExistsException();
 
 		return $this->fileHandlerClass->isLocked($this->filePath);
 	}
 
-	public function isWritable() :bool
+	public function isWritable(): bool
 	{
 		$this->injectFileIsNotExistsException();
 
@@ -266,52 +245,42 @@ class FileObject implements FileObjectInterface
 
 	public function removeTemporary()
 	{
-		if ($this->recoveryMode)
-		{
-			if (FileHandler::isExists($this->temporaryPath))
-			{
+		if ($this->recoveryMode) {
+			if (FileHandler::isExists($this->temporaryPath)) {
 				$this->fileHandlerClass->delete($this->temporaryPath);
 			}
 		}
 	}
 
-	public function writeContent(string $content, $isLarge = false, int $bufferSize = 1024) :bool
+	public function writeContent(string $content, $isLarge = false, int $bufferSize = 1024): bool
 	{
-		if (!$this->isWritable() || $this->isLocked())
-		{
+		if (!$this->isWritable() || $this->isLocked()) {
 			$this->removeTemporary();
 			return false;
 		}
 
 		$this->confirmFilesize = true;
 
-		if ($this->mode === 'w')
-		{
+		if ($this->mode === 'w') {
 			$this->writeContentLength = strlen($content);
-		}
-		else if ($this->mode === 'a')
-		{
+		} else if ($this->mode === 'a') {
 			$this->writeContentLength = $this->fileHandlerClass->getSize($this->filePath);
 			$this->writeContentLength += strlen($content);
 		}
 
-		if ($isLarge)
-		{
+		if ($isLarge) {
 			$pieces = str_split($content, $bufferSize ? $bufferSize : (1024 * 4));
-			foreach ($pieces as $piece)
-			{
+			foreach ($pieces as $piece) {
 				$this->writeHandler += fwrite($this->fileHandler, $piece, strlen($piece));
 			}
-		}
-		else
-		{
+		} else {
 			$this->writeHandler = fwrite($this->fileHandler, $content);
 		}
 
 		return true;
 	}
 
-	public function getCurrentSize() :int
+	public function getCurrentSize(): int
 	{
 		$filePath = $this->getFilePath();
 		$currentFileSize = $this->fileHandlerClass->getSize($filePath);
@@ -319,12 +288,12 @@ class FileObject implements FileObjectInterface
 		return $currentFileSize;
 	}
 
-	public function getReadedContent() :string
+	public function getReadedContent(): string
 	{
 		return (!$this->isReadedContentValid()) ? '' : $this->readedContent;
 	}
 
-	public function isReadedContentValid() :bool
+	public function isReadedContentValid(): bool
 	{
 		return !($this->readedContent === false);
 	}
@@ -336,122 +305,106 @@ class FileObject implements FileObjectInterface
 
 	public function readAllContent()
 	{
-		if (!$this->hasReadedContent())
-		{
+		if (!$this->hasReadedContent()) {
 		}
 
 		$this->readContent($this->getCurrentSize());
 	}
 
-	public function readContent(int $fileSize = 0) :void
+	public function readContent(int $fileSize = 0): void
 	{
 		$this->readedContent = fread($this->fileHandler, $fileSize);
 	}
 
-	public function printFileData(int $mbSize = 8) :void
+	public function printFileData(int $mbSize = 8): void
 	{
-		while (!feof($this->fileHandler))
-		{
+		while (!feof($this->fileHandler)) {
 			print(@fread($this->fileHandler, (1024 * $mbSize)));
 			ob_flush();
 			flush();
 		}
 	}
 
-	public function isEnoughFreeSpace() :bool
+	public function isEnoughFreeSpace(): bool
 	{
 		$freeSpace = $this->directoryHandler->getFreeSpace();
-		if ($freeSpace === -1)
-		{
+		if ($freeSpace === -1) {
 			return true;
 		}
 
 		$capacity = (int)$this->writeContentLength;
 
 		$isEnough = $capacity < $freeSpace;
-		if ($this->mode === 'w' && !$isEnough)
-		{
+		if ($this->mode === 'w' && !$isEnough) {
 			return false;
 		}
 
 		$sourceFileSize = $this->fileHandlerClass->getSize($this->filePath);
 		$bool = ($freeSpace + $sourceFileSize) < $freeSpace;
-		if ($this->mode === 'a' && !$bool)
-		{
+		if ($this->mode === 'a' && !$bool) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public function successToWriteContent() :bool
+	public function successToWriteContent(): bool
 	{
-		if (!getType($this->writeHandler) === 'integer')
-		{
+		if (!getType($this->writeHandler) === 'integer') {
 			return false;
 		}
 
 		$isInvalidSize = ($this->writeHandler !== (int)$this->writeContentLength);
 
-		if ($this->mode === 'w' && $isInvalidSize)
-		{
+		if ($this->mode === 'w' && $isInvalidSize) {
 			return false;
 		}
 
 		$isCorrectSize = ($this->fileHandlerClass->getSize($this->temporaryPath) !== (int)$this->writeContentLength);
 
-		if ($this->mode === 'a' && $isCorrectSize)
-		{
+		if ($this->mode === 'a' && $isCorrectSize) {
 			return false;
 		}
 
 		return true;
 	}
 
-	public function getFilePath() :string
+	public function getFilePath(): string
 	{
-		if ($this->recoveryMode)
-		{
+		if ($this->recoveryMode) {
 			$filePath = $this->temporaryPath;
-		}
-		else
-		{
+		} else {
 			$filePath = $this->filePath;
 		}
 
 		return $filePath;
 	}
 
-	public function startHandle() :void
+	public function startHandle(): void
 	{
 		$fileIsNotExists = (!$this->hasMode() && !FileHandler::isExists($this->getFilePath()));
 
-		if ($fileIsNotExists)
-		{
+		if ($fileIsNotExists) {
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($this->getFilePath()));
 		}
 
 		$this->fileHandler = fopen($this->getFilePath(), $this->mode);
 	}
 
-	public function successToStartHandle() :bool
+	public function successToStartHandle(): bool
 	{
-		if (($this->fileHandler) === false)
-		{
+		if (($this->fileHandler) === false) {
 			return false;
 		}
 
-		if (getType($this->fileHandler) !== 'resource')
-		{
+		if (getType($this->fileHandler) !== 'resource') {
 			return false;
 		}
 
-		if (get_resource_type($this->fileHandler) !== 'stream')
-		{
+		if (get_resource_type($this->fileHandler) !== 'stream') {
 			return false;
 		}
 
 		return true;
 	}
-
 }

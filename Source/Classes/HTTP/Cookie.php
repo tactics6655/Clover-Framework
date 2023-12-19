@@ -13,12 +13,9 @@ class Cookie
 
 	public function setRaw($key, $value = '', $expired)
 	{
-		if (isset($expired)) 
-		{
+		if (isset($expired)) {
 			setrawcookie($key, $value, $expired);
-		} 
-		else 
-		{
+		} else {
 			setrawcookie($key, $value);
 		}
 
@@ -27,8 +24,7 @@ class Cookie
 
 	public function get($key)
 	{
-		if ($this->isSet($key)) 
-		{
+		if ($this->isSet($key)) {
 			return $_COOKIE[$key];
 		}
 
@@ -37,19 +33,13 @@ class Cookie
 
 	public function set($key, $value = '', $expired = '', $useUrlEncoding = true)
 	{
-		if ($useUrlEncoding) 
-		{
-			if (isset($expired)) 
-			{
+		if ($useUrlEncoding) {
+			if (isset($expired)) {
 				setcookie($key, $value, $expired);
-			} 
-			else if (!isset($expired)) 
-			{
+			} else if (!isset($expired)) {
 				setcookie($key, $value);
 			}
-		} 
-		else 
-		{
+		} else {
 			$this->setRaw($key, $value, $expired);
 		}
 
@@ -58,8 +48,7 @@ class Cookie
 
 	public static function unset($name)
 	{
-		if (isset($_COOKIE[$name])) 
-		{
+		if (isset($_COOKIE[$name])) {
 			unset($_COOKIE[$name]);
 
 			return true;

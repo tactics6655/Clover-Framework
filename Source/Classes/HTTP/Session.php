@@ -4,31 +4,29 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP;
 
-class Session 
+class Session
 {
-	
+
 	/**
 	 * Start session
 	 *
 	 * @return void
 	 */
-	public static function start($options = []) 
+	public static function start($options = [])
 	{
-		if (self::isExtensionLoaded()) 
-		{
-			session_start ($options);
+		if (self::isExtensionLoaded()) {
+			session_start($options);
 		}
 	}
-	
+
 	/**
 	 * Check that php session extension is exsits
 	 *
 	 * @return boolean
 	 */
-	public static function isExtensionLoaded() 
+	public static function isExtensionLoaded()
 	{
-		if (!extension_loaded('session')) 
-		{
+		if (!extension_loaded('session')) {
 			return false;
 		}
 
@@ -40,7 +38,7 @@ class Session
 	 *
 	 * @return int
 	 */
-	public static function getStatus() 
+	public static function getStatus()
 	{
 		$status = session_status();
 
@@ -52,7 +50,7 @@ class Session
 	 *
 	 * @return string
 	 */
-	public static function getId() 
+	public static function getId()
 	{
 		$sessionId = session_id();
 
@@ -64,22 +62,22 @@ class Session
 		return session_id($id);
 	}
 
-	public static function setCacheLimiter(string $value) 
+	public static function setCacheLimiter(string $value)
 	{
 		session_cache_limiter($value);
 	}
 
-	public static function getCacheLimiter() 
+	public static function getCacheLimiter()
 	{
 		return session_cache_limiter();
 	}
 
-	public static function setCacheExpire(int $value) 
+	public static function setCacheExpire(int $value)
 	{
 		return session_cache_expire($value);
 	}
 
-	public static function abort() 
+	public static function abort()
 	{
 		return session_abort();
 	}
@@ -89,20 +87,18 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function hasId() 
+	public static function hasId()
 	{
-		if (self::getId() == '') 
-		{
+		if (self::getId() == '') {
 			return false;
 		}
 
 		return true;
 	}
 
-	public static function isActive() 
+	public static function isActive()
 	{
-		if (self::getStatus() == PHP_SESSION_ACTIVE) 
-		{
+		if (self::getStatus() == PHP_SESSION_ACTIVE) {
 			return false;
 		}
 
@@ -114,10 +110,9 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function isExists() :bool 
+	public static function isExists(): bool
 	{
-		if (self::getStatus() == PHP_SESSION_NONE) 
-		{
+		if (self::getStatus() == PHP_SESSION_NONE) {
 			return false;
 		}
 
@@ -129,10 +124,9 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function isDisabled() :bool 
+	public static function isDisabled(): bool
 	{
-		if (self::getStatus() == PHP_SESSION_DISABLED) 
-		{
+		if (self::getStatus() == PHP_SESSION_DISABLED) {
 			return false;
 		}
 
@@ -144,10 +138,9 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function isStated() 
+	public static function isStated()
 	{
-		if (!self::isExists() && empty($_SESSION)) 
-		{
+		if (!self::isExists() && empty($_SESSION)) {
 			return false;
 		}
 
@@ -159,7 +152,7 @@ class Session
 	 *
 	 * @return bool|string
 	 */
-	public static function getSavePath() 
+	public static function getSavePath()
 	{
 		return session_save_path();
 	}
@@ -171,7 +164,7 @@ class Session
 	 *
 	 * @return string|boolean
 	 */
-	public static function setSavePath($path = '') 
+	public static function setSavePath($path = '')
 	{
 		return session_save_path($path);
 	}
@@ -196,12 +189,12 @@ class Session
 		return session_create_id($prefix);
 	}
 
-	public static function commit() 
+	public static function commit()
 	{
 		session_commit();
 	}
 
-	public static function regenerateId($use = true) 
+	public static function regenerateId($use = true)
 	{
 		session_regenerate_id($use);
 	}
@@ -211,10 +204,9 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function useCookies() 
+	public static function useCookies()
 	{
-		if (ini_get('session.use_cookies')) 
-		{
+		if (ini_get('session.use_cookies')) {
 			return true;
 		}
 
@@ -226,7 +218,7 @@ class Session
 	 *
 	 * @return void
 	 */
-	public static function destroy() 
+	public static function destroy()
 	{
 		$_SESSION = [];
 		session_destroy();
@@ -242,31 +234,23 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function set($key, $value, $overwrite = true, $valid = false) :bool 
+	public static function set($key, $value, $overwrite = true, $valid = false): bool
 	{
-		$setSessionData = function ($key, $value) 
-		{
+		$setSessionData = function ($key, $value) {
 			$_SESSION[$key] = $value;
 		};
 
-		if (isset($_SESSION[$key])) 
-		{
-			if ($overwrite === true) 
-			{
+		if (isset($_SESSION[$key])) {
+			if ($overwrite === true) {
 				$setSessionData($key, $value);
-			} 
-			else 
-			{
+			} else {
 				return false;
 			}
-		} 
-		else 
-		{
+		} else {
 			$setSessionData($key, $value);
 		}
 
-		if ($valid === true && $_SESSION[$key] !== $value) 
-		{
+		if ($valid === true && $_SESSION[$key] !== $value) {
 			return false;
 		}
 
@@ -278,7 +262,7 @@ class Session
 	 *
 	 * @return mixed
 	 */
-	public static function get($key) 
+	public static function get($key)
 	{
 		return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 	}
@@ -288,14 +272,13 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function unset() :bool 
+	public static function unset(): bool
 	{
 		return session_unset();
 	}
-	
-	public static function close() :bool
+
+	public static function close(): bool
 	{
 		return session_write_close();
 	}
-
 }

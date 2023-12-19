@@ -2,8 +2,9 @@
 
 namespace Xanax\Classes;
 
-class Tokenizer {
-	
+class Tokenizer
+{
+
 	const OPERATOR     = 1;
 	const PARENTHESIES = 2;
 	const WORD         = 3;
@@ -32,7 +33,7 @@ class Tokenizer {
 		'(' => self::PARENTHESIES,
 		')' => self::PARENTHESIES
 	];
-	
+
 	private $firstTokens = [
 		'string'    => self::DATATYPE,
 		'integer'   => self::DATATYPE,
@@ -52,52 +53,38 @@ class Tokenizer {
 	const STATE_WORD     = 4;
 	const STATE_OPERATOR = 5;
 
-	public function generateToken($string) 
+	public function generateToken($string)
 	{
 		$count = strlen($string);
 
 		$state = self::STATE_DEFAULT;
 
 		// Lexical analysis
-		for ($i = 0; $i < $count; $i++) 
-		{
+		for ($i = 0; $i < $count; $i++) {
 			$character = $string[$i];
 
-			switch ($state) 
-			{
+			switch ($state) {
 				case self::STATE_DEFAULT:
-					if (ctype_alpha($character)) 
-					{
+					if (ctype_alpha($character)) {
 						$this->token .= $character;
 						$state = self::STATE_WORD;
-					} 
-					elseif (is_numeric($character)) 
-					{
+					} elseif (is_numeric($character)) {
 						$this->token .= $character;
 						$state = self::STATE_WORD;
-					} 
-					elseif (in_array($character, $this->variableSpecialCharacter)) 
-					{
+					} elseif (in_array($character, $this->variableSpecialCharacter)) {
 						$this->token .= $character;
-					} 
-					elseif (isset($this->operatorTokens[$character])) 
-					{
+					} elseif (isset($this->operatorTokens[$character])) {
 						$this->token .= $character;
 						$state = self::STATE_OPERATOR;
-					} 
-					elseif (in_array($character, $this->quotes)) 
-					{
+					} elseif (in_array($character, $this->quotes)) {
 						$state = self::STATE_STRING;
 					}
 
 					break;
 				case self::STATE_OPERATOR:
-					if (isset($this->operatorTokens[$character])) 
-					{
+					if (isset($this->operatorTokens[$character])) {
 						$this->token .= $character;
-					} 
-					else 
-					{
+					} else {
 						$this->tokens[] = new TokenObject($this->token, $this->operatorTokens[$this->token]);
 						$this->token    = '';
 						$i--;
@@ -107,32 +94,23 @@ class Tokenizer {
 
 					break;
 				case self::STATE_STRING:
-					if ($character == '"') 
-					{
+					if ($character == '"') {
 						$this->tokens[] = new TokenObject($this->token, self::STATE_STRING);
 						$this->token    = '';
 
 						$state = self::STATE_DEFAULT;
-					} 
-					else 
-					{
+					} else {
 						$this->token .= $character;
 					}
 
 					break;
 				case self::STATE_WORD:
-					if (ctype_alnum($character) || in_array($character, $this->variableSpecialCharacter)) 
-					{
+					if (ctype_alnum($character) || in_array($character, $this->variableSpecialCharacter)) {
 						$this->token .= $character;
-					} 
-					else 
-					{
-						if (isset($this->operatorTokens[$character])) 
-						{
+					} else {
+						if (isset($this->operatorTokens[$character])) {
 							$this->tokens[] = new TokenObject($this->token, self::STATE_WORD);
-						} 
-						else 
-						{
+						} else {
 							$this->tokens[] = new TokenObject($this->token, self::STATE_WORD);
 						}
 

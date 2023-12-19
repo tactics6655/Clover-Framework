@@ -10,7 +10,8 @@ use Xanax\Classes\ClientURLLastTransferInformation as ClientURLLastTransferInfor
 use Xanax\Classes\Data\StringObject as StringObject;
 use Xanax\Implement\ClientURLInterface;
 
-class ClientURL implements ClientURLInterface {
+class ClientURL implements ClientURLInterface
+{
 	private static $session;
 
 	/** @var \Xanax\Classes\ClientURLOption */
@@ -21,15 +22,13 @@ class ClientURL implements ClientURLInterface {
 
 	public function __construct(bool $useLocalMethod = true, string $url = '')
 	{
-		if (!extension_loaded('curl'))
-		{
-            throw new \ErrorException('The CURL library is NOT loaded');
-        }
-		
+		if (!extension_loaded('curl')) {
+			throw new \ErrorException('The CURL library is NOT loaded');
+		}
+
 		self::$session = $this->getSession();
 
-		if ($useLocalMethod)
-		{
+		if ($useLocalMethod) {
 			$this->option      = new ClientURLOption(self::$session);
 			$this->information = new ClientURLLastTransferInformation(self::$session);
 		}
@@ -37,19 +36,20 @@ class ClientURL implements ClientURLInterface {
 
 	public function getSession()
 	{
-		if (self::$session == null)
-		{
+		if (self::$session == null) {
 			self::$session = $this->initialize();
 		}
 
 		return self::$session;
 	}
 
-	public function getLastErrorMessage() :string {
+	public function getLastErrorMessage(): string
+	{
 		return curl_error(self::$session);
 	}
 
-	public function getLastErrorNumber() :int {
+	public function getLastErrorNumber(): int
+	{
 		return curl_errno(self::$session);
 	}
 
@@ -60,16 +60,14 @@ class ClientURL implements ClientURLInterface {
 
 	public function reset()
 	{
-		if (function_exists('curl_reset'))
-		{
+		if (function_exists('curl_reset')) {
 			curl_reset(self::$session);
 		}
 	}
 
 	public function option()
 	{
-		if (!$this->option)
-		{
+		if (!$this->option) {
 			$this->option = new ClientURLOption(self::$session);
 		}
 
@@ -78,8 +76,7 @@ class ClientURL implements ClientURLInterface {
 
 	public function information()
 	{
-		if (!$this->information)
-		{
+		if (!$this->information) {
 			$this->information = new ClientURLLastTransferInformation(self::$session);
 		}
 
@@ -91,7 +88,8 @@ class ClientURL implements ClientURLInterface {
 		curl_setopt(self::$session, $option, $value);
 	}
 
-	public function close() :void {
+	public function close(): void
+	{
 		curl_close(self::$session);
 	}
 

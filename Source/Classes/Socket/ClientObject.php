@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace Xanax\Classes;
 
-class ClientObject 
+class ClientObject
 {
-	
+
 	private $SocketHandlerClass;
 	private $SocketHandler;
 
-	public function __construct($socketHandler) 
+	public function __construct($socketHandler)
 	{
-		if ($socketHandler instanceof Xanax\Classes\Socket\Handler) 
-		{
+		if ($socketHandler instanceof Xanax\Classes\Socket\Handler) {
 			$this->SocketHandlerClass = $socketHandler;
 		}
 	}
 
 	// Send packet to socket of server
-	public function sendPacket($string = '') : bool {
+	public function sendPacket($string = ''): bool
+	{
 		$result = $this->SocketHandlerClass->writeSocket($this->SocketHandler, $string, strlen($string));
 
-		if ($result === 0) 
-		{
+		if ($result === 0) {
 			return false;
 		}
 
@@ -31,41 +30,38 @@ class ClientObject
 	}
 
 	// Close socket
-	public function close() :void 
+	public function close(): void
 	{
 		$this->SocketHandlerClass->Close();
 	}
 
 	// Connect socket
-	public function connect($address, $port, $domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :bool 
+	public function connect($address, $port, $domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP): bool
 	{
 		$this->SocketHandler = $this->SocketHandlerClass->Create($domain, $type, $protocol);
 
-		if (!$this->SocketHandler) 
-		{
+		if (!$this->SocketHandler) {
 			return false;
 		}
 
 		$result = $this->SocketHandlerClass->Connect($this->SocketHandler, $address, $port);
 
-		if (!$result) 
-		{
+		if (!$result) {
 			return false;
 		}
 
 		return true;
 	}
-	
+
 	// Connect TCP socket
-	public function connectTCP($address, $port, $domain = AF_INET) : bool 
+	public function connectTCP($address, $port, $domain = AF_INET): bool
 	{
 		return $this->connect($address, $port, $domain, SOCK_STREAM, SOL_TCP);
 	}
 
 	// Connect UDP socket
-	public function connectUDP($address, $port, $domain = AF_INET) :bool 
+	public function connectUDP($address, $port, $domain = AF_INET): bool
 	{
 		return $this->connect($address, $port, $domain, SOCK_DGRAM, SOL_UDP);
 	}
-
 }

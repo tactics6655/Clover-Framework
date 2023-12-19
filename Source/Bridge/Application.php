@@ -1,4 +1,5 @@
 <?php
 
-class Application {
+class Application
+{
 }

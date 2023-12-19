@@ -12,12 +12,12 @@ class StringObject extends BaseObject
 
     protected static $raw_data = '';
 
-    public function __construct($data) 
+    public function __construct($data)
     {
         self::$raw_data = $data;
     }
 
-    public function __toString() 
+    public function __toString()
     {
         return self::$raw_data;
     }
@@ -29,22 +29,22 @@ class StringObject extends BaseObject
         return new ArrayObject($array);
     }
 
-    public function substring($start, $length) 
+    public function substring($start, $length)
     {
         return StringHandler::substring(self::$raw_data, $start, $length);
     }
-    
-    public function isEmpty() 
+
+    public function isEmpty()
     {
         return StringHandler::isEmpty(self::$raw_data);
     }
 
-    public function isNull() 
+    public function isNull()
     {
         return StringHandler::isNull(self::$raw_data);
     }
 
-    public function contains($search) 
+    public function contains($search)
     {
         return StringHandler::contains(self::$raw_data, $search);
     }
@@ -78,5 +78,4 @@ class StringObject extends BaseObject
     {
         return StringHandler::removeUtf8Bom(self::$raw_data);
     }
-    
 }

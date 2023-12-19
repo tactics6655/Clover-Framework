@@ -1,5 +1,5 @@
 <?php
 
-class Geometry {
-	
+class Geometry
+{
 }

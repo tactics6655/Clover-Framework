@@ -26,21 +26,19 @@ class PHPDataObject extends \PDO
 			];
 
 			parent::__construct($dns, $username, $password, $attributes);
-		} 
-		catch (\Exception $e) 
-		{
+		} catch (\Exception $e) {
 			throw new \Exception($e->getMessage());
 		}
 	}
 
-	public function insertByArray($table, $columns, $values) 
+	public function insertByArray($table, $columns, $values)
 	{
 		$column_count = count($columns);
 		$column_separated = implode(",", $columns);
 		$placeholder_separated = implode(",", array_fill(0, $column_count, "?"));
 		$sql = "INSERT INTO $table ($column_separated) VALUES ($placeholder_separated)";
 
-		$stmt= $this->prepare($sql);
+		$stmt = $this->prepare($sql);
 		$stmt->execute($values);
 	}
 
@@ -48,13 +46,12 @@ class PHPDataObject extends \PDO
 	{
 		$errCode = $e->errorInfo[1];
 		$errCodeArguments = preg_match_all("|(?:\')(.*)(?:\')|U", $e->errorInfo[2], $matches);
-		if (isset($matches)) 
-		{
+		if (isset($matches)) {
 			$errCodeArguments = $matches[1];
 		}
-		
+
 		$message = "";
-		switch($errCode) {
+		switch ($errCode) {
 			case "1004":
 				$message = sprintf("%s 파일을 정상적으로 생성할 수 없습니다.", $errCodeArguments[0]);
 				break;
@@ -244,14 +241,13 @@ class PHPDataObject extends \PDO
 			default:
 				break;
 		}
-		
+
 		return $message;
 	}
 
-	public function fetch($stm, $type) 
+	public function fetch($stm, $type)
 	{
-		switch ($type) 
-		{
+		switch ($type) {
 			case 'all':
 				$res = $stm->fetchAll(\PDO::FETCH_ASSOC);
 				break;
@@ -280,8 +276,7 @@ class PHPDataObject extends \PDO
 				$res = $stm->fetchAll(\PDO::FETCH_ASSOC);
 				break;
 		}
-		
+
 		return $res;
 	}
-	
 }

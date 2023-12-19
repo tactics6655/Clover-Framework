@@ -11,13 +11,10 @@ class Memcache
 
 	public function __construct()
 	{
-		if ($this->isMemcachedClassExists()) 
-		{
+		if ($this->isMemcachedClassExists()) {
 			$this->cache = new Memcached;
 			$this->type = "memcached";
-		} 
-		else if ($this->isMemcacheClassExists()) 
-		{
+		} else if ($this->isMemcacheClassExists()) {
 			$this->cache = new Memcache;
 			$this->type = "memcache";
 		}
@@ -45,12 +42,9 @@ class Memcache
 
 	public function set($key, $validTime, $buffer)
 	{
-		if ($this->type == "memcached") 
-		{
+		if ($this->type == "memcached") {
 			return $this->set($key, array(time(), $buffer), $validTime);
-		} 
-		else if ($this->type == "memcache") 
-		{
+		} else if ($this->type == "memcache") {
 			return $this->set($key, array(time(), $buffer), \MEMCACHE_COMPRESSED, $validTime);
 		}
 	}
@@ -79,8 +73,7 @@ class Memcache
 	{
 		$cache = $this->cache->get($key);
 
-		if ($limit > 0 && $limit > $cache[0])
-		{
+		if ($limit > 0 && $limit > $cache[0]) {
 			$this->delete($key);
 		}
 

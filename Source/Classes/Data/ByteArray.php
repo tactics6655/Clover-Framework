@@ -13,5 +13,4 @@ class ByteArray extends Data
   {
     parent::$data = unpack('C*', parent::$data);
   }
-
 }
