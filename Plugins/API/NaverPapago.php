@@ -27,7 +27,7 @@ class NaverPapago
         );
 
         $text = urlencode($text);
-        $postData = "source=${source}&target=${target}&text=${text}";
+        $postData = "source={$source}&target={$target}&text={$text}";
 
         $cURL = new ClientURL();
         $cURL->option->setURL($this->requestUrl)
@@ -41,12 +41,14 @@ class NaverPapago
 
         $result = $cURL->execute();
 
-        if (JSONHandler::isJSON($result->__toString())) {
-            $json = JSONHandler::decode($result);
+        if (!JSONHandler::isJSON($result->__toString())) {
+            return false;
+        }
 
-            if (isset($json->message->result->translatedText)) {
-                return $json->message->result->translatedText;
-            }
+        $json = JSONHandler::decode($result);
+
+        if (isset($json->message->result->translatedText)) {
+            return $json->message->result->translatedText;
         }
 
         return $result;

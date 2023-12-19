@@ -18,6 +18,7 @@ enum RecordAction {
 }
 
 enum RecordState {
+    UNINITIALIZED = 'uninitialized',
     RECORDING = 'recording',
     INACTIVE = 'inactive',
     PAUSED = 'paused'
@@ -81,7 +82,7 @@ class AudioRecorder implements AudioRecorderInterface {
     private events: Array<any>;
     private maximum_duration: number;
     private spectrum_callback: any;
-    private mediaRecorder: MediaRecorder;
+    private mediaRecorder: MediaRecorder | null;
     private min_decibels: number;
     private fft_size: number;
     private requestAnimationFrame: any;
@@ -359,10 +360,13 @@ class AudioRecorder implements AudioRecorderInterface {
         }
     }
 
-    private getState(): RecordingState {
-        if (typeof this.mediaRecorder.state == 'undefined') {
+    private getState(): RecordingState | RecordState {
+        if (this.mediaRecorder == null) {
+            return RecordState.UNINITIALIZED;
+        }
 
-            return;
+        if (typeof this.mediaRecorder.state == 'undefined') {
+            return RecordState.UNINITIALIZED;
         }
 
         return this.mediaRecorder.state;
@@ -417,7 +421,9 @@ class AudioRecorder implements AudioRecorderInterface {
 
         this.events[event].listeners = this.events[event].listeners.filter((listener: any) => {
             return listener.toString() !== callback.toString();
-        })
+        });
+
+        return false;
     }
 
     public addListener(event: string, callback: any) :void {
@@ -462,41 +468,55 @@ class AudioRecorder implements AudioRecorderInterface {
         const self = this;
 
         // An event handler called to handle the resume event, which occurs when media recording resumes after being paused.
-        this.mediaRecorder.onresume = function(event) {
-            self.dispatch(RecorderEvent.ON_RESUME, event);
-        };
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.onresume = function(event) {
+                self.dispatch(RecorderEvent.ON_RESUME, event);
+            };
+        }
 
         // An event handler called to handle the pause event, which occurs when media recording is paused.
-        this.mediaRecorder.onpause = function(event) {
-            self.dispatch(RecorderEvent.ON_PAUSE, event);
-        };
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.onpause = function(event) {
+                self.dispatch(RecorderEvent.ON_PAUSE, event);
+            };
+        }
 
         // An event handler called to handle the start event, which occurs when media recording starts.
-        this.mediaRecorder.onstart = function(event) {
-            self.dispatch(RecorderEvent.ON_START, event);
-        };
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.onstart = function(event) {
+                self.dispatch(RecorderEvent.ON_START, event);
+            };
+        }
 
         // Called to handle the dataavailable event, which is periodically triggered each time timeslice milliseconds of media have been recorded (or when the entire media has been recorded, if timeslice wasn't specified). The event, of type BlobEvent, contains the recorded media in its data property. You can then collect and act upon that recorded media data using this event handler.
-        this.mediaRecorder.ondataavailable = (event) => {
-            self.dispatch(RecorderEvent.ON_DATA_AVAILABLE, event);
-        };
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.ondataavailable = (event) => {
+                self.dispatch(RecorderEvent.ON_DATA_AVAILABLE, event);
+            };
+        }
 
         // An event handler called to handle the error event, including reporting errors that arise with media recording. These are fatal errors that stop recording. The received event is based on the MediaRecorderErrorEvent interface, whose error property contains a DOMException that describes the actual error that occurred.
-        this.mediaRecorder.onerror = (event) => {
-            self.dispatch(RecorderEvent.ON_ERROR, event);
-        };
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.onerror = (event) => {
+                self.dispatch(RecorderEvent.ON_ERROR, event);
+            };
+        }
 
         // An event handler called to handle the stop event, which occurs when media recording ends, either when the MediaStream ends — or after the MediaRecorder.stop() method is called.
-        this.mediaRecorder.onstop = (event) => {
-            self.dispatch(RecorderEvent.ON_STOP, event);
-        };
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.onstop = (event) => {
+                self.dispatch(RecorderEvent.ON_STOP, event);
+            };
+        }
 
         const onLoadedMetadataEvent = (event) => {
             self.dispatch(RecorderEvent.LOADED_METADATA, event);
         };
 
-        this.mediaRecorder.removeEventListener('loadedmetadata', onLoadedMetadataEvent);
-        this.mediaRecorder.addEventListener(RecorderEvent.LOADED_METADATA, onLoadedMetadataEvent);
+        if (this.mediaRecorder != null) {
+            this.mediaRecorder.removeEventListener('loadedmetadata', onLoadedMetadataEvent);
+            this.mediaRecorder.addEventListener(RecorderEvent.LOADED_METADATA, onLoadedMetadataEvent);
+        }
 
         this.removeListeners(RecorderEvent.ON_STOP);
         this.addListener(RecorderEvent.ON_STOP, (event: any) => {
@@ -524,6 +544,10 @@ class AudioRecorder implements AudioRecorderInterface {
     }
 
     public start() :void {
+        if (this.mediaRecorder == null) {
+            throw new Error('Media recorder is not initialized');
+        }
+
         if (!this.isRecorderPresents()) {
             return;
         }
@@ -545,6 +569,10 @@ class AudioRecorder implements AudioRecorderInterface {
     }
 
     public pause() :void {
+        if (this.mediaRecorder == null) {
+            throw new Error('Media recorder is not initialized');
+        }
+
         if (!this.isRecorderPresents()) {
             return;
         }
@@ -558,6 +586,10 @@ class AudioRecorder implements AudioRecorderInterface {
     }
 
     public resume() :void {
+        if (this.mediaRecorder == null) {
+            throw new Error('Media recorder is not initialized');
+        }
+
         if (!this.isRecorderPresents()) {
             return;
         }
@@ -571,6 +603,10 @@ class AudioRecorder implements AudioRecorderInterface {
     }
 
     public stop() :void {
+        if (this.mediaRecorder == null) {
+            throw new Error('Media recorder is not initialized');
+        }
+
         if (!this.isRecorderPresents()) {
             return;
         }

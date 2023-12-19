@@ -116,6 +116,13 @@ module.exports = {
 		}, {
 			test: /\.css$/,
 			use: ['style-loader', 'css-loader']
+		},{
+			test: /\.(ts|tsx)?$/,
+			use: [
+				{
+					loader: 'ts-loader'
+				}
+			]
 		}],
 		exprContextCritical: false,
 		exprContextRecursive: true,

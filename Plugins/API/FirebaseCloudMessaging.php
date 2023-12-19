@@ -3,7 +3,7 @@
 namespace Xanax\Plugin;
 
 use Xanax\Classes\ClientURL;
-use Xanax\Classes\Data\StringHandler;
+use Xanax\Classes\Data\JSONHandler;
 
 class FirebaseCloudMessaging
 {
@@ -138,7 +138,7 @@ class FirebaseCloudMessaging
 
 		$result = $cURL->execute();
 
-		$isJson = StringHandler::isJson($result);
+		$isJson = JSONHandler::isJson($result);
 
 		if ($isJson) {
 			$this->ResultData = json_decode($result);
