@@ -6,7 +6,7 @@ namespace Xanax\Classes;
 
 class Header
 {
-	public static function Response($data)
+	public static function response($data)
 	{
 		header($data);
 	}
@@ -17,7 +17,7 @@ class Header
 		
 		$responseData = implode($pair, "");
 		
-		self::Response($responseData);
+		self::response($responseData);
 	}
 	
 	public static function responseWithArray(Array $pair)
@@ -26,14 +26,14 @@ class Header
 		
 		$responseData = implode($pair, "");
 		
-		self::Response($responseData);
+		self::response($responseData);
 	}
 	
 	public static function responseWithKey($key, $value)
 	{
 		$responseData = "$key : $value";
 		
-		self::Response($responseData);
+		self::response($responseData);
 	}
 	
 	public static function responseContentType($value)
@@ -90,7 +90,7 @@ class Header
 	{
 		$responseData = sprintf("%s/%s %s %s", $protocol, $protocolVersion, $responseCode, $responseMessage);
 		
-		self::Response($responseData);
+		self::response($responseData);
 	}
 	
 	public static function responseStatusByCode($code)

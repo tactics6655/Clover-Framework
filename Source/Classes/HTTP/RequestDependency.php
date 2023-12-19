@@ -18,12 +18,12 @@ class RequestDependency
         $this->acceptLanguage = HTTPRequest::getAcceptLanguage();
     }
  
-    public function Get($key)
+    public function get($key)
     {
         return $this->getParameters[$key];
     }
     
-    public function Post($key)
+    public function post($key)
     {
         return $this->postParameters[$key];
     }

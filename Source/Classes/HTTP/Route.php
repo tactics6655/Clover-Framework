@@ -42,12 +42,12 @@ class Route
 
 		if (!isset($methodName))
 		{
-			return ReflectionHandler::Invoke($callback, $methodName, ($this->arguments ?? array()), []);
+			return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), []);
 		}
 
 		if (is_object($callback))
 		{
-			return ReflectionHandler::Invoke($callback, $methodName, ($this->arguments ?? array()), $container);
+			return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), $container);
 		}
     }
 

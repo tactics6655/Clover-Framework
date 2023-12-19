@@ -16,7 +16,7 @@ class NullObject extends BaseObject
 
     public function __toString() 
     {
-        return $this->raw_data;
+        return (string)$this->raw_data;
     }
 
 }

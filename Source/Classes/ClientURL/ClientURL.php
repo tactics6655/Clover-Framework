@@ -13,11 +13,11 @@ use Xanax\Implement\ClientURLInterface;
 class ClientURL implements ClientURLInterface {
 	private static $session;
 
-	/** @var Xanax\Classes\ClientURLOption */
-	public ClientURLOption $Option;
+	/** @var \Xanax\Classes\ClientURLOption */
+	public ClientURLOption $option;
 
-	/** @var Xanax\Classes\ClientURLLastTransferInformation */
-	public ClientURLLastTransferInformation $Information;
+	/** @var \Xanax\Classes\ClientURLLastTransferInformation */
+	public ClientURLLastTransferInformation $information;
 
 	public function __construct(bool $useLocalMethod = true, string $url = '')
 	{
@@ -30,8 +30,8 @@ class ClientURL implements ClientURLInterface {
 
 		if ($useLocalMethod)
 		{
-			$this->Option      = new ClientURLOption(self::$session);
-			$this->Information = new ClientURLLastTransferInformation(self::$session);
+			$this->option      = new ClientURLOption(self::$session);
+			$this->information = new ClientURLLastTransferInformation(self::$session);
 		}
 	}
 
@@ -39,7 +39,7 @@ class ClientURL implements ClientURLInterface {
 	{
 		if (self::$session == null)
 		{
-			self::$session = $this->Initialize();
+			self::$session = $this->initialize();
 		}
 
 		return self::$session;
@@ -53,12 +53,12 @@ class ClientURL implements ClientURLInterface {
 		return curl_errno(self::$session);
 	}
 
-	public function Initialize($instance = '')
+	public function initialize($instance = '')
 	{
 		return curl_init($instance);
 	}
 
-	public function Reset()
+	public function reset()
 	{
 		if (function_exists('curl_reset'))
 		{
@@ -66,24 +66,24 @@ class ClientURL implements ClientURLInterface {
 		}
 	}
 
-	public function Option()
+	public function option()
 	{
-		if (!$this->Option)
+		if (!$this->option)
 		{
-			$this->Option = new ClientURLOption(self::$session);
+			$this->option = new ClientURLOption(self::$session);
 		}
 
-		return $this->Option;
+		return $this->option;
 	}
 
-	public function Information()
+	public function information()
 	{
-		if (!$this->Information)
+		if (!$this->information)
 		{
-			$this->Information = new ClientURLLastTransferInformation(self::$session);
+			$this->information = new ClientURLLastTransferInformation(self::$session);
 		}
 
-		return $this->Information;
+		return $this->information;
 	}
 
 	public function setOption(int $option, $value)
@@ -91,16 +91,16 @@ class ClientURL implements ClientURLInterface {
 		curl_setopt(self::$session, $option, $value);
 	}
 
-	public function Close() :void {
+	public function close() :void {
 		curl_close(self::$session);
 	}
 
 	public function getHeaderOptions()
 	{
-		return $this->Option::$headerArrayData;
+		return $this->option::$headerArrayData;
 	}
 
-	public function Execute()
+	public function execute()
 	{
 		$result = curl_exec(self::$session);
 

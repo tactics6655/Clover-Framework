@@ -46,7 +46,7 @@ class Zip
 		}
 	}
 
-	public function Uncompress($filePath)
+	public function uncompress($filePath)
 	{
 		$zip = zip_open($filePath);
 
@@ -80,7 +80,7 @@ class Zip
 		zip_close($zip);
 	}
 
-	public function Compress($filePath, array $fileList)
+	public function compress($filePath, array $fileList)
 	{
 		$zipHandler = new \ZipArchive();
 

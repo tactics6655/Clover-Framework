@@ -27,7 +27,7 @@ class File extends Header
 		
 		$responseData = implode("", $pair);
 		
-		parent::Response($header.";". $responseData);
+		parent::response($header.";". $responseData);
 	}
 	
 	public static function responseWithCharset($application, $characterSet)
@@ -45,7 +45,7 @@ class File extends Header
 		} 
 		else 
 		{
-			self::Response('application/zip; charset=UTF-8');
+			self::response('application/zip; charset=UTF-8');
 		}
 	}
 

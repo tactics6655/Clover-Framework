@@ -129,7 +129,7 @@ class FirebaseCloudMessaging
 		);
 
 		$cURL = new ClientURL();
-		$cURL->Option->setURL($this->RequestUrl)
+		$cURL->option->setURL($this->RequestUrl)
 					 ->setPostMethod(true)
 					 ->setHeaders($headers)
 					 ->setReturnTransfer(true)
@@ -138,7 +138,7 @@ class FirebaseCloudMessaging
 					 ->setReturnHeader(false)
 					 ->disableCache(true);
 
-		$result = $cURL->Execute();
+		$result = $cURL->execute();
 
 		$isJson = StringHandler::isJson($result);
 

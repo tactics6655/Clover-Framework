@@ -6,7 +6,7 @@ namespace Xanax\Classes;
 
 class SHA256
 {
-	public function Encrypt($string, $useBase64 = true)
+	public function encrypt($string, $useBase64 = true)
 	{
 		$hashed = base64_encode(hash('sha256', $string, true));
 

@@ -84,8 +84,8 @@ class Mapper
     private function setContainer()
     {
         $this->container = new Container();
-        $this->container->Set("Renderer",  new Renderer());
-        $this->container->Set("Resource",  new Resource());
+        $this->container->set("Renderer",  new Renderer());
+        $this->container->set("Resource",  new Resource());
     }
 
     public function matchRunner()

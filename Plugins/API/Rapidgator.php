@@ -14,12 +14,12 @@ class Rapidgator
         ));
 
         $cURL = new ClientURL();
-        $cURL->Option->setURL("https://rapidgator.net/api/v2/user/info")
+        $cURL->option->setURL("https://rapidgator.net/api/v2/user/info")
                      ->setReturnTransfer(true)
                      ->setPostMethod()
                      ->setPostField($query);
 
-        $result = $cURL->Execute();
+        $result = $cURL->execute();
 
         return $result;
     }
@@ -32,17 +32,17 @@ class Rapidgator
         ));
 
         $cURL = new ClientURL();
-        $cURL->Option->setURL("https://rapidgator.net/api/v2/file/info")
+        $cURL->option->setURL("https://rapidgator.net/api/v2/file/info")
                      ->setReturnTransfer(true)
                      ->setPostMethod()
                      ->setPostField($query);
 
-        $result = $cURL->Execute();
+        $result = $cURL->execute();
 
         return $result;
     }
     
-    public function Download($file_id, $token) 
+    public function download($file_id, $token) 
     {
         $query = http_build_query(array(
             'file_id' => $file_id,
@@ -50,17 +50,17 @@ class Rapidgator
         ));
 
         $cURL = new ClientURL();
-        $cURL->Option->setURL("https://rapidgator.net/api/v2/file/download")
+        $cURL->option->setURL("https://rapidgator.net/api/v2/file/download")
                      ->setReturnTransfer(true)
                      ->setPostMethod()
                      ->setPostField($query);
 
-        $result = $cURL->Execute();
+        $result = $cURL->execute();
 
         return $result;
     }
     
-    public function Login($email, $password) 
+    public function login($email, $password) 
     {
         $query = http_build_query(array(
             'login' => $email,
@@ -68,12 +68,12 @@ class Rapidgator
         ));
 
         $cURL = new ClientURL();
-        $cURL->Option->setURL("https://rapidgator.net/api/v2/user/login")
+        $cURL->option->setURL("https://rapidgator.net/api/v2/user/login")
                      ->setReturnTransfer(true)
                      ->setPostMethod()
                      ->setPostField($query);
 
-        $result = $cURL->Execute();
+        $result = $cURL->execute();
 
         return $result;
     }

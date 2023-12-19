@@ -42,7 +42,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Provide the URL to use in the request
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setURL(string $url)
 	{
@@ -61,7 +61,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Ready to Upload
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setUploadReady(bool $bool = true)
 	{
@@ -73,7 +73,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Verify the peer's SSL certificate
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setSSLVerifypeer(bool $bool = true)
 	{
@@ -85,7 +85,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Set maximum time the request is allowed to take
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setTimeout(bool $timeout = true)
 	{
@@ -104,7 +104,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Specify data to POST to server
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setPostField($fields)
 	{
@@ -116,7 +116,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Size of POST data pointed to
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setPostFieldSize(int $size = 0)
 	{
@@ -128,7 +128,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Follow HTTP 3xx redirects
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setFollowLocationHeader(int $size = 0)
 	{
@@ -140,7 +140,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Enable/Disable use of EPSV
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setFTPUseEPSV(int $size = 0)
 	{
@@ -278,7 +278,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Verbose
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setVerbose(bool $bool = true)
 	{
@@ -290,7 +290,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Enable/Disable Global DNS cache
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setDnsUseGlobalCache(bool $bool = true)
 	{
@@ -302,7 +302,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Set HTTP user-agent header
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setUserAgent($userAgent = '')
 	{
@@ -321,7 +321,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Set contents of HTTP Cookie header
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setCookieHeader($cookieData = '')
 	{
@@ -333,7 +333,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Start a new cookie session
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function useCookieSession(bool $bool = true)
 	{
@@ -345,7 +345,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Maximum connection cache size
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setMaximumConnectionCount(bool $maximumConnection = true)
 	{
@@ -357,7 +357,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Automatically update the referer header
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setAutoReferer(bool $bool = true)
 	{
@@ -369,7 +369,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Do the download request without getting the body
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setBodyEmpty(bool $bool = true)
 	{
@@ -395,7 +395,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Timeout for the connect phase
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setConnectionTimeoutMilliseconds(bool $timeout = true)
 	{
@@ -435,7 +435,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Rate limit data upload speed
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setMaximumSendSpeed(int $bytePerSeconds = 1000)
 	{
@@ -454,7 +454,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Rate limit data download speed
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setMaximumReceiveSpeed(int $bytePerSeconds = 1000)
 	{
@@ -521,7 +521,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Set custom HTTP headers
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setHeaders($headers = [])
 	{
@@ -533,7 +533,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Set remote port number to work with
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setPort(bool $port = true)
 	{
@@ -545,7 +545,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP POST Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setPostMethod(bool $bool = true)
 	{
@@ -557,7 +557,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP GET Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setGetMethod(bool $bool = true)
 	{
@@ -670,7 +670,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Options Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	private function setOptionsMethod()
 	{
@@ -680,7 +680,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Patch Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	private function setPatchMethod()
 	{
@@ -690,7 +690,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Head Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	private function setHeadMethod()
 	{
@@ -700,7 +700,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Put Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	private function setPutMethod()
 	{
@@ -710,7 +710,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Delete Method
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	private function setDeleteMethod()
 	{
@@ -727,7 +727,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Pass headers to the data stream
 	 *
-	 * @return void
+	 * @return \Xanax\Classes\ClientURLOption
 	 */
 	public function setReturnHeader(bool $hasResponse = true) 
 	{

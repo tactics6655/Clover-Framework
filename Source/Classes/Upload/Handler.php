@@ -12,7 +12,7 @@ use Xanax\Enumeration\UploadedFileError;
 class Handler 
 {
 	
-	public static function Get($name, $key = UploadedFile::NAME) 
+	public static function get($name, $key = UploadedFile::NAME) 
 	{
 		if (preg_match('/^([A-Za-z0-9-_]{1,})\[[A-Za-z0-9-_]{1,}\]$/', $name, $match)) 
 		{
@@ -31,7 +31,7 @@ class Handler
 		}
 	}
 
-	public static function Move($name, $filePath) 
+	public static function move($name, $filePath) 
 	{
 		$temporaryName = self::getTemporaryName($name);
 
@@ -105,32 +105,32 @@ class Handler
 
 	public static function getTemporaryName($name) 
 	{
-		return self::Get($name, UploadedFile::TEMPORARY_NAME);
+		return self::get($name, UploadedFile::TEMPORARY_NAME);
 	}
 
 	public static function getFileType($name) 
 	{
-		return self::Get($name, UploadedFile::TYPE);
+		return self::get($name, UploadedFile::TYPE);
 	}
 
 	public static function getFileName($name) 
 	{
-		return self::Get($name, UploadedFile::NAME);
+		return self::get($name, UploadedFile::NAME);
 	}
 
 	public static function getFileSize($name) 
 	{
-		return self::Get($name, UploadedFile::SIZE);
+		return self::get($name, UploadedFile::SIZE);
 	}
 
 	public static function getFileError($name) 
 	{
-		return self::Get($name, UploadedFile::ERROR);
+		return self::get($name, UploadedFile::ERROR);
 	}
 
 	public static function isExists($name = UploadedFile::TEMPORARY_NAME) 
 	{
-		if (self::Get($name) === null) 
+		if (self::get($name) === null) 
 		{
 			return false;
 		}

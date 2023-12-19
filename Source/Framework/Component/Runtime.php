@@ -45,7 +45,7 @@ class Runtime
     {
         $mapper = new Mapper($this->options, $this->environment);
         $runner = $mapper->matchRunner();
-        $runner->Run()->printBody();
+        $runner->run()->printBody();
         $this->flushResponseData();
     }
 

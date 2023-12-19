@@ -19,13 +19,13 @@ class HttpKernel
         return FileFunctions::getInterpretedContent($filePath, $resource);
     }
 
-    public function Run()
+    public function run()
     {
         Router::fromDirectory('./App/Controller');
     
         Router::setContainer($this->container);
         
-        $response = Router::Run();
+        $response = Router::run();
 
         if (empty($response))
         {

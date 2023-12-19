@@ -6,32 +6,32 @@ class Container
 {
     private $container = [];
 
-    public function Set($identifier, $value)
+    public function set($identifier, $value)
     {
         $this->container[$identifier] = $value;
     }
 
-    public function Has($identifier)
+    public function has($identifier)
     {
         return isset($this->container[$identifier]);
     }
 
-    public function Get($identifier)
+    public function get($identifier)
     {
-        if (!$this->Has($identifier))
+        if (!$this->has($identifier))
         {
             return false;
         }
 
         if (is_callable($this->container[$identifier]))
         {
-            $this->container[$identifier] = $this->Resolve($identifier);
+            $this->container[$identifier] = $this->resolve($identifier);
         }
 
         return $this->container[$identifier];
     }
 
-    public function Resolve($identifier)
+    public function resolve($identifier)
     {
         if (!is_callable($this->container[$identifier]))
         {

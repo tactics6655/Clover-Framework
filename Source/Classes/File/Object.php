@@ -154,22 +154,22 @@ class FileObject implements FileObjectInterface
 
 		if ($this->recoveryMode && !$invalidFileSize && !$correctFileSize)
 		{
-			$this->fileHandlerClass->Delete($filePath);
+			$this->fileHandlerClass->delete($filePath);
 			return false;
 		}
 
 		if ($this->recoveryMode)
 		{
-			if ($this->fileHandlerClass->Copy($filePath, $this->filePath))
+			if ($this->fileHandlerClass->copy($filePath, $this->filePath))
 			{
-				$this->fileHandlerClass->Delete($filePath);
+				$this->fileHandlerClass->delete($filePath);
 			}
 		}
 
 		return true;
 	}
 
-	public function Seek(int $offset) :bool
+	public function seek(int $offset) :bool
 	{
 		$seek = fseek($this->fileHandler, $offset, SEEK_SET);
 
@@ -270,7 +270,7 @@ class FileObject implements FileObjectInterface
 		{
 			if (FileHandler::isExists($this->temporaryPath))
 			{
-				$this->fileHandlerClass->Delete($this->temporaryPath);
+				$this->fileHandlerClass->delete($this->temporaryPath);
 			}
 		}
 	}

@@ -4,7 +4,7 @@ namespace Xanax\Implement;
 
 interface EventDispatcherInterface {
 	
-	public function Dispatch($event, string $eventName = null);
+	public function dispatch($event, string $eventName = null);
 
 	public function removeListener(string $eventName, callable $listener);
 
@@ -16,6 +16,6 @@ interface EventDispatcherInterface {
 
 	public function addListener(string $eventName, callable $listener) :void;
 
-	public function Emit(object $event) :object;
+	public function emit(object $event) :object;
 	
 }

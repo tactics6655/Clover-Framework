@@ -120,17 +120,17 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return boolean
 	 */
-	public function Make(string $directoryPath, int $permission = 644) 
+	public function make(string $directoryPath, int $permission = 644) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{
 			throw new DirectoryIsNotExistsException();
 		}
 
-		return $this->Create($directoryPath);
+		return $this->create($directoryPath);
 	}
 
-	public function Create(string $directoryPath, int $permission = 644) 
+	public function create(string $directoryPath, int $permission = 644) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{
@@ -186,14 +186,14 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return boolean
 	 */
-	public function Delete(string $directoryPath) 
+	public function delete(string $directoryPath) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{
 			throw new DirectoryIsNotExistsException();
 		}
 
-		if (!$this->isEmpty($directoryPath) || !$this->Empty($directoryPath)) 
+		if (!$this->isEmpty($directoryPath) || !$this->empty($directoryPath)) 
 		{
 			return false;
 		}
@@ -229,7 +229,7 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return void
 	 */
-	public function Copy(string $directoryPath, string $copyPath) 
+	public function copy(string $directoryPath, string $copyPath) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{
@@ -243,11 +243,11 @@ class Handler implements DirectoryHandlerInterface
 		{
 			if ($item->isDir()) 
 			{
-				$this->Create($copyPath . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+				$this->create($copyPath . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
 			} 
 			else 
 			{
-				$this->fileHandler->Copy($item, $copyPath . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+				$this->fileHandler->copy($item, $copyPath . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
 			}
 		}
 	}
@@ -315,7 +315,7 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return boolean
 	 */
-	public function Rename(string $directoryPath, string $string, string $replacement) 
+	public function rename(string $directoryPath, string $string, string $replacement) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{
@@ -367,7 +367,7 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return boolean
 	 */
-	public function RenameInnerFiles(string $directoryPath, $replacement, $string = null) 
+	public function renameInnerFiles(string $directoryPath, $replacement, $string = null) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{
@@ -541,7 +541,7 @@ class Handler implements DirectoryHandlerInterface
 		return $fileList;
 	}
 
-	public function Empty(string $directoryPath) 
+	public function empty(string $directoryPath) 
 	{
 		if (!self::isDirectory($directoryPath)) 
 		{

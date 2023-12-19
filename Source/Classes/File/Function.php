@@ -87,7 +87,7 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		return self::Read($filePath, -1);
+		return self::read($filePath, -1);
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Write(string $filePath, string $content = null, string $mode = 'w'): bool
+	public static function write(string $filePath, string $content = null, string $mode = 'w'): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -191,7 +191,7 @@ class Functions
 		$fileLines     = file($filePath);
 		$invertedLines = strrev(array_shift($fileLines));
 
-		return self::Write($filePath, $invertedLines, 'w');
+		return self::write($filePath, $invertedLines, 'w');
 	}
 
 	public static function getExtensionByFilePath(string $filePath): string
@@ -250,7 +250,7 @@ class Functions
 
 		if (!self::isValidHandler($filePath)) 
 		{
-			$filePath = self::Open($filePath, FileMode::READ_OVERWRITE);
+			$filePath = self::open($filePath, FileMode::READ_OVERWRITE);
 		}
 
 		if (!flock($filePath, LOCK_EX)) 
@@ -298,7 +298,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Unlock($fileHandler): void
+	public static function unlock($fileHandler): void
 	{
 		if (!self::isValidHandler($fileHandler)) 
 		{
@@ -349,9 +349,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
-	 * @return bool
+	 * @return bool|void
 	 */
-	public static function Lock($fileHandler, $mode = FileMode::READ_ONLY)
+	public static function lock($fileHandler, $mode = FileMode::READ_ONLY)
 	{
 		if (!self::isValidHandler($fileHandler)) 
 		{
@@ -461,7 +461,7 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
@@ -489,7 +489,7 @@ class Functions
 
 		if (!$overwrite && self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if ($stream === true) 
@@ -498,7 +498,7 @@ class Functions
 		} 
 		else 
 		{
-			self::Write($filePath, $content, 'a');
+			self::write($filePath, $content, 'a');
 		}
 
 		return true;
@@ -528,17 +528,17 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (FileValidation::isPharProtocol($filePath)) 
 		{
-			throw new StupidIdeaException(FileHandlerMessage::getDoNotUsePharProtocolMessage());
+			throw new StupidIdeaException(FileHandlerMessage::getDoNotUsePharProtocolMessage($filePath));
 		}
 
 		self::clearStatusCache($filePath);
@@ -605,12 +605,12 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (FileSystemHandler::getCurrentInode() === self::getInode($filePath)) 
@@ -634,12 +634,12 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		return FileSystemHandler::getInodeNumber($filePath);
@@ -721,7 +721,7 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
@@ -745,12 +745,12 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		return parse_ini_file($filePath);
@@ -822,7 +822,7 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
@@ -830,7 +830,7 @@ class Functions
 			return false;
 		}
 
-		$cached = self::Open($filePath, FileMode::WRITE_ONLY);
+		$cached = self::open($filePath, FileMode::WRITE_ONLY);
 		fwrite($destination, ob_get_contents());
 		fclose($destination);
 		ob_end_flush();
@@ -851,12 +851,12 @@ class Functions
 
 		if (!self::isExists($filePath)) 
 		{
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) 
 		{
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		$return = is_readable($filePath);
@@ -971,7 +971,7 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getOutput(), $mode);
+		$handler = self::open($phpProtocol->getOutput(), $mode);
 
 		return $handler;
 	}
@@ -979,7 +979,7 @@ class Functions
 	public static function getInputStream($mode = 'rb')
 	{
 		$phpProtocol = new PHPProtocol();
-		$handler = self::Open($phpProtocol->getInput(), $mode);
+		$handler = self::open($phpProtocol->getInput(), $mode);
 
 		return $handler;
 	}
@@ -988,7 +988,7 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getMemory(), $mode);
+		$handler = self::open($phpProtocol->getMemory(), $mode);
 
 		return $handler;
 	}
@@ -997,7 +997,7 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getTemporary(), $mode);
+		$handler = self::open($phpProtocol->getTemporary(), $mode);
 
 		return $handler;
 	}
@@ -1006,7 +1006,7 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getFilter(), $mode);
+		$handler = self::open($phpProtocol->getFilter(), $mode);
 
 		return $handler;
 	}
@@ -1015,7 +1015,7 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getStandardInput(), $mode);
+		$handler = self::open($phpProtocol->getStandardInput(), $mode);
 
 		return $handler;
 	}
@@ -1024,9 +1024,14 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getStandardOutput(), $mode);
+		$handler = self::open($phpProtocol->getStandardOutput(), $mode);
 
 		return $handler;
+	}
+
+	public static function seek($stream, $offset, $whence = SEEK_SET)
+	{
+		return fseek($stream, $offset, $whence);
 	}
 
 	/**
@@ -1036,7 +1041,7 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getInterpretedContent(string $filePath, $data): string
+	public static function getInterpretedContent(string $filePath, $data = []): string
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1082,7 +1087,7 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function Move(string $source, string $destination): bool
+	public static function move(string $source, string $destination): bool
 	{
 		$source      = self::convertToNomalizePath($source);
 		$destination = self::convertToNomalizePath($destination);
@@ -1111,7 +1116,7 @@ class Functions
 	 *
 	 * @return mixed
 	 */
-	public static function Read(string $filePath, int $length = -1, string $mode = FileMode::READ_ONLY)
+	public static function read(string $filePath, int $length = -1, string $mode = FileMode::READ_ONLY)
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1282,7 +1287,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Delete(string $filePath): bool
+	public static function delete(string $filePath): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1307,7 +1312,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Copy(string $filePath, string $destination): bool
+	public static function copy(string $filePath, string $destination): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1334,7 +1339,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Merge(string $filePath, string $mergeFile): bool
+	public static function merge(string $filePath, string $mergeFile): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1370,7 +1375,7 @@ class Functions
 			return false;
 		}
 
-		$header = self::Read($filePath, $size);
+		$header = self::read($filePath, $size);
 		if ($header) 
 		{
 			$bigEndianUnpack = unpack('N', $header);
@@ -1760,7 +1765,7 @@ class Functions
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		$fileHandler = self::Open($filePath, FileMode::READ_ONLY);
+		$fileHandler = self::open($filePath, FileMode::READ_ONLY);
 		$fileSize    = self::getSize($filePath);
 		$return      = fread($fileHandler, $fileSize);
 		fclose($fileHandler);
@@ -1775,7 +1780,7 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function Download(string $filePath, int $bufferSize = 0): bool
+	public static function download(string $filePath, int $bufferSize = 0): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1789,7 +1794,7 @@ class Functions
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
-		$fileHandler = self::Open($filePath, 'rb');
+		$fileHandler = self::open($filePath, 'rb');
 		if ($fileHandler === false) 
 		{
 			return false;
@@ -1849,7 +1854,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function Open($filePath, $mode, $use_include_path = false)
+	public static function open($filePath, $mode, $use_include_path = false)
 	{
 		$handler = fopen($filePath, $mode);
 
@@ -1867,7 +1872,7 @@ class Functions
 	{
 		$phpProtocol = new PHPProtocol();
 
-		$handler = self::Open($phpProtocol->getStandardError(), $mode);
+		$handler = self::open($phpProtocol->getStandardError(), $mode);
 
 		return $handler;
 	}
@@ -1893,8 +1898,8 @@ class Functions
 
 		// Compare the first ${chunkSize} bytes
 		// This is fast and binary files will most likely be different
-		$fp1            = self::Open($firstPath, FileMode::READ_ONLY);
-		$fp2            = self::Open($secondPath, FileMode::READ_ONLY);
+		$fp1            = self::open($firstPath, FileMode::READ_ONLY);
+		$fp2            = self::open($secondPath, FileMode::READ_ONLY);
 		$chunksAreEqual = fread($fp1, $chunkSize) == fread($fp2, $chunkSize);
 		fclose($fp1);
 		fclose($fp2);

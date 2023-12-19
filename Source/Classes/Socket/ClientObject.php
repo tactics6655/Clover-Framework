@@ -31,13 +31,13 @@ class ClientObject
 	}
 
 	// Close socket
-	public function Close() :void 
+	public function close() :void 
 	{
 		$this->SocketHandlerClass->Close();
 	}
 
 	// Connect socket
-	public function Connect($address, $port, $domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :bool 
+	public function connect($address, $port, $domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :bool 
 	{
 		$this->SocketHandler = $this->SocketHandlerClass->Create($domain, $type, $protocol);
 
@@ -57,15 +57,15 @@ class ClientObject
 	}
 	
 	// Connect TCP socket
-	public function ConnectTCP($address, $port, $domain = AF_INET) : bool 
+	public function connectTCP($address, $port, $domain = AF_INET) : bool 
 	{
-		return $this->Connect($address, $port, $domain, SOCK_STREAM, SOL_TCP);
+		return $this->connect($address, $port, $domain, SOCK_STREAM, SOL_TCP);
 	}
 
 	// Connect UDP socket
-	public function ConnectUDP($address, $port, $domain = AF_INET) :bool 
+	public function connectUDP($address, $port, $domain = AF_INET) :bool 
 	{
-		return $this->Connect($address, $port, $domain, SOCK_DGRAM, SOL_UDP);
+		return $this->connect($address, $port, $domain, SOCK_DGRAM, SOL_UDP);
 	}
 
 }

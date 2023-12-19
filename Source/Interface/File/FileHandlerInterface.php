@@ -6,7 +6,7 @@ use Xanax\Enumeration\FileMode;
 
 interface FileHandlerInterface {
 
-	public static function Open($filePath, $mode, $use_include_path = false);
+	public static function open($filePath, $mode, $use_include_path = false);
 	
 	public static function generateHashByContents($algorithm = 'md5', $filePath, $rawContents): string;
 
@@ -82,25 +82,25 @@ interface FileHandlerInterface {
 
 	public static function getInterpretedContent(string $filePath) :string;
 
-	public static function Merge(string $filePath, string $mergeFile) :bool;
+	public static function merge(string $filePath, string $mergeFile) :bool;
 
-	public static function Delete(string $filePath) :bool;
+	public static function delete(string $filePath) :bool;
 
-	public static function Copy(string $filePath, string $destinationPath) :bool;
+	public static function copy(string $filePath, string $destinationPath) :bool;
 
 	public static function appendContent(string $filePath, string $content = null, bool $overwrite = true) :bool;
 
-	public static function Write(string $filePath, string $content = null, string $writeMode = FileMode::WRITE_ONLY) :bool;
+	public static function write(string $filePath, string $content = null, string $writeMode = FileMode::WRITE_ONLY) :bool;
 
-	public static function Read(string $filePath, int $length = -1, string $mode = FileMode::READ_ONLY);
+	public static function read(string $filePath, int $length = -1, string $mode = FileMode::READ_ONLY);
 
 	public static function readAllContent(string $filePath, string $writeMode = FileMode::READ_ONLY);
 
-	public static function Download(string $filePath, int $bufferSize = 0): bool;
+	public static function download(string $filePath, int $bufferSize = 0): bool;
 
 	public static function requireOnce(string $filePath);
 
-	public static function Move(string $source, string $destination) :bool;
+	public static function move(string $source, string $destination) :bool;
 
 	public static function getOwner($filePath): int;
 

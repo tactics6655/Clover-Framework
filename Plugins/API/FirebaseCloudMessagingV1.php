@@ -25,7 +25,7 @@ class FirebaseCloudMessagingV1
         );
 
         $cURL = new ClientURL();
-		$cURL->Option->setURL($tokenUrl)
+		$cURL->option->setURL($tokenUrl)
 					 ->setPostMethod(true)
 					 ->setHeaders($headers)
 					 ->setPostField(json_encode(array('Content')))
@@ -34,7 +34,7 @@ class FirebaseCloudMessagingV1
 					 ->setReturnHeader(false)
 					 ->disableCache(true);
 
-		$result = $cURL->Execute();
+		$result = $cURL->execute();
 
         echo print_r($result);
     }
@@ -58,7 +58,7 @@ class FirebaseCloudMessagingV1
 		);
 
         $cURL = new ClientURL();
-		$cURL->Option->setURL($this->RequestUrl)
+		$cURL->option->setURL($this->RequestUrl)
 					 ->setPostMethod(true)
 					 ->setHeaders($headers)
 					 ->setReturnTransfer(true)
@@ -67,7 +67,7 @@ class FirebaseCloudMessagingV1
 					 ->setReturnHeader(false)
 					 ->disableCache(true);
 
-		$result = $cURL->Execute();
+		$result = $cURL->execute();
 
         echo print_r($result);
     }

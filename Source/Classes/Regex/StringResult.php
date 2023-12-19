@@ -19,7 +19,7 @@ class StringResult
       return new \static ($result);
   }
   
-  public function Get()
+  public function get()
   {
     
   }

@@ -2,7 +2,7 @@
 
 namespace Xanax\Enumeration;
 
-enum FileSizeUnit :string
+abstract class FileSizeUnit
 {
     const SHORT = 'short';
 

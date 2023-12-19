@@ -4,24 +4,24 @@ namespace Xanax\Implement;
 
 interface ClientURLInterface {
 	
-	public function Reset();
+	public function reset();
 	
 	public function getLastErrorNumber();
 	
 	public function getLastErrorMessage();
 	
-	public function Initialize($instance = '');
+	public function initialize($instance = '');
 	
 	public function getSession();
 	
-	public function Option();
+	public function option();
 	
-	public function Information();
+	public function information();
 	
 	public function setOption(int $option, $value );
 	
-	public function Close();
+	public function close();
 	
-	public function Execute();
+	public function execute();
 	
 }

@@ -12,7 +12,7 @@ class Session
 	 *
 	 * @return void
 	 */
-	public static function Start($options = []) 
+	public static function start($options = []) 
 	{
 		if (self::isExtensionLoaded()) 
 		{
@@ -79,7 +79,7 @@ class Session
 		return session_cache_expire($value);
 	}
 
-	public static function Abort() 
+	public static function abort() 
 	{
 		return session_abort();
 	}
@@ -176,7 +176,7 @@ class Session
 		return session_save_path($path);
 	}
 
-	public static function Reset()
+	public static function reset()
 	{
 		return session_reset();
 	}
@@ -196,7 +196,7 @@ class Session
 		return session_create_id($prefix);
 	}
 
-	public static function Commit() 
+	public static function commit() 
 	{
 		session_commit();
 	}
@@ -226,7 +226,7 @@ class Session
 	 *
 	 * @return void
 	 */
-	public static function Destroy() 
+	public static function destroy() 
 	{
 		$_SESSION = [];
 		session_destroy();
@@ -242,7 +242,7 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function Set($key, $value, $overwrite = true, $valid = false) :bool 
+	public static function set($key, $value, $overwrite = true, $valid = false) :bool 
 	{
 		$setSessionData = function ($key, $value) 
 		{
@@ -278,7 +278,7 @@ class Session
 	 *
 	 * @return mixed
 	 */
-	public static function Get($key) 
+	public static function get($key) 
 	{
 		return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 	}
@@ -288,12 +288,12 @@ class Session
 	 *
 	 * @return boolean
 	 */
-	public static function Unset() :bool 
+	public static function unset() :bool 
 	{
 		return session_unset();
 	}
 	
-	public static function Close() :bool
+	public static function close() :bool
 	{
 		return session_write_close();
 	}

@@ -2,10 +2,11 @@
 
 namespace Xanax\Classes\Data;
 
+#[\AllowDynamicProperties]
 class ResourceObject 
 {
 
-    protected static $data;
+    protected static \resource $data;
 
     public function __construct($data) 
     {

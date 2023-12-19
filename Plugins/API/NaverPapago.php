@@ -30,7 +30,7 @@ class NaverPapago
         $postData = "source=${source}&target=${target}&text=${text}";
 
         $cURL = new ClientURL();
-		$cURL->Option->setURL($this->requestUrl)
+		$cURL->option->setURL($this->requestUrl)
 					 ->setPostMethod(true)
 					 ->setHeaders($headers)
 					 ->setReturnTransfer(true)
@@ -39,11 +39,11 @@ class NaverPapago
 					 ->setReturnHeader(false)
 					 ->disableCache(true);
 
-		$result = $cURL->Execute();
+		$result = $cURL->execute();
 
         if (JSONHandler::isJSON($result->__toString()))
         {
-            $json = JSONHandler::Decode($result);
+            $json = JSONHandler::decode($result);
 
             if (isset($json->message->result->translatedText))
             {

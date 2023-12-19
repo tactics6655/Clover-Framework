@@ -27,7 +27,7 @@ class ArrayObject
 		return array_values($array);
 	}
 
-	public static function Shuffle(array $array)
+	public static function shuffle(array $array)
 	{
 		return shuffle($array);
 	}

@@ -18,7 +18,7 @@ class Dispatcher implements EventDispatcherInterface
 	 * @String event
 	 * @String eventName
 	 */
-	public function Dispatch($event, string $eventName = null)
+	public function dispatch($event, string $eventName = null)
 	{
 		if (\is_object($event)) 
 		{
@@ -125,7 +125,7 @@ class Dispatcher implements EventDispatcherInterface
 		}
 	}
 
-	public function Emit(object $event) :object
+	public function emit(object $event) :object
 	{
 		$listeners = $this->getListeners(get_class($event)) ?? [];
 

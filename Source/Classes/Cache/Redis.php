@@ -6,6 +6,9 @@ namespace Xanax\Classes;
 
 class Redis
 {
+
+	private $cache;
+	
 	public function __construct() 
 	{
 		$this->cache = new Redis();
@@ -25,10 +28,10 @@ class Redis
 			return false;
 		}
 
-		return $true;
+		return true;
 	}
 
-	public function Connect($host, $port = '6379')
+	public function connect($host, $port = '6379')
 	{
 		$this->cache->connect($host, $port);
 	}
@@ -38,14 +41,14 @@ class Redis
 		$this->cache->lpush($key, $value);
 	}
 
-	public function Delete($key, $value)
+	public function delete($key, $value)
 	{
 		$this->cache->del($key, $value);
 
 		static::$redis->expireat($key, time() + 3600);
 	}
 
-	public function Set($key, $value)
+	public function set($key, $value)
 	{
 		$this->cache->set($key, $value);
 	}

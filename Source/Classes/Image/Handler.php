@@ -157,13 +157,13 @@ class Handler implements ImageHandlerInterface
 			$flip = $data['Orientation'];
 		}
 		
-		$image = $this->Rotate($imageResource, $degree);
+		$image = $this->rotate($imageResource, $degree);
 
 		switch ($flip) 
 		{
 			case Orientation::VERTICAL:
 			case Orientation::HORIZONTAL:
-				$image = $this->Flip($image, $flip);
+				$image = $this->flip($image, $flip);
 				break;
 		}
 
@@ -196,7 +196,7 @@ class Handler implements ImageHandlerInterface
 		return $outputImage;
 	}
 
-	public function Combine ( $paletteImage, $combineImage, $right = 0, $top = 0)
+	public function combine ( $paletteImage, $combineImage, $right = 0, $top = 0)
 	{
 		if ( !self::isResource($paletteImage) )
 		{
@@ -267,7 +267,7 @@ class Handler implements ImageHandlerInterface
 	 * @param int      $left
 	 * @param int      $top
 	 */
-	public function Crop ($imageResource, $resizeWidth, $resizeHeight, $sourceX = 0, $sourceY = 0)
+	public function crop ($imageResource, $resizeWidth, $resizeHeight, $sourceX = 0, $sourceY = 0)
 	{
 		if ( !self::isResource($imageResource) )
 		{
@@ -278,7 +278,7 @@ class Handler implements ImageHandlerInterface
 		$this->setAlphaBlendMode($trueColorImage);
 		$this->saveAlphaChannel($trueColorImage, false);
 
-		$this->Resample($trueColorImage, $imageResource, 0, 0, $sourceX, $sourceY, $resizeWidth, $resizeHeight, $resizeWidth - $sourceX, $resizeHeight - $sourceY);
+		$this->resample($trueColorImage, $imageResource, 0, 0, $sourceX, $sourceY, $resizeWidth, $resizeHeight, $resizeWidth - $sourceX, $resizeHeight - $sourceY);
 
 		return $trueColorImage;
 	}
@@ -309,12 +309,12 @@ class Handler implements ImageHandlerInterface
 		$this->setAlphaBlendMode($trueColorImage);
 		$this->saveAlphaChannel($trueColorImage, false);
 
-		$this->Resample($trueColorImage, $imageResource, 0,0,(int)$x1,(int)$y1, $resizeWidth, $resizeHeight, $resizeWidth, $resizeHeight);
+		$this->resample($trueColorImage, $imageResource, 0,0,(int)$x1,(int)$y1, $resizeWidth, $resizeHeight, $resizeWidth, $resizeHeight);
 
 		return $trueColorImage;
 	}
 
-	public function Resample ($destinationImage, $imageResource, $destinationX = 0, $destinationY = 0, $sourceX = 0, $sourceY = 0, $destinationWidth = 0, $destinationHeight = 0, $sourceWidth = 0, $sourceHeight = 0)
+	public function resample ($destinationImage, $imageResource, $destinationX = 0, $destinationY = 0, $sourceX = 0, $sourceY = 0, $destinationWidth = 0, $destinationHeight = 0, $sourceWidth = 0, $sourceHeight = 0)
 	{
 		imagecopyresampled ($destinationImage, $imageResource, $destinationX, $destinationY, $sourceX, $sourceY, $destinationWidth, $destinationHeight, $sourceWidth, $sourceHeight );
 	}
@@ -347,7 +347,7 @@ class Handler implements ImageHandlerInterface
 	 */
 
 	// TODO get a args by array data
-	public function Filter ($imageResource, string $type, ...$args)
+	public function filter ($imageResource, string $type, ...$args)
 	{
 		$filter = 0;
 		$type = strtolower($type);
@@ -407,7 +407,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return output stream
 	 */
-	public function Draw ( $imageResource, $format )
+	public function draw ( $imageResource, $format )
 	{
 		if ( !self::isResource($imageResource) )
 		{
@@ -547,7 +547,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return boolean
 	 */
-	public static function Create ($filePath, $imageResource, $outputPath, $quality = 100 ) 
+	public static function create ($filePath, $imageResource, $outputPath, $quality = 100 ) 
 	{
 		$format = self::getType( $filePath );
 
@@ -591,7 +591,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return resource
 	 */
-	public function Flip ( $imageResource, $type ) 
+	public function flip ( $imageResource, $type ) 
 	{
 		if ( !self::isResource($imageResource) ) 
 		{
@@ -699,7 +699,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return resource
 	 */
-	public function Rotate ( $imageResource, $degrees ) 
+	public function rotate ( $imageResource, $degrees ) 
 	{
 		if ( !self::isResource($imageResource) ) 
 		{
@@ -791,7 +791,7 @@ class Handler implements ImageHandlerInterface
 		return self::getInstance($image);
 	}
 
-	public static function Resize ( $imageResource, $resizeWidth, $resizeHeight ) 
+	public static function resize ( $imageResource, $resizeWidth, $resizeHeight ) 
 	{
 		if ( !self::isResource($imageResource) )
 		{
@@ -820,7 +820,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return resource
 	 */
-	public function Merge ( $sourceCreateObject, $mergeCreateObject, $transparent ) 
+	public function merge ( $sourceCreateObject, $mergeCreateObject, $transparent ) 
 	{
 		if ( !self::isResource($sourceCreateObject) ) 
 		{

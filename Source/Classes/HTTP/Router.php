@@ -46,14 +46,14 @@ class Router
 		return self::$global_prefix.$pattern;
 	}
 
-	private static function Set(string $method, $pattern, $callback)
+	private static function set(string $method, $pattern, $callback)
 	{
 		$pattern = self::addPrefix($pattern);
 
 		self::addRoute((string)$method, $pattern, $callback);
 	}
 
-	public static function Group($pattern, $callback)
+	public static function group($pattern, $callback)
 	{
 		self::$global_prefix = $pattern;
 
@@ -67,19 +67,19 @@ class Router
 		return self::class;
 	}
 
-	public static function On(string $method, $pattern, $callback)
+	public static function on(string $method, $pattern, $callback)
 	{
-		self::Set($method, $pattern, $callback);
+		self::set($method, $pattern, $callback);
 	}
 
-	public static function Get($pattern, $callback)
+	public static function get($pattern, $callback)
 	{
-		self::Set(HTTPRequestMethod::GET, $pattern, $callback);
+		self::set(HTTPRequestMethod::GET, $pattern, $callback);
 	}
 
-	public static function Post($pattern, $callback)
+	public static function post($pattern, $callback)
 	{
-		self::Set(HTTPRequestMethod::POST, $pattern, $callback);
+		self::set(HTTPRequestMethod::POST, $pattern, $callback);
 	}
 
 	public static function fromDirectory($path)
@@ -163,27 +163,27 @@ class Router
 		self::$routes[$method][] = new RouteObject($pattern, $callback);
 	}
 
-	public static function Delete($pattern, $callback)
+	public static function delete($pattern, $callback)
 	{
-		self::Set(HTTPRequestMethod::DELETE, $pattern, $callback);
+		self::set(HTTPRequestMethod::DELETE, $pattern, $callback);
 	}
 
-	public static function Put($pattern, $callback)
+	public static function put($pattern, $callback)
 	{
-		self::Set(HTTPRequestMethod::PUT, $pattern, $callback);
+		self::set(HTTPRequestMethod::PUT, $pattern, $callback);
 	}
 
-	public static function Options($pattern, $callback)
+	public static function options($pattern, $callback)
 	{
-		self::Set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
+		self::set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
 	}
 
-	public static function Patch($pattern, $callback)
+	public static function patch($pattern, $callback)
 	{
-		self::Set(HTTPRequestMethod::PATCH, $pattern, $callback);
+		self::set(HTTPRequestMethod::PATCH, $pattern, $callback);
 	}
 
-	private static function Has($method)
+	private static function has($method)
 	{
 		return isset(self::$routes[$method]);
 	}
@@ -193,11 +193,11 @@ class Router
 		return self::$routes[$method];
 	}
 
-	public static function Run($reflection = true)
+	public static function run($reflection = true)
 	{
 		self::$method = HTTPRequest::getRequestMethod();
 
-		if (!self::Has(self::$method))
+		if (!self::has(self::$method))
 		{
 			return false;
 		}

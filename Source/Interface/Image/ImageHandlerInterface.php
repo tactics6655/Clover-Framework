@@ -10,13 +10,13 @@ interface ImageHandlerInterface {
 
 	public function drawEclipse($imageResource, $width, $height, $x, $y, $red, $green, $blue);
 
-	public function Combine($paletteImage, $combineImage, $right = 0, $top = 0);
+	public function combine($paletteImage, $combineImage, $right = 0, $top = 0);
 
 	public function ratioResize($imageResource, $resizeWidth, $resizeHeight);
 
-	public function Filter ($imageResource, string $type, ...$args);
+	public function filter ($imageResource, string $type, ...$args);
 
-	public function Draw($imageResource, $format);
+	public function draw($imageResource, $format);
 
 	public function pickColor($imageResource, $x, $y) :array;
 
@@ -28,9 +28,9 @@ interface ImageHandlerInterface {
 
 	public static function getType($filePath);
 
-	public static function Create($filePath, $imageResource, $outputPath, $quality = 100 );
+	public static function create($filePath, $imageResource, $outputPath, $quality = 100 );
 
-	public function Flip($imageResource, $type);
+	public function flip($imageResource, $type);
 
 	public static function getWidth($imageResource);
 
@@ -38,13 +38,13 @@ interface ImageHandlerInterface {
 
 	public static function isResource($imageResource);
 
-	public function Rotate($imageResource, $degrees);
+	public function rotate($imageResource, $degrees);
 
 	public static function getimageResource($filePath);
 
 	public function getBlank($width, $height, $red, $blue, $green);
 
-	public function Merge($sourceCreateObject, $mergeCreateObject, $transparent);
+	public function merge($sourceCreateObject, $mergeCreateObject, $transparent);
 
 	public static function getInstance($filePath);
 

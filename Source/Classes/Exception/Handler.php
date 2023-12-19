@@ -47,7 +47,7 @@ class Handler
 		restore_exception_handler();
 	}
 	
-	public function Trigger($errorMessage) 
+	public function trigger($errorMessage) 
 	{
 		trigger_error($errorMessage);
 	}

@@ -4,6 +4,7 @@ namespace Xanax\Classes\Data;
 
 use Xanax\Classes\Data\BaseObject as BaseObject;
 
+#[\AllowDynamicProperties]
 class BooleanObject extends BaseObject
 {
 

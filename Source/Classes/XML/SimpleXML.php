@@ -10,7 +10,7 @@ class SimpleXML {
 	{
 	}
 	
-	public function Parse($text) 
+	public function parse($text) 
 	{
 		$this->data = simplexml_load_string($text);
 	}

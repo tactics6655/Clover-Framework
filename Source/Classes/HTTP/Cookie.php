@@ -25,7 +25,7 @@ class Cookie
 		return true;
 	}
 
-	public function Get($key)
+	public function get($key)
 	{
 		if ($this->isSet($key)) 
 		{
@@ -35,7 +35,7 @@ class Cookie
 		return '';
 	}
 
-	public function Set($key, $value = '', $expired = '', $useUrlEncoding = true)
+	public function set($key, $value = '', $expired = '', $useUrlEncoding = true)
 	{
 		if ($useUrlEncoding) 
 		{
@@ -56,7 +56,7 @@ class Cookie
 		return true;
 	}
 
-	public static function Unset($name)
+	public static function unset($name)
 	{
 		if (isset($_COOKIE[$name])) 
 		{

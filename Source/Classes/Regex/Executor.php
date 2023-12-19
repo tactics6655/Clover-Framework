@@ -4,7 +4,7 @@ namespace Xanax\Classes\Regex;
 
 class Executor
 {
-  public static function Match(string $pattern, string $subject)
+  public static function match(string $pattern, string $subject)
   {
     $bool = @preg_match($pattern, $subject, $matches);
     

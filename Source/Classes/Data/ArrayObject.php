@@ -6,6 +6,7 @@ use Xanax\Classes\Data\BaseObject as BaseObject;
 use Xanax\Classes\Data\IntegerObject as IntegerObject;
 use Xanax\Classes\Data\BooleanObject as BooleanObject;
 
+#[\AllowDynamicProperties]
 class ArrayObject extends BaseObject
 {
 
@@ -30,7 +31,7 @@ class ArrayObject extends BaseObject
         return $this;
 	}
 
-	public function Shuffle() 
+	public function shuffle() 
 	{
 		$this->raw_data = shuffle($this->raw_data);
 
@@ -103,21 +104,21 @@ class ArrayObject extends BaseObject
         return implode(" ", $this->raw_data);
     }
 
-    public function Sort($flags = SORT_REGULAR)
+    public function sort($flags = SORT_REGULAR)
     {
         sort($this->raw_data, $flags);
 
         return $this;
     }
 
-    public function Join($delimiter)
+    public function join($delimiter)
     {
         $this->raw_data = implode($delimiter, $this->raw_data);
 
         return new StringObject($this->raw_data);
     }
 
-    public function Length()
+    public function length()
     {
         return new IntegerObject(count($this->raw_data));
     }

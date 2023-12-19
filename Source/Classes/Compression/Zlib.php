@@ -6,7 +6,7 @@ namespace Xanax\Classes\Compression;
 
 class Zlib
 {
-	public function Uncompress($filePath, $destination)
+	public function uncompress($filePath, $destination)
 	{
 		if (is_file($filePath) && file_exists($filePath) && filesize($filePath) > 0) 
 		{
@@ -35,7 +35,7 @@ class Zlib
 		}
 	}
 
-	public function Compress($filePath, $destination)
+	public function compress($filePath, $destination)
 	{
 		$fp = fopen($filePath, 'rb');
 		$compresscontents = fread($fp, filesize($filePath));

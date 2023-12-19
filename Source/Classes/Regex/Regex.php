@@ -8,18 +8,18 @@ use Xanax\Classes\Regex\Executor as Executor;
 
 class Regex
 {
-  public static function Filter(string $pattern, string $replacement, $subject)
+  public static function filter(string $pattern, string $replacement, $subject)
   {
     
   }
   
-  public static function Quote(string $string, string $delimiter = NULL)
+  public static function quote(string $string, string $delimiter = NULL)
   {
   }
   
-  public static function Match(string $pattern, string $subject) :ArrayResult
+  public static function match(string $pattern, string $subject) :ArrayResult
   {
-    $result = Executor::Match($pattern, $subject);
+    $result = Executor::match($pattern, $subject);
     
     return (new ArrayResult())->getSingleton($result);
   }
@@ -31,11 +31,11 @@ class Regex
     return (new ArrayResult())->getSingleton($result);
   }
   
-  public static function Split(string $pattern, $subject, int $limit = -1)
+  public static function split(string $pattern, $subject, int $limit = -1)
   {
   }
   
-  public static function Replace(string $pattern, string $replacement, $subject, int $limit = -1)
+  public static function replace(string $pattern, string $replacement, $subject, int $limit = -1)
   {
   }
 }

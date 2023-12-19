@@ -19,7 +19,7 @@ class StringHandler
 	 *
 	 * @return bool
 	 */
-	public static function Contains($haystack, $needle)
+	public static function contains($haystack, $needle)
 	{
 		$isGreaterThanRequiredVersion = PHPValidation::versionGreaterThanCurrent("8.0");
 
@@ -33,7 +33,12 @@ class StringHandler
 		return $position > -1;
 	}
 
-	public static function Pad($string, $length, $padString = " ", $type, $encoding = Encoding::UTF8)
+	public static function camelize($string)
+	{
+		return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+	}
+
+	public static function pad($string, $length, $padString = " ", $type, $encoding = Encoding::UTF8)
 	{
 		if (function_exists("mb_str_pad"))
 		{
@@ -45,17 +50,17 @@ class StringHandler
 
 	public static function padBoth($string, $length, $padString = " ")
 	{
-		return self::Pad($string, $length, $padString, \STR_PAD_BOTH);
+		return self::pad($string, $length, $padString, \STR_PAD_BOTH);
 	}
 
 	public static function padRight($string, $length, $padString = " ")
 	{
-		return self::Pad($string, $length, $padString, \STR_PAD_RIGHT);
+		return self::pad($string, $length, $padString, \STR_PAD_RIGHT);
 	}
 
 	public static function padLeft($string, $length, $padString = " ")
 	{
-		return self::Pad($string, $length, $padString, \STR_PAD_LEFT);
+		return self::pad($string, $length, $padString, \STR_PAD_LEFT);
 	}
 
 	public static function endsWith($haystack, $needle)
@@ -92,7 +97,7 @@ class StringHandler
 		return strpos($haystack, $needle, $offset);
 	}
 
-	public static function SubstringMultibyte($string, $start, $length, $prefix = '...') 
+	public static function substringMultibyte($string, $start, $length, $prefix = '...') 
 	{
 		if (mb_strlen($string) > (int)$length) 
 		{
@@ -148,7 +153,7 @@ class StringHandler
 				break;
 		}
 
-		$hexString = self::Substring(self::binaryToHex($text), 0, 6);
+		$hexString = self::substring(self::binaryToHex($text), 0, 6);
 
 		if ($hexString === $byteOrderMark)
 		{
@@ -188,7 +193,7 @@ class StringHandler
 		return preg_replace("#(.*)-(.*)-(.*).(\d)-(.*)#", "$1-$2-$3$4-$5", $text);
 	}
 
-	public static function Substring($binaryText, $start, $length)
+	public static function substring($binaryText, $start, $length)
 	{
 		return substr($binaryText, $start, $length);
 	}
@@ -219,7 +224,7 @@ class StringHandler
 		return (int)($maxAllocationSize / strlen($string));
 	}
 
-	public static function Repeat(string $string, int $multiplier)
+	public static function repeat(string $string, int $multiplier)
 	{
 		if (self::getMaxAllocationSize($string) > $multiplier)
 		{
@@ -275,15 +280,15 @@ class StringHandler
 		return $name;
 	}
 	
-	public static function getMd5Uniqid($length = 20)
+	public static function getMd5Uniqid($length = 20, $prefix = '')
     	{
-		$id = md5(uniqid(\mt_rand(), true));
+		$id = md5(uniqid($prefix, true));
 		$id = substr($id, -$length);
 
 		return $id;
 	}
 
-	public static function Length($data)
+	public static function length($data)
 	{
 		return \strlen($data);
 	}

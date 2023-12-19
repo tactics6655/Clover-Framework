@@ -16,7 +16,7 @@ class Handler implements SocketHandlerInterface
 	 * Protocol = [SOL_TCP, SOL_UDP]
 	 *
 	 */
-	public function Create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :\Socket|bool|resource 
+	public function create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP) :\Socket|bool|resource 
 	{
 		return \socket_create($domain, $type, $protocol);
 	}
@@ -36,27 +36,27 @@ class Handler implements SocketHandlerInterface
 		return [];
 	}
 
-	public function Close($socketHandler) :void 
+	public function close($socketHandler) :void 
 	{
 		socket_close($socketHandler);
 	}
 
-	public function Select(array $socketArray, $write = null, $except = null, $timeout = 10) 
+	public function select(array $socketArray, $write = null, $except = null, $timeout = 10) 
 	{
 		return socket_select($socketArray, $write, $except, $timeout);
 	}
 
-	public function AcceptConnect($socketHandler) 
+	public function acceptConnect($socketHandler) 
 	{
 		socket_accept($socketHandler);
 	}
 	
-	public function Listen($socketHandler) :bool 
+	public function listen($socketHandler) :bool 
 	{
 		return socket_listen($socketHandler);
 	}
 
-	public function Bind($socketHandler, $address, $port) :bool 
+	public function bind($socketHandler, $address, $port) :bool 
 	{
 		return socket_bind($socketHandler, $address, $port);
 	}
@@ -76,7 +76,7 @@ class Handler implements SocketHandlerInterface
 		return socket_write($socketHandler, $buffer, $length);
 	}
 
-	public function Connect($socketHandler, $address, $port) :bool 
+	public function connect($socketHandler, $address, $port) :bool 
 	{
 		return socket_connect($socketHandler, $address, $port);
 	}

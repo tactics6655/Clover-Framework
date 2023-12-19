@@ -18,7 +18,7 @@ class XMLParser
 		xml_set_object($this->parser, $this);
 	}
 
-	public function Parse($plainText) 
+	public function parse($plainText) 
 	{
 		xml_parse($this->parser, $plainText);
 	}

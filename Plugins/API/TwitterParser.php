@@ -24,14 +24,14 @@ class TwitterParser
   public function getGuestToken() 
   {
     $cURL = new ClientURL();
-    $cURL->Option->setURL($this->activateUrl)
+    $cURL->option->setURL($this->activateUrl)
       ->setPostField(true)
       ->setHeaders($headers)
       ->setReturnTransfer(true)
       ->setAutoReferer(true)
       ->setReturnHeader(false);
 
-      $result = $cURL->Execute();
+      $result = $cURL->execute();
       $guestToken = json_decode($result)->guest_token;
       
       return $guestToken;
@@ -54,14 +54,14 @@ class TwitterParser
     $requestUrl = sprintf($this->graphqlUrl, $userId);
     
     $cURL = new ClientURL();
-    $cURL->Option->setURL($requestUrl)
+    $cURL->option->setURL($requestUrl)
       ->setPostMethod(false)
       ->setHeaders($headers)
       ->setReturnTransfer(true)
       ->setAutoReferer(true)
       ->setReturnHeader(false);
 
-    $result = $cURL->Execute();
+    $result = $cURL->execute();
     return json_decode($result)->data->user->result;
   }
   

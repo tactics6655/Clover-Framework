@@ -109,9 +109,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::isEqual($firstPath, $secondPath, $chunkSize);
 	}
 
-	public static function Open($filePath, $mode, $use_include_path = false)
+	public static function open($filePath, $mode, $use_include_path = false)
 	{
-		return FileFunctions::Open($filePath, $mode, $use_include_path);
+		return FileFunctions::open($filePath, $mode, $use_include_path);
 	}
 
 	public static function closeProcess($processResource)
@@ -221,9 +221,9 @@ class Handler implements FileHandlerInterface
 		FileFunctions::setAccessAndModificatinTime($filePath, $time, $atime);
 	}
 
-	public static function Unlock($fileHandler): void
+	public static function unlock($fileHandler): void
 	{
-		FileFunctions::Unlock($fileHandler);
+		FileFunctions::unlock($fileHandler);
 	}
 
 	public function setPermission(string $filePath, int $mode): bool
@@ -236,9 +236,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::changeGroup($filePath, $group);
 	}
 
-	public static function Lock($fileHandler, $mode = FileMode::READ_ONLY)
+	public static function lock($fileHandler, $mode = FileMode::READ_ONLY)
 	{
-		FileFunctions::Lock($fileHandler, $mode);
+		FileFunctions::lock($fileHandler, $mode);
 	}
 
 	public static function isEmpty(string $filePath): bool
@@ -301,9 +301,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::isWritable($filePath);
 	}
 
-	public static function Delete(string $filePath): bool
+	public static function delete(string $filePath): bool
 	{
-		return FileFunctions::Delete($filePath);
+		return FileFunctions::delete($filePath);
 	}
 
 	public static function getSize(string $filePath, bool $humanReadable = false, ?FileSizeUnit $type = NULL): int
@@ -311,14 +311,14 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::getSize($filePath, $humanReadable, $type);
 	}
 
-	public static function Copy(string $filePath, string $destination): bool
+	public static function copy(string $filePath, string $destination): bool
 	{
 		return FileFunctions::copy($filePath, $destination);
 	}
 
-	public static function Merge(string $filePath, string $mergeFile): bool
+	public static function merge(string $filePath, string $mergeFile): bool
 	{
-		return FileFunctions::Merge($filePath, $mergeFile);
+		return FileFunctions::merge($filePath, $mergeFile);
 	}
 
 	public static function changeUmask($mask): int
@@ -331,9 +331,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::getHeaderType($filePath);
 	}
 
-	public static function Read(string $filePath, int $length = -1, string $mode = FileMode::READ_ONLY)
+	public static function read(string $filePath, int $length = -1, string $mode = FileMode::READ_ONLY)
 	{
-		return FileFunctions::Read($filePath, $length, $mode);
+		return FileFunctions::read($filePath, $length, $mode);
 	}
 
 	public static function readAllContent(string $filePath, string $writeMode = FileMode::READ_ONLY)
@@ -341,9 +341,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::readAllContent($filePath, $writeMode);
 	}
 
-	public static function Write(string $filePath, string $content = null, string $mode = 'w'): bool
+	public static function write(string $filePath, string $content = null, string $mode = 'w'): bool
 	{
-		return FileFunctions::Write($filePath, $content, $mode);
+		return FileFunctions::write($filePath, $content, $mode);
 	}
 
 	public static function appendContent(string $filePath, string $content = null, bool $stream = false, bool $overwrite = true): bool
@@ -396,9 +396,9 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::getContent($filePath);
 	}
 
-	public static function Download(string $filePath, int $bufferSize = 0): bool
+	public static function download(string $filePath, int $bufferSize = 0): bool
 	{
-		return FileFunctions::Download($filePath, $bufferSize);
+		return FileFunctions::download($filePath, $bufferSize);
 	}
 
 	public static function isCorrectInode($filePath): bool
@@ -421,7 +421,7 @@ class Handler implements FileHandlerInterface
 		FileFunctions::requireOnce($filePath);
 	}
 
-	public static function Move(string $source, string $destination): bool
+	public static function move(string $source, string $destination): bool
 	{
 		return FileFunctions::move($source, $destination);
 	}

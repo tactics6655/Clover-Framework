@@ -44,14 +44,14 @@ class Handler
         return $result;
     }
 	
-    public static function Class($class)
+    public static function class($class)
     {
         $reflection = new ReflectionClass($class);
 
         return $reflection;
     }
 
-    public static function Method($class, $method)
+    public static function method($class, $method)
     {
         $reflection = new \ReflectionMethod($class, $method);
 
@@ -79,7 +79,7 @@ class Handler
 
 	public static function getClassReflection($class)
 	{
-		$reflection = self::Class($class);
+		$reflection = self::class($class);
 		$parameters = self::getParameters($reflection);
 
 		$dependencies = [];
@@ -105,9 +105,9 @@ class Handler
 		return $reflection->newInstance(...$dependencies);
 	}
 
-	public static function Invoke($class, $method, $append_parameters = [], $arguments = [])
+	public static function invoke($class, $method, $append_parameters = [], $arguments = [])
 	{
-		$reflection = self::Method($class, $method);
+		$reflection = self::method($class, $method);
 		$parameters = self::getMethodParameters($reflection);
 
 		$dependencies = [];

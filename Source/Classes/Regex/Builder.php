@@ -18,12 +18,12 @@ class Builder
 		return "[^${expression}]";
 	}
 	
-	public function Url() 
+	public function url() 
 	{
 		return "(?<=(([\<a href])))?(?2)?(?>)(?1)(?=[http|https]).{4,5}[A-Za-z]\:\/\/\b[0-9a-zA-Z\?\=.\/\_\-]{1,}\b";
 	}
 	
-	public function Repetition($expression, $repeat) 
+	public function repetition($expression, $repeat) 
 	{
 		return "\\b${expression}\{${repeat}\}\b";
 	}
@@ -33,7 +33,7 @@ class Builder
 		return "(?#${content})"; 
 	}
 	
-	public function Recursion() 
+	public function recursion() 
 	{
 		return "(?R)";
 	}
@@ -67,7 +67,7 @@ class Builder
 	
 	// Condition
 	
-	public function Condition($expression, $then, $else) 
+	public function condition($expression, $then, $else) 
 	{
 		return "(?(?=${expression})${then}|${else})";
 	}
@@ -142,7 +142,7 @@ class Builder
 		return "\b";
 	}
 
-	public function Digits()
+	public function digits()
 	{
 		return "\d";
 	}
@@ -230,12 +230,12 @@ class Builder
 
 	// Et greta
 
-	public function Braces($minimum, $maximum)
+	public function braces($minimum, $maximum)
 	{
 		return "\{$minimum,$maximum\}";
 	}
 
-	public function NegatedCharacterSet()
+	public function negatedCharacterSet()
 	{
 		return "[^ ]";
 	}

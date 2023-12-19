@@ -13,7 +13,7 @@ interface FileObjectInterface
 
 	public function closeFileHandle();
 
-	public function Seek(int $offset): bool;
+	public function seek(int $offset): bool;
 
 	public function hasMode($readMode = null);
 

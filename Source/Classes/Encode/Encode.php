@@ -6,7 +6,7 @@ namespace Xanax\Classes;
 
 class Encode
 {
-	public function Detect($string)
+	public function detect($string)
 	{
 		$encoding = mb_detect_encoding($string, mb_list_encodings(), true);
 

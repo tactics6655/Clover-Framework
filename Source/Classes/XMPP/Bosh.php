@@ -30,7 +30,7 @@ class Bosh
     public function sendBody($body)
     {
         $cURL = new ClientURL();
-        $cURL->Option
+        $cURL->option
             ->setURL($this->bosh_server)
             ->setPostMethod(true)
             ->setPostField($body)
@@ -40,7 +40,7 @@ class Bosh
             ->setVerbose(true)
 			->setReturnTransfer(true);
 
-        return $cURL->Execute();
+        return $cURL->execute();
     }
 
     public function getPlainHash()

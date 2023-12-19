@@ -8,7 +8,7 @@ class AES256CBC
 {
 	const METHOD = 'AES-256-CBC';
 
-	public static function Encrypt($string, $key) 
+	public static function encrypt($string, $key) 
 	{
 		if (mb_strlen($key, '8bit') !== 32) 
 		{
@@ -29,7 +29,7 @@ class AES256CBC
 		return base64_encode($iv . $ciphertext);
 	}
 
-	public static function Decrypt($string, $key) 
+	public static function decrypt($string, $key) 
 	{
 		$string = base64_decode($string);
 

@@ -21,24 +21,24 @@ class BaseController
     
     public function addHeadCssFile($filename)
     {
-        $this->container->Get('Resource')->addGenericCssFile($filename);
+        $this->container->get('Resource')->addGenericCssFile($filename);
     }
 
     public function addHeadJsFile($filename)
     {
-        $this->container->Get('Resource')->addGenericJavascriptFile($filename);
+        $this->container->get('Resource')->addGenericJavascriptFile($filename);
     }
 
     public function setTitle($title)
     {
-        $this->container->Get('Resource')->setTitle($title);
+        $this->container->get('Resource')->setTitle($title);
     }
 
     public function render(string $template, array $data = [])
     {
-        $resources = $this->container->Get('Resource')->extract();
+        $resources = $this->container->get('Resource')->extract();
 
-        $render = $this->container->Get('Renderer')->render($template, $data);
+        $render = $this->container->get('Renderer')->render($template, $data);
 
         return $this->response($render, $resources);
     }

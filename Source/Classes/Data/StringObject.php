@@ -4,13 +4,13 @@ namespace Xanax\Classes\Data;
 
 use Xanax\Classes\Data\StringHandler as StringHandler;
 use Xanax\Classes\Data\ArrayObject as ArrayObject;
-
 use Xanax\Classes\Data\BaseObject as BaseObject;
 
+#[\AllowDynamicProperties]
 class StringObject extends BaseObject
 {
 
-    protected static $raw_data;
+    protected static string $raw_data;
 
     public function __construct($data) 
     {
@@ -22,16 +22,16 @@ class StringObject extends BaseObject
         return self::$raw_data;
     }
 
-    public function Split($separator)
+    public function split($separator)
     {
         $array = explode($separator, self::$raw_data);
 
         return new ArrayObject($array);
     }
 
-    public function Substring($start, $length) 
+    public function substring($start, $length) 
     {
-        return StringHandler::Substring(self::$raw_data, $start, $length);
+        return StringHandler::substring(self::$raw_data, $start, $length);
     }
     
     public function isEmpty() 
@@ -44,9 +44,9 @@ class StringObject extends BaseObject
         return StringHandler::isNull(self::$raw_data);
     }
 
-    public function Contains($search) 
+    public function contains($search) 
     {
-        return StringHandler::Contains(self::$raw_data, $search);
+        return StringHandler::contains(self::$raw_data, $search);
     }
 
     public function toUpperCase()
@@ -64,9 +64,9 @@ class StringObject extends BaseObject
         return StringHandler::toLowerCase(self::$raw_data);
     }
 
-    public function Length()
+    public function length()
     {
-        return StringHandler::Length(self::$raw_data);
+        return StringHandler::length(self::$raw_data);
     }
 
     public function removeNullByte()

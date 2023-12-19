@@ -7,7 +7,7 @@ namespace Xanax\Classes;
 class Memcache
 {
 	protected $type;
-	protected $cache;
+	protected \Memcached | \Memcache $cache;
 
 	public function __construct()
 	{
@@ -33,17 +33,17 @@ class Memcache
 		return class_exists('Memcached');
 	}
 
-	public function Connect($host, $port)
+	public function connect($host, $port)
 	{
 		$this->cache->addServer($host, $port);
 	}
 
-	public function Truncate()
+	public function truncate()
 	{
 		return $this->cache->flush();
 	}
 
-	public function Set($key, $validTime, $buffer)
+	public function set($key, $validTime, $buffer)
 	{
 		if ($this->type == "memcached") 
 		{
@@ -55,33 +55,33 @@ class Memcache
 		}
 	}
 
-	public function Decrement($key, $amount)
+	public function decrement($key, $amount)
 	{
 		return $this->cache->decrement($key, $amount);
 	}
 
-	public function Increment($key, $amount)
+	public function increment($key, $amount)
 	{
 		return $this->cache->increment($key, $amount);
 	}
 
 	public function isExists($key)
 	{
-		return $this->Get($key) !== false;
+		return $this->get($key) !== false;
 	}
 
-	public function Delete($key)
+	public function delete($key)
 	{
 		return $this->cache->delete($key);
 	}
 
-	public function Get($key, $limit = 0)
+	public function get($key, $limit = 0)
 	{
 		$cache = $this->cache->get($key);
 
 		if ($limit > 0 && $limit > $cache[0])
 		{
-			$this->Delete($key);
+			$this->delete($key);
 		}
 
 		return $cache[1];

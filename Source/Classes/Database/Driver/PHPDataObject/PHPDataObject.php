@@ -248,7 +248,7 @@ class PHPDataObject extends \PDO
 		return $message;
 	}
 
-	public function Fetch($stm, $type) 
+	public function fetch($stm, $type) 
 	{
 		switch ($type) 
 		{

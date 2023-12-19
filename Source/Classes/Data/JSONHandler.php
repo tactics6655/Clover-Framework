@@ -5,12 +5,12 @@ namespace Xanax\Classes\Data;
 class JSONHandler 
 {
 	
-	public static function Decode($string) 
+	public static function decode($string) 
 	{
 		return json_decode($string);
 	}
 
-	public static function Encode($string) 
+	public static function encode($string) 
 	{
 		return json_encode($string, JSON_PRETTY_PRINT);
 	}

@@ -12,7 +12,7 @@ class DOM
 		$this->dom = new \DOMDocument;
 	}
 
-	public function Parse($xmlString) 
+	public function parse($xmlString) 
 	{
 		$this->dom->loadXML($xmlString);
 	}

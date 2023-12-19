@@ -9,12 +9,12 @@ class PostgreSQL
     $this->connection = pg_connect("host=$host dbname=$database user=$username password=$password");
   }
   
-  public function Query($query)
+  public function query($query)
   {
     pg_query($this->connection, $query);
   }
   
-  public function Close()
+  public function close()
   {
     pg_close($this->connection);
   }

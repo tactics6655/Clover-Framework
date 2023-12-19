@@ -6,7 +6,7 @@ interface DirectoryHandlerInterface {
 	
 	public function getFreeSpace($prefix = '/');
 
-	public function RenameInnerFiles(string $directoryPath, $replacement, $string = null);
+	public function renameInnerFiles(string $directoryPath, $replacement, $string = null);
 
 	public function hasCurrentWorkingLocation();
 
@@ -14,23 +14,23 @@ interface DirectoryHandlerInterface {
 
 	public static function isDirectory(string $directoryPath);
 
-	public function Make(string $directoryPath);
+	public function make(string $directoryPath);
 
-	public function Create(string $directoryPath);
+	public function create(string $directoryPath);
 
 	public function getFileCount(string $directoryPath);
 
 	public function isEmpty(string $directoryPath);
 
-	public function Delete(string $directoryPath);
+	public function delete(string $directoryPath);
 
-	public function Copy(string $directoryPath, string $copyPath);
+	public function copy(string $directoryPath, string $copyPath);
 
 	public function getMaxDepth();
 
 	public function setMaxDepth(int $depth);
 
-	public function Empty(string $directoryPath);
+	public function empty(string $directoryPath);
 
 	public static function getSize(string $directoryPath);
 	

@@ -4,7 +4,7 @@ namespace Xanax\Classes\Sort;
 
 class InsertableSort
 {
-	public function Sort(array $array)
+	public function sort(array $array)
 	{
 		$count = count($array);
 

@@ -6,7 +6,7 @@ class OperatorExpression {
 	{
 	}
 	
-	public function Evaluate ( $operator, int $val1, int $val2 ) 
+	public function evaluate ( $operator, int $val1, int $val2 ) 
 	{
 		$result = false;
 			

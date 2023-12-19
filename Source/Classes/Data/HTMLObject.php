@@ -19,9 +19,9 @@ class HTMLObject extends StringObject
         $this->handler = new HTMLHandler();
     }
 
-    public function Length()
+    public function length()
     {
-        return parent::Length();
+        return parent::length();
     }
 
     public function unhtmlSpecialChars()
