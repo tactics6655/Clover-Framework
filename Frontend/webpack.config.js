@@ -23,7 +23,7 @@ module.exports = {
 	],
 	mode: "production",
 	entry: [
-		'./index.js'
+		'./index.ts'
 	],
 	output: {
 		filename: './../../../html/common/assets/js/coreJS/dist/coreJS.js',

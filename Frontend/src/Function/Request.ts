@@ -712,7 +712,7 @@
 			xhr.send(content);
 			
 			if ($.core.Browser.isSafari() || $.core.Browser.isOpera()) {
-				resultNodes = xhr.responseXML.firstChild.childNodes;
+				var resultNodes = xhr.responseXML.firstChild.childNodes;
 				
 				for (var i = 0; i < resultNodes.length; i++) {
 					null != resultNodes.item(i).firstChild && (result[resultNodes.item(i).nodeName] = resultNodes.item(i).firstChild.nodeValue);
@@ -761,10 +761,11 @@
 		 * @return {object} : XHR Object
 		 **/
 		createXhrObject: function () {
+			var xhr;
 			if (_cWin.XMLHttpRequest) {
-				var xhr = new XMLHttpRequest();
+				xhr = new XMLHttpRequest();
 			} else if (_cWin.ActiveXObject) {
-				var xhr = this.getXMLHttp();
+				xhr = this.getXMLHttp();
 			}
 			
 			if ($.core.Validate.isObject(xhr)) {

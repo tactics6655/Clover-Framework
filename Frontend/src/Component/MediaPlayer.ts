@@ -43,6 +43,78 @@ class MediaPlayer implements MediaPlayerInterface {
         this.events = [];
     }
 
+    public hasPip() {
+        return document.pictureInPictureElement !== undefined;
+    }
+
+    public cancelFullScreen() {
+        const hasWebkitRequestFullScreen = (this.mediaContext.webkitRequestFullScreen !== undefined);
+        const hasMozRequestFullScreen = (this.mediaContext.mozRequestFullScreen !== undefined);
+        const hasMsRequstFullScreen = (this.mediaContext.msRequestFullscreen !== undefined);
+
+        var requestMethod;
+
+        if (this.mediaContext.exitFullscreen) {
+            requestMethod = this.mediaContext.exitFullscreen();
+        } else if (this.mediaContext.cancelFullScreen) {
+            requestMethod = this.mediaContext.cancelFullScreen();
+        } else if (hasWebkitRequestFullScreen) {
+			requestMethod = document.webkitCancelFullScreen();
+		} else if (hasMozRequestFullScreen) {
+			requestMethod = document.mozCancelFullScreen();
+		} else if (hasMsRequstFullScreen) {
+			requestMethod = document.msExitFullscreen();
+		}
+        
+        requestMethod.call(this.mediaContext);
+
+        return true;
+    }
+
+    public requestFullScreen() {
+        if (this.isFullScreen()) {
+            return false;
+        }
+
+        const hasWebkitRequestFullScreen = (this.mediaContext.webkitRequestFullScreen !== undefined);
+        const hasMozRequestFullScreen = (this.mediaContext.mozRequestFullScreen !== undefined);
+        const hasMsRequstFullScreen = (this.mediaContext.msRequestFullscreen !== undefined);
+
+        var requestMethod;
+
+        if (hasMozRequestFullScreen) {
+            requestMethod = this.mediaContext.mozRequestFullScreen();
+        } else if (hasWebkitRequestFullScreen) {
+            requestMethod = this.mediaContext.webkitRequestFullScreen();
+        } else if (hasMsRequstFullScreen) {
+            requestMethod = this.mediaContext.msRequestFullscreen();
+        } else if (this.mediaContext.requestFullscreen) {
+            requestMethod = this.mediaContext.requestFullscreen();
+        } else {
+            requestMethod = this.mediaContext.requestFullScreen || this.mediaContext.webkitRequestFullScreen() || this.mediaContext.mozRequestFullScreen || this.mediaContext.msRequestFullScreen;
+        }
+
+        requestMethod.call(this.mediaContext);
+
+        return true;
+    }
+
+    public isFullScreen() {
+        const hasWebkitRequestFullScreen = (this.mediaContext.webkitRequestFullScreen !== undefined);
+        const hasMozRequestFullScreen = (this.mediaContext.mozRequestFullScreen !== undefined);
+        const hasMsRequstFullScreen = (this.mediaContext.msRequestFullscreen !== undefined);
+
+        if (hasMozRequestFullScreen) {
+			return document.mozFullScreen;
+		} else if (hasWebkitRequestFullScreen) {
+			return document.webkitIsFullScreen;
+		} else if (hasMsRequstFullScreen) {
+			return document.msFullscreenElement !== null;
+		} else {
+            return this.mediaContext.fullscreenElement || this.mediaContext.mozFullScreenElement || this.mediaContext.webkitFullscreenElement || this.mediaContext.msFullscreenElement;
+        }
+    }
+
     public removeListeners(event: string) :boolean {
         if (this.events[event] === undefined) {
             return false;
