@@ -10,7 +10,7 @@ use Xanax\Classes\Data\BaseObject as BaseObject;
 class StringObject extends BaseObject
 {
 
-    protected static string $raw_data;
+    protected static $raw_data = '';
 
     public function __construct($data) 
     {

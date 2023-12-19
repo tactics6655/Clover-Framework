@@ -368,7 +368,7 @@ return [
     'es_GQ' => array('name' =>  "Spanish (Equatorial Guinea)"),
     'es_GT' => array('name' =>  "Spanish (Guatemala)"),
     'es_HN' => array('name' =>  "Spanish (Honduras)"),
-    'es_419': "Spanish (Latin America)"),
+    'es_419' => array('name' => "Spanish (Latin America)"),
     'es_MX' => array('name' =>  "Spanish (Mexico)"),
     'es_NI' => array('name' =>  "Spanish (Nicaragua)"),
     'es_PA' => array('name' =>  "Spanish (Panama)"),
