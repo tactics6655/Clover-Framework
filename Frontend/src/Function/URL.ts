@@ -1,12 +1,20 @@
 //URL-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+import {regURLParmas} from "./../../dist/variables"
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.URL = {
+	A = core.URL = {
 		
 		createBlob: function (arrayBuffer) {
-			var url = self.getNative;
+			var url = this.getNative();
 			var blob = new Blob([arrayBuffer]);
 			
 			return url.createObjectURL(blob);
@@ -63,7 +71,7 @@
 		},
 		
 		getObject: function (target) {
-			var url = self.getNative;
+			var url = this.getNative();
 			
 			if (!url.createObjectURL) {
 				url.createObjectURL = function (obj) {
@@ -75,7 +83,7 @@
 		},
 		
 		revokeObject: function (target) {
-			var url = self.getNative;
+			var url = this.getNative();
 			
 			return url.revokeObjectURL(target);
 		},
@@ -116,7 +124,7 @@
 		
 		getQueryString: function (key) {
 			var regex = new RegExp("[\?&]" + key.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]") + "=([^&#]*)");
-			var url = regex.exec(url());
+			var url = regex.exec(this.getUrl());
 			
 			if (url == null) {
 				return false;
@@ -186,3 +194,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,9 +1,16 @@
 //Midi-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const device;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Midi = {
+	A = core.Midi = {
 		
 		constructor: function () {
 			
@@ -205,3 +212,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

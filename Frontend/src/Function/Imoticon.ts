@@ -1,8 +1,13 @@
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Imoticon = {
+	A = core.Imoticon = {
 		constructor: function () {
 			this.unicodeImoticon = {
 				"00a9": ["©", "", "󾬩", ["copyright"]],
@@ -870,3 +875,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

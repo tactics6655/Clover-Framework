@@ -1,7 +1,16 @@
 //Session Storage-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const $cache;
+declare const sessionStroage;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.sessionStorage = {
+	A = core.sessionStorage = {
 		
 		isSupport: function () {
 			if ($.core.Validate.isUndefined($cache['isSessionStorageSupport'])) {
@@ -68,3 +77,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

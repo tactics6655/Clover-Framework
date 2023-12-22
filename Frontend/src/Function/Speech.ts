@@ -1,7 +1,15 @@
 //Speech-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = $.core.Speech = {
+	A = $.core.Speech = {
 		
 		Get: function () {
 			return _cWin.speechSynthesis;
@@ -61,3 +69,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

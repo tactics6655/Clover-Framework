@@ -1,5 +1,7 @@
 export default class OpenGLAttributeObject {
 	
+	private gl;
+
 	constructor(openGL) {
 		this.gl = openGL;
 	}

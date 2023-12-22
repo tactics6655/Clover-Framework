@@ -1,9 +1,16 @@
 //Popup-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Popup = {
+	A = core.Popup = {
 		
 		constructor: function () {
 			this.popupHandler = null
@@ -38,7 +45,7 @@
 		 * @param {circleSize}  : Circle Windows Size
 		 **/
 		openCircle: function (href, circleSize) {
-			$.core.Popup.Open(href, circleSize, circleSize, parseInt(($.core.Element.getInnerHeight() / 2) - parseInt(circleSize / 2), 10), parseInt(($.core.Element.getInnerWidth() / 2) - parseInt(circleSize / 2), 10));
+			$.core.Popup.Open(href, circleSize, circleSize, parseInt(String(($.core.Element.getInnerHeight() / 2) - parseInt(String(circleSize / 2))), 10), parseInt(String(($.core.Element.getInnerWidth() / 2) - parseInt(String(circleSize / 2))), 10));
 		},
 		
 		/**
@@ -73,3 +80,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

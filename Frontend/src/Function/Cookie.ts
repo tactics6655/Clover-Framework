@@ -1,9 +1,16 @@
 //Cookie-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cNavi;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Cookie = {
+	A = core.Cookie = {
 		
 		/**
 		 * Delete Cookie
@@ -72,3 +79,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,9 +1,14 @@
 //Time-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Time = {
+	A = core.Time = {
 		
 		getDateObject: function (time) {
 			var date = new Date(time);
@@ -106,3 +111,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

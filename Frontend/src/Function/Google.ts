@@ -1,9 +1,16 @@
 //Google-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const ga;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Google = {
+	A = core.Google = {
 		
 		/**
 		 * Check Website has Google Adsence
@@ -50,10 +57,10 @@
 		 * @param {key}	: Authentication key
 		 **/
 		sendAnalytics: function (key) {
-			(function (i, s, o, g, r, a, m) {
+			(function (i: any, s: any, o: any, g: any, r: any, a, m) {
 				i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
 					(i[r].q = i[r].q || []).push(arguments)
-				}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				}, i[r].l = 1 * Number(new Date()); a = s.createElement(o),
 				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
 			})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
@@ -64,3 +71,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

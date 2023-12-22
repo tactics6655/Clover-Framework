@@ -1,11 +1,17 @@
 //ChromeExtend-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
 declare const chrome;
+declare const _cWin;
+
+var A;
 
 (function ($, core) {
 
-	var A = core.ChromeExtend = {
+	A = core.ChromeExtend = {
 		
 		appCreate: function (html, id, maxWidth, maxHeight, minWidth, minHeight) {
 			chrome.app.window.create(
@@ -42,7 +48,7 @@ declare const chrome;
 		},
 		
 		isSupport: function () {
-			if (navigator.userAgent.toLowerCase.indexOf("chrome") != -1 && $.core.Browser.getChromeVersion() >= 42) {
+			if (navigator.userAgent.toLowerCase().indexOf("chrome") != -1 && $.core.Browser.getChromeVersion() >= 42) {
 				return true;
 			} else {
 				return false;
@@ -53,9 +59,9 @@ declare const chrome;
 			_cWin.open("https://chrome.google.com/webstore/detail/" + APP_ID);
 		},
 		
-		sendMessage: function (APP_ID, msg, callback) {
+		sendMessage: function (APP_ID, callback) {
 			if (this.isSupport()) {
-				chrome.runtime.sendMessage(APP_ID, message, function (response) {
+				chrome.runtime.sendMessage(APP_ID, function (response) {
 					callback(response);
 				});
 			}
@@ -64,3 +70,5 @@ declare const chrome;
 	};
 	
 })(jQuery, $.core);
+
+export default A;

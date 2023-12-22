@@ -1,11 +1,21 @@
 //gamePad-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const gamePadControllers;
+declare const gamePadValue;
+declare let gamePadDynamicKeys;
+declare let pressedGamePadPressedIndex;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.gamePad = {
+	A = core.gamePad = {
 		
-		Registry: function (callback) {
+		Registry: function (callback, controllers) {
 			var gamepads = this.Get();
 			
 			for (var i = 0; i < gamepads.length; i++) {
@@ -144,7 +154,7 @@
 		},
 		
 		isButtonPressed: function (index) {
-			if (self.isConnected() && self.isKeyExists()) {
+			if (this.isConnected() && this.isKeyExists()) {
 				var gp = this.Get()[0];
 				if (gp.buttons[index] == 1 && gp.buttons[index].pressed) {
 					return true;
@@ -157,3 +167,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

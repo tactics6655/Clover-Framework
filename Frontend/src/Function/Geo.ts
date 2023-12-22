@@ -1,9 +1,16 @@
 //GEO-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cNavi;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.GEO = {
+	A = core.GEO = {
 		
 		isSupport: function () {
 			return (navigator.geolocation) ? true : false;
@@ -26,3 +33,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

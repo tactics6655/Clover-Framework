@@ -1,7 +1,16 @@
 //WebSocket-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare let HandlerWebSocket;
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.WebSocket = {
+	A = core.WebSocket = {
 		
 		isSupport: function () {
 			if ("WebSocket" in _cWin) {
@@ -24,3 +33,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

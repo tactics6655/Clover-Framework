@@ -1,7 +1,14 @@
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A: any;
+
+declare const resizeHandler;
+
 (function ($, core) {
-	var A: any = core.dragDrop = {}
+	A = core.dragDrop = {}
 	
 	A.Resize = {
 		/**
@@ -63,7 +70,7 @@
 			var nx = obj.xDPX;
 			var ny = obj.xDPY;
 			
-			var pallet = $.core.Element.getById(self.target.pallet);
+			var pallet = $.core.Element.getById(this.target.pallet);
 			var palletWidth = $.core.dragDrop.Resize.width(pallet);
 			var palletLeft = $.core.Element.getPosition(pallet, 'left');
 			
@@ -73,7 +80,7 @@
 			
 			var pWidth = $.core.dragDrop.Resize.width(obj.parentNode);
 			
-			if (target.hasClass((self.target.target))) {
+			if (target.hasClass((this.target.target))) {
 				if (nx > fullWidth) nx = fullWidth;
 				
 				var new_width = nx  - objLeft;
@@ -150,9 +157,10 @@
 		 * @return void;
 		 **/
 		startEvent: function (event, target, pallet) {
-			self.target = {};
-			self.target.target = target;
-			self.target.pallet = pallet;
+			this.target = {};
+			this.target.target = target;
+			this.target.pallet = pallet;
+
 			this.vss = event.target;
 			if (!this.vss) {
 				return;
@@ -300,8 +308,8 @@
 	
 	A.Reorder = {
 		
-		onDragStart: function (evt, callback) {
-			self.$.core.dragDrop.Reorder.Handler = evt.target;
+		onDragStart: function (elem, evt, callback) {
+			this.$.core.dragDrop.Reorder.Handler = evt.target;
 			evt.dataTransfer.effectAllowed = 'move';
 			evt.dataTransfer.setData('Text', elem.textContent);
 			callback();
@@ -312,10 +320,10 @@
 			callback();
 		},
 		
-		onDragOver: function (evt) {
+		onDragOver: function (rootEl, evt) {
 			evt.preventDefault();
 			evt.dataTransfer.dropEffect = 'move';
-			this.handler = self.$.core.dragDrop.Reorder.Handler;
+			this.handler = this.$.core.dragDrop.Reorder.Handler;
 			var target = evt.target;
 			
 			if (target && target !== this.handler && target.nodeName == 'LI') {
@@ -326,3 +334,5 @@
 	}
 	
 })(jQuery, $.core);
+
+export default A;

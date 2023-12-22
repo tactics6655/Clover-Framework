@@ -1,9 +1,17 @@
 //File-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const getFloat;
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.File = {
+	A = core.File = {
 		
 		hasFileUpload: function () {
 			return (window.File && window.FileList && window.FileReader)
@@ -90,11 +98,11 @@
 			} else if ($signed == 'int') {
 				switch ($bit) {
 				case "8":
-					return new int8Array($array);
+					return new Int8Array($array);
 				case "16":
-					return new int16Array($array);
+					return new Int16Array($array);
 				case "32":
-					return new int32Array($array);
+					return new Int32Array($array);
 				}
 			} else if ($signed == 'float') {
 				switch ($bit) {
@@ -122,3 +130,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

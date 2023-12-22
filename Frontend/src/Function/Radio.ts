@@ -2,9 +2,14 @@
 //This API is available on Firefox or Firefox OS for installed or higher privileged applications.
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Radio = {
+	A = core.Radio = {
 		
 		isSupport: function () {
 			var radio = navigator.mozFMRadio;
@@ -23,3 +28,5 @@
 	}
 	
 });
+
+export default A;

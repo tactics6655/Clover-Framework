@@ -1,9 +1,14 @@
 //OptionList-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.OptionList = {
+	A = core.OptionList = {
 		setFocusLastItem: function (target) {
 			if (!target) {
 				return;
@@ -100,3 +105,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

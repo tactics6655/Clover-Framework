@@ -1,12 +1,17 @@
 //System-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
 declare const ActiveXObject;
 declare const Enumerator;
 
+var A;
+
 (function ($, core) {
 
-	var A = core.System = {
+	A = core.System = {
 		
 		shell: function (exec) {
 			var shell = new ActiveXObject("WScript.shell");
@@ -40,3 +45,5 @@ declare const Enumerator;
 	};
 	
 })(jQuery, $.core);
+
+export default A;

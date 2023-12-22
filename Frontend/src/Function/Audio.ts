@@ -2,13 +2,18 @@
 //https://www.nyu.edu/classes/bello/FMT_files/9_MIDI_code.pdf
 'use strict'
 
-import * from "./../../dist/variables.ts"
+import $ from 'jquery';
+import jQuery from 'jquery';
+import {yamahaTone} from "./../../dist/variables"
+import AudioContextObject from './Class/AudioContextObject';
 
-import AudioContextObject from './Class/AudioContextObject.js';
+declare const _cWin;
+
+var A;
 
 (function ($, core) {
 
-	var A = core.Audio = {
+	core.Audio = {
 		
 		constructor: function () {
 			/*this.bitRate = [
@@ -247,7 +252,7 @@ import AudioContextObject from './Class/AudioContextObject.js';
 			};
 			
 			Object.defineProperty(this.StreamAudio, "default", {
-				volume: 100,
+				//volume: 100,
 				writable: false,
 				enumerable: false,
 				configurable: false
@@ -387,10 +392,13 @@ import AudioContextObject from './Class/AudioContextObject.js';
 		 **/
 		getOfflineAudioContext: function () {
 			var OfflineAudioContext = null;
+
 			try {
-				var OfflineAudioContext = _cWin.OfflineAudioContext;
+				OfflineAudioContext = _cWin.OfflineAudioContext;
+
 				return new(OfflineAudioContext)();
 			} catch (e) {}
+
 			return OfflineAudioContext;
 		},
 		
@@ -403,9 +411,9 @@ import AudioContextObject from './Class/AudioContextObject.js';
 			var AudioContext = null;
 			try {
 				if (!window.hasOwnProperty('webkitAudioContext') && window.hasOwnProperty('AudioContext')) {
-					var AudioContext = _cWin.AudioContext;
+				 	AudioContext = _cWin.AudioContext;
 				} else {
-					var AudioContext = _cWin.webkitAudioContext || _cWin.mozAudioContext || _cWin.msAudioContext;
+					AudioContext = _cWin.webkitAudioContext || _cWin.mozAudioContext || _cWin.msAudioContext;
 				}
 				
 				return new (AudioContext)();
@@ -521,8 +529,8 @@ import AudioContextObject from './Class/AudioContextObject.js';
 		setPan: function (context, audioNode: any) {
 			var variable = context.createPanner();
 			variable.panningModel = "equalpower";
-			audionode.connect(variable);
-			audionode.connect(context.destination);
+			audioNode.connect(variable);
+			audioNode.connect(context.destination);
 			variable.connect(context.destination);
 		},
 		
@@ -656,3 +664,5 @@ import AudioContextObject from './Class/AudioContextObject.js';
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

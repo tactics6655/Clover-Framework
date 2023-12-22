@@ -1,5 +1,10 @@
+
+import $ from 'jquery';
+
 export default class AudioContextObject {
 	
+	private audioContext;
+
 	constructor(AudioContextObject) {
 		this.audioContext = AudioContextObject;
 	}
@@ -8,18 +13,21 @@ export default class AudioContextObject {
 	}
 	
 	get getBusLists() {
+		return '';
 	}
 	
 	setEventDispatcher() {
 	}
 	
 	get getEventDispatcherListners() {
+		return '';
 	}
 	
 	setSubscriber() {
 	}
 	
 	get getSubscriber() {
+		return '';
 	}
 	
 	get getObject () {

@@ -1,9 +1,16 @@
 //MediaSource-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.MediaSource = {
+	A = core.MediaSource = {
 		
 		isEMESupport: function () {
 			if (!navigator.requestMediaKeySystemAccess) {
@@ -62,3 +69,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,9 +1,18 @@
 //XML-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const $cache;
+declare const ActiveXObject;
+declare const _cXMLHttpRequest;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.XML = {
+	A = core.XML = {
 		
 		isXMLDoc: function (xml) {
 			return jQuery.isXMLDoc(xml);
@@ -14,7 +23,7 @@
 		},
 		
 		find: function (xml, val) {
-			if (self.isXMLDoc(xml)) {
+			if (this.isXMLDoc(xml)) {
 				return xml.find(val);
 			}
 		},
@@ -61,3 +70,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,9 +1,14 @@
 //Selector-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Selector = {
+	A = core.Selector = {
 		
 		first: function (elem) {
 			return $(elem + ':first');
@@ -43,3 +48,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

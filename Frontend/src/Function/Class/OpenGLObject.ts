@@ -1,7 +1,11 @@
-import OpenGLAttributeObject from './OpenGLAttributeObject.js'
+import OpenGLAttributeObject from './OpenGLAttributeObject';
 
 export default class OpenGLObject {
 	
+	private canvas;
+	private gl;
+	private attribute;
+
 	constructor(CanvasID) {
 		try {
 		this.canvas = document.getElementById(CanvasID);
@@ -92,7 +96,7 @@ export default class OpenGLObject {
 		this.gl.linkProgram(shaderProgram);
 		
 		if (!this.hasInitializedShaderProgramLink(shaderProgram)) {
-			return new Exception("Unable to initialize the shader program.");
+			return new DOMException("Unable to initialize the shader program.");
 		}
 	}
 	

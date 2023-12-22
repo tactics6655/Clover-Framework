@@ -1,9 +1,16 @@
 //Flash-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const ActiveXObject;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Flash = {
+	A = core.Flash = {
 		constructor: function () {
 			this.getFlashLink = "http://get.adobe.com/flashplayer/";
 		},
@@ -27,7 +34,7 @@
 			} catch (e) {}
 			
 			if (!version) try {
-				axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
+				flash = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
 				version = "WIN 6,0,21,0";
 				flash.AllowScriptAccess = "always";
 				version = flash.GetVariable("$version");
@@ -77,7 +84,7 @@
 			
 			if (flash && flash.nodeName == "OBJECT") {
 				if ($.core.Browser.isIE()) {
-					if (obj.readyState == 4) {
+					if (flash.readyState == 4) {
 						$.core.Element.removeIEObject(id);
 					}
 				} else {
@@ -91,3 +98,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

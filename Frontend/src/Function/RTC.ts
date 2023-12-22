@@ -1,9 +1,16 @@
 //Browser-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.RTC = {
+	A = core.RTC = {
 		
 		getRTCPeerConnection: function () {
 			_cWin.RTCPeerConnection = _cWin.RTCPeerConnection || 
@@ -20,3 +27,5 @@
     }
 
 });
+
+export default A;

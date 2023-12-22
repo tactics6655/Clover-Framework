@@ -1,11 +1,15 @@
 //Validate-related functions
 'use strict';
 
-import * from "./../../dist/variables.ts"
+import $ from 'jquery';
+import jQuery from 'jquery';
+import {regJapan, regHiragana, regKatakana, regRRN, regWhiteSpace, regOnlyKor, regEmail, regUrl} from "./../../dist/variables"
+
+var A;
 
 (function ($, core) {
 
-	var A = core.Validate = {
+	A = core.Validate = {
 		
 		constructor: function () {
 		},
@@ -170,19 +174,19 @@ import * from "./../../dist/variables.ts"
 		},
 		
 		isArray: function (value) {
-			return typeof value === 'array' && value.constructor === Array && toString.call(value) === '[object Array]';
+			return value instanceof Array && value.constructor === Array && toString.call(value) === '[object Array]';
 		},
 		
 		isNull: function (value) {
-			return typeof value === 'null' || value == undefined || value == null || value == 'null' || value.toString().replace(/ /g,"") == "";
+			return value == undefined || value == null || value == 'null' || value.toString().replace(/ /g,"") == "";
 		},
 		
 		isDate: function (value) {
-			return toString.call(value) === '[object Date]' && typeof value === 'date';
+			return toString.call(value) === '[object Date]' && value instanceof Date;
 		},
 		
 		isRegex: function (value) {
-			return typeof value === 'regexp' && toString.call(value) === '[object RegExp]';
+			return value instanceof RegExp && toString.call(value) === '[object RegExp]';
 		},
 		
 		isStr: function (value, mode) {
@@ -246,3 +250,5 @@ import * from "./../../dist/variables.ts"
 	};
 	
 })(jQuery, $.core);
+
+export default A;

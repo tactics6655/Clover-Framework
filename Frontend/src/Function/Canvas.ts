@@ -1,11 +1,16 @@
 //Canvas-related functions
-import OpenGLObject from './Class/OpenGLObject.js'
-import Canvas2D from './Class/Canvas2D.js'
+import OpenGLObject from './Class/OpenGLObject';
+import Canvas2D from './Class/Canvas2D';
 'use strict';
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
 
 (function ($, core) {
 
-	var A = core.Canvas = {
+	core.Canvas = {
 		
 		drawTriangle: function (ctx, backgroundRgb, x1, y1, x2, y2, x3, y3) {
 			ctx = this.setFillStyle(ctx, backgroundRgb);
@@ -97,7 +102,7 @@ import Canvas2D from './Class/Canvas2D.js'
 		//repeat, repeat-x, repeat-y, no-repeat
 		createPattern: function (ctx, image, repetition) {
 			if (!repetition) repetition = 'repeat';
-			var pattern = ctx.createPattern(img, repetition);
+			var pattern = ctx.createPattern(image, repetition);
 			
 			return pattern;
 		},
@@ -108,7 +113,7 @@ import Canvas2D from './Class/Canvas2D.js'
 			return imagedata;
 		},
 		
-		applyLinearGradient: function (ctx, x0, y0, r0, x1, y1, r1, x, y, width, height, startcolor, stopcolor) {
+		applyLinearGradient: function (ctx, x, y, width, height, startcolor, stopcolor, image, repetition) {
 			var gradient = this.createLinearGradient(ctx, image, repetition);
 			this.gradientAddColorStop(0, startcolor);
 			this.gradientAddColorStop(1, stopcolor);
@@ -116,7 +121,7 @@ import Canvas2D from './Class/Canvas2D.js'
 			ctx.fillRect(x, y, width, height);
 		},
 		
-		applyRadialGradient: function (ctx, x0, y0, r0, x1, y1, r1, x, y, width, height, startcolor, stopcolor) {
+		applyRadialGradient: function (ctx, x, y, width, height, startcolor, stopcolor, image, repetition) {
 			var gradient = this.createRadialGradient(ctx, image, repetition);
 			this.gradientAddColorStop(0, startcolor);
 			this.gradientAddColorStop(1, stopcolor);
@@ -140,3 +145,5 @@ import Canvas2D from './Class/Canvas2D.js'
 	};
 	
 })(jQuery, $.core);
+
+export default A;

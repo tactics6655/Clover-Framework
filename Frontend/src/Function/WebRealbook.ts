@@ -1,9 +1,14 @@
 //WebRealbook-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A: any;
+
 (function ($, core) {
 
-	var A: any = core.WebRealbook = {
+	A = core.WebRealbook = {
 		
 		createContainer: function () {
 			var svgContainer = $.core.Element.createSVGNS('svg');
@@ -48,3 +53,5 @@
 	A.storage.container = {};
 	
 })(jQuery, $.core);
+
+export default A;

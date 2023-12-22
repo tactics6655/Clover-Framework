@@ -7,6 +7,9 @@ const WebpackObfuscator = require('webpack-obfuscator');
 const webpack = require('webpack')
 
 module.exports = {
+	resolve: {
+		extensions: [".ts", ".tsx", ".js"]
+	},
 	plugins: [
 		new CompressionPlugin({
 		}),
@@ -116,14 +119,27 @@ module.exports = {
 		}, {
 			test: /\.css$/,
 			use: ['style-loader', 'css-loader']
-		},{
-			test: /\.(ts|tsx)?$/,
+		}
+		/*{
+			test: /\.[jt]s$/,
+			exclude: /(node_modules)/,
 			use: [
-				{
-					loader: 'ts-loader'
-				}
-			]
-		}],
+			  {
+				loader: 'babel-loader',
+				options: {
+				  presets: ['@babel/preset-env'],
+				},
+			  },
+			  {
+				loader: 'ts-loader',
+				options: {
+				  compilerOptions: {
+					noEmit: false,
+				  },
+				},
+			  },
+			],
+		}*/],
 		exprContextCritical: false,
 		exprContextRecursive: true,
 		exprContextRegExp: true,

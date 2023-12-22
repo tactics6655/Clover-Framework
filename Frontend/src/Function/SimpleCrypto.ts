@@ -1,11 +1,15 @@
 //SimpleCrypto-related functions
 'use strict';
 
-import * as CryptoJS from "cryptojs";
+import $ from 'jquery';
+import jQuery from 'jquery';
+import * as CryptoJS from 'crypto-js';
+
+var A;
 
 (function ($, core) {
 
-	var A = core.SimpleCrypto = {
+	A = core.SimpleCrypto = {
 		getSecureNumber: function (n) {
 			return Math.floor(Math.pow(0.03*n+0.8,n+0.7));
 		},
@@ -218,7 +222,7 @@ import * as CryptoJS from "cryptojs";
 		
 		getSecureLink: function (text, milliseconds) {
 			var timestamp = this.getTimeStamp(milliseconds);
-			var md5String = md5(text);
+			var md5String = this.MD5(text);
 			var md5ByteArray = $.core.Str.hex2a(md5String);
 			var base64String = btoa(md5ByteArray);
 			
@@ -232,8 +236,7 @@ import * as CryptoJS from "cryptojs";
 		
 		AESCBCDecrypt: function (iv, key, plainText) {
 			var plaintextArray = CryptoJS.AES.decrypt(
-				{ciphertext: CryptoJS.enc.Base64.parse(plainText)},
-		 
+				String(CryptoJS.enc.Base64.parse(plainText)),
 				CryptoJS.enc.Hex.parse(key),
 				{iv: CryptoJS.enc.Hex.parse(iv)}
 			);
@@ -294,7 +297,7 @@ import * as CryptoJS from "cryptojs";
 			var time = date.getTime() + milliseconds;
 			var date = new Date(time * 1000);
 			
-			var timestamp = parseInt((date.setMinutes(0, 0, 0) / 1000) / 1000);
+			var timestamp = parseInt(String((date.setMinutes(0, 0, 0) / 1000) / 1000));
 			
 			return timestamp;
 		},
@@ -346,3 +349,5 @@ import * as CryptoJS from "cryptojs";
 	};
 	
 })(jQuery, $.core);
+
+export default A;

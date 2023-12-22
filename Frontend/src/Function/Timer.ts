@@ -1,7 +1,16 @@
 //Timer-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const deferred;
+declare let pTimer;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Timer = {
+	A = core.Timer = {
 		
 		//async function fn() { const variables = await $.core.Timer.sleep(...); }
 		sleep: function (callback, delay) {
@@ -51,3 +60,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

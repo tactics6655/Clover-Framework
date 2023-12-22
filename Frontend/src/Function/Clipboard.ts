@@ -1,9 +1,16 @@
 //Clipboard-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Clipboard = {
+	A = core.Clipboard = {
 		
 		isExist: function () {
 			return _cWin.clipboardData;
@@ -49,3 +56,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

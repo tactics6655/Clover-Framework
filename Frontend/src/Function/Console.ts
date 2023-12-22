@@ -1,9 +1,14 @@
 //Console-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Console = {
+	A = core.Console = {
 		
 		clear: function () {
 			console.clear();
@@ -14,7 +19,7 @@
 		},
 		
 		err: function (str) {
-			console.err(str);
+			console.error(str);
 		},
 		
 		styledLog: function (str, style) {
@@ -48,3 +53,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

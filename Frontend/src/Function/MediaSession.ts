@@ -1,9 +1,14 @@
 //mediaSession-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.MediaSession = {
+	A = core.MediaSession = {
 		
 		isSupport: function () {
 			if ('MediaSession' in navigator) {
@@ -83,3 +88,5 @@
 	}
 	
 })(jQuery, $.core);
+
+export default A;

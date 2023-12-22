@@ -1,9 +1,18 @@
 //Element-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+declare const numberCValue;
+declare const _cDoc;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Element = {
+	A = core.Element = {
 		
 		constructor: function () {
 			this.SVG_NS = 'http://www.w3.org/2000/svg';
@@ -303,7 +312,7 @@
 			$(object).bind('wheel', function(event) {
 				var fontsize = parseInt($(this).css("font-size").replace("px", ""));
 
-				if (event.originalEvent.deltaY < 0) {
+				if ((event.originalEvent as any).deltaY < 0) {
 					if (fontsize < 250) {
 						$(this).css("font-size", fontsize + 1);
 					}
@@ -610,7 +619,7 @@
 			return classArr;
 		},
 		
-		makeStruct: function (item, duplicate) {
+		makeStruct: function (item, duplicate, names) {
 			var item = item.split(duplicate);
 			var count = item.length;
 			
@@ -811,7 +820,7 @@
 			return p;
 		},
 		
-		generateTooltip: function (elem, _class) {
+		generateTooltip: function (elem, _class, body) {
 			var _tooltip = [];
 			
 			if (!$(elem).length) {
@@ -819,7 +828,7 @@
 			}
 			
 			$(elem).each(function (i, item) {
-				var _tooltipItem = $('<div class="' + _class + '" data-index="' + i + '"></div>').appendTo($body);
+				var _tooltipItem = $('<div class="' + _class + '" data-index="' + i + '"></div>').appendTo(body);
 				$(item).attr('data-index', i);
 				_tooltip.push(_tooltipItem);
 			});
@@ -918,7 +927,7 @@
 			var obj = $('input[name=' + item + ']:checkbox');
 			
 			obj.each(function () {
-				$(this).attr('checked', ($(this).attr('checked')) ? false : true)
+				$(this).attr('checked', $(this).attr('checked'))
 			});
 		},
 		
@@ -1073,7 +1082,7 @@
 		},
 		
 		hasProperty: function (obj, prop) {
-			return protoObj.hasOwnProperty.call(obj, prop);
+			return Object.prototype.hasOwnProperty.call(obj, prop);
 		},
 		
 		setProperty: function (obj, prop, descriptor) {
@@ -1211,7 +1220,7 @@
 		},
 		
 		findClass: document.getElementsByClassName ? (function (cls, context) {
-			return protoArr.slice.call((context || document).getElementsByClassName(cls));
+			return Array.prototype.slice.call((context || document).getElementsByClassName(cls));
 		}) : (function (cls, context) {
 			var nodes = [];
 			
@@ -1768,3 +1777,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

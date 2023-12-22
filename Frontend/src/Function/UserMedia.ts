@@ -1,11 +1,18 @@
 //Browser-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cNavi;
+declare const _cWin;
 declare const ImageCapture;
+
+var A;
 
 (function ($, core) {
 
-	var A = core.UserMedia = {
+	 A = core.UserMedia = {
 		
 		getUserMedia: function () {
 			return _cNavi.getUserMedia || 
@@ -90,3 +97,5 @@ declare const ImageCapture;
 		
     }
 });
+
+export default A;

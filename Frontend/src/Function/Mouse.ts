@@ -1,9 +1,14 @@
 //Mouse-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Mouse = {
+	A = core.Mouse = {
 		
 		hasTouchscreen: function () {
 			var result = false;
@@ -98,7 +103,7 @@
 			if ("onpointerlockchange" in document) {
 				document.addEventListener('pointerlockchange', callback, false);
 			} else if ("onmozpointerlockchange" in document) {
-				document.addEventListener('mozpointerlockchange', callback, false);
+				//document.addEventListener('mozpointerlockchange', callback, false);
 			}
 		},
 		
@@ -120,3 +125,5 @@
 	}
 	
 })(jQuery, $.core);
+
+export default A;

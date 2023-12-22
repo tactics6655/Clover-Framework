@@ -1,9 +1,16 @@
 //Screen-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Screen = {
+	A = core.Screen = {
 		
 		getResolution: function () {
 		},
@@ -97,7 +104,7 @@
 			}
 		},
 		
-		getHTML5Handler: function () {
+		getHTML5Handler: function (html5Elements) {
 			var video;
 			this.length = html5Elements.length;
 			for (var i = 0; i < this.length; i++) {
@@ -173,7 +180,7 @@
 					if (element.requestFullscreen) {
 						var requestMethod = element.requestFullscreen();
 					} else {
-						var requestMethod = element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+						var requestMethod = element.webkitRequestFullScreen(); // Element.ALLOW_KEYBOARD_INPUT
 					}
 					
 					if (element.mozRequestFullScreen || element.mozRequestFullScreen) {
@@ -185,7 +192,7 @@
 					} else if (element.msRequestFullscreen || this.hasMsNativeFullScreen) {
 						var requestMethod = element.msRequestFullscreen();
 					} else {
-						var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) || element.mozRequestFullScreen || element.msRequestFullScreen;
+						var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen() || element.mozRequestFullScreen || element.msRequestFullScreen;
 					}
 				} catch(e) {
 					console.log(e);
@@ -256,3 +263,5 @@
 	}
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,7 +1,11 @@
 // Create a Component
 
+import jQuery from 'jquery'
+
+var core;
+
 (function ($) {
-	var core = core || function (element) {
+	core = core || function (element) {
 		this.element = $(element);
 	};
 	
@@ -9,9 +13,11 @@
 	core.version = '1.0';
 	
 	$.core = {};
-	$.fn.core = $.fn.core || function () {
-		$.extend(this, $.fn.core);
+	$.core = $.core || function () {
+		$.extend(this, $.core);
 		
 		return this;
 	};
 })(jQuery);
+
+export default core;

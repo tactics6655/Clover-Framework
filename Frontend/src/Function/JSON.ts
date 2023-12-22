@@ -1,9 +1,14 @@
 //JSON-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.JSON = {
+	A = core.JSON = {
 		
 		isSupport: function () {
 			if ("JSON" in window) {
@@ -59,7 +64,7 @@
 			var result = "";
 			
 			if (typeof JSON != "undefined") {
-				result = self.stringify(obj);
+				result = this.stringify(obj);
 			} else {
 				var arr = [];
 				for (var i in obj) {
@@ -126,3 +131,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

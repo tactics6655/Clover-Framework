@@ -1,15 +1,23 @@
 //String-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const numberCValue;
+declare let uniquenum;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Str = {
+	A = core.Str = {
 		
 		getMinusOne: function () {
 			return ~[]>>1; // -~[i+2]>>4<<[]
 		},
 		
-		getNumber: function (a: any) {
+		/*getNumber: function (a: any) {
 			return [[]]|1[{}]+blur()&[]|+a|2[[]]&3|6&[];
 		},
 
@@ -19,11 +27,11 @@
 		
 		getUndefined: function () {
 			return [[]][{}];
-		},
+		},*/
 		
 		isSmallThenValue: function (i, z) {
 			var res = i << z % i >> z;
-			if (res == a) {
+			if (res == z) {
 				return true;
 			}
 			
@@ -106,10 +114,10 @@
 		},
 		
 		//Determining if an integer is a power of 2
-		determiningIntegerisPowOf2: function (v) {
+		determiningIntegerisPowOf2: function (v: number) {
 			v = v >>> 0; //convert to unsigned int
 			
-			return (v & (v-1) === 0) ? true : false;
+			return ((v & (v-1)) === 0) ? true : false;
 		},
 		
 		
@@ -132,8 +140,8 @@
 			return str.match(/[\d\.]+|^[\s]* +|[*\+|\-|(|)|^]/g);
 		},
 		
-		isIsothermal: function (str) {
-			if (3 & str == 3) {
+		isIsothermal: function (str: number) {
+			if ((3 & str) == 3) {
 				return true;
 			}
 			
@@ -170,8 +178,8 @@
 		/**
 		 * x, (x+2, x+6) => repeat
 		 **/
-		is2P6Px: function (str, x) {
-			if (5 & str == x) {
+		is2P6Px: function (str: number, x: number) {
+			if ((5 & str) == x) {
 				return true;
 			}
 			
@@ -182,7 +190,7 @@
 		 * 32n
 		 **/
 		is32n: function (str) {
-			if (2 >> n == 2) {
+			if ((2 >> str) == 2) {
 				return true;
 			}
 			
@@ -193,7 +201,7 @@
 		 * x, (x+1, x+2, x+3, x+8) => repeat
 		 **/
 		is1P2P3P8P: function (str, x) {
-			if (4 & str == x) {
+			if ((4 & str) == x) {
 				return true;
 			}
 			
@@ -204,7 +212,7 @@
 		 * 8n+x
 		 **/
 		is8NPx: function (str, x) {
-			if (7 & str == x) {
+			if ((7 & str) == x) {
 				return true;
 			}
 			
@@ -404,8 +412,8 @@
 			var d: any = 0;
 			var g = [];
 			var str = str.replace(/\=/g, "");
-			var h: any;
-			var n: any;
+			var h: number;
+			var n: number;
 			var l: any;
 			
 			//Split Word by 4 Length
@@ -416,7 +424,7 @@
 					n |= f << 18 - 6 * h;
 				}
 				
-				for (var h: any = 0; h < l.length - 1; ++h) {
+				for (h = 0; h < l.length - 1; ++h) {
 					for (var m = d + [0], f = m >>> 2; g.length <= f;) {
 						g.push(0);
 					}
@@ -762,3 +770,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

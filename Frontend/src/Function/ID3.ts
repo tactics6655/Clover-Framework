@@ -1,9 +1,16 @@
 //ID3-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const asciiHex;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.ID3 = {
+	A = core.ID3 = {
 		
 		isHasHeader: function (data /* Uint8Array */, offset, type) {
 			if (type === 'footer') {
@@ -55,3 +62,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

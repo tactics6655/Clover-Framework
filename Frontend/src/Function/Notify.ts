@@ -1,9 +1,16 @@
 //Notify-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Notify = {
+	A = core.Notify = {
 		constructor: function () {
 			this.notificationHandler = null;
 		},
@@ -39,16 +46,18 @@
 		 * Check Permission
 		 **/
 		getPermitLevel: function () {
+			var permit;
+
 			if (_cWin.Notification && _cWin.Notification.permissionLevel) {
-				var permit = _cWin.Notification.permissionLevel;
+				permit = _cWin.Notification.permissionLevel;
 			} else if (_cWin.webkitNotifications && _cWin.webkitNotifications.checkPermission) {
-				var permit = Permissions[_cWin.webkitNotifications.checkPermission()];
+				permit = Permissions[_cWin.webkitNotifications.checkPermission()];
 			} else if (_cWin.Notification && _cWin.Notification.permission) {
-				var permit = _cWin.Notification.permission;
+				permit = _cWin.Notification.permission;
 			} else if (navigator.mozNotification) {
-				var permit = Permission.GRANTED;
+				permit = Notification.permission;
 			} else if (_cWin.external && _cWin.external.msIsSiteMode() !== undefined) {
-				var permit = _cWin.external.msIsSiteMode() ? 'granted' : 'default';
+				permit = _cWin.external.msIsSiteMode() ? 'granted' : 'default';
 			}
 			
 			return permit;
@@ -65,6 +74,8 @@
 		 **/
 		Show: function (title, message, icon, body, options) {
 			if (this.getPermitLevel() != 'denied') {
+				var notification = null;
+
 				if (_cWin.Notification) {
 					if (!options) {
 						options = {}
@@ -91,3 +102,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

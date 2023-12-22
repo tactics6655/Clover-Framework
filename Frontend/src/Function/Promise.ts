@@ -1,9 +1,14 @@
 //Promise-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Promise = {
+	A = core.Promise = {
 		
 		isSupport: function () {
 			if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1) {
@@ -60,3 +65,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

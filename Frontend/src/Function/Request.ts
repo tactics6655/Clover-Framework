@@ -1,8 +1,27 @@
 //Request-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+import {globalLang} from 'src/config';
+
+declare let defaultHeaders;
+declare const _cXMLHttpRequest;
+declare const instance;
+declare const waitTimeout;
+declare const customCallbacks;
+declare const _cWin;
+declare let waitForm;
+declare const waitformSkin;
+declare const requireCSS;
+declare const loader;
+declare const debug;
+declare const requireJS;
+
+var A;
+
 (function ($, core) {
-	var A = core.Request = {
+	A = core.Request = {
 		
 		constructor: function () {
 			this.ajaxFailCallbacks = {};
@@ -692,7 +711,7 @@
 		 * @param {url} : URL
 		 **/
 		getAux: function (url) {
-			return url.indexOf("?") == -1 ? aux = "?" : aux = "&";
+			return url.indexOf("?") == -1 ? "?" : "&";
 		},
 		
 		/**
@@ -783,7 +802,7 @@
 		 **/
 		appendJsInstance: function (src) {
 			var head = $('head')[0];
-			var script = document.createElement('SCRIPT');
+			var script: any = document.createElement('SCRIPT');
 			script.src = src;
 			script.onload = function () {
 				head.removeChild(script);
@@ -882,7 +901,7 @@
 		
 		sendMessage: function (id, msg, url) {
 			try{
-				var _window = document.getElementById(id).contentWindow;
+				var _window = (document.getElementById(id) as any).contentWindow;
 				_window.postMessage(msg, url);
 			} catch(e) {
 				console.log(e);
@@ -1073,7 +1092,7 @@
 						}
 
 						if (typeof A.ajaxCallbacks[callback] == 'undefined') {
-							return new throws(callback + " is not callback");
+							return new DOMException(callback + " is not callback");
 						}
 
 						// Ajax Callback
@@ -1117,7 +1136,7 @@
 					error: function (xhr) {
 						try {
 							if ($.core.Validate.isFunc(this.ajaxFailCallbacks[callback])) {
-								this.ajaxFailCallbacks[callback].call(this, args);
+								this.ajaxFailCallbacks[callback].call(this, xhr);
 
 								if (debug === true) {
 									$.log(this.ResponseCode[xhr.status]);
@@ -1222,3 +1241,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

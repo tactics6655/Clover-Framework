@@ -1,9 +1,16 @@
 //Effect-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Effect = {
+	A = core.Effect = {
 		
 		Highlighter: function (target, rgb1: Array<number>, rgb2, delay) {
 			var timerCounter = 0;
@@ -14,9 +21,9 @@
 			var thirdDiff: number = (rgb1[2] - rgb2[2]) / _delay;
 
 			var timer = setInterval(function () {
-				rgb1[0] = parseInt(rgb1[0] - firstDiff, 10);
-				rgb1[1] = parseInt(rgb1[1] - secondDiff, 10);
-				rgb1[2] = parseInt(rgb1[2] - thirdDiff, 10);
+				rgb1[0] = parseInt(String(rgb1[0] - firstDiff), 10);
+				rgb1[1] = parseInt(String(rgb1[1] - secondDiff), 10);
+				rgb1[2] = parseInt(String(rgb1[2] - thirdDiff), 10);
 				
 				target.style.backgroundColor = "rgb(" + rgb1.toString() + ")";
 				timerCounter += 1;
@@ -67,3 +74,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

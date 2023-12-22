@@ -1,7 +1,15 @@
 //WebDB-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.WebDB = {
+	A = core.WebDB = {
 		
 		constructor: function () {
 			this.HandlerWebDb = null;
@@ -82,3 +90,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,7 +1,13 @@
 //StreamObject-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.StreamObject = {
+	A = core.StreamObject = {
 		
 		/*
 		 * var streamobject = new core.StreamObject.Stream();
@@ -56,3 +62,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

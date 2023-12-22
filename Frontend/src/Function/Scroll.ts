@@ -1,9 +1,14 @@
 //Scroll-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Scroll = {
+	A = core.Scroll = {
 		
 		/**
 		 * Document Scroll to Top
@@ -22,3 +27,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

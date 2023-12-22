@@ -1,9 +1,14 @@
 //Pagenation-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	let A: any = core.Pagination = {
+	A = core.Pagination = {
 		
 		constructor: function () {
 			this.point = 0;
@@ -69,3 +74,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

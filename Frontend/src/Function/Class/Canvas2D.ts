@@ -1,5 +1,12 @@
+declare const $;
+
 export default class OPenGLObject {
 	
+	private canvas;
+	private context;
+	private fontSize;
+	private fontFamily;
+
 	constructor(CanvasID) {
 		try {
 			this.canvas = document.getElementById(CanvasID);

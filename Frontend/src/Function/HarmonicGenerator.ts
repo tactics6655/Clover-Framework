@@ -1,9 +1,16 @@
 //harmonicGenerator-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const yamahaTone;
+
+var A;
+
 (function ($, core) {
 	
-	var A = core.harmonicGenerator = {
+	A = core.harmonicGenerator = {
 		constructor: function () {
 			/**
 			 * Perfect is 1,4,5,8
@@ -567,7 +574,7 @@
 		setScaleOctave: function (scale, octave) {
 			var scaleArr = [];
 			scale.forEach(function(note) {
-				scaleArr.push((parseInt(12) * octave) + parseInt(note)); 
+				scaleArr.push((parseInt(String(12)) * octave) + parseInt(note)); 
 			});
 			
 			return scaleArr;
@@ -777,3 +784,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

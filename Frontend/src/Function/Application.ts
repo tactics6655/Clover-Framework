@@ -1,11 +1,16 @@
 //Application-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
 declare const appRegister;
+
+var A;
 
 (function ($, core) {
 
-	var A = core.App = {
+	A = core.App = {
 		
 		each: function(Array, args, callback) {
 			if (Array) {
@@ -71,3 +76,5 @@ declare const appRegister;
 	};
 	
 })(jQuery, $.core);
+
+export default A;

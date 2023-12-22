@@ -1,9 +1,14 @@
 //Generator-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Generator = {
+	A = core.Generator = {
 		
 		uniqueRandIterators: function* (min, max, length) {
 			var str = $.core.Str.getUniqueRand(min, max, length);
@@ -24,17 +29,19 @@
 		},
 		
 		getUniqueNum: function (min, max, length) {
-			IteratorsTemp = this.uniqueRandIterators(min, max, length);
+			this.IteratorsTemp = this.uniqueRandIterators(min, max, length);
 		},
 		
 		getUniqueStr: function (length) {
-			IteratorsTemp = this.uniqueStrIterators(length);
+			this.IteratorsTemp = this.uniqueStrIterators(length);
 		},
 		
-		getNext: function () {
+		getNext: function (IteratorsTemp) {
 			return IteratorsTemp.next().value;
 		}
 		
 	};
 	
 })(jQuery, $.core);
+
+export default A;

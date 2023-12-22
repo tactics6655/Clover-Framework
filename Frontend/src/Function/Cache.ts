@@ -1,9 +1,16 @@
 //Cache-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Cache = {
+	A = core.Cache = {
 		
 		isSupport: function () {
 			if ('caches' in _cWin) {
@@ -53,3 +60,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

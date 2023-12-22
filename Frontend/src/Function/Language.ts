@@ -1,7 +1,13 @@
 //ScreenCapture-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Language = {
+	A = core.Language = {
 		
 		constructor: function () {
 			
@@ -280,7 +286,6 @@
 					'い': 'i',
 					'ぃ': 'i',
 					'き': 'ki',
-					'ま': 'ma',
 					'ぎ': 'gi',
 					'し': 'si',
 					'じ': 'zi',
@@ -507,7 +512,6 @@
 					'च': 'ca',
 					'ट': 'ṭa',
 					'त': 'ta',
-					'प': 'pa',
 					/***/
 					'ख': 'kha',
 					'छ': 'cha',
@@ -603,7 +607,7 @@
 					'ш': 'ʃ',
 					'Щ': 'ts',
 					'щ': 'ʃtʃ',
-					'ц': 'ʃtʃ',
+					//'ц': 'ʃtʃ',
 					'Ъ': '-',
 					'ъ': '-',
 					'Ы': 'ɨ',
@@ -703,3 +707,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

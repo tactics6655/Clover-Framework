@@ -1,9 +1,28 @@
 //Storage-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+export class QUOTA_EXCEEDED_ERR extends Error {
+    /**
+     * Message explaining the error.
+     */
+    message: string;
+    /**
+     * Creates a specific `Error` object for **Quota Exceeded Errors**.
+     * @param message Message explaining the error.
+     */
+}
+
+declare const _cWin;
+declare const $cache;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Storage = {
+	A = core.Storage = {
 		
 		/**
 		 * Check Storage is Support
@@ -102,3 +121,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

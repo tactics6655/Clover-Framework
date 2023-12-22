@@ -1,7 +1,13 @@
 //ScreenCapture-related functions
+
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.ScreenCapture = {
+	A = core.ScreenCapture = {
 		
 		stop: function (videoElement) {
 			let tracks = videoElement.srcObject.getTracks();
@@ -31,3 +37,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

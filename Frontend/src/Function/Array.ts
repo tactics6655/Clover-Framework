@@ -1,9 +1,14 @@
 //Array-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Arr = {
+	A = core.Arr = {
 		
 		enqueue: function (arr) {
 			return arr.push(arr);
@@ -139,7 +144,7 @@
 		},
 		
 		locationFrame: function (id, type, url) {
-			var iframe = document.getElementById(id);
+			var iframe: any = document.getElementById(id);
 			if (iframe) {
 				var sendData: any = {}
 				sendData.type = type;
@@ -193,7 +198,7 @@
 				temp[arr[i]] = true;
 			}
 			
-			return nativeKeys(temp);
+			return Object.keys(temp);
 		},
 		
 		isDef: function (args) {
@@ -288,3 +293,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

@@ -1,9 +1,16 @@
 //Event-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Evt = {
+	A = core.Evt = {
 		
 		getHiddenDocumentType: function () {
 			var hidden;
@@ -184,7 +191,7 @@
 		},
 
 		iframeOnClick: function (id, callback) {
-			document.getElementById(id).contentWindow.document.body.onclick = function () {
+			(document.getElementById(id) as any).contentWindow.document.body.onclick = function () {
 				callback();
 			};
 		},
@@ -388,3 +395,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

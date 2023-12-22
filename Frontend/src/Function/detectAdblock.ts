@@ -1,10 +1,19 @@
 //detectAdblock-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare let pAdBlocker;
+declare const _cWin;
+declare const $cache;
+
+var A;
+
 (function ($, core) {
 
 	//From FuckAdBlock.js
-	var A = core.detectAdblock = {
+	A = core.detectAdblock = {
 		
 		create: function () {
 			var cls = 'pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links';
@@ -47,3 +56,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

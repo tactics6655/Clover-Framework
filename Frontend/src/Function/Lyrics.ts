@@ -1,9 +1,16 @@
 //Lyrics-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const core_flower;
+
+var A;
+
 (function ($, core) {
 
-	var A: any = core.Lyrics = {
+	A = core.Lyrics = {
 		setLyricsMoveEvent: function() {
 			$('.lyrics_display > div').mousedown(function(e) {
 				var eventWhich = $.core.Evt.getMouseEventWhichType(e);
@@ -120,12 +127,12 @@
 			}
 		},
 		
-		getUserVolume: function () {
+		getUserVolume: function (audioElement) {
 			try {
 				var volume = $.core.Storage.getItem('volume');
 				audioElement.volume = parseFloat(volume),
 				audioElement.onvolumechange = function () {
-					$.core.Storage.setItem('volume', $("video")[0].volume);
+					$.core.Storage.setItem('volume', audioElement.volume);
 				}
 			} catch(e) {}
 		},
@@ -381,7 +388,7 @@
 			audioRequest.onload = function() {
 				audioContext.decodeAudioData(audioRequest.response, 
 					function(buffer) {
-						var canvas = document.getElementById("waveform");
+						var canvas: any = document.getElementById("waveform");
 						$.core.Lyrics.Equalizer.drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer); 
 					}
 				);
@@ -522,14 +529,14 @@
 		},
 		
 		// Find adjacent milliseconds attribute in lyrics
-		_ms: function (ms, timestamp) {
+		_ms: function (ms: string, timestamp) {
 			var s = null;
-			return $.each($.map($(".lyrics_display > div[" + timestamp + '="' + A.config.dump._near + '"]'), function (ms) {
-				return $(ms).attr("ms")
+			return $.each($.map($(".lyrics_display > div[" + timestamp + '="' + A.config.dump._near + '"]'), function (_ms: any) {
+				return ($(_ms) as any).attr("ms")
 			}).filter(function (ms, timestamp, s) {
 				return s.indexOf(ms) === timestamp
 			}), function () {
-				(null === s || Math.abs(this - ms) < Math.abs(s - ms)) && (s = this)
+				(null === s || Math.abs(this - Number(ms)) < Math.abs(s - Number(ms))) && (s = this)
 			}), s.valueOf();
 		}
 	};
@@ -577,7 +584,7 @@
 			
 			// Set time and milliseconds
 			A.config.playmeta.time = parseInt(currentTime);
-			A.config.playmeta.ms = parseInt(100 * (currentTime - A.config.playmeta.time).toFixed(2));
+			A.config.playmeta.ms = parseInt((100 * (currentTime - A.config.playmeta.time)).toFixed(2));
 			
 			// If has lyric
 			if ($(".lyrics_display_expand > div").length > 0) {
@@ -619,7 +626,7 @@
 				}
 				
 				$(".lyrics_display_expand_timer").html($.core.Time.formatTime(realStamp) + " / " + $.core.Time.formatTime(pysicalStamp));
-				$(".lyrics_display_expand_bar").css("width",parseInt(realStamp / pysicalStamp * 100).toFixed(3) + "%");
+				$(".lyrics_display_expand_bar").css("width",parseInt(String(realStamp / pysicalStamp * 100)).toFixed(3) + "%");
 			}
 			
 			// If found current time arributes in lyrics
@@ -704,3 +711,5 @@
 	}
 	
 })(jQuery, $.core);
+
+export default A;

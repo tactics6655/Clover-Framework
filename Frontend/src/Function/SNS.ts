@@ -2,10 +2,15 @@
 'use strict';
 
 import $ from 'jquery'
+import jQuery from 'jquery';
+
+declare const secure_opt;
+
+var A;
 
 (function ($, core) {
 
-	var A = core.SNS = {
+	A = core.SNS = {
 		
 		getLink: function (href) {
 			if (secure_opt) {
@@ -79,3 +84,5 @@ import $ from 'jquery'
 	};
 	
 })(jQuery, $.core);
+
+export default A;

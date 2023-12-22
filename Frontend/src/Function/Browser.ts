@@ -1,9 +1,24 @@
 //Browser-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const define;
+declare const _cWin;
+declare const $cache;
+declare const _cNavi;
+declare const _cDoc;
+declare const _cUserAgent;
+declare const Modernizr;
+declare const Browser;
+declare const DocumentTouch;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Browser = {
+	core.Browser = {
 		
 		isContextMenuSupport: function () {
 			if ('contextMenu' in document && 'HTMLMenuItemElement' in window) {
@@ -431,7 +446,7 @@
 		
 		isBlackBerry: function () {
 			if ($.core.Validate.isUndefined($cache['isBlackBerry'])) {
-				$cache['isBlackBerry'] == _cWin.navigator.userAgent.toLowerCase().indexOf("blackberry") !== -1 ? true : false;
+				$cache['isBlackBerry'] == (_cWin.navigator.userAgent.toLowerCase().indexOf("blackberry") !== -1) ? true : false;
 			}
 			
 			return $cache['isBlackBerry'];
@@ -439,7 +454,7 @@
 		
 		isMac: function () {
 			if ($.core.Validate.isUndefined($cache['isMac'])) {
-				$cache['isMac'] == _cWin.navigator.userAgent.toLowerCase().indexOf("mac") !== -1 ? true : false;
+				$cache['isMac'] == (_cWin.navigator.userAgent.toLowerCase().indexOf("mac") !== -1) ? true : false;
 			}
 			
 			return $cache['isMac'];
@@ -480,9 +495,9 @@
 		
 		setIframeAPushState: function () {
 			if (this.hasIframe()) {
-				$("a").click(function () {
+				$("a").click(function (event) {
 					var tag = event.currentTarget.tagName.toUpperCase();
-					var url = event.currentTarget.href;
+					var url = (event.currentTarget as any).href;
 					if (tag === 'A' && !url.match(url)) {
 						$.core.Browser.pushState(null, null, url);
 					}
@@ -507,7 +522,7 @@
 		
 		getBoundingHeight: function (id) {
 			var height = 0;
-			var rect = document.getElementById(id).getBoundingClintRect();
+			var rect = document.getElementById(id).getBoundingClientRect();
 
 			if (rect.height) {
 				height = rect.height;
@@ -709,7 +724,7 @@
 		},
 		
 		Refresh: function () {
-			location.reload(true);
+			location.reload();
 		},
 		
 		Forward: function () {
@@ -783,12 +798,12 @@
 			_cWin.top.history.pushState(stateObject, title, url);
 		},
 		
-		replaceState: function (data, title) {
-			_cWin.top.history.replaceState(stateObject, title, url);
+		replaceState: function (stateObject, data, title) {
+			_cWin.top.history.replaceState(stateObject, title, data);
 		},
 		
 		isSmartPhone: function () {
-			var UserAgent = _cNavi.userAgent.toLowerCase();
+			var userAgent = _cNavi.userAgent.toLowerCase();
 			
 			if (/(Mobile)|(iPhone)|(Android)/gi.exec(userAgent)) {
 				return true;
@@ -988,7 +1003,7 @@
 			} else if ((_cWin.sidebar && (_cNavi.userAgent.toLowerCase().indexOf('firefox') > -1)) || (_cWin.opera && _cWin.print)) {
 				var aElements = document.createElement('a');
 				aElements.setAttribute('href', url);
-				aElements.setAttribute('title', name);
+				aElements.setAttribute('title', title);
 				aElements.setAttribute('rel', 'sidebar');
 				aElements.click();
 			} else if (_cWin.sidebar && Browser.isMozila()) {
@@ -1005,3 +1020,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

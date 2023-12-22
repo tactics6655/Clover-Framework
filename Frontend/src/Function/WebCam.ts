@@ -1,11 +1,16 @@
 //WebCam-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+var A;
+
 (function ($, core) {
 
 	var recorder;
 
-	var A = core.WebCam = {
+	A = core.WebCam = {
 		
 		constructor: function () {
 			this.recorder = null;
@@ -77,3 +82,5 @@
 	A.constructor();
 	
 })(jQuery, $.core);
+
+export default A;

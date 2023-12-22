@@ -30,7 +30,7 @@ enum PlayState {
     WAITING = 'waiting'
 }
 
-class MediaPlayer implements MediaPlayerInterface {
+export default class MediaPlayer implements MediaPlayerInterface {
 
     private mediaType: any;
     public mediaContext: any;

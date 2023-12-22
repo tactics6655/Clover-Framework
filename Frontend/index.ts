@@ -1,8 +1,23 @@
+declare const ActiveXObject;
+
 declare global {
+    interface console {
+        err: any;
+    }
+    interface Date {
+        toGMTString: any;
+    }
     interface HTMLElement {
         mozRequestPointerLock: any;
+        getContext: any;
+        type: any;
     }
     interface Navigator {
+        connection: any;
+        mozConnection: any;
+        msVibrate: any;
+        mozVibrate: any;
+        webkitVibrate: any;
         getBattery: any;
         mozNotification: any;
         requestWakeLock: any;
@@ -12,8 +27,10 @@ declare global {
         getUserMedia: any;
         msGetUserMedia: any;
         mozGetUserMedia: any;
+        webkitGetGamepads: any;
     }
     interface Document {
+        getAttribute: any;
         webkitHidden: any;
         msHidden: any;
         onmousewheel: any;
@@ -40,6 +57,12 @@ declare global {
         webkitRequestFullscreen?: () => Promise<void>;
     }
     interface Window {
+        ga: any;
+        jQuery: any;
+        dataURLtoBlob: any;
+        webkitAudioContext: any;
+        mozAudioContext: any;
+        msAudioContext: any;
         DocumentTouch: any;
         chrome: any;
         webkitPerformance: any;
@@ -88,6 +111,8 @@ declare global {
         attachEvent: any;
     }
     interface JQueryStatic {
+        browser: any;
+        isReady: any;
         core: any;
         log: any;
     }
@@ -99,80 +124,82 @@ declare global {
 declare let $:any;
 
 import 'babel-polyfill';
-import jQuery from './jquery-3.3.1.min.js'
-require.context('./src/', false, /\.ts$/);
+import jQuery from 'jquery'
+//require.context('./src/', false, /\$/);
 
-import './src/config.js'
-import './dist/variables.js'
-import mat4 from './src/Extention/gl-matrix-min.ts'
+import './src/config'
+import './dist/variables'
+//import mat4 from './src/Extention/gl-matrix-min'
 
-import core from './src/Extention/Initialization.ts'
-import Application from './src/Function/Application.ts'
-import Array from './src/Function/Array.ts'
-import Audio from './src/Function/Audio.ts'
-import Base from './src/Function/Base.ts'
-import Battery from './src/Function/Battery.ts'
-import Browser from './src/Function/Browser.ts'
-import Cache from './src/Function/Cache.ts'
-import Canvas from './src/Function/Canvas.ts'
-import ChromeExtend from './src/Function/ChromeExtend.ts'
-import Clipboard from './src/Function/Clipboard.ts'
-import Console from './src/Function/Console.ts'
-import Cookie from './src/Function/Cookie.ts'
-import detectAdblock from './src/Function/detectAdblock.ts'
-import dragDrop from './src/Function/dragDrop.ts'
-import Effect from './src/Function/Effect.ts'
-import Element from './src/Function/Element.ts'
-import Event from './src/Function/Event.ts'
-import File from './src/Function/File.ts'
-import Flash from './src/Function/Flash.ts'
-import Gamepad from './src/Function/Gamepad.ts'
-import Generator from './src/Function/Generator.ts'
-import Geo from './src/Function/Geo.ts'
-import Google from './src/Function/Google.ts'
-import HarmonicGenerator from './src/Function/HarmonicGenerator.ts'
-import ID3 from './src/Function/ID3.ts'
-import Imoticon from './src/Function/Imoticon.ts'
-import JSON from './src/Function/JSON.ts'
-import List from './src/Function/List.ts'
-import Lyrics from './src/Function/Lyrics.ts'
-import Language from './src/Function/Language.ts'
-import MediaSession from './src/Function/MediaSession.ts'
-import MediaSource from './src/Function/MediaSource.ts'
-import Midi from './src/Function/Midi.ts'
-import Mobile from './src/Function/Mobile.ts'
-import Mouse from './src/Function/Mouse.ts'
-import Notify from './src/Function/Notify.ts'
-import OptionList from './src/Function/OptionList.ts'
-import Popup from './src/Function/Popup.ts'
-import Pagenation from './src/Function/Pagenation.ts'
-import Promise from './src/Function/Promise.ts'
-import Radio from './src/Function/Radio.ts'
-import Request from './src/Function/Request.ts'
-import Screen from './src/Function/Screen.ts'
-import Scroll from './src/Function/Scroll.ts'
-import Selector from './src/Function/Selector.ts'
-import SessionStorage from './src/Function/SessionStorage.ts'
-import ScreenCapture from './src/Function/ScreenCapture.ts'
-import SimpleCrypto from './src/Function/SimpleCrypto.ts'
-import SNS from './src/Function/SNS.ts'
-import Speech from './src/Function/Speech.ts'
-import Storage from './src/Function/Storage.ts'
-import StreamObject from './src/Function/StreamObject.ts'
-import String from './src/Function/String.ts'
-import System from './src/Function/System.ts'
-import Time from './src/Function/Time.ts'
-import Timer from './src/Function/Timer.ts'
-import URL from './src/Function/URL.ts'
-import Validate from './src/Function/Validate.ts'
-import WebDB from './src/Function/WebDB.ts'
-import WebCam from './src/Function/WebCam.ts'
-import WebRealbook from './src/Function/WebRealbook.ts'
-import WebSocket from './src/Function/WebSocket.ts'
-import XML from './src/Function/XML.ts'
+import core from './src/Extention/Initialization'
+import Application from './src/Function/Application'
+import Array from './src/Function/Array'
+import Audio from './src/Function/Audio'
+import Base from './src/Function/Base'
+import Battery from './src/Function/Battery'
+import Browser from './src/Function/Browser'
+import Cache from './src/Function/Cache'
+import Canvas from './src/Function/Canvas'
+import ChromeExtend from './src/Function/ChromeExtend'
+import Clipboard from './src/Function/Clipboard'
+import Console from './src/Function/Console'
+import Cookie from './src/Function/Cookie'
+import detectAdblock from './src/Function/detectAdblock'
+import dragDrop from './src/Function/dragDrop'
+import Effect from './src/Function/Effect'
+import Element from './src/Function/Element'
+import Event from './src/Function/Event'
+import File from './src/Function/File'
+import Flash from './src/Function/Flash'
+import Gamepad from './src/Function/Gamepad'
+import Generator from './src/Function/Generator'
+import Geo from './src/Function/Geo'
+import Google from './src/Function/Google'
+import HarmonicGenerator from './src/Function/HarmonicGenerator'
+import ID3 from './src/Function/ID3'
+import Imoticon from './src/Function/Imoticon'
+import JSON from './src/Function/JSON'
+import List from './src/Function/List'
+import Lyrics from './src/Function/Lyrics'
+import Language from './src/Function/Language'
+import MediaSession from './src/Function/MediaSession'
+import MediaSource from './src/Function/MediaSource'
+import Midi from './src/Function/Midi'
+import Mobile from './src/Function/Mobile'
+import Mouse from './src/Function/Mouse'
+import Notify from './src/Function/Notify'
+import OptionList from './src/Function/OptionList'
+import Popup from './src/Function/Popup'
+import Pagination from './src/Function/Pagination'
+import Promise from './src/Function/Promise'
+import Radio from './src/Function/Radio'
+import Request from './src/Function/Request'
+import Screen from './src/Function/Screen'
+import Scroll from './src/Function/Scroll'
+import Selector from './src/Function/Selector'
+import SessionStorage from './src/Function/SessionStorage'
+import ScreenCapture from './src/Function/ScreenCapture'
+import SimpleCrypto from './src/Function/SimpleCrypto'
+import SNS from './src/Function/SNS'
+import Speech from './src/Function/Speech'
+import Storage from './src/Function/Storage'
+import StreamObject from './src/Function/StreamObject'
+import String from './src/Function/String'
+import System from './src/Function/System'
+import Time from './src/Function/Time'
+import Timer from './src/Function/Timer'
+import URL from './src/Function/URL'
+import Validate from './src/Function/Validate'
+import WebDB from './src/Function/WebDB'
+import WebCam from './src/Function/WebCam'
+import WebRealbook from './src/Function/WebRealbook'
+import WebSocket from './src/Function/WebSocket'
+import XML from './src/Function/XML'
 
-import UserMedia from './src/Function/UserMedia.ts'
-import RTC from './src/Function/RTC.ts'
+import UserMedia from './src/Function/UserMedia'
+import RTC from './src/Function/RTC'
 
-import AudioRecorder from './src/Component/AudioRecorder.ts'
-import MediaPlayer from './src/Component/MediaPlayer.ts'
+import AudioRecorder from './src/Component/AudioRecorder'
+import MediaPlayer from './src/Component/MediaPlayer'
+
+export default {AudioRecorder, MediaPlayer};

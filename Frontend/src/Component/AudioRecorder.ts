@@ -72,7 +72,7 @@ interface AudioRecorderInterface {
     stop() :void;
 }
 
-class AudioRecorder implements AudioRecorderInterface {
+export default class AudioRecorder implements AudioRecorderInterface {
 
     private state: string;
     private timeslice: number;

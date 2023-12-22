@@ -1,9 +1,17 @@
 //Mobile-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const _cWin;
+declare const _cNavi;
+
+var A;
+
 (function ($, core) {
 
-	var A = core.Mobile = {
+	A = core.Mobile = {
 		
 		isRefMobile: function () {
 			return navigator.userAgent.match(/Android/i) || 
@@ -261,3 +269,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;

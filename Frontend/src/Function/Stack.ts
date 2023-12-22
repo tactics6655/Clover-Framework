@@ -1,9 +1,16 @@
 //Stack-related functions
 'use strict';
 
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+declare const Canvas2D;
+
+var A;
+
 (function ($, core) {
 	
-	var A = core.Stack = {
+	A = core.Stack = {
 		initialize: function (canvasID) {
 			return new Canvas2D(canvasID);
 		},
@@ -16,3 +23,5 @@
 	};
 	
 })(jQuery, $.core);
+
+export default A;
