@@ -110,6 +110,9 @@ declare global {
         clipboardData: any;
         attachEvent: any;
     }
+    interface Notification {
+        permissionLevel: any;
+    }
     interface JQueryStatic {
         browser: any;
         isReady: any;
@@ -201,5 +204,3 @@ import RTC from './src/Function/RTC'
 
 import AudioRecorder from './src/Component/AudioRecorder'
 import MediaPlayer from './src/Component/MediaPlayer'
-
-export default {AudioRecorder, MediaPlayer};

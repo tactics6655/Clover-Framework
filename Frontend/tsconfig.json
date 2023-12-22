@@ -20,8 +20,6 @@
         "removeComments": true, /* 주석 삭제 여부 */
         "importHelpers": true, /* 'tslib'에서 헬퍼를 가져올 지 여부 */
         "downlevelIteration": true, /* 타겟이 'ES5', 'ES3'일 때에도 'for-of', spread 그리고 destructuring 문법 모두 지원 */
-    
-        "noEmit": false,
         /* 엄격한 타입-확인 옵션 */
         "strict": false, /* 모든 엄격한 타입-체킹 옵션 활성화 여부 */
         "noImplicitAny": false, /* 'any' 타입으로 구현된 표현식 혹은 정의 에러처리 여부 */

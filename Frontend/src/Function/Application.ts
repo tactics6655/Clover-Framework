@@ -1,9 +1,6 @@
 //Application-related functions
 'use strict';
 
-import $ from 'jquery';
-import jQuery from 'jquery';
-
 declare const appRegister;
 
 var A;
@@ -12,9 +9,9 @@ var A;
 
 	A = core.App = {
 		
-		each: function(Array, args, callback) {
-			if (Array) {
-				if (Array instanceof Array) {
+		each: function(arr, args, callback) {
+			if (arr) {
+				if (arr instanceof Array) {
 					for (let i = 0, length = Array.length; i < length && !1 !== args.call(callback, Array[i], i); i++);
 				} else {
 					for (let i in Array) {

@@ -12,12 +12,12 @@ var core;
 	// The current version of Core Javascript
 	core.version = '1.0';
 	
-	$.core = {};
+	/*$.core = {};
 	$.core = $.core || function () {
 		$.extend(this, $.core);
 		
 		return this;
-	};
+	};*/
 })(jQuery);
 
 export default core;

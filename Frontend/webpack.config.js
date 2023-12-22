@@ -5,12 +5,14 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
 const WebpackObfuscator = require('webpack-obfuscator');
 const webpack = require('webpack')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
 	resolve: {
 		extensions: [".ts", ".tsx", ".js"]
 	},
 	plugins: [
+		new ForkTsCheckerWebpackPlugin(),
 		new CompressionPlugin({
 		}),
 		new webpack.ids.DeterministicChunkIdsPlugin({
@@ -29,7 +31,7 @@ module.exports = {
 		'./index.ts'
 	],
 	output: {
-		filename: './../../../html/common/assets/js/coreJS/dist/coreJS.js',
+		filename: 'coreJS.js',
 		path: path.resolve(__dirname, 'dist'),
 		libraryTarget: "umd"
 	},
@@ -119,8 +121,8 @@ module.exports = {
 		}, {
 			test: /\.css$/,
 			use: ['style-loader', 'css-loader']
-		}
-		/*{
+		},
+		{
 			test: /\.[jt]s$/,
 			exclude: /(node_modules)/,
 			use: [
@@ -134,12 +136,12 @@ module.exports = {
 				loader: 'ts-loader',
 				options: {
 				  compilerOptions: {
-					noEmit: false,
+					//noEmit: false,
 				  },
 				},
 			  },
 			],
-		}*/],
+		}],
 		exprContextCritical: false,
 		exprContextRecursive: true,
 		exprContextRegExp: true,
