@@ -8,7 +8,7 @@ namespace Xanax\Classes;
 class CacheControl extends Header
 {
 
-	public function response($value)
+	public static function response($value)
 	{
 		parent::responseWithKey('Cache-Control', $value);
 	}
@@ -18,7 +18,7 @@ class CacheControl extends Header
 		$key = "min-fresh";
 		$data = "$key=$value";
 
-		$this->response($data);
+		self::response($data);
 	}
 
 	public function maxStale($value)
@@ -26,7 +26,7 @@ class CacheControl extends Header
 		$key = "max-stale";
 		$data = "$key=[=$value]";
 
-		$this->response($data);
+		self::response($data);
 	}
 
 	public function maxAge($value)
@@ -34,26 +34,26 @@ class CacheControl extends Header
 		$key = "max-age";
 		$data = "$key=$value";
 
-		$this->response($data);
+		self::response($data);
 	}
 
 	public function onlyIfCached()
 	{
-		$this->response('only-if-cached');
+		self::response('only-if-cached');
 	}
 
 	public function noStore()
 	{
-		$this->response('no-store');
+		self::response('no-store');
 	}
 
 	public function noTransform()
 	{
-		$this->response('no-transform');
+		self::response('no-transform');
 	}
 
 	public function noCache()
 	{
-		$this->response('no-cache');
+		self::response('no-cache');
 	}
 }

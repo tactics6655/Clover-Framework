@@ -2,7 +2,7 @@
 
 namespace Xanax\Enumeration;
 
-abstract class UploadedFileError
+abstract class UploadedFileErrorMessage
 {
     const UPLOAD_ERR_OK             = 'There is no error, the file uploaded with success.';
     const UPLOAD_ERR_INI_SIZE       = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';

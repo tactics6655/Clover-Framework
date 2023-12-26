@@ -13,18 +13,30 @@ class Header
 
 	public static function responseWithKeyAndArray(String $header, array $pair)
 	{
-		array_walk($pair, create_function('&$i,$k', '$i:" $k:$i;";'));
+		if (function_exists('create_function')) {
+			array_walk($pair, \create_function('&$i,$k', '$i:" $k:$i;";'));
+		} else {
+			array_walk($pair, function (&$i, $k) {
+				$i = $k . ":" . $i . ";";
+			});
+		}
 
-		$responseData = implode($pair, "");
+		$responseData = implode("", $pair);
 
 		self::response($responseData);
 	}
 
 	public static function responseWithArray(array $pair)
 	{
-		array_walk($pair, create_function('&$i,$k', '$i:" $k:$i;";'));
+		if (function_exists('create_function')) {
+			array_walk($pair, \create_function('&$i,$k', '$i:" $k:$i;";'));
+		} else {
+			array_walk($pair, function (&$i, $k) {
+				$i = $k . ":" . $i . ";";
+			});
+		}
 
-		$responseData = implode($pair, "");
+		$responseData = implode("", $pair);
 
 		self::response($responseData);
 	}
@@ -169,11 +181,11 @@ class Header
 
 	public static function responseXSSBlock()
 	{
-		self::XXSSProtection('mode=block');
+		self::responseXXSSProtection('mode=block');
 	}
 
 	public static function responseNoSniff()
 	{
-		self::XContentTypeOption('nosniff');
+		self::responseXContentTypeOption('nosniff');
 	}
 }

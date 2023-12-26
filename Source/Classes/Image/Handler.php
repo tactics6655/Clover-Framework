@@ -50,22 +50,22 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Draw picture to pallete
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int $width
 	 * @param int $height
 	 *
 	 * return Resource
 	 */
-	public function drawRepeat($imageResource, $width, $height)
+	public function drawRepeat($imageResource, $tile, int $width = 0, int $height = 0)
 	{
 		if (!self::isResource($imageResource)) {
 			$imageResource = self::getInstance($imageResource);
 		}
 
-		$width = $width || self::getWidth($imageResource);
-		$height = $height || self::getHeight($imageResource);
+		$width = $width ?? self::getWidth($imageResource);
+		$height = $height ?? self::getHeight($imageResource);
 
-		imagesettile($imageResource, $image);
+		imagesettile($imageResource, $tile);
 		imagefilledrectangle($imageResource, 0, 0, $width, $height, IMG_COLOR_TILED);
 
 		return $imageResource;
@@ -167,7 +167,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Draw eclipse to image resource
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int      $width
 	 * @param int      $height
 	 * @param int      $x
@@ -176,7 +176,7 @@ class Handler implements ImageHandlerInterface
 	 * @param int      $green
 	 * @param int      $blue
 	 *
-	 * @return resource
+	 * @return mixed
 	 */
 	public function drawEclipse($imageResource, $width, $height, $x, $y, $red, $green, $blue)
 	{
@@ -186,6 +186,7 @@ class Handler implements ImageHandlerInterface
 
 		$backgroundColor = imagecolorallocate($imageResource, $red, $green, $blue);
 		$outputImage = imagefilledellipse($imageResource, $x, $y, $width, $height, $backgroundColor);
+
 		return $outputImage;
 	}
 
@@ -201,7 +202,7 @@ class Handler implements ImageHandlerInterface
 
 		$x = imagesx($paletteImage) - imagesx($combineImage) - $right;
 		$y = imagesy($paletteImage) - imagesy($combineImage) - $top;
-		imagecopy($paletteImage, $combineImage, $x, $y, 0, 0, imagesx($combineImage), imagesy($combineImage));
+		imagecopy($paletteImage, $combineImage, intval($x), intval($y), 0, 0, imagesx($combineImage), imagesy($combineImage));
 
 		return $paletteImage;
 	}
@@ -209,13 +210,13 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Ratio resize to specific size
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int      $resizeWidth
 	 * @param int      $resizeHeight
 	 *
 	 * @return resource
 	 */
-	public function ratioResize($imageResource, $resizeWidth, $resizeHeight)
+	public function ratioResize($imageResource, $resizeWidth, $resizeHeight, $thumbnailWidth = 0, $thumbnailHeight = 0)
 	{
 		if (!self::isResource($imageResource)) {
 			$imageResource = self::getInstance($imageResource);
@@ -226,9 +227,9 @@ class Handler implements ImageHandlerInterface
 		$resizeWidth = $resizeHeight = min($resizeWidth, max($origin_width, $origin_height));
 
 		if ($ratio < 1) {
-			$resizeWidth = $thumbnail_height * $ratio;
+			$resizeWidth = $thumbnailHeight * $ratio;
 		} else {
-			$resizeHeight = $thumbnail_width / $ratio;
+			$resizeHeight = $thumbnailWidth / $ratio;
 		}
 
 		$outputImage = imagecreatetruecolor($resizeWidth, $resizeHeight);
@@ -248,7 +249,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Crop Image
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int      $width
 	 * @param int      $height
 	 * @param int      $left
@@ -322,13 +323,13 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Apply specific filter to image resource
 	 *
-	 * @param resource $imageResource
-	 * @param resource $type
+	 * @param \GdImage | resource $imageResource
+	 * @param string $type
 	 * @param resource $args1
 	 * @param resource $args2
 	 * @param resource $args3
 	 *
-	 * @return output stream
+	 * @return \GdImage | resource stream
 	 */
 
 	// TODO get a args by array data
@@ -385,13 +386,13 @@ class Handler implements ImageHandlerInterface
 	}
 
 	/**
-	 * Draw a picture to output
+	 * Draw a picture to buffer
 	 *
-	 * @param resource $imageResource
+	 * @param \GdImage | string | resource $imageResource
 	 *
-	 * @return output stream
+	 * @return void
 	 */
-	public function draw($imageResource, $format)
+	public function draw($imageResource, $format, $quality = 1)
 	{
 		if (!self::isResource($imageResource)) {
 			$imageResource = self::getInstance($imageResource);
@@ -400,15 +401,15 @@ class Handler implements ImageHandlerInterface
 		switch ($format) {
 			case MIME::IMAGE_JPEG:
 				FileHeader::fromMIME('jpeg');
-				imagejpeg($imageResource);
+				imagejpeg($imageResource, null, $quality);
 				break;
 			case MIME::IMAGE_PNG:
 				FileHeader::fromMIME('png');
-				imagepng($imageResource);
+				imagepng($imageResource, null, $quality);
 				break;
 			case MIME::IMAGE_BMP:
 				FileHeader::fromMIME('bmp');
-				imagebmp($imageResource);
+				imagebmp($imageResource, null);
 				break;
 			case MIME::IMAGE_GIF:
 				FileHeader::fromMIME('gif');
@@ -417,10 +418,6 @@ class Handler implements ImageHandlerInterface
 			case MIME::IMAGE_WBMP:
 				FileHeader::fromMIME('wbmp');
 				imagewbmp($imageResource);
-				break;
-			case MIME::IMAGE_WEBP:
-				FileHeader::fromMIME('webp');
-				imagecreatefromwebp($imageResource);
 				break;
 			case MIME::IMAGE_XBM:
 				FileHeader::fromMIME('xbm');
@@ -442,7 +439,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Pick a color of specific position
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int      $x
 	 * @param int      $y
 	 *
@@ -467,7 +464,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Draw text to image resource
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int      $fontSize
 	 * @param int      $x
 	 * @param int      $y
@@ -493,7 +490,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Get type of image file
 	 *
-	 * @param string $filePath
+	 * @param mixed $filePath
 	 *
 	 * @return mixed
 	 */
@@ -511,13 +508,14 @@ class Handler implements ImageHandlerInterface
 
 			$format = $finfo['mime'];
 		}
+
 		return $format;
 	}
 
 	/**
 	 * Create a image to path
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param string   $outputPath
 	 * @param int      $quality
 	 *
@@ -540,9 +538,6 @@ class Handler implements ImageHandlerInterface
 			case  'image/wbmp':
 				imagewbmp($imageResource, $outputPath);
 				break;
-			case  'image/webp':
-				imagecreatefromwebp($imageResource, $outputPath);
-				break;
 			case  'image/xbm':
 				imagexbm($imageResource, $outputPath);
 				break;
@@ -562,7 +557,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Flip a image resource
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 *
 	 * @return resource
 	 */
@@ -590,36 +585,36 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Get width of image resource
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 *
 	 * @return int
 	 */
-	public static function getWidth($imageResource)
+	public static function getWidth($imageResource): int
 	{
 		if (!self::isResource($imageResource)) {
 			$imageResource = self::getInstance($imageResource);
 		}
 
 		if (function_exists('exif_read_data') && false) {
-			$exifData = exif_read_data($imageResource, '', true, false);
+			$exifData = exif_read_data($imageResource, null, true, false);
 
 			if (isset($exifData['COMPUTED'])) {
 				$tmp = $exifData['COMPUTED'];
 				return $tmp['Width'];
 			}
-		} else {
-			return imagesx($imageResource);
 		}
+
+		return imagesx($imageResource);
 	}
 
 	/**
 	 * Get height of image resource
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 *
 	 * @return int
 	 */
-	public static function getHeight($imageResource)
+	public static function getHeight($imageResource): int
 	{
 		if (!self::isResource($imageResource)) {
 			$imageResource = self::getInstance($imageResource);
@@ -632,9 +627,9 @@ class Handler implements ImageHandlerInterface
 				$tmp = $exif['COMPUTED'];
 				return $tmp['Height'];
 			}
-		} else {
-			return imagesy($imageResource);
 		}
+
+		return imagesy($imageResource);
 	}
 
 	/**
@@ -644,7 +639,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return boolean
 	 */
-	public static function isResource($imageResource)
+	public static function isResource(mixed $imageResource)
 	{
 		if (gettype($imageResource) === 'resource' || $imageResource instanceof \GdImage) {
 			return true;
@@ -656,7 +651,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Rotate a image resource
 	 *
-	 * @param resource $imageResource
+	 * @param mixed $imageResource
 	 * @param int $degrees
 	 *
 	 * @return resource
@@ -680,11 +675,11 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Get a resource of file
 	 *
-	 * @param string $filePath
+	 * @param mixed $filePath
 	 *
 	 * @return resource
 	 */
-	public static function getimageResource($filePath)
+	public static function getimageResource($filePath) :mixed
 	{
 		$format = self::getType($filePath);
 		$createObject = null;
@@ -734,12 +729,20 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return resource
 	 */
-	public function getBlank($width, $height, $red, $blue, $green)
+	public function getBlank($width, $height, $red, $blue, $green): \GdImage|false
 	{
 		$image = imagecreatetruecolor($width, $height);
-		$background_color = imagecolorallocate($image, $red, $green, $blue);
-		imagefilledrectangle($image, 0, 0, $width, $height, $background_color);
-		imagecolortransparent($image, $background_color);
+		if (!$image) {
+			return false;
+		}
+
+		$backgroundColor = imagecolorallocate($image, $red, $green, $blue);
+		if (!$backgroundColor) {
+			return false;
+		}
+
+		imagefilledrectangle($image, 0, 0, $width, $height, $backgroundColor);
+		imagecolortransparent($image, $backgroundColor);
 
 		return self::getInstance($image);
 	}
@@ -766,13 +769,13 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Merge of two image to palette
 	 *
-	 * @param resource $sourceCreateObject
-	 * @param resource $mergeCreateObject
+	 * @param mixed $sourceCreateObject
+	 * @param mixed $mergeCreateObject
 	 * @param int      $transparent
 	 *
-	 * @return resource
+	 * @return bool
 	 */
-	public function merge($sourceCreateObject, $mergeCreateObject, $transparent)
+	public function merge(mixed $sourceCreateObject, mixed $mergeCreateObject, $transparent)
 	{
 		if (!self::isResource($sourceCreateObject)) {
 			$sourceCreateObject = self::getInstance($sourceCreateObject);
@@ -791,26 +794,26 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Get a singletone of image file
 	 *
-	 * @param string $filePath
+	 * @param mixed $filePath
 	 *
-	 * @return resource
+	 * @return \GdImage | resource | false
 	 */
-	public static function getInstance($filePath)
+	public static function getInstance(mixed $filePath): \GdImage|false|\resource|string
 	{
 		if (self::isResource($filePath)) {
 			return \getimagesizefromstring($filePath);
-		} else if (is_array(\getImageSize($filePath))) {
-			return self::getImageResource($filePath);
-		} else {
-			$finfo = getImageSize($filePath);
-			if ($finfo === false) {
-				return false;
-			}
-
-			return $filePath;
 		}
 
-		return new \stdClass();
+		if (is_array(\getImageSize($filePath))) {
+			return self::getImageResource($filePath);
+		}
+
+		$finfo = getImageSize($filePath);
+		if ($finfo === false) {
+			return false;
+		}
+
+		return $filePath;
 	}
 
 	/**
