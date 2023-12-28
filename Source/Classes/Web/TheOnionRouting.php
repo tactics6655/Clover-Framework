@@ -19,7 +19,7 @@ class TheOnionRouting
 
 	public function isExitNode()
 	{
-		$ipAddress = self::$requestHandlerClass::getRemoteIP();
+		$ipAddress = self::$requestHandlerClass::getRemoteIPAddress();
 		$serverPort = self::$requestHandlerClass::getPort();
 		$reverseIP = self::$internetProtocolClass::toReverseOctet($_SERVER['REMOTE_ADDR']);
 

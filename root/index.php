@@ -6,6 +6,8 @@ use Xanax\Classes\Data\Unicode;
 use Xanax\Classes\Data\CodePoint;
 use Xanax\Classes\Data\ArrayObject;
 
+use Xanax\Classes\Math\Other;
+
 /*register_shutdown_function(function () {
     $err = error_get_last();
 
@@ -35,3 +37,4 @@ $old_error_handler = set_error_handler("customErrorHandler");*/
 include("./../vendor/autoload.php");
 
 $runtime = new Runtime();
+$runtime->run();

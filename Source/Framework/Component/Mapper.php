@@ -56,9 +56,9 @@ class Mapper
         $this->options = $options ?? [];
         $this->environment = $environment ?? [];
 
-        $this->method = HTTPRequest::getRequestMethod();
-        $this->accept_encoding = HTTPRequest::getAcceptEncoding();
-        $this->remote_ip_address = HTTPRequest::getRemoteIP()->__toString();
+        $this->setMethod(HTTPRequest::getRequestMethod());
+        $this->setAcceptEncoding(HTTPRequest::getAcceptEncoding());
+        $this->remote_ip_address = HTTPRequest::getRemoteIPAddress()->__toString();
         $this->http_connection = HTTPRequest::getHTTPConnection();
         $this->x_forwared_for = HTTPRequest::getHTTPXForwardedFor();
         $this->accept_language = HTTPRequest::getAcceptLanguage();
@@ -76,6 +76,38 @@ class Mapper
         $this->is_commnadline_interface = OperationSystem::isCommandLineInterface();
     }
 
+    public function setAcceptEncoding($accept_encoding)
+    {
+        $this->accept_encoding = $accept_encoding;
+    }
+
+    public function setMethod($method)
+    {
+        $this->method = $method;
+    }
+
+    private function getEnvironment()
+    {
+        return [
+            'method' => $this->method,
+            'accept_encoding' => $this->accept_encoding,
+            'remote_ip_address' => $this->remote_ip_address,
+            'http_connection' => $this->http_connection,
+            'x_forwared_for' => $this->x_forwared_for,
+            'accept_language' => $this->accept_language,
+            'has_referer' => $this->has_referer,
+            'is_mobile' => $this->is_mobile,
+            'is_crawler' => $this->is_crawler,
+            'request_uri' => $this->request_uri,
+            'scheme' => $this->scheme,
+            'user_agent' => $this->user_agent,
+            'is_xml_http_request' => $this->is_xml_http_request,
+            'query_string' => $this->query_string,
+            'request_url' => $this->request_url,
+            'url_path' => $this->url_path,
+        ];
+    }
+
     public function isCommentLineInterface()
     {
         return $this->is_commnadline_interface;
@@ -88,13 +120,18 @@ class Mapper
         $this->container->set("Resource",  new Resource());
     }
 
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
     public function matchRunner()
     {
         $this->setContainer();
 
         if ($this->isCommentLineInterface()) {
         } else {
-            return new HttpKernel($this->container);
+            return new HttpKernel($this->container, $this->getEnvironment(), $this->getOptions());
         }
     }
 }

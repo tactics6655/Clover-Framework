@@ -19,14 +19,17 @@ class Runtime
     {
         $this->options = $options ?? [];
         $this->environment = [];
-
-        $this->setDefaultOptions();
-        $this->setEnvironmentVariables();
-
-        $this->applyOptions();
-        $this->setMapping();
     }
 
+    public function run()
+    {
+        $this->setDefaultOptions();
+        $this->setEnvironmentVariables();
+        $this->applyOptions();
+
+        $this->setMapping();
+    }
+    
     private function flushResponseData()
     {
         $software = $this->environment[Environment::SERVER][Environment::SOFTWARE];
@@ -59,8 +62,8 @@ class Runtime
 
     protected function applyOptions()
     {
-        OS::setErrorReportingLevel($this->options[Environment::ERROR_REPORTING_LEVEL]);
         OS::setDisplayErrors($this->options[Environment::DISPLAY_ERRORS]);
+        OS::setErrorReportingLevel($this->options[Environment::ERROR_REPORTING_LEVEL]);
         OS::setDefaultDateTimeZone($this->options[Environment::TIMEZONE_ID]);
         OS::setDisplayStatupErrors($this->options[Environment::DISPLAY_STARTUP_ERRORS]);
     }

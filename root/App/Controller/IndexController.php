@@ -29,7 +29,7 @@ class IndexController extends BaseController
     #[Annotation\Route('GET', '/')]
     public function index(HTTPRequest $request)
     {
-        $ip = $request->getRemoteIP();
+        $ip = $request->getRemoteIPAddress();
 
         $this->setTitle('test');
         $this->addHeadJsFile('jquery.js');

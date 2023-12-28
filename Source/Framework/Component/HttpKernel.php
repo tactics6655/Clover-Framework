@@ -9,9 +9,15 @@ class HttpKernel
 {
     private $container;
 
-    public function __construct($container)
+    private $environment;
+
+    private $options;
+
+    public function __construct($container, $environment = [], $options = [])
     {
         $this->container = $container;
+        $this->environment = $environment;
+        $this->options = $options;
     }
 
     private function getEssentialBody($resource, $filePath)
