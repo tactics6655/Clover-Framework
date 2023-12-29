@@ -7,9 +7,9 @@ namespace Xanax\Classes\Exception;
 class Handler
 {
 
-	public function setError($errorRaised, $errorMessage, $fileName, $lineNumber, $context, callable $callback)
+	public static function setError(callable $callback)
 	{
-		$previous = set_error_handler(function ($errorRaised, $errorMessage, $fileName, $lineNumber, $context) use (&$previous, $callback) {
+		$previous = self::setErrorHandler(function ($errorRaised, $errorMessage, $fileName, $lineNumber, $context) use (&$previous, $callback) {
 			if ($previous && is_callable($callback)) {
 				$callback($errorRaised, $errorMessage, $fileName, $lineNumber, $context);
 			} else {
@@ -18,32 +18,42 @@ class Handler
 		});
 	}
 
-	public function clearLastError(): Void
+	public static function setErrorHandler($callback, $error_level = E_ALL) 
+	{
+		return set_error_handler($callback, $error_level);
+	}
+
+	public static function registerShutdownFunction($callback, ...$args)
+	{
+		register_shutdown_function($callback, ...$args);
+	}
+
+	public static function clearLastError(): Void
 	{
 		error_clear_last();
 	}
 
-	public function getLastError(): array
+	public static function getLastError(): array
 	{
 		return error_get_last();
 	}
 
-	public function setException(callable $exceptionFunction)
+	public static function setExceptionHandler(callable $exceptionFunction)
 	{
 		set_exception_handler($exceptionFunction);
 	}
 
-	public function restorePreviousErrorStack()
+	public static function restorePreviousErrorStack()
 	{
 		restore_error_handler();
 	}
 
-	public function restorePreviousExceptionStack()
+	public static function restorePreviousExceptionStack()
 	{
 		restore_exception_handler();
 	}
 
-	public function trigger($errorMessage)
+	public static function trigger($errorMessage)
 	{
 		trigger_error($errorMessage);
 	}

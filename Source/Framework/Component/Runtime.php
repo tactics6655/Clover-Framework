@@ -78,7 +78,7 @@ class Runtime
 
     protected function setEnvironmentVariables()
     {
-        $this->environment[Environment::HYPERTEXT_PREPROCESSOR] = [];
+        $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR], []);
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::VERSION], OS::getPHPVersion());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_POST_SIZE], OS::getMaxPostSize());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_UPLOAD_FILE_SIZE], OS::getMaxUploadFileSize());
@@ -87,9 +87,11 @@ class Runtime
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::SESSION_USE_COOKIES], OS::isSessionUseCookies());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_INTEGER_SIZE], OS::getMaximumIntergerSize());
 
-        $this->environment[Environment::SERVER] = [];
+        $this->setEnvironment([Environment::SERVER], []);
         $this->setEnvironment([Environment::SERVER, Environment::BUILT_OPERATION_SYSTEM], OS::getBuiltOperationSystemString());
         $this->setEnvironment([Environment::SERVER, Environment::SOFTWARE], OS::getMainServerSoftware());
         $this->setEnvironment([Environment::SERVER, Environment::HOME_PATH], OS::getHomePath());
+
+        var_dump($this->environment);
     }
 }
