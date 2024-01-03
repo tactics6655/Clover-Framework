@@ -39,7 +39,7 @@ class Route
         }
 
         if (!isset($methodName)) {
-            return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), []);
+            return ReflectionHandler::invoke($callback, '', ($this->arguments ?? array()), []);
         }
 
         if (is_object($callback)) {

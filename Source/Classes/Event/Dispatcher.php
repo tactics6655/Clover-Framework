@@ -75,7 +75,7 @@ class Dispatcher implements EventDispatcherInterface
 	 */
 	public function getListenersCount(?iterable $listeners = array()): int
 	{
-		return count($listeners || $this->getListeners());
+		return count($listeners ?? $this->getListeners());
 	}
 
 	/**
@@ -113,12 +113,12 @@ class Dispatcher implements EventDispatcherInterface
 		}
 	}
 
-	public function emit(object $event): object
+	public function emit(object $event): object | bool
 	{
 		$listeners = $this->getListeners(get_class($event)) ?? [];
 
 		if (count($listeners) <= 0) {
-			//return false;
+			return false;
 		}
 
 		foreach ($listeners as $listener) {

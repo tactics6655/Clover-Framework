@@ -92,12 +92,41 @@ class Handler
                 array_push($dependencies, $name);
             } else {
                 if (!$parameter->isOptional()) {
-                    throw new Exception("Can not resolve parameters");
+                    throw new \Exception("Can not resolve parameters");
                 }
             }
         }
 
         return $reflection->newInstance(...$dependencies);
+    }
+
+    public static function callMethod($controller, callable $method, mixed ...$arguments)
+    {
+        $reflection = self::method($controller, $method);
+
+        if ($reflection->isStatic()) {
+            forward_static_call($method, $arguments);
+            return;
+        }
+
+        call_user_func($method, $arguments);
+    }
+
+    public static function callMethodArray($controller, callable $method, array $arguments = [])
+    {
+        $reflection = self::method($controller, $method);
+
+        if ($reflection->isStatic()) {
+            forward_static_call_array($method, $arguments);
+            return;
+        }
+
+        call_user_func_array($method, $arguments);
+    }
+
+    public static function isCallable($value)
+    {
+        return is_callable($value);
     }
 
     public static function invoke($class, $method, $append_parameters = [], $arguments = [])

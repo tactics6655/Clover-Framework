@@ -44,9 +44,9 @@ class Zip
 
 	public function uncompress($filePath)
 	{
-		$zip = zip_open($filePath);
+		$archive = new \ZipArchive();
 
-		while ($zip_entry = zip_read($zip)) {
+		while ($zip_entry = $archive->open($filePath)) {
 			if (!zip_entry_open($zip, $zip_entry, FileMode::READ_ONLY)) {
 				return false;
 			}

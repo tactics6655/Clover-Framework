@@ -17,5 +17,5 @@ interface EventDispatcherInterface
 
 	public function addListener(string $eventName, callable $listener): void;
 
-	public function emit(object $event): object;
+	public function emit(object $event): object | bool;
 }

@@ -91,7 +91,5 @@ class Runtime
         $this->setEnvironment([Environment::SERVER, Environment::BUILT_OPERATION_SYSTEM], OS::getBuiltOperationSystemString());
         $this->setEnvironment([Environment::SERVER, Environment::SOFTWARE], OS::getMainServerSoftware());
         $this->setEnvironment([Environment::SERVER, Environment::HOME_PATH], OS::getHomePath());
-
-        var_dump($this->environment);
     }
 }

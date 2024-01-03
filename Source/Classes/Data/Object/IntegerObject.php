@@ -76,4 +76,9 @@ class IntegerObject extends BaseObject
 
         return $s;
     }
+
+    public function length()
+    {
+        return 1;
+    }
 }

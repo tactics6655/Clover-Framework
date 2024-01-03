@@ -22,8 +22,6 @@ class Router
 
 	private static $container = array();
 
-	private static $variable_regex = '/^({\w*})$/';
-
 	private static $routes = array();
 
 	private static $arguments;
@@ -57,8 +55,8 @@ class Router
 	{
 		self::$global_prefix = $pattern;
 
-		if (is_callable($callback)) {
-			call_user_func($callback);
+		if (ReflectionHandler::isCallable($callback)) {
+			ReflectionHandler::callMethod(self::class, $callback);
 		}
 
 		self::$global_prefix = '';
@@ -126,15 +124,15 @@ class Router
 
 	public static function fromFile($path)
 	{
-		$class_names = FileFunctions::getClassName($path);
+		$classNames = FileFunctions::getClassName($path);
 
-		$annotations = [];
+		$annotationList = [];
 
-		foreach ($class_names as $class_name) {
-			$annotations = array_merge($annotations, self::getAnnotationFromClassName($class_name));
+		foreach ($classNames as $className) {
+			$annotationList = array_merge($annotationList, self::getAnnotationFromClassName($className));
 		}
 
-		foreach ($annotations as $annotation) {
+		foreach ($annotationList as $annotation) {
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
 			$holder = $annotation->holder ?? [];
@@ -183,7 +181,7 @@ class Router
 		return self::$routes[$method];
 	}
 
-	public static function run($reflection = true)
+	public static function run()
 	{
 		self::$method = HTTPRequest::getRequestMethod();
 
