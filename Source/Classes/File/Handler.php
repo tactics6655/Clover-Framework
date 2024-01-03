@@ -59,7 +59,7 @@ class Handler implements FileHandlerInterface
 		$this->directoryHandler = isset($directoryHandler) ? $directoryHandler : new DirectoryHandler($this);
 	}
 
-	public static function generateHashByContents($algorithm = 'md5', $filePath = '', $rawContents = ''): string
+	public static function generateHashByContents($algorithm = 'md5', $filePath = '', $rawContents = null): string
 	{
 		return FileFunctions::generateHashByContents($algorithm, $filePath, $rawContents);
 	}

@@ -145,7 +145,7 @@ class Handler implements DirectoryHandlerInterface
 			throw new DirectoryIsNotExistsException();
 		}
 
-		$iterator = new \RecursiveDirectoryIterator($directoryPath, \FilesystemIterator::SKIP_DOTS);
+		$iterator = new RecursiveDirectoryIterator($directoryPath, \FilesystemIterator::SKIP_DOTS);
 		$return   = iterator_count($iterator);
 
 		return $return;
@@ -218,14 +218,14 @@ class Handler implements DirectoryHandlerInterface
 			throw new DirectoryIsNotExistsException();
 		}
 
-		$directoryIterator = new \RecursiveDirectoryIterator($directoryPath, \RecursiveDirectoryIterator::SKIP_DOTS);
-		$iterator          = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::SELF_FIRST);
+		$directoryIterator = new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS);
+		$iterator          = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::SELF_FIRST);
 
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
-				$this->create($copyPath . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+				$this->create($copyPath . DIRECTORY_SEPARATOR . $item->getSubPathName());
 			} else {
-				$this->fileHandler->copy($item, $copyPath . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+				$this->fileHandler->copy($item, $copyPath . DIRECTORY_SEPARATOR . $item->getSubPathName());
 			}
 		}
 	}
@@ -265,13 +265,13 @@ class Handler implements DirectoryHandlerInterface
 	}
 
 	/**
-	 * Set configure max depth of recursive
+	 * Set max depth of recursive
 	 *
 	 * @param string $directoryPath
 	 *
-	 * @return int
+	 * @return bool
 	 */
-	public function setMaxDepth(int $depth)
+	public function setMaxDepth(int $depth) :bool
 	{
 		if ($this->getMaxDepth() === $this->directoryDepth) {
 			return false;
