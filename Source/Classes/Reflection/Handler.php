@@ -9,7 +9,7 @@ use Reflector;
 
 class Handler
 {
-
+    
     /**
      * Gets an array of methods for the class.
      * 
@@ -269,9 +269,21 @@ class Handler
      * 
      * @return bool
      */
-    public static function isCallable(mixed $value, bool $syntax_only = false, null|string &$callable_name = null)
+    public static function isCallable(mixed $value, bool $syntax_only = false, null|string &$callable_name = null) :bool
     {
         return is_callable($value, $syntax_only, $callable_name);
+    }
+
+    /**
+     * Gets the class methods' names
+     * 
+     * @param object|string $object_or_class
+     * 
+     * @return array
+     */
+    public static function getClassMethodNames(object|string $object_or_class) :array
+    {
+        return get_class_methods($object_or_class);
     }
 
     /**
@@ -283,28 +295,29 @@ class Handler
      * 
      * @return mixed
      */
-    public static function invoke(object|string|null $class, array $passParameters = [], $arguments = [], ?\Closure|string $method = null) :mixed
+    public static function invoke(object|string|null $class, array $passParameters = [], $arguments = [], null|callable|string $method = null) :mixed
     {
         $reflection = $method == null ? self::function($method) : self::method($class, $method);
+        /** @var \ReflectionParameter[] $parameters */
         $parameters = self::getMethodParameters($reflection);
 
         $dependencies = [];
 
         foreach ($parameters as $parameter) {
+            /** @var \ReflectionNamedType|\ReflectionUnionType|\ReflectionIntersectionType|null $type */
             $type = $parameter->getType();
 
-            if ($type && self::isNamedType($type)) {
-                if (8 === PHP_MAJOR_VERSION) {
-                    $reflectionClass = new ReflectionClass($parameter->getType()->getName());
-
-                    array_push($dependencies, $reflectionClass->newInstance());
-                } else {
-                    $name = $parameter->getClass()->newInstance();
-                    array_push($dependencies, $name);
-                }
-            } else {
-                $name = $parameter->getName();
+            if (!$type || !self::isNamedType($type)) {
+                continue;
             }
+
+            if (8 === PHP_MAJOR_VERSION) {
+                $reflectionClass = new ReflectionClass($type->getName());
+            } else {
+                $reflectionClass = $parameter->getClass();
+            }
+            
+            array_push($dependencies, $reflectionClass->newInstance());
         }
 
         if (!is_object($class)) {
