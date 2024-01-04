@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP\Router;
 
+use COM;
 use Xanax\Classes\Reflection\Handler as ReflectionHandler;
 
 class Route
 {
-    private $callback;
+    private \Closure | string $callback;
 
-    private $pattern;
+    private array $middlewares = array();
 
-    private $arguments;
+    private string $pattern;
+
+    private array $arguments;
 
     public function __construct($pattern, $callback)
     {
@@ -20,13 +23,18 @@ class Route
         $this->callback = $callback;
     }
 
-    public function handle($container)
+    public function setMiddleware($middleware)
+    {
+        $this->middlewares[] = $middleware;
+    }
+
+    public function handle($container, $dependencyInjection = false)
     {
         $className = null;
         $methodName = null;
-        $callback = $this->callback;
+        $callback = $this->getCallback();
 
-        if (!is_callable($this->callback) && is_string(($this->callback))) {
+        if (!is_callable($callback) && is_string($callback)) {
             $statiMethodArguments = explode('::', $this->callback);
             $className = $statiMethodArguments[0];
             $methodName = $statiMethodArguments[1];
@@ -41,17 +49,38 @@ class Route
         }
 
         if (is_object($callback)) {
-            return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), $container);
+            if ($dependencyInjection) {
+                return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), $container);
+            } else {
+                return ReflectionHandler::callClassMethod($callback, $methodName, ($this->arguments ?? array()));
+            }
         }
+
+        return false;
+    }
+
+    private function getCallback()
+    {
+        return $this->callback;
+    }
+
+    private function isEmptyPattern()
+    {
+        return empty($this->pattern);
+    }
+
+    private function getPattern()
+    {
+        return $this->pattern;
     }
 
     public function match($urlSegments)
     {
-        if (empty($this->pattern)) {
+        if ($this->isEmptyPattern()) {
             return false;
         }
 
-        $separatedSegments = explode('/', trim($this->pattern ?? "", '/'));
+        $separatedSegments = explode('/', trim($this->getPattern() ?? "", '/'));
 
         if (count($separatedSegments) <= 0) {
             return false;

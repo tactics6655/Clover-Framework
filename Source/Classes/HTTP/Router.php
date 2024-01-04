@@ -16,17 +16,15 @@ use Xanax\Implement\EventDispatcherInterface;
 
 class Router
 {
-	private $middlewares = array();
-
 	private $container = array();
 
 	private $routes = array();
 
-	private $method;
+	private HTTPRequestMethod $method;
 
-	private $globalPrefix;
+	private $prependPrefix;
 
-	private $annotationReader;
+	private RouteAnnotationReader $annotationReader;
 
 	public function __construct(private readonly ?EventDispatcherInterface $eventDispatcher = null)
 	{
@@ -40,7 +38,7 @@ class Router
 
 	private function addPrefix($pattern)
 	{
-		return $this->globalPrefix . $pattern;
+		return $this->prependPrefix . $pattern;
 	}
 
 	private function set(string $method, $pattern, $callback)
@@ -52,13 +50,13 @@ class Router
 
 	public function group($pattern, $callback)
 	{
-		$this->globalPrefix = $pattern;
+		$this->prependPrefix = $pattern;
 
 		if (ReflectionHandler::isCallable($callback)) {
 			ReflectionHandler::callClassMethod(self::class, $callback);
 		}
 
-		$this->globalPrefix = '';
+		$this->prependPrefix = '';
 
 		return $this;
 	}
