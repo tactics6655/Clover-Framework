@@ -22,9 +22,9 @@ abstract class PHPINI
     const ALLOW_URL_FILE_OPEN = 'allow_url_fopen';
 
     const ALLOW_INCLUDE_URL = 'allow_url_include';
-    
+
     const DEFAULT_USER_AGENT = 'user_agent';
-    
+
     const DEFAULT_SOCKET_TIMEOUT = 'default_socket_timeout';
 
     const ALLOW_SHORT_OPEN_TAG = 'short_open_tag';
@@ -34,7 +34,7 @@ abstract class PHPINI
     const SESSION_COOKIE_LIFETIME = 'session.cookie_lifetime';
 
     const SESSION_COOKIE_ADD_HTTPONLY_FLAG = 'session.cookie_httponly';
-    
+
     const MULTIBYTE_STRING_INTERNAL_LANGUAGE = 'mbstring.language';
 
     const DISPLAY_STARTUP_ERRORS = 'display_startup_errors';
@@ -60,5 +60,4 @@ abstract class PHPINI
     const MAX_INPUT_VARIABLES = 'max_input_vars';
 
     const MAX_EXECUTION_TIME = 'max_execution_time';
-
 }

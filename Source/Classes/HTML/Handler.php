@@ -9,7 +9,7 @@ class Handler
 	public static function getInputTag($type, $name, $value, $list = array())
 	{
 		$html = "";
-		
+
 		switch ($type) {
 			case "option":
 				foreach ($list as $val) {

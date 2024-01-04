@@ -679,7 +679,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return resource
 	 */
-	public static function getimageResource($filePath) :mixed
+	public static function getimageResource($filePath): mixed
 	{
 		$format = self::getType($filePath);
 		$createObject = null;

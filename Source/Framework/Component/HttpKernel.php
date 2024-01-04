@@ -31,7 +31,7 @@ class HttpKernel
 
         Router::setContainer($this->container);
 
-        $response = Router::run();
+        $response = Router::handle();
 
         if (empty($response)) {
             exit();

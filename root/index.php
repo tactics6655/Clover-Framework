@@ -1,8 +1,14 @@
 <?php
 
 use Xanax\Framework\Component\Runtime;
+use Xanax\Classes\HTTP\Router;
 
 include("./../vendor/autoload.php");
 
-$runtime = new Runtime();
-$runtime->run();
+$router = new Router();
+$response = $router->get('/test', function () {
+    return 'test007788';
+})
+->handle();
+
+echo $response;

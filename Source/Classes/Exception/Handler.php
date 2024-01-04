@@ -18,7 +18,7 @@ class Handler
 		});
 	}
 
-	public static function setErrorHandler($callback, $error_level = E_ALL) 
+	public static function setErrorHandler($callback, $error_level = E_ALL)
 	{
 		return set_error_handler($callback, $error_level);
 	}

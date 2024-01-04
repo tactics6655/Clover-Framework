@@ -69,6 +69,6 @@ abstract class HTTPHeader
     const CrossOriginEmbedderPolicy = 'Cross-Origin-Embedder-Policy';
 
     const CrossOriginOpenerPolicy = 'Cross-Origin-Opener-Policy';
-    
+
     const CrossOriginResourcePolicy = 'Cross-Origin-Resource-Policy';
 }

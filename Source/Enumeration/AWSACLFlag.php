@@ -11,5 +11,4 @@ abstract class AWSACLFlag
     const ACL_PUBLIC_READ_WRITE = 'public-read-write';
 
     const ACL_AUTHENTICATED_READ = 'authenticated-read';
-
 }

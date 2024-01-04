@@ -66,7 +66,7 @@ abstract class ServerIndices
 
     /** 
      * Set to a non-empty value if the script was queried through the HTTPS protocol.
-     **/ 
+     **/
     const HTTPS = 'HTTPS';
 
     /**
@@ -118,9 +118,9 @@ abstract class ServerIndices
     const REQUEST_SCHEME = 'REQUEST_SCHEME';
 
     const APP_POOL_CONFIG = 'APP_POOL_CONFIG';
-    
-    const APPL_MD_PATH = 'APPL_MD_PATH';    
-    
+
+    const APPL_MD_PATH = 'APPL_MD_PATH';
+
     const HTTP_X_REWRITE_URL = 'HTTP_X_REWRITE_URL';
 
     const HTTP_CONNECTION = 'HTTP_CONNECTION';
@@ -130,7 +130,7 @@ abstract class ServerIndices
     const HTTP_ACCEPT = 'HTTP_ACCEPT';
 
     const HTTP_CONTENT_TYPE = 'HTTP_CONTENT_TYPE';
-    
+
     const CONTENT_TYPE = 'CONTENT_TYPE';
 
     const SERVER_SIGNATURE = 'SERVER_SIGNATURE';
@@ -169,5 +169,4 @@ abstract class ServerIndices
 
     const HTTP_X_FORWARDED_PROTO = 'HTTP_X_FORWARDED_PROTO';
     const HTTP_X_FORWARDED_FOR = 'HTTP_X_FORWARDED_FOR';
-
 }

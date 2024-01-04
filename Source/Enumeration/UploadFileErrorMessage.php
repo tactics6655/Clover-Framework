@@ -17,6 +17,6 @@ abstract class UploadedFileErrorMessage
     const UPLOAD_ERR_NO_TMP_DIR     = 'Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3.';
 
     const UPLOAD_ERR_CANT_WRITE     = 'Failed to write file to disk. Introduced in PHP 5.1.0.';
-    
+
     const UPLOAD_ERR_EXTENSION      = 'File upload stopped by extension. Introduced in PHP 5.2.0.';
 }

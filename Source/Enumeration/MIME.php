@@ -23,6 +23,6 @@ abstract class MIME
     const IMAGE_GD2 = 'image/gd2';
 
     const IMAGE_WBMP = 'vnd.wap.wbmp';
-    
+
     const IMAGE_DJVU = 'image/vnd.djvu';
 }

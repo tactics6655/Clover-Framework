@@ -121,5 +121,4 @@ class ArrayObject extends BaseObject
     {
         return new IntegerObject(count($this->raw_data));
     }
-    
 }

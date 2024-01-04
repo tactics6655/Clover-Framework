@@ -27,6 +27,6 @@ abstract class ImageFilter
     const PIXELATE = 'pixelate';
 
     const COLORIZE = 'colorize';
-    
+
     const SCATTER = 'scatter';
 }

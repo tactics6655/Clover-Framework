@@ -34,7 +34,6 @@ class Zlib
 		fclose($fileHandler);
 
 		return true;
-
 	}
 
 	public function compress($filePath, $destination)

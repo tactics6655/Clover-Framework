@@ -11,6 +11,6 @@ abstract class UploadedFile
     const NAME = 'name';
 
     const SIZE = 'size';
-    
+
     const ERROR = 'error';
 }

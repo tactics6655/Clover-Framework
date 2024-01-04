@@ -13,6 +13,6 @@ abstract class Orientation
     const HORIZONTAL = 'horizontal';
 
     const VERTICAL = 'vertical';
-    
+
     const BOTH = 'both';
 }

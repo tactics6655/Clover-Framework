@@ -100,28 +100,34 @@ class Handler
         return $reflection->newInstance(...$dependencies);
     }
 
-    public static function callMethod($controller, callable $method, mixed ...$arguments)
-    {
-        $reflection = self::method($controller, $method);
-
-        if ($reflection->isStatic()) {
-            forward_static_call($method, $arguments);
-            return;
-        }
-
-        call_user_func($method, $arguments);
+    public static function callMethod(callable $method, mixed ...$arguments) {
+        return call_user_func($method, $arguments);
     }
 
-    public static function callMethodArray($controller, callable $method, array $arguments = [])
+    public static function callMethodArray(callable $method, array $arguments = []) {
+        return call_user_func_array($method, $arguments);
+    }
+
+    public static function callClassMethod($controller, callable $method, mixed ...$arguments)
     {
         $reflection = self::method($controller, $method);
 
         if ($reflection->isStatic()) {
-            forward_static_call_array($method, $arguments);
-            return;
+            return forward_static_call($method, $arguments);
         }
 
-        call_user_func_array($method, $arguments);
+        return call_user_func($method, $arguments);
+    }
+
+    public static function callClassMethodArray($controller, callable $method, array $arguments = [])
+    {
+        $reflection = self::method($controller, $method);
+
+        if ($reflection->isStatic()) {
+            return forward_static_call_array($method, $arguments);
+        }
+
+        return call_user_func_array($method, $arguments);
     }
 
     public static function isCallable($value)

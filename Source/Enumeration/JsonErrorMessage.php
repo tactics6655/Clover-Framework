@@ -13,6 +13,6 @@ abstract class JsonErrorMessage
     const JSON_ERROR_SYNTAX = "Syntax error, malformed JSON";
 
     const JSON_ERROR_UTF8 = "Malformed UTF-8 characters, possibly incorrectly encoded";
-    
+
     const JSON_ERROR_UNKNOWN = "Unknown error";
 }

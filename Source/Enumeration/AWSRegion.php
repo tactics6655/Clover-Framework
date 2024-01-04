@@ -55,5 +55,4 @@ abstract class AWSRegion
     const US_GOV_EAST_1 = 'us-gov-east-1';
 
     const US_GOV_WEST_1 = 'us-gov-west-1';
-
 }

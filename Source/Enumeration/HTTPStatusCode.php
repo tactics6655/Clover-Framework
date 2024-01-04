@@ -69,7 +69,7 @@ abstract class HTTPStatusCode
     const LengthRequired = 411;
 
     const PreconditionFailed = 412;
-    
+
     const RequestEntityTooLarge = 413;
 
     const RequestURITooLong = 414;
@@ -83,7 +83,7 @@ abstract class HTTPStatusCode
     const ImATeapot = 418;
 
     const MisdirectedRequest = 421;
-    
+
     const UnprocessableEntity = 422;
 
     const Locked = 423;
@@ -125,6 +125,6 @@ abstract class HTTPStatusCode
     const WebserverIsReturningAnUnknownError = 520;
 
     const ConnectionTimedOut = 522;
-    
+
     const ATimeoutOccurred = 524;
 }

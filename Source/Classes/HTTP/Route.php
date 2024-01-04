@@ -8,17 +8,11 @@ use Xanax\Classes\Reflection\Handler as ReflectionHandler;
 
 class Route
 {
-    private $segments;
-
     private $callback;
 
     private $pattern;
 
     private $arguments;
-
-    private $regex = [
-        'digit' => '^\d{1,}$'
-    ];
 
     public function __construct($pattern, $callback)
     {
@@ -28,18 +22,22 @@ class Route
 
     public function handle($container)
     {
+        $className = null;
+        $methodName = null;
+        $callback = $this->callback;
+
         if (!is_callable($this->callback) && is_string(($this->callback))) {
             $statiMethodArguments = explode('::', $this->callback);
             $className = $statiMethodArguments[0];
             $methodName = $statiMethodArguments[1];
         }
 
-        if (class_exists($className)) {
+        if (isset($className) && !empty($className) && class_exists($className)) {
             $callback = new $className;
         }
 
-        if (!isset($methodName)) {
-            return ReflectionHandler::invoke($callback, '', ($this->arguments ?? array()), []);
+        if (!isset($methodName) && empty($methodName)) {
+            return ReflectionHandler::callMethodArray($callback, ($this->arguments ?? array()));
         }
 
         if (is_object($callback)) {

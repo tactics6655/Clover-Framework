@@ -4,7 +4,7 @@ use Xanax\Enumeration\PHPINI;
 
 class INIConfiguration
 {
-    
+
 	public static function setDisplayStatupErrors(bool $displayErrors)
 	{
 		ini_set(PHPINI::DISPLAY_STARTUP_ERRORS, $displayErrors ? 'On' : 'Off');
@@ -45,19 +45,18 @@ class INIConfiguration
 		return ini_get(PHPINI::MAX_UPLOAD_FILE_NUMBER) == 1;
 	}
 
-    public static function getUploadTemporaryDirectory()
-    {
+	public static function getUploadTemporaryDirectory()
+	{
 		return ini_get(PHPINI::UPLOAD_TEMPORARY_DIRECTORY) == 1;
-    }
+	}
 
-    public static function getMemoryLimit()
-    {
+	public static function getMemoryLimit()
+	{
 		return ini_get(PHPINI::MEMORY_LIMIT) == 1;
-    }
+	}
 
-    public static function getMaxMultipartBodyParts()
-    {
+	public static function getMaxMultipartBodyParts()
+	{
 		return ini_get(PHPINI::MAX_MULTIPART_BODY_PARTS) == 1;
-    }
-
+	}
 }

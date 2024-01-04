@@ -55,5 +55,4 @@ class BaseObject
     {
         return 0;
     }
-
 }

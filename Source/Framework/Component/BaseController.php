@@ -4,10 +4,12 @@ namespace Xanax\Framework\Component;
 
 use Xanax\Framework\Component\Response;
 
+use Xanax\Framework\Component\Container;
+
 class BaseController
 {
 
-    private $container;
+    private Container $container;
 
     public function __construct($container = [])
     {

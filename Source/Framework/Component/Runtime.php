@@ -29,7 +29,7 @@ class Runtime
 
         $this->setMapping();
     }
-    
+
     private function flushResponseData()
     {
         $software = $this->environment[Environment::SERVER][Environment::SOFTWARE];

@@ -271,7 +271,7 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return bool
 	 */
-	public function setMaxDepth(int $depth) :bool
+	public function setMaxDepth(int $depth): bool
 	{
 		if ($this->getMaxDepth() === $this->directoryDepth) {
 			return false;

@@ -167,7 +167,7 @@ class Request
 	{
 		return self::getServerArguments(ServerIndices::HEADER_X_FORWARDED_PROTO);
 	}
-	
+
 	public static function getContentLength()
 	{
 		return self::getServerArguments(ServerIndices::CONTENT_LENGTH);
