@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Xanax\Classes\Reflection;
 
 use ReflectionClass;
-use Reflector;
 
 class Handler
 {
@@ -62,12 +61,12 @@ class Handler
     /**
      * Gets an array of annotation for the class
      * 
-     * @param Reflector $reflector
+     * @param ReflectionClass $reflector
      * @param string $annotationName
      * 
      * @return array
      */
-    public static function getAnnotations(Reflector $reflector, string $annotationName): array
+    public static function getAnnotations(ReflectionClass $reflector, string $annotationName): array
     {
         $result = [];
 
