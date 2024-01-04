@@ -28,7 +28,7 @@ class Route
         $this->middlewares[] = $middleware;
     }
 
-    public function handle($container, $dependencyInjection = false)
+    public function handle($container)
     {
         $className = null;
         $methodName = null;
@@ -49,11 +49,7 @@ class Route
         }
 
         if (is_object($callback)) {
-            if ($dependencyInjection) {
-                return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), $container);
-            } else {
-                return ReflectionHandler::callClassMethod($callback, $methodName, ($this->arguments ?? array()));
-            }
+            return ReflectionHandler::invoke($callback, ($this->arguments ?? array()), $container, $methodName);
         }
 
         return false;

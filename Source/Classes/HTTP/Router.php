@@ -20,7 +20,7 @@ class Router
 
 	private $routes = array();
 
-	private HTTPRequestMethod $method;
+	private string|HTTPRequestMethod $method;
 
 	private $prependPrefix;
 
