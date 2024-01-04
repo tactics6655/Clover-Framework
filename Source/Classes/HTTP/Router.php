@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP;
 
-use Xanax\Classes\Event\Instance as EventInterface;
+use Xanax\Classes\DependencyInjection\Container;
 use Xanax\Classes\HTTP\Router\Route as RouteObject;
 use Xanax\Classes\HTTP\Router\RouteAnnotationReader;
 use Xanax\Classes\HTTP\Request as HTTPRequest;
@@ -16,19 +16,30 @@ use Xanax\Implement\EventDispatcherInterface;
 
 class Router
 {
-	private $container = array();
+	/** @var Container[] $container */
+	private array $container = array();
+	
+	/** @var RouteObject[] $routes */
+	private array $routes = array();
 
-	private $routes = array();
+	private mixed $middlewares;
 
 	private string|HTTPRequestMethod $method;
 
-	private $prependPrefix;
+	private string $prependPrefix = "";
 
 	private RouteAnnotationReader $annotationReader;
 
 	public function __construct(private readonly ?EventDispatcherInterface $eventDispatcher = null)
 	{
 		$this->annotationReader = new RouteAnnotationReader();
+	}
+
+	public function setMiddleware(...$middleware)
+	{
+		$this->middlewares = $middleware;
+
+		return $this;
 	}
 
 	public function setContainer($container)
@@ -178,6 +189,10 @@ class Router
 
 			if (!$match) {
 				continue;
+			}
+
+			if (isset($this->middlewares)) {
+				$route->setMiddleware($this->middlewares);
 			}
 
 			return $route->handle($this->container);

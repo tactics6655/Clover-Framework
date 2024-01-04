@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP\Router;
 
-use COM;
+use Xanax\Classes\HTTP\Router\Middleware;
 use Xanax\Classes\Reflection\Handler as ReflectionHandler;
+use Xanax\Classes\HTTP\Request as HTTPRequest;
 
 class Route
 {
     private \Closure | string $callback;
+
+	private $request;
 
     private array $middlewares = array();
 
@@ -44,6 +47,10 @@ class Route
             $callback = new $className;
         }
 
+        if (is_callable($callback)) {
+            $this->handleMiddleware($callback);
+        }
+
         if (!isset($methodName) && empty($methodName)) {
             return ReflectionHandler::callMethodArray($callback, ($this->arguments ?? array()));
         }
@@ -54,6 +61,13 @@ class Route
 
         return false;
     }
+
+	private function handleMiddleware(array|callable $callback)
+	{
+		$this->request = new HTTPRequest();
+        
+        $instance = new Middleware();
+	}
 
     private function getCallback()
     {

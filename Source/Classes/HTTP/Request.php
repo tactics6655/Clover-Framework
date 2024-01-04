@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP;
 
+use Xanax\Implement\RequestInterface;
 use Xanax\Classes\Data\URLObject as URLObject;
 use Xanax\Classes\Data\StringObject as StringObject;
 use Xanax\Enumeration\HTTPRequestMethod;
 use Xanax\Enumeration\ServerIndices;
 
-class Request
+class Request implements RequestInterface
 {
 
 	protected $statusCode = 200;
