@@ -57,6 +57,7 @@ declare global {
         webkitRequestFullscreen?: () => Promise<void>;
     }
     interface Window {
+        speechRecognition: any;
         ga: any;
         jQuery: any;
         dataURLtoBlob: any;
@@ -124,9 +125,9 @@ declare global {
     }
 }
 
-declare let $:any;
+//declare let $:any;
 
-import 'babel-polyfill';
+/*import 'babel-polyfill';
 import jQuery from 'jquery'
 //require.context('./src/', false, /\$/);
 
@@ -203,4 +204,4 @@ import UserMedia from './src/Function/UserMedia'
 import RTC from './src/Function/RTC'
 
 import AudioRecorder from './src/Component/AudioRecorder'
-import MediaPlayer from './src/Component/MediaPlayer'
+import MediaPlayer from './src/Component/MediaPlayer'*/

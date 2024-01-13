@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP\Router;
 
+use Xanax\Classes\HTTP\Router\Middleware;
 use Xanax\Classes\Reflection\Handler as ReflectionHandler;
+use Xanax\Classes\HTTP\Request as HTTPRequest;
 
 class Route
 {
-    private $segments;
+    private \Closure | string $callback;
 
-    private $callback;
+	private $request;
 
-    private $pattern;
+    private array $middlewares = array();
 
-    private $arguments;
+    private string $pattern;
 
-    private $regex = [
-        'digit' => '^\d{1,}$'
-    ];
+    private array $arguments;
 
     public function __construct($pattern, $callback)
     {
@@ -26,34 +26,71 @@ class Route
         $this->callback = $callback;
     }
 
+    public function setMiddleware($middleware)
+    {
+        $this->middlewares[] = $middleware;
+    }
+
     public function handle($container)
     {
-        if (!is_callable($this->callback) && is_string(($this->callback))) {
+        $className = null;
+        $methodName = null;
+        $callback = $this->getCallback();
+
+        if (!is_callable($callback) && is_string($callback)) {
             $statiMethodArguments = explode('::', $this->callback);
             $className = $statiMethodArguments[0];
             $methodName = $statiMethodArguments[1];
         }
 
-        if (class_exists($className)) {
+        if (isset($className) && !empty($className) && class_exists($className)) {
             $callback = new $className;
         }
 
-        if (!isset($methodName)) {
-            return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), []);
+        if (is_callable($callback)) {
+            $this->handleMiddleware($callback);
+        }
+
+        if (!isset($methodName) && empty($methodName)) {
+            return ReflectionHandler::callMethodArray($callback, ($this->arguments ?? array()));
         }
 
         if (is_object($callback)) {
-            return ReflectionHandler::invoke($callback, $methodName, ($this->arguments ?? array()), $container);
+            return ReflectionHandler::invoke($callback, ($this->arguments ?? array()), $container, $methodName);
         }
+
+        return false;
+    }
+
+	private function handleMiddleware(array|callable $callback)
+	{
+		$this->request = new HTTPRequest();
+        
+        $instance = new Middleware();
+	}
+
+    private function getCallback()
+    {
+        return $this->callback;
+    }
+
+    private function isEmptyPattern()
+    {
+        return empty($this->pattern);
+    }
+
+    private function getPattern()
+    {
+        return $this->pattern;
     }
 
     public function match($urlSegments)
     {
-        if (empty($this->pattern)) {
+        if ($this->isEmptyPattern()) {
             return false;
         }
 
-        $separatedSegments = explode('/', trim($this->pattern ?? "", '/'));
+        $separatedSegments = explode('/', trim($this->getPattern() ?? "", '/'));
 
         if (count($separatedSegments) <= 0) {
             return false;

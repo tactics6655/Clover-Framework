@@ -8,7 +8,6 @@ use ReflectionClass;
 
 class Handler
 {
-
     /**
      * Gets an array of methods for the class.
      * 
@@ -315,7 +314,6 @@ class Handler
             } else {
                 $reflectionClass = $parameter->getClass();
             }
-
             array_push($dependencies, $reflectionClass->newInstance());
         }
 

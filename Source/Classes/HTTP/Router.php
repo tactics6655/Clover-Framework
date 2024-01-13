@@ -4,194 +4,184 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP;
 
+use Xanax\Classes\DependencyInjection\Container;
 use Xanax\Classes\HTTP\Router\Route as RouteObject;
+use Xanax\Classes\HTTP\Router\RouteAnnotationReader;
 use Xanax\Classes\HTTP\Request as HTTPRequest;
 use Xanax\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 use Xanax\Classes\File\Functions as FileFunctions;
-use Xanax\Annotation\Route;
-use Xanax\Annotation\Prefix;
-use Xanax\Annotation\Middleware;
 use Xanax\Classes\Reflection\Handler as ReflectionHandler;
 use Xanax\Classes\Directory\Handler as DirectoryHandler;
-
-use ReflectionClass;
+use Xanax\Implement\EventDispatcherInterface;
 
 class Router
 {
-	private $middlewares = array();
+	/** @var Container[] $container */
+	private array $container = array();
+	
+	/** @var RouteObject[] $routes */
+	private array $routes = array();
 
-	private static $container = array();
+	private mixed $middlewares;
 
-	private static $variable_regex = '/^({\w*})$/';
+	private string|HTTPRequestMethod $method;
 
-	private static $routes = array();
+	private string $prependPrefix = "";
 
-	private static $arguments;
+	private RouteAnnotationReader $annotationReader;
 
-	private static $url_path;
-
-	private static $method;
-
-	private static $segments;
-
-	private static $global_prefix;
-
-	public static function setContainer($container)
+	public function __construct(private readonly ?EventDispatcherInterface $eventDispatcher = null)
 	{
-		self::$container = $container;
+		$this->annotationReader = new RouteAnnotationReader();
 	}
 
-	private static function addPrefix($pattern)
+	public function setMiddleware(...$middleware)
 	{
-		return self::$global_prefix . $pattern;
+		$this->middlewares = $middleware;
+
+		return $this;
 	}
 
-	private static function set(string $method, $pattern, $callback)
+	public function setContainer($container)
 	{
-		$pattern = self::addPrefix($pattern);
-
-		self::addRoute((string)$method, $pattern, $callback);
+		$this->container = $container;
 	}
 
-	public static function group($pattern, $callback)
+	private function addPrefix($pattern)
 	{
-		self::$global_prefix = $pattern;
+		return $this->prependPrefix . $pattern;
+	}
 
-		if (is_callable($callback)) {
-			call_user_func($callback);
+	private function set(string $method, $pattern, $callback)
+	{
+		$pattern = $this->addPrefix($pattern);
+
+		$this->addRoute((string)$method, $pattern, $callback);
+	}
+
+	public function group($pattern, $callback)
+	{
+		$this->prependPrefix = $pattern;
+
+		if (ReflectionHandler::isCallable($callback)) {
+			ReflectionHandler::callClassMethod(self::class, $callback);
 		}
 
-		self::$global_prefix = '';
+		$this->prependPrefix = '';
 
-		return self::class;
+		return $this;
 	}
 
-	public static function on(string $method, $pattern, $callback)
+	public function on(string $method, $pattern, $callback)
 	{
-		self::set($method, $pattern, $callback);
+		$this->set($method, $pattern, $callback);
+
+		return $this;
 	}
 
-	public static function get($pattern, $callback)
+	public function get($pattern, $callback)
 	{
-		self::set(HTTPRequestMethod::GET, $pattern, $callback);
+		$this->set(HTTPRequestMethod::GET, $pattern, $callback);
+
+		return $this;
 	}
 
-	public static function post($pattern, $callback)
+	public function post($pattern, $callback)
 	{
-		self::set(HTTPRequestMethod::POST, $pattern, $callback);
+		$this->set(HTTPRequestMethod::POST, $pattern, $callback);
+
+		return $this;
 	}
 
-	public static function fromDirectory($path)
+	public function fromDirectory($path)
 	{
 		$fileList = DirectoryHandler::getList($path, 'file', true, true);
 
 		foreach ($fileList as $file) {
-			self::fromFile($file);
+			$this->fromFile($file);
 		}
+
+		return $this;
 	}
 
-	private static function getAnnotationFromClassName($class_name)
+	public function fromFile($path)
 	{
-		$annotations = [];
+		$classNames = FileFunctions::getClassName($path);
 
-		$class = new ReflectionClass($class_name);
+		$annotationList = [];
 
-		foreach ($class->getMethods() as $method) {
-			if ($method->isStatic() || $method->isPrivate() || $method->isProtected()) {
-				continue;
-			}
-
-			$route_annotation = ReflectionHandler::getAnnotations($method, Route::class);
-			if (!isset($route_annotation[0])) {
-				continue;
-			}
-
-			$descriptor = $route_annotation[0];
-			$prefix_annotation = ReflectionHandler::getAnnotations($class, Prefix::class);
-			if (isset($prefix_annotation[0])) {
-				$descriptor->pattern = $prefix_annotation[0]->value . $descriptor->pattern;
-			}
-			$descriptor->holder = [$class->getName(), $method->getName()];
-
-			$middleware_annotation = ReflectionHandler::getAnnotations($class, Middleware::class);
-			if (isset($middleware_annotation[0])) {
-				$descriptor->middleware = $middleware_annotation[0]->value;
-			}
-
-			$annotations[] = $descriptor;
+		foreach ($classNames as $className) {
+			$annotationList = array_merge($annotationList, $this->annotationReader->read($className));
 		}
 
-		return $annotations;
-	}
-
-	public static function fromFile($path)
-	{
-		$class_names = FileFunctions::getClassName($path);
-
-		$annotations = [];
-
-		foreach ($class_names as $class_name) {
-			$annotations = array_merge($annotations, self::getAnnotationFromClassName($class_name));
-		}
-
-		foreach ($annotations as $annotation) {
+		foreach ($annotationList as $annotation) {
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
 			$holder = $annotation->holder ?? [];
 			$callback = join('::', $holder);
 
-			self::addRoute($method, $pattern, $callback);
-		}
-	}
-
-	private static function addRoute($method, $pattern, $callback)
-	{
-		if (!isset(self::$routes[$method])) {
-			self::$routes[$method] = [];
+			$this->addRoute($method, $pattern, $callback);
 		}
 
-		self::$routes[$method][] = new RouteObject($pattern, $callback);
+		return $this;
 	}
 
-	public static function delete($pattern, $callback)
+	private function addRoute($method, $pattern, $callback)
 	{
-		self::set(HTTPRequestMethod::DELETE, $pattern, $callback);
+		if (!isset($this->routes[$method])) {
+			$this->routes[$method] = [];
+		}
+
+		$this->routes[$method][] = new RouteObject($pattern, $callback);
 	}
 
-	public static function put($pattern, $callback)
+	public function delete($pattern, $callback)
 	{
-		self::set(HTTPRequestMethod::PUT, $pattern, $callback);
+		$this->set(HTTPRequestMethod::DELETE, $pattern, $callback);
+
+		return $this;
 	}
 
-	public static function options($pattern, $callback)
+	public function put($pattern, $callback)
 	{
-		self::set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
+		$this->set(HTTPRequestMethod::PUT, $pattern, $callback);
+
+		return $this;
 	}
 
-	public static function patch($pattern, $callback)
+	public function options($pattern, $callback)
 	{
-		self::set(HTTPRequestMethod::PATCH, $pattern, $callback);
+		$this->set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
+
+		return $this;
 	}
 
-	private static function has($method)
+	public function patch($pattern, $callback)
 	{
-		return isset(self::$routes[$method]);
+		$this->set(HTTPRequestMethod::PATCH, $pattern, $callback);
+
+		return $this;
 	}
 
-	private static function getRoute($method)
+	private function has($method)
 	{
-		return self::$routes[$method];
+		return isset($this->routes[$method]);
 	}
 
-	public static function run($reflection = true)
+	private function getRoute($method)
 	{
-		self::$method = HTTPRequest::getRequestMethod();
+		return $this->routes[$method];
+	}
 
-		if (!self::has(self::$method)) {
+	public function handle()
+	{
+		$this->method = HTTPRequest::getRequestMethod();
+
+		if (!$this->has($this->method)) {
 			return false;
 		}
 
-		$routes = self::getRoute(self::$method);
+		$routes = $this->getRoute($this->method);
 		$urlPathSegments = HTTPRequest::getUrlPathSegments();
 
 		foreach ($routes as $route) {
@@ -201,7 +191,11 @@ class Router
 				continue;
 			}
 
-			return $route->handle(self::$container);
+			if (isset($this->middlewares)) {
+				$route->setMiddleware($this->middlewares);
+			}
+
+			return $route->handle($this->container);
 		}
 
 		return false;
