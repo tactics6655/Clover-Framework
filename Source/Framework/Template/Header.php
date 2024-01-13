@@ -21,3 +21,5 @@ use Xanax\Classes\HTML\Handler as HTMLHandler;
 
     <title><?= $title; ?></title>
 </head>
+
+<body>

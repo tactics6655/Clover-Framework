@@ -8,35 +8,41 @@ class Zlib
 {
 	public function uncompress($filePath, $destination)
 	{
-		if (is_file($filePath) && file_exists($filePath) && filesize($filePath) > 0) {
-			$fileHandler = fopen($filePath, 'rb');
 
-			if ($fileHandler) {
-				$uncompresscontents = fread($fileHandler, filesize($filePath));
-				fclose($fileHandler);
-
-				$uncompressing = gzuncompress($uncompresscontents);
-
-				if ($uncompressing) {
-					$fileHandler = fopen($destination, 'wb');
-					fwrite($fileHandler, $uncompressing);
-					fclose($fileHandler);
-				}
-			} else {
-				fclose($fileHandler);
-
-				return false;
-			}
+		if (!is_file($filePath) || !file_exists($filePath) || filesize($filePath) <= 0) {
+			return false;
 		}
+
+		$fileHandler = fopen($filePath, 'rb');
+
+		if (!$fileHandler) {
+			fclose($fileHandler);
+			return false;
+		}
+
+		$uncompressContents = fread($fileHandler, filesize($filePath));
+		fclose($fileHandler);
+
+		$uncompressing = gzuncompress($uncompressContents);
+
+		if (!$uncompressing) {
+			return false;;
+		}
+
+		$fileHandler = fopen($destination, 'wb');
+		fwrite($fileHandler, $uncompressing);
+		fclose($fileHandler);
+
+		return true;
 	}
 
 	public function compress($filePath, $destination)
 	{
 		$fp = fopen($filePath, 'rb');
-		$compresscontents = fread($fp, filesize($filePath));
+		$compressContents = fread($fp, filesize($filePath));
 		fclose($fp);
 
-		$compressing = gzcompress($compresscontents);
+		$compressing = gzcompress($compressContents);
 
 		if ($compressing) {
 			$fp = fopen($destination, 'wb');

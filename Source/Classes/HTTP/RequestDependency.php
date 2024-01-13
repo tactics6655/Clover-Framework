@@ -10,20 +10,28 @@ use Xanax\Classes\HTTP\Request as HTTPRequest;
 
 class RequestDependency
 {
+    private $queryParameters;
+
+    private $postParameters;
+
+    private $requestMethod;
+
+    private $acceptLanguage;
+
     public function __construct()
     {
-        $this->getParameters = RequestHandler::getExtractedGetParameters();
+        $this->queryParameters = RequestHandler::getExtractedQueryParameters();
         $this->postParameters = RequestHandler::getExtractedPostParameters();
         $this->requestMethod = HTTPRequest::getRequestMethod();
         $this->acceptLanguage = HTTPRequest::getAcceptLanguage();
     }
 
-    public function get($key)
+    public function queryParameter($key)
     {
-        return $this->getParameters[$key];
+        return $this->queryParameters[$key];
     }
 
-    public function post($key)
+    public function postParameter($key)
     {
         return $this->postParameters[$key];
     }

@@ -7,7 +7,7 @@ interface ImageHandlerInterface
 
 	public function isAnimated($filename);
 
-	public function drawRepeat($imageResource, $width, $height);
+	public function drawRepeat($imageResource, $tile, int $width = 0, int $height = 0);
 
 	public function drawEclipse($imageResource, $width, $height, $x, $y, $red, $green, $blue);
 

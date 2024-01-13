@@ -69,7 +69,7 @@ class ArrayObject
 
 	public static function isKeyExists(array $array, $key)
 	{
-		return array_key_exists($array, $key);
+		return array_key_exists($key, $array);
 	}
 
 	public static function getKeyByValue(array $array, string $key)
@@ -89,7 +89,7 @@ class ArrayObject
 	public static function getDepth(array $array)
 	{
 		$depth = 0;
-		$arrayReclusive = new \RecursiveArrayIterator($array);
+		$arrayReclusive = new RecursiveArrayIterator($array);
 		$iteratorReclusive = new \RecursiveIteratorIterator($arrayReclusive);
 
 		foreach ($iteratorReclusive as $iterator) {

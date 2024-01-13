@@ -2,6 +2,8 @@
 
 namespace Xanax\Trait\Json;
 
+use Xanax\Enumeration\JsonErrorMessage;
+
 trait JSONError
 {
 
@@ -47,5 +49,23 @@ trait JSONError
 	public function isMalformedUTF8()
 	{
 		return $this->getLastError() === JSON_ERROR_UTF8;
+	}
+
+	public function getMessage()
+	{
+		switch ($this->getLastError()) {
+			case JSON_ERROR_DEPTH:
+				return JsonErrorMessage::JSON_ERROR_DEPTH;
+			case JSON_ERROR_STATE_MISMATCH:
+				return JsonErrorMessage::JSON_ERROR_STATE_MISMATCH;
+			case JSON_ERROR_CTRL_CHAR:
+				return JsonErrorMessage::JSON_ERROR_CTRL_CHAR;
+			case JSON_ERROR_SYNTAX:
+				return JsonErrorMessage::JSON_ERROR_SYNTAX;
+			case JSON_ERROR_UTF8:
+				return JsonErrorMessage::JSON_ERROR_UTF8;
+			default:
+				return JsonErrorMessage::JSON_ERROR_UNKNOWN;
+		}
 	}
 }

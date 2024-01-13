@@ -4,12 +4,12 @@ namespace Xanax\Framework\Component;
 
 use Xanax\Framework\Component\Response;
 
+use Xanax\Classes\DependencyInjection\Container;
+
 class BaseController
 {
 
-    private $container;
-
-    public function __construct($container = [])
+    public function __construct(private ?Container $container = null)
     {
         $this->container = $container;
     }

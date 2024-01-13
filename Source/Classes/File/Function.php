@@ -34,6 +34,7 @@ use function rename;
 
 class Functions
 {
+	private static $lastError;
 
 	public static function getClassName($filePath)
 	{
@@ -130,7 +131,7 @@ class Functions
 		$filePath = self::convertToNomalizePath($filePath);
 
 		if (!self::isExists($filePath)) {
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) {
@@ -155,11 +156,11 @@ class Functions
 		$fileName = self::convertToNomalizePath($fileName);
 
 		if (!self::isExists($fileName)) {
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($fileName));
 		}
 
 		if (!self::isFile($fileName)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($fileName));
 		}
 
 		self::clearStatusCache($fileName);
@@ -228,7 +229,7 @@ class Functions
 		}
 
 		if (!self::isFile($filePath)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isValidHandler($filePath) && !self::isFile($filePath)) {
@@ -303,7 +304,7 @@ class Functions
 	public static function setPermission(string $filePath, int $mode): bool
 	{
 		if (!self::isFile($filePath)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		return chmod($filePath, $mode) ? true : false;
@@ -320,7 +321,7 @@ class Functions
 	public static function changeGroup(string $filePath, string $group): bool
 	{
 		if (!self::isFile($filePath)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		return chgrp($filePath, $group);
@@ -363,7 +364,7 @@ class Functions
 		$filePath = self::convertToNomalizePath($filePath);
 
 		if (!self::isFile($filePath)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		$return = self::getSize($filePath) !== 0;
@@ -414,11 +415,11 @@ class Functions
 		$filePath = self::convertToNomalizePath($filePath);
 
 		if (!self::isExists($filePath)) {
-			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		if (!self::isFile($filePath)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		require_once $filePath;
@@ -505,7 +506,7 @@ class Functions
 		}
 
 		if (FileValidation::isPharProtocol($filePath)) {
-			throw new StupidIdeaException(FileHandlerMessage::getDoNotUsePharProtocolMessage($filePath));
+			throw new StupidIdeaException(FileHandlerMessage::getDoNotUsePharProtocolMessage());
 		}
 
 		self::clearStatusCache($filePath);
@@ -678,7 +679,7 @@ class Functions
 		}
 
 		if (!self::isFile($filePath)) {
-			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage());
+			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
 		}
 
 		return mime_content_type($filePath);
@@ -709,7 +710,7 @@ class Functions
 	/**
 	 * Gets the current file pointer position.
 	 *
-	 * @param string $fileHandler
+	 * @param string|resource $fileHandler
 	 *
 	 * @return bool
 	 */
@@ -727,7 +728,7 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
-	 * @return bool
+	 * @return string
 	 */
 	public static function convertToNomalizePath($filePath): string
 	{
@@ -737,7 +738,7 @@ class Functions
 	/**
 	 * Make sure the file handler is of type resource.
 	 *
-	 * @param string $fileHandler
+	 * @param string|resource $fileHandler
 	 *
 	 * @return bool
 	 */
@@ -776,8 +777,8 @@ class Functions
 		}
 
 		$cached = self::open($filePath, FileMode::WRITE_ONLY);
-		fwrite($destination, ob_get_contents());
-		fclose($destination);
+		fwrite($cached, ob_get_contents());
+		fclose($cached);
 		ob_end_flush();
 
 		return true;
@@ -1033,7 +1034,7 @@ class Functions
 	 *
 	 * @param string $filePath
 	 * @param int    $length
-	 * @param int    $mode
+	 * @param string $mode
 	 *
 	 * @return mixed
 	 */
@@ -1631,7 +1632,7 @@ class Functions
 	 * @param string  $mode
 	 * @param boolean $use_include_path
 	 *
-	 * @return bool
+	 * @return bool|resource
 	 */
 	public static function open($filePath, $mode, $use_include_path = false)
 	{

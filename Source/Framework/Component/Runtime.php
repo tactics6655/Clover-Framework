@@ -2,11 +2,11 @@
 
 namespace Xanax\Framework\Component;
 
-use Xanax\Classes\OperationSystem as OS;
 use Xanax\Framework\Component\Mapper;
 use Xanax\Framework\Enumeration\Environment;
+
+use Xanax\Classes\OperationSystem as OS;
 use Xanax\Classes\ArrayObject;
-use Xanax\Classes\HTTP\Router as Router;
 use Xanax\Classes\HTTP\Request as Request;
 
 class Runtime
@@ -19,11 +19,14 @@ class Runtime
     {
         $this->options = $options ?? [];
         $this->environment = [];
+    }
 
+    public function run()
+    {
         $this->setDefaultOptions();
         $this->setEnvironmentVariables();
-
         $this->applyOptions();
+
         $this->setMapping();
     }
 
@@ -59,8 +62,8 @@ class Runtime
 
     protected function applyOptions()
     {
-        OS::setErrorReportingLevel($this->options[Environment::ERROR_REPORTING_LEVEL]);
         OS::setDisplayErrors($this->options[Environment::DISPLAY_ERRORS]);
+        OS::setErrorReportingLevel($this->options[Environment::ERROR_REPORTING_LEVEL]);
         OS::setDefaultDateTimeZone($this->options[Environment::TIMEZONE_ID]);
         OS::setDisplayStatupErrors($this->options[Environment::DISPLAY_STARTUP_ERRORS]);
     }
@@ -75,7 +78,7 @@ class Runtime
 
     protected function setEnvironmentVariables()
     {
-        $this->environment[Environment::HYPERTEXT_PREPROCESSOR] = [];
+        $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR], []);
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::VERSION], OS::getPHPVersion());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_POST_SIZE], OS::getMaxPostSize());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_UPLOAD_FILE_SIZE], OS::getMaxUploadFileSize());
@@ -84,7 +87,7 @@ class Runtime
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::SESSION_USE_COOKIES], OS::isSessionUseCookies());
         $this->setEnvironment([Environment::HYPERTEXT_PREPROCESSOR, Environment::MAXIMUM_INTEGER_SIZE], OS::getMaximumIntergerSize());
 
-        $this->environment[Environment::SERVER] = [];
+        $this->setEnvironment([Environment::SERVER], []);
         $this->setEnvironment([Environment::SERVER, Environment::BUILT_OPERATION_SYSTEM], OS::getBuiltOperationSystemString());
         $this->setEnvironment([Environment::SERVER, Environment::SOFTWARE], OS::getMainServerSoftware());
         $this->setEnvironment([Environment::SERVER, Environment::HOME_PATH], OS::getHomePath());

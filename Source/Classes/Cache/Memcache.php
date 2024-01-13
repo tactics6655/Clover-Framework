@@ -12,10 +12,10 @@ class Memcache
 	public function __construct()
 	{
 		if ($this->isMemcachedClassExists()) {
-			$this->cache = new Memcached;
+			$this->cache = new \Memcached;
 			$this->type = "memcached";
 		} else if ($this->isMemcacheClassExists()) {
-			$this->cache = new Memcache;
+			$this->cache = new \Memcache;
 			$this->type = "memcache";
 		}
 	}

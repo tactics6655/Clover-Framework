@@ -50,4 +50,9 @@ class BaseObject
 
         return $this;
     }
+
+    public function length()
+    {
+        return 0;
+    }
 }

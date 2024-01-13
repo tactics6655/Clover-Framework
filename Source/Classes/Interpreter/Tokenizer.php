@@ -18,6 +18,18 @@ class Tokenizer
 
 	private $quotes = ['"', "'"];
 
+	private $closableToken = [
+		"<",
+		"{",
+		"("
+	];
+
+	private $closeToken = [
+		">",
+		"}",
+		")"
+	];
+
 	private $operatorTokens = [
 		',' => self::COMMA,
 		'?' => self::OPERATOR,
@@ -32,6 +44,10 @@ class Tokenizer
 		'>' => self::OPERATOR,
 		'(' => self::PARENTHESIES,
 		')' => self::PARENTHESIES
+	];
+
+	private $patternRegexpr = [
+		'keyword' => '/^\w(?<=[A-Za-z0-9_]{1,})$/g'
 	];
 
 	private $firstTokens = [
@@ -53,37 +69,58 @@ class Tokenizer
 	const STATE_WORD     = 4;
 	const STATE_OPERATOR = 5;
 
-	public function generateToken($string)
+	public function generateToken(string $string)
 	{
 		$count = strlen($string);
 
 		$state = self::STATE_DEFAULT;
 
+		$brackets = [];
+
 		// Lexical analysis
-		for ($i = 0; $i < $count; $i++) {
-			$character = $string[$i];
+		for ($i = 0; $i <= $count; $i++) {
+			$character = $string[$i < $count ? $i : $count - 1];
 
 			switch ($state) {
 				case self::STATE_DEFAULT:
 					if (ctype_alpha($character)) {
 						$this->token .= $character;
 						$state = self::STATE_WORD;
-					} elseif (is_numeric($character)) {
+					} else if (is_numeric($character)) {
 						$this->token .= $character;
 						$state = self::STATE_WORD;
-					} elseif (in_array($character, $this->variableSpecialCharacter)) {
+					} else if (in_array($character, $this->variableSpecialCharacter)) {
 						$this->token .= $character;
-					} elseif (isset($this->operatorTokens[$character])) {
+					} else if (isset($this->operatorTokens[$character])) {
 						$this->token .= $character;
 						$state = self::STATE_OPERATOR;
-					} elseif (in_array($character, $this->quotes)) {
+
+						// This token is must be close
+						if (in_array($character, $this->closableToken)) {
+							$brackets[] = $character;
+						}
+					} else if (in_array($character, $this->quotes)) {
 						$state = self::STATE_STRING;
+					} else {
+						throw new \Exception('Token is unknown');
 					}
 
 					break;
 				case self::STATE_OPERATOR:
 					if (isset($this->operatorTokens[$character])) {
 						$this->token .= $character;
+
+						// When already exists open bracket
+						if (count($brackets)) {
+							$bracket = array_pop($brackets);
+
+							$key = array_search($bracket, $this->closableToken);
+
+							if ($character !== $this->closeToken[$key]) {
+								var_dump($this->closeToken[$key]);
+								throw new \Exception('Bracket is not closed');
+							}
+						}
 					} else {
 						$this->tokens[] = new TokenObject($this->token, $this->operatorTokens[$this->token]);
 						$this->token    = '';
@@ -124,6 +161,10 @@ class Tokenizer
 			}
 		}
 
-		echo print_r($this);
+		if ($state == self::STATE_WORD && !empty($this->token)) {
+			$this->tokens[] = new TokenObject($this->token, self::STATE_WORD);
+		}
+
+		return $this->tokens;
 	}
 }

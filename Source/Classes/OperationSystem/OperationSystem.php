@@ -165,6 +165,11 @@ class OperationSystem
 		return strtoupper(substr(self::getBuiltOperationSystemString(), 0, 3));
 	}
 
+	public static function isMachitosh()
+	{
+		return 'Darwin' === self::getFamily();
+	}
+
 	public static function isWindows()
 	{
 		return (self::getShortOperationSystemString() === 'WIN');

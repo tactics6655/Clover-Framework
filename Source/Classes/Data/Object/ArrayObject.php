@@ -17,6 +17,13 @@ class ArrayObject extends BaseObject
         $this->raw_data = $data;
     }
 
+    public function get($key)
+    {
+        $data = $this->raw_data[$key];
+
+        return new StringObject($data);
+    }
+
     public function getKeys()
     {
         $this->raw_data = array_keys($this->raw_data);

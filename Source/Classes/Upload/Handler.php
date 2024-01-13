@@ -7,7 +7,7 @@ namespace Xanax\Classes\Upload;
 use Xanax\Classes\File\Handler as FileHandler;
 
 use Xanax\Enumeration\UploadedFile;
-use Xanax\Enumeration\UploadedFileError;
+use Xanax\Enumeration\UploadedFileErrorMessage;
 
 class Handler
 {
@@ -16,13 +16,13 @@ class Handler
 	{
 		if (preg_match('/^([A-Za-z0-9-_]{1,})\[[A-Za-z0-9-_]{1,}\]$/', $name, $match)) {
 			return isset($_FILES[$match[1]][$key][$match[2]]) ? $_FILES[$match[1]][UploadedFile::NAME][$match[2]] : null;
-		} else {
-			if ($key === UploadedFile::NAME) {
-				return isset($_FILES[$name]) ? $_FILES[$name] : null;
-			} else {
-				return isset($_FILES[$name][$key]) ? $_FILES[$name][$key] : null;
-			}
 		}
+
+		if ($key === UploadedFile::NAME) {
+			return isset($_FILES[$name]) ? $_FILES[$name] : null;
+		}
+
+		return isset($_FILES[$name][$key]) ? $_FILES[$name][$key] : null;
 	}
 
 	public static function move($name, $filePath)
@@ -45,31 +45,31 @@ class Handler
 	{
 		switch ($error) {
 			case \UPLOAD_ERR_OK:
-				$response = UploadedFileError::UPLOAD_ERR_OK;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_OK;
 				break;
 			case \UPLOAD_ERR_INI_SIZE:
-				$response = UploadedFileError::UPLOAD_ERR_INI_SIZE;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_INI_SIZE;
 				break;
 			case \UPLOAD_ERR_FORM_SIZE:
-				$response = UploadedFileError::UPLOAD_ERR_FORM_SIZE;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_FORM_SIZE;
 				break;
 			case \UPLOAD_ERR_PARTIAL:
-				$response = UploadedFileError::UPLOAD_ERR_PARTIAL;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_PARTIAL;
 				break;
 			case \UPLOAD_ERR_NO_FILE:
-				$response = UploadedFileError::UPLOAD_ERR_NO_FILE;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_NO_FILE;
 				break;
 			case \UPLOAD_ERR_NO_TMP_DIR:
-				$response = UploadedFileError::UPLOAD_ERR_NO_TMP_DIR;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_NO_TMP_DIR;
 				break;
 			case \UPLOAD_ERR_CANT_WRITE:
-				$response = UploadedFileError::UPLOAD_ERR_CANT_WRITE;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_CANT_WRITE;
 				break;
 			case \UPLOAD_ERR_EXTENSION:
-				$response = UploadedFileError::UPLOAD_ERR_EXTENSION;
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_EXTENSION;
 				break;
 			default:
-				$response = 'Unknown upload error';
+				$response = 'Unknown error';
 				break;
 		}
 

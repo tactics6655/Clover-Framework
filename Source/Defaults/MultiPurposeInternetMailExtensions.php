@@ -3,15 +3,18 @@
 return [
     /* Mac */
     'hqx' => [
-        'type' => 'application/mac-binhex40'
+        'type' => 'application/mac-binhex40',
+        'description' => 'BinHex 4.0 Encoded File'
     ],
     'cpt' => [
-        'type' => 'application/mac-compactpro'
+        'type' => 'application/mac-compactpro',
+        'description' => 'Pocket Slides Presentation'
     ],
 
     /* Text */
     '323' => [
-        'type' => 'text/h323'
+        'type' => 'text/h323',
+        'description' => 'H.323 Internet Telephony File'
     ],
     'sgml' => [
         'type' => 'text/sgml'
@@ -23,7 +26,8 @@ return [
         'type' => 'text/rtf'
     ],
     'php' => [
-        'type' => 'text/html'
+        'type' => 'text/html',
+        'array' => array('application/x-httpd-php', 'text/html')
     ],
     'htm' => [
         'type' => 'text/html'
@@ -359,9 +363,6 @@ return [
     ],
     'jar' => [
         'type' => 'application/java-archive'
-    ],
-    'php' => [
-        'type' => 'application/x-httpd-php'
     ],
     'fxp' => [
         'type' => 'application/vnd.adobe.fxp'

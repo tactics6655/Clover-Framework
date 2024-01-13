@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Xanax\Classes\HTTP;
 
+use Xanax\Implement\RequestInterface;
 use Xanax\Classes\Data\URLObject as URLObject;
 use Xanax\Classes\Data\StringObject as StringObject;
 use Xanax\Enumeration\HTTPRequestMethod;
+use Xanax\Enumeration\ServerIndices;
 
-class Request
+class Request implements RequestInterface
 {
 
 	protected $statusCode = 200;
@@ -107,8 +109,8 @@ class Request
 
 	public static function flushFastCgiResponseData()
 	{
-		if (function_exists('litespeed_finish_request')) {
-			litespeed_finish_request();
+		if (function_exists('fastcgi_finish_request')) {
+			fastcgi_finish_request();
 		}
 	}
 
@@ -135,7 +137,7 @@ class Request
 
 	public static function isHttpsProtocol(): bool
 	{
-		return empty($_SERVER['HTTPS']) ? false : (self::getServerArguments('HTTPS') === 'on' ? true : false);
+		return empty($_SERVER[ServerIndices::HTTPS]) ? false : (self::getServerArguments(ServerIndices::HTTPS) === 'on' ? true : false);
 	}
 
 	public static function getServerArguments($argument)
@@ -147,6 +149,11 @@ class Request
 		return null;
 	}
 
+	public static function fetchAllResponseHeaders()
+	{
+		return getallheaders();
+	}
+
 	public static function getUrlPathSegments($preset = null)
 	{
 		return explode('/', trim($preset ?? self::getUrlPath(), '/'));
@@ -154,37 +161,42 @@ class Request
 
 	public static function getUrlPath(): string
 	{
-		return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		return parse_url($_SERVER[ServerIndices::REQUEST_URI], PHP_URL_PATH);
 	}
 
 	public static function getForwarededPorto()
 	{
-		return self::getServerArguments('HEADER_X_FORWARDED_PROTO');
+		return self::getServerArguments(ServerIndices::HEADER_X_FORWARDED_PROTO);
+	}
+
+	public static function getContentLength()
+	{
+		return self::getServerArguments(ServerIndices::CONTENT_LENGTH);
 	}
 
 	public static function getOverrideMethod()
 	{
-		return self::getServerArguments('X-HTTP-METHOD-OVERRIDE');
+		return self::getServerArguments(ServerIndices::X_HTTP_METHOD_OVERRIDE);
 	}
 
 	public static function getServerTime()
 	{
-		return self::getServerArguments('REQUEST_TIME');
+		return self::getServerArguments(ServerIndices::REQUEST_TIMESTAMP);
 	}
 
 	public static function getServerFloatTime()
 	{
-		return self::getServerArguments('REQUEST_TIME_FLOAT');
+		return self::getServerArguments(ServerIndices::REQUEST_TIME_FLOAT);
 	}
 
 	public static function getScheme()
 	{
-		return self::getServerArguments('REQUEST_SCHEME');
+		return self::getServerArguments(ServerIndices::REQUEST_SCHEME);
 	}
 
 	public static function getProtocol(): string
 	{
-		return substr(strtolower(self::getServerArguments('SERVER_PROTOCOL')), 0, strpos(strtolower(self::getServerArguments('SERVER_PROTOCOL')), '/'));
+		return substr(strtolower(self::getServerArguments(ServerIndices::SERVER_PROTOCOL)), 0, strpos(strtolower(self::getServerArguments(ServerIndices::SERVER_PROTOCOL)), '/'));
 	}
 
 	/**
@@ -194,7 +206,7 @@ class Request
 	 */
 	public static function getURI()
 	{
-		return self::getServerArguments('REQUEST_URI');
+		return self::getServerArguments(ServerIndices::REQUEST_URI);
 	}
 
 	/**
@@ -204,7 +216,7 @@ class Request
 	 */
 	public static function getTemporaryIISApplicationPhysicalPathOfPoolConfiguration()
 	{
-		return self::getServerArguments('APP_POOL_CONFIG');
+		return self::getServerArguments(ServerIndices::APP_POOL_CONFIG);
 	}
 
 	/**
@@ -214,7 +226,12 @@ class Request
 	 */
 	public static function getIISApplicationMetabasePath()
 	{
-		return self::getServerArguments('APPL_MD_PATH');
+		return self::getServerArguments(ServerIndices::APPL_MD_PATH);
+	}
+
+	public static function getHttpHost()
+	{
+		return self::getServerArguments(ServerIndices::HTTP_HOST);
 	}
 
 	/**
@@ -226,7 +243,7 @@ class Request
 	 */
 	public static function getIISAuthenticateType()
 	{
-		return self::getServerArguments('AUTH_TYPE');
+		return self::getServerArguments(ServerIndices::AUTH_TYPE);
 	}
 
 	/**
@@ -236,7 +253,7 @@ class Request
 	 */
 	public static function getIISAuthenticatePassword()
 	{
-		return self::getServerArguments('AUTH_PASSWORD');
+		return self::getServerArguments(ServerIndices::AUTH_PASSWORD);
 	}
 
 	/**
@@ -246,7 +263,7 @@ class Request
 	 */
 	public static function getIISApplicationPoolID()
 	{
-		return self::getServerArguments('APP_POOL_ID');
+		return self::getServerArguments(ServerIndices::APP_POOL_ID);
 	}
 
 	/**
@@ -256,102 +273,98 @@ class Request
 	 */
 	public static function getIISApplicationPhysicalPath()
 	{
-		return self::getServerArguments('APPL_PHYSICAL_PATH');
+		return self::getServerArguments(ServerIndices::APPL_PHYSICAL_PATH);
 	}
 
 	public static function getServerSoftwareName()
 	{
-		return self::getServerArguments('SERVER_SOFTWARE');
+		return self::getServerArguments(ServerIndices::SERVER_SOFTWARE_NAME);
 	}
 
 	public static function getAbsolutePathOfDocumentRoot()
 	{
-		return self::getServerArguments('DOCUMENT_ROOT');
+		return self::getServerArguments(ServerIndices::DOCUMENT_ROOT_DIRECTORY);
 	}
 
 	public static function getIISIsapiRewriteURL()
 	{
-		return self::getServerArguments('HTTP_X_REWRITE_URL');
+		return self::getServerArguments(ServerIndices::HTTP_X_REWRITE_URL);
 	}
 
 	public static function getHTTPConnection(): string
 	{
-		return self::getServerArguments('HTTP_CONNECTION');
+		return self::getServerArguments(ServerIndices::HTTP_CONNECTION);
 	}
 
 	public static function getPort(): string
 	{
-		return self::getServerArguments('SERVER_PORT');
+		return self::getServerArguments(ServerIndices::SERVER_PORT);
 	}
 
 	public static function getReferer()
 	{
-		if (self::hasReferer()) {
-			return self::getServerArguments('HTTP_REFERER');
-		}
-
-		return null;
+		return self::getServerArguments(ServerIndices::HTTP_REFERER);
 	}
 
 	public static function getHTTPAccept()
 	{
-		return self::getServerArguments('HTTP_ACCEPT');
+		return self::getServerArguments(ServerIndices::HTTP_ACCEPT);
 	}
 
 	public static function getHTTPContentType()
 	{
-		return self::getServerArguments('HTTP_CONTENT_TYPE');
+		return self::getServerArguments(ServerIndices::HTTP_CONTENT_TYPE);
 	}
 
 	public static function getServerProtocol()
 	{
-		return self::getServerArguments('SERVER_PROTOCOL');
+		return self::getServerArguments(ServerIndices::SERVER_PROTOCOL);
 	}
 
 	public static function getContentType()
 	{
-		return self::getServerArguments('CONTENT_TYPE');
+		return self::getServerArguments(ServerIndices::CONTENT_TYPE);
 	}
 
 	public static function getSignature()
 	{
-		return self::getServerArguments('SERVER_SIGNATURE');
+		return self::getServerArguments(ServerIndices::SERVER_SIGNATURE);
 	}
 
 	public static function getUserAgent()
 	{
-		return self::getServerArguments('HTTP_USER_AGENT');
-	}
-
-	public static function getDocumentRoot()
-	{
-		return self::getServerArguments('DOCUMENT_ROOT');
+		return self::getServerArguments(ServerIndices::HTTP_USER_AGENT);
 	}
 
 	public static function getRequestMethod()
 	{
-		return self::getServerArguments('REQUEST_METHOD');
+		return self::getServerArguments(ServerIndices::REQUEST_METHOD);
 	}
 
 	public static function getAcceptEncoding()
 	{
-		return self::getServerArguments('HTTP_ACCEPT_ENCODING');
+		return self::getServerArguments(ServerIndices::HTTP_ACCEPT_ENCODING);
+	}
+
+	public static function getDocumentUrl()
+	{
+		return self::getServerArguments(ServerIndices::DOCUMENT_URI);
 	}
 
 	public static function isXmlHttpRequest()
 	{
-		return (strtolower(self::getServerArguments('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest');
+		return (strtolower(self::getServerArguments(ServerIndices::HTTP_X_REQUESTED_WITH)) == 'xmlhttprequest');
 	}
 
 	public static function isAjax()
 	{
-		return (!empty(self::getServerArguments('HTTP_X_REQUESTED_WITH')) && self::isXmlHttpRequest()) ? true : false;
+		return (!empty(self::getServerArguments(ServerIndices::HTTP_X_REQUESTED_WITH)) && self::isXmlHttpRequest()) ? true : false;
 	}
 
 	public static function getHTTPXForwardedFor()
 	{
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		if (isset($_SERVER[ServerIndices::HTTP_X_FORWARDED_FOR])) {
+			return $_SERVER[ServerIndices::HTTP_X_FORWARDED_FOR];
 		}
 
 		return null;
@@ -359,8 +372,8 @@ class Request
 
 	public static function getCloudFlareProxyIP()
 	{
-		if (isset($_SERVER['HTTP-CF-CONNECTING-IP'])) {
-			return $_SERVER['HTTP_CLIENT_IP'];
+		if (isset($_SERVER[ServerIndices::HTTP_CF_CONNECTING_IP])) {
+			return self::getClientIP();
 		}
 
 		return null;
@@ -368,8 +381,8 @@ class Request
 
 	public static function getClientIP()
 	{
-		if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-			return $_SERVER['HTTP_CLIENT_IP'];
+		if (isset($_SERVER[ServerIndices::HTTP_CLIENT_IP])) {
+			return $_SERVER[ServerIndices::HTTP_CLIENT_IP];
 		}
 
 		return null;
@@ -386,8 +399,8 @@ class Request
 
 	public static function getQueryString()
 	{
-		if (isset($_SERVER['QUERY_STRING'])) {
-			$queryString = $_SERVER['QUERY_STRING'];
+		if (isset($_SERVER[ServerIndices::QUERY_STRING])) {
+			$queryString = $_SERVER[ServerIndices::QUERY_STRING];
 
 			return new URLObject($queryString);
 		}
@@ -395,10 +408,10 @@ class Request
 		return null;
 	}
 
-	public static function getRemoteIP()
+	public static function getRemoteIPAddress()
 	{
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$remoteAddress = $_SERVER['REMOTE_ADDR'];
+		if (isset($_SERVER[ServerIndices::REMOTE_IP_ADDRESS])) {
+			$remoteAddress = $_SERVER[ServerIndices::REMOTE_IP_ADDRESS];
 
 			return new URLObject($remoteAddress);
 		}
@@ -419,8 +432,8 @@ class Request
 
 	public static function getAcceptLanguage()
 	{
-		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-			return $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		if (isset($_SERVER[ServerIndices::HTTP_ACCEPT_LANGUAGE])) {
+			return $_SERVER[ServerIndices::HTTP_ACCEPT_LANGUAGE];
 		}
 
 		return null;
@@ -436,37 +449,37 @@ class Request
 		return in_array(strtoupper(self::getRequestMethod()), self::$safeMethods);
 	}
 
-	public static function isHead()
+	public static function isHeadMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::HEAD) ? true : false;
 	}
 
-	public static function isPatch()
+	public static function isPatchMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::PATCH) ? true : false;
 	}
 
-	public static function isPut()
+	public static function isPutMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::PUT) ? true : false;
 	}
 
-	public static function isOptions()
+	public static function isOptionsMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::OPTIONS) ? true : false;
 	}
 
-	public static function isDelete()
+	public static function isDeleteMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::DELETE) ? true : false;
 	}
 
-	public static function isGet()
+	public static function isGetMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::GET) ? true : false;
 	}
 
-	public static function isPost()
+	public static function isPostMethod()
 	{
 		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::POST) ? true : false;
 	}
@@ -475,7 +488,7 @@ class Request
 	{
 		$string = null;
 
-		if (self::isPost()) {
+		if (self::isPostMethod()) {
 			$string = isset($_POST[$parameter]) ? $_POST[$parameter] : null;
 		}
 
@@ -486,7 +499,7 @@ class Request
 	{
 		$string = null;
 
-		if (self::isGet()) {
+		if (self::isGetMethod()) {
 			$string = isset($_GET[$parameter]) ? $_GET[$parameter] : null;
 		}
 
@@ -495,7 +508,7 @@ class Request
 
 	public static function getExtractedPostParameters()
 	{
-		if (self::getRequestMethod() === "POST") {
+		if (self::getRequestMethod() === HTTPRequestMethod::POST) {
 			$extracted = array();
 
 			foreach ($_POST as $key => $val) {
@@ -508,9 +521,9 @@ class Request
 		return null;
 	}
 
-	public static function getExtractedGetParameters()
+	public static function getExtractedQueryParameters()
 	{
-		if (self::getRequestMethod() === "GET") {
+		if (self::getRequestMethod() === HTTPRequestMethod::GET) {
 			$extracted = array();
 
 			foreach ($_GET as $key => $val) {
@@ -526,7 +539,7 @@ class Request
 	public static function getRequestUri()
 	{
 		$port = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-		$host = sprintf('%s%s%s', $port, $_SERVER['HTTP_HOST'], dirname($_SERVER['DOCUMENT_URI']));
+		$host = sprintf('%s%s%s', $port, self::getHttpHost(), dirname(self::getDocumentUrl()));
 
 		return new URLObject($host);
 	}
@@ -534,7 +547,7 @@ class Request
 	public static function getRequestURL()
 	{
 		$port = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-		$host = sprintf('%s%s%s', $port, $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']);
+		$host = sprintf('%s%s%s', $port, self::getHttpHost(), $_SERVER['REQUEST_URI']);
 
 		return new URLObject($host);
 	}
@@ -543,27 +556,27 @@ class Request
 	{
 		$useragent = strtolower(self::getUserAgent());
 
-		if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
+		if (isset($_SERVER[ServerIndices::HTTP_X_WAP_PROFILE])) {
 			return true;
 		}
 
-		if (isset($_SERVER['HTTP_DEVICE_STOCK_UA'])) {
+		if (isset($_SERVER[ServerIndices::HTTP_DEVICE_STOCK_UA])) {
 			return true;
 		}
 
-		if (isset($_SERVER['HTTP_X_UCBROWSER_DEVICE_UA'])) {
+		if (isset($_SERVER[ServerIndices::HTTP_X_UCBROWSER_DEVICE_UA])) {
 			return true;
 		}
 
-		if (isset($_SERVER['HTTP_X_BOLT_PHONE_UA'])) {
+		if (isset($_SERVER[ServerIndices::HTTP_X_BOLT_PHONE_UA])) {
 			return true;
 		}
 
-		if (isset($_SERVER['HTTP_X_SKYFIRE_PHONE'])) {
+		if (isset($_SERVER[ServerIndices::HTTP_X_SKYFIRE_PHONE])) {
 			return true;
 		}
 
-		if (isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])) {
+		if (isset($_SERVER[ServerIndices::HTTP_X_OPERAMINI_PHONE_UA])) {
 			return true;
 		}
 
@@ -639,22 +652,24 @@ class Request
 
 	public static function isMatchHost($hosts)
 	{
-		$host = $_SERVER['REMOTE_HOST'];
+		$host = $_SERVER[ServerIndices::REMOTE_HOST_NAME];
 
 		$regexp = preg_quote($hosts, '#');
 		$regexp = str_replace(',', '|', $regexp);
 		$regexp = str_replace('\*', '.+', $regexp);
+
 		return preg_match("#$regexp#", $host);
 	}
 
 	public static function isMatchUserAgent($agents)
 	{
-		$agent = $_SERVER['HTTP_USER_AGENT'];
+		$agent = $_SERVER[ServerIndices::HTTP_USER_AGENT];
 		$agent = preg_replace('/[\r\n]/', '', $agent);
 
 		$regexp = preg_quote($agents, '#');
 		$regexp = str_replace(',', '|', $regexp);
 		$regexp = str_replace('\*', '.+', $regexp);
+
 		return preg_match("#$regexp#", $agent);
 	}
 
@@ -673,20 +688,20 @@ class Request
 
 	public static function isConnectionKeepAlive()
 	{
-		$connection = strtolower(self::getHTTPConnection());
+		$connection = self::getHTTPConnection();
 
-		return $connection === 'keep-alive';
+		return strtolower($connection) === 'keep-alive';
 	}
 
 	public static function hasReferer()
 	{
-		if (isset($_SERVER['HTTP_REFERER']) && isset($_SERVER['SCRIPT_URL'])) {
-			$referer = $_SERVER['HTTP_REFERER'];
-			$url     = $_SERVER['SCRIPT_URL'];
-
-			return strpos($referer, $url) === 0;
+		if (!isset($_SERVER[ServerIndices::HTTP_REFERER]) || !isset($_SERVER['SCRIPT_URL'])) {
+			return false;
 		}
 
-		return false;
+		$referer = self::getReferer();
+		$url     = $_SERVER['SCRIPT_URL'];
+
+		return strpos($referer, $url) === 0;
 	}
 }

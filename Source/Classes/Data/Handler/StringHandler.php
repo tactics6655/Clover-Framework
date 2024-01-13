@@ -37,7 +37,7 @@ class StringHandler
 		return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
 	}
 
-	public static function pad($string, $length, $padString = " ", $type, $encoding = Encoding::UTF8)
+	public static function pad($string = "", $length = 0, $padString = " ", $type = STR_PAD_BOTH, $encoding = Encoding::UTF_8)
 	{
 		if (function_exists("mb_str_pad")) {
 			return mb_str_pad($string, $length, $padString, $type, $encoding);

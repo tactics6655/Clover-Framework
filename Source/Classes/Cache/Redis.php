@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Xanax\Classes;
 
+use Redis as Cache;
+
 class Redis
 {
 
@@ -21,7 +23,7 @@ class Redis
 
 	public function compareVersion($host, $port = '6379')
 	{
-		preg_match('/redis_version:(.*?)\n/', $this->conn->info(), $info);
+		preg_match('/redis_version:(.*?)\n/', $this->cache->info(), $info);
 
 		if (version_compare(trim($info[1]), '1.2') < 0) {
 			return false;
@@ -44,7 +46,7 @@ class Redis
 	{
 		$this->cache->del($key, $value);
 
-		static::$redis->expireat($key, time() + 3600);
+		$this->cache->expireat($key, time() + 3600);
 	}
 
 	public function set($key, $value)

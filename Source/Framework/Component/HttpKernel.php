@@ -2,16 +2,23 @@
 
 namespace Xanax\Framework\Component;
 
-use Xanax\Classes\HTTP\Router as Router;
+use Xanax\Classes\Router\Router as Router;
 use Xanax\Classes\File\Functions as FileFunctions;
+use Xanax\Classes\DependencyInjection\Container;
 
 class HttpKernel
 {
-    private $container;
+    private Container $container;
 
-    public function __construct($container)
+    private $environment;
+
+    private $options;
+
+    public function __construct(Container $container, $environment = [], $options = [])
     {
         $this->container = $container;
+        $this->environment = $environment;
+        $this->options = $options;
     }
 
     private function getEssentialBody($resource, $filePath)
@@ -21,11 +28,13 @@ class HttpKernel
 
     public function run()
     {
-        Router::fromDirectory('./App/Controller');
+        $router = new Router();
 
-        Router::setContainer($this->container);
+        $router->fromDirectory('./App/Controller');
 
-        $response = Router::run();
+        $router->setContainer($this->container);
+
+        $response = $router->handle();
 
         if (empty($response)) {
             exit();
