@@ -6,13 +6,14 @@ use Xanax\Classes\Pagination\Dynamic as DynamicPagination;
 use Xanax\Classes\File\Functions;
 
 use Xanax\Framework\Component\BaseController;
-use Xanax\Framework\Component\Middleware\ModuleMiddleware;
+use App\Middleware\ModuleMiddleware as ModuleMiddleware;
 
 use Xanax\Annotation;
 
 use Xanax\Plugin\NaverPapago;
 
 #[Annotation\Prefix('/')]
+#[Annotation\Middleware(ModuleMiddleware::class)]
 class IndexController extends BaseController
 {
     #[Annotation\Route('GET', '/translate')]

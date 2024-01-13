@@ -34,6 +34,7 @@
     "psr-4": {
       "Xanax\\": "Classes/Source/",
       "Xanax\\": "Plugins/",
+      "App\\": "root/App/",
       "Iamport\\RestClient\\": "iamport/"
     },
     "files": [
