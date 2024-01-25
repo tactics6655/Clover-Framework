@@ -10,6 +10,7 @@ use Neko\Classes\Database\Driver\PHPDataObject;
 use Neko\Classes\Upload\Handler as UploadHandler;
 
 #[Annotation\Prefix('/')]
+#[Annotation\Middleware(ModuleMiddleware::class)]
 class IndexController extends BaseController
 {
     private function getConnection()

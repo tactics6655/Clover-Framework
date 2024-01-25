@@ -25,7 +25,7 @@ export default class NotificationService {
         }
     }
 
-    public getPermittedLevel () {
+    public getPermittedLevel() {
         let permit;
 
         if (window.webkitNotifications && window.webkitNotifications.checkPermission) {
@@ -39,7 +39,7 @@ export default class NotificationService {
         return permit;
     }
 
-    public notify (title: string, message: string, icon: string, body: string, options: any) {
+    public notify(title: string, message: string, icon: string, body: string, options: any) {
         if (this.getPermittedLevel() === 'denied') {
             this.requestPermission();
             return;
