@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Classes\Data\BaseObject as BaseObject;
+use Neko\Classes\Data\BaseObject as BaseObject;
 
 #[\AllowDynamicProperties]
 class IntegerObject extends BaseObject
@@ -13,6 +13,11 @@ class IntegerObject extends BaseObject
     public function __construct($data)
     {
         $this->raw_data = $data;
+    }
+
+    public function toInteger()
+    {
+        return (int)($this->raw_data);
     }
 
     public function __toString()

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Exception\FileHandler\MemoryAllocatedException;
-use Xanax\Validation\PHPValidation;
-use Xanax\Classes\OperationSystem;
-use Xanax\Enumeration\Encoding;
+use Neko\Exception\FileHandler\MemoryAllocatedException;
+use Neko\Validation\PHPValidation;
+use Neko\Classes\OperationSystem;
+use Neko\Enumeration\Encoding;
 
 class StringHandler
 {
@@ -37,7 +37,7 @@ class StringHandler
 		return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
 	}
 
-	public static function pad($string, $length, $padString = " ", $type, $encoding = Encoding::UTF8)
+	public static function pad($string = "", $length = 0, $padString = " ", $type = STR_PAD_BOTH, $encoding = Encoding::UTF_8)
 	{
 		if (function_exists("mb_str_pad")) {
 			return mb_str_pad($string, $length, $padString, $type, $encoding);

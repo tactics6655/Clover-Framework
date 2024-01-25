@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Annotation;
+namespace Neko\Annotation;
 
 use Attribute;
 

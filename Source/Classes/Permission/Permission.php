@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
-use Xanax\Classes\Permission\Group as Group;
-use Xanax\Classes\Permission\Owner as Owner;
-use Xanax\Classes\Permission\World as World;
+use Neko\Classes\Permission\Group as Group;
+use Neko\Classes\Permission\Owner as Owner;
+use Neko\Classes\Permission\World as World;
 
 class Permission
 {

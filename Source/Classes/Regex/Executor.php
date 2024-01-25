@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Regex;
+namespace Neko\Classes\Regex;
 
 class Executor
 {

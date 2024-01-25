@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Hash;
+namespace Neko\Classes\Hash;
 
 class MD5
 {

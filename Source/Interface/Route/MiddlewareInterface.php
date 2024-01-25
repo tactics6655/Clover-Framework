@@ -1,10 +1,10 @@
 <?php
 
-namespace Xanax\Implement;
+namespace Neko\Implement;
 
-use Xanax\Implement\RequestInterface;
+use Neko\Implement\RequestInterface;
 
 interface MiddlewareInterface
 {
-    public function handle(RequestInterface $request,callable $next);
+    public function handle(RequestInterface $request, callable $next);
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Validation;
+namespace Neko\Validation;
 
-use Xanax\Validation\PHPValidation;
+use Neko\Validation\PHPValidation;
 
 class FileValidation
 {

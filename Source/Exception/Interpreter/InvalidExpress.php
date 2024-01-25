@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Exception\Interpreter;
+namespace Neko\Exception\Interpreter;
 
 class InvalidExpress extends InvalidExpressException
 {

@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Neko\Classes\Date;
+
+use \DateTime;
+use \DateTimeZone;
+
 class Date
 {
 

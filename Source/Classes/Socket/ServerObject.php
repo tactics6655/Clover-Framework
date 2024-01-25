@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Socket;
+namespace Neko\Classes\Socket;
 
 class ServerObject
 {
@@ -12,22 +12,22 @@ class ServerObject
 	private $arrayAcceptedSocketCount = 0;
 	private $arrayClientSocket        = [];
 	private $clientBindHandler;
-	private $SocketHandlerClass;
-	private $SocketHandler;
+	private $socketHandlerClass;
+	private $socketHandler;
 
 	public function __construct($socketHandler)
 	{
-		$this->SocketHandlerClass = $socketHandler;
+		$this->socketHandlerClass = $socketHandler;
 	}
 
-	public function exceptSocketInArray($arrayClientSocket, $arrayAcceptedSocketInfo, $AcceptedSocketInArray)
+	public function exceptSocketInArray($arrayClientSocket, $arrayAcceptedSocketInfo, $acceptedSocketInArray)
 	{
-		if (isset($arrayClientSocket[$AcceptedSocketInArray])) {
-			unset($arrayClientSocket[$AcceptedSocketInArray]);
+		if (isset($arrayClientSocket[$acceptedSocketInArray])) {
+			unset($arrayClientSocket[$acceptedSocketInArray]);
 		}
 
-		if (isset($arrayAcceptedSocketInfo[$AcceptedSocketInArray])) {
-			unset($arrayAcceptedSocketInfo[$AcceptedSocketInArray]);
+		if (isset($arrayAcceptedSocketInfo[$acceptedSocketInArray])) {
+			unset($arrayAcceptedSocketInfo[$acceptedSocketInArray]);
 		}
 
 		if (!$this->getAcceptedClientInArray()) {
@@ -56,33 +56,33 @@ class ServerObject
 
 	public function selectArrayClient($timeout = 10, $write = null, $except = null)
 	{
-		$this->arrayAcceptedSocketCount = $this->SocketHandlerClass->select($this->arrayAcceptedSocket, $timeout, $write, $except);
+		$this->arrayAcceptedSocketCount = $this->socketHandlerClass->select($this->arrayAcceptedSocket, $timeout, $write, $except);
 	}
 
 	public function setArrayClient()
 	{
-		$this->arrayAcceptedSocket = array_merge([$this->SocketHandler], $this->arrayClientSocket);
+		$this->arrayAcceptedSocket = array_merge([$this->socketHandler], $this->arrayClientSocket);
 	}
 
 	public function close()
 	{
-		$this->SocketHandlerClass->close();
+		$this->socketHandlerClass->close();
 	}
 
 	public function connect($address, $port, $domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP)
 	{
-		$this->SocketHandler = $this->SocketHandlerClass->create($domain, $type, $protocol);
+		$this->socketHandler = $this->socketHandlerClass->create($domain, $type, $protocol);
 
-		if (!$this->SocketHandler) {
+		if (!$this->socketHandler) {
 			return false;
 		}
 
-		$result = $this->SocketHandlerClass->bind($this->SocketHandler, $address, $port);
+		$result = $this->socketHandlerClass->bind($this->socketHandler, $address, $port);
 		if (!$result) {
 			return false;
 		}
 
-		$result = $this->SocketHandlerClass->listen($this->SocketHandler);
+		$result = $this->socketHandlerClass->listen($this->socketHandler);
 		if (!$result) {
 			return false;
 		}
@@ -92,7 +92,7 @@ class ServerObject
 
 	public function acceptClient()
 	{
-		$bind = $this->SocketHandlerClass->acceptConnect($this->SocketHandler);
+		$bind = $this->socketHandlerClass->acceptConnect($this->socketHandler);
 
 		if ($bind) {
 			$this->clientBindHandler = $bind;

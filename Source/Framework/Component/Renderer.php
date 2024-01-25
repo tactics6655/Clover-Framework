@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
-use Xanax\Classes\File\Functions as FileFunction;
+use Neko\Classes\File\Functions as FileFunction;
 
 class Renderer
 {

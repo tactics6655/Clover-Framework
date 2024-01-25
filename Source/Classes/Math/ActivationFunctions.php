@@ -3,6 +3,11 @@
 class ActivationFunctions
 {
 
+	public function log($v, $base = M_E)
+	{
+		return log($v, $base);
+	}
+
 	public function erf()
 	{
 	}
@@ -11,25 +16,38 @@ class ActivationFunctions
 	{
 	}
 
-	public function partial_derivative()
+	public function partialDerivative()
 	{
 	}
 
-	public function backpropagtion()
+	public function backPropagtion()
 	{
 	}
 
-	public function cross_entropy()
+	public function crossEntropy()
 	{
 	}
 
-	public function softmax($x)
+	public function softmax(array $v)
 	{
+		$v = array_map('exp', array_map('floatval', $v));
+		$sum = array_sum($v);
+
+		foreach ($v as $index => $value) {
+			$v[$index] = $value / $sum;
+		}
+
+		return $v;
 	}
 
 	public function sigmoid($x)
 	{
 		return 1 / (1 + exp(-$x));
+	}
+
+	public function sigmoidDerivative($x)
+	{
+		return $x * (1 - $x);
 	}
 
 	public function tanh($x)

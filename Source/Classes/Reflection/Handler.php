@@ -2,21 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Reflection;
+namespace Neko\Classes\Reflection;
 
+use Closure;
+use Exception;
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionFunction;
+use ReflectionNamedType;
+use ReflectionUnionType;
+use ReflectionIntersectionType;
+use ReflectionParameter;
 
 class Handler
 {
-    
+
     /**
      * Gets an array of methods for the class.
      * 
-     * @param ReflectionClass $class@param 
+     * @param ReflectionClass $class
      * 
      * @return array
      */
-    public static function getClassMethods(ReflectionClass $class) :array
+    public static function getClassMethods(ReflectionClass $class): array
     {
         return $class->getMethods();
     }
@@ -29,7 +37,7 @@ class Handler
      * 
      * @return bool
      */
-    public static function isSubClassOf(ReflectionClass $class, ReflectionClass|string $className) :bool
+    public static function isSubClassOf(ReflectionClass $class, ReflectionClass|string $className): bool
     {
         return $class->isSubclassOf($className);
     }
@@ -41,7 +49,7 @@ class Handler
      * 
      * @return bool
      */
-    public static function isInterfaceClassDescriptor(ReflectionClass $class) :bool
+    public static function isInterfaceClassDescriptor(ReflectionClass $class): bool
     {
         return $class->isInterface();
     }
@@ -53,7 +61,7 @@ class Handler
      * 
      * @return bool
      */
-    public static function isAbstractClassDescriptor(ReflectionClass $class) :bool
+    public static function isAbstractClassDescriptor(ReflectionClass $class): bool
     {
         return $class->isAbstract();
     }
@@ -61,12 +69,12 @@ class Handler
     /**
      * Gets an array of annotation for the class
      * 
-     * @param ReflectionClass $reflector
+     * @param ReflectionClass|ReflectionMethod $reflector
      * @param string $annotationName
      * 
      * @return array
      */
-    public static function getAnnotations(ReflectionClass $reflector, string $annotationName): array
+    public static function getAnnotations(ReflectionClass|ReflectionMethod $reflector, string $annotationName): array
     {
         $result = [];
 
@@ -87,7 +95,7 @@ class Handler
      * 
      * @return \ReflectionClass
      */
-    public static function class(object|string $class) :ReflectionClass
+    public static function getClass(object|string $class): ReflectionClass
     {
         $reflection = new ReflectionClass($class);
 
@@ -97,13 +105,13 @@ class Handler
     /**
      * Get a ReflectionFunction
      * 
-     * @param \Closure|string $function
+     * @param Closure|string $function
      * 
-     * @return \ReflectionFunction
+     * @return ReflectionFunction
      */
-    public static function function(\Closure|string $function) :\ReflectionFunction
+    public static function getFunction(Closure|string $function): ReflectionFunction
     {
-        $reflection = new \ReflectionFunction($function);
+        $reflection = new ReflectionFunction($function);
 
         return $reflection;
     }
@@ -114,11 +122,11 @@ class Handler
      * @param object|string|null $class
      * @param string|null $method = null
      * 
-     * @return \ReflectionMethod
+     * @return ReflectionMethod
      */
-    public static function method(object|string|null $class, string|null $method = null) :\ReflectionMethod
+    public static function getMethod(object|string|null $class, string|null $method = null): ReflectionMethod
     {
-        $reflection = new \ReflectionMethod($class, $method);
+        $reflection = new ReflectionMethod($class, $method);
 
         return $reflection;
     }
@@ -140,11 +148,11 @@ class Handler
     /**
      * Gets parameters
      * 
-     * @param \ReflectionFunction $reflection
+     * @param ReflectionFunction|ReflectionMethod $reflection
      * 
      * @return array
      */
-    public static function getMethodParameters(\ReflectionFunction $reflection) :array
+    public static function getMethodParameters(ReflectionFunction|ReflectionMethod $reflection): array
     {
         $parameters = $reflection->getParameters();
 
@@ -158,9 +166,9 @@ class Handler
      * 
      * @return bool
      */
-    public static function isNamedType(mixed $parameter) :bool
+    public static function isNamedType(mixed $parameter): bool
     {
-        return $parameter instanceof \ReflectionNamedType;
+        return $parameter instanceof ReflectionNamedType;
     }
 
     /**
@@ -170,9 +178,9 @@ class Handler
      * 
      * @return object
      */
-    public static function getClassReflection(object|string $class) :object
+    public static function getClassReflection(object|string $class): object
     {
-        $reflection = self::class($class);
+        $reflection = self::getClass($class);
         $parameters = self::getParameters($reflection);
 
         $dependencies = [];
@@ -185,7 +193,7 @@ class Handler
                 array_push($dependencies, $name);
             } else {
                 if (!$parameter->isOptional()) {
-                    throw new \Exception("Can not resolve parameters");
+                    throw new Exception("Can not resolve parameters");
                 }
             }
         }
@@ -201,7 +209,7 @@ class Handler
      * 
      * @return mixed
      */
-    public static function callMethod(callable $method, array ...$arguments) :mixed
+    public static function callMethod(callable $method, array ...$arguments): mixed
     {
         return call_user_func($method, $arguments);
     }
@@ -214,7 +222,7 @@ class Handler
      * 
      * @return mixed
      */
-    public static function callMethodArray(callable $method, array $arguments = []) :mixed
+    public static function callMethodArray(callable $method, array $arguments = []): mixed
     {
         return call_user_func_array($method, $arguments);
     }
@@ -228,9 +236,9 @@ class Handler
      * 
      * @return mixed
      */
-    public static function callClassMethod(object|string|null $class, string $method, array ...$arguments) :mixed
+    public static function callMethodOfClass(object|string|null $class, string $method, array ...$arguments): mixed
     {
-        $reflection = self::method($class, $method);
+        $reflection = self::getMethod($class, $method);
 
         if ($reflection->isStatic()) {
             return forward_static_call($method, $arguments);
@@ -248,9 +256,9 @@ class Handler
      * 
      * @return mixed
      */
-    public static function callClassMethodArray(object|string|null $controller, string $method, array $arguments = [])
+    public static function callArrayMethodOfClass(object|string|null $controller, string $method, array $arguments = [])
     {
-        $reflection = self::method($controller, $method);
+        $reflection = self::getMethod($controller, $method);
 
         if ($reflection->isStatic()) {
             return forward_static_call_array($method, $arguments);
@@ -268,7 +276,7 @@ class Handler
      * 
      * @return bool
      */
-    public static function isCallable(mixed $value, bool $syntax_only = false, null|string &$callable_name = null) :bool
+    public static function isCallable(mixed $value, bool $syntax_only = false, null|string &$callable_name = null): bool
     {
         return is_callable($value, $syntax_only, $callable_name);
     }
@@ -280,9 +288,17 @@ class Handler
      * 
      * @return array
      */
-    public static function getClassMethodNames(object|string $object_or_class) :array
+    public static function getClassMethodNames(object|string $object_or_class): array
     {
         return get_class_methods($object_or_class);
+    }
+
+    public static function getNewInstance($class) {
+        if (!class_exists($class)) {
+            return false;
+        }
+        
+        return new ($class);
     }
 
     /**
@@ -290,48 +306,48 @@ class Handler
      * 
      * @param object|string|null $class
      * @param array $passParameters = []
-     * @param ?\Closure|string $method = null
+     * @param ?Closure|string $method = null
      * 
      * @return mixed
      */
-    public static function invoke(object|string|null $class, array $passParameters = [], $arguments = [], null|callable|string $method = null) :mixed
+    public static function invoke(object|string|null $class, array $passParameters = [], $arguments = [], null|callable|string $method = null): mixed
     {
-        $reflection = $method == null ? self::function($method) : self::method($class, $method);
-        /** @var \ReflectionParameter[] $parameters */
+        $reflection = $method == null ? self::getFunction($class) : self::getMethod($class, $method);
+        /** @var ReflectionParameter[] $parameters */
         $parameters = self::getMethodParameters($reflection);
 
         $dependencies = [];
 
         foreach ($parameters as $parameter) {
-            /** @var \ReflectionNamedType|\ReflectionUnionType|\ReflectionIntersectionType|null $type */
+            /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
             $type = $parameter->getType();
 
             if (!$type || !self::isNamedType($type)) {
                 continue;
             }
 
-            if (8 === PHP_MAJOR_VERSION) {
+            if (80100 <= PHP_VERSION_ID && self::isNamedType($type)) {
                 $reflectionClass = new ReflectionClass($type->getName());
-            } else {
+            } else if (80000 > PHP_VERSION_ID) {
                 $reflectionClass = $parameter->getClass();
             }
-            
-            array_push($dependencies, $reflectionClass->newInstance());
+
+            $dependencies[] = $reflectionClass->newInstance();
         }
 
         if (!is_object($class)) {
-            $initClass = self::getClassReflection($class);
+            $instanceClass = self::getClassReflection($class);
         } else {
-            $initClass = $class;
+            $instanceClass = $class;
         }
 
         if (isset($arguments) && !empty($arguments)) {
-            $class = new ReflectionClass($initClass);
+            $class = new ReflectionClass($instanceClass);
             $instance = $class->newInstance($arguments);
 
             return $reflection->invoke($instance, ...array_merge($dependencies, $passParameters));
         }
 
-        return $reflection->invoke($initClass, ...$dependencies);
+        return $reflection->invoke($instanceClass, ...$dependencies);
     }
 }

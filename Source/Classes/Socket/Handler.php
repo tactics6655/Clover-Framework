@@ -2,21 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Socket;
+namespace Neko\Classes\Socket;
 
-use Xanax\Implement\SocketHandlerInterface;
+use Neko\Implement\SocketHandlerInterface;
 
 class Handler implements SocketHandlerInterface
 {
 
-	/*
-	 *
-	 * Domain = [AF_INET, AF_INET6, AF_UNIX]
-	 * Type = [SOCK_STREAM, SOCK_DGRAM, SOCK_SEQPACKET, SOCK_RAW, SOCK_RDM]
-	 * Protocol = [SOL_TCP, SOL_UDP]
-	 *
-	 */
-	public function create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP): \Socket|bool|resource
+	public function create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP)
 	{
 		return \socket_create($domain, $type, $protocol);
 	}
@@ -79,7 +72,7 @@ class Handler implements SocketHandlerInterface
 		return socket_connect($socketHandler, $address, $port);
 	}
 
-	public function getErrorMessage($message = '')
+	public function getErrorMessage(int $message = 0)
 	{
 		return socket_strerror($message);
 	}

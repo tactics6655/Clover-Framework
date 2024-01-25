@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Database\Driver;
+namespace Neko\Classes\Database\Driver;
+
+use SQLite3;
+use SQLite3Result;
 
 class SqLite
 {
@@ -10,7 +13,7 @@ class SqLite
 
     public function __construct($file)
     {
-        $this->connection = new \SQLite3($file);
+        $this->connection = new SQLite3($file);
     }
 
     public function isConnected()
@@ -23,12 +26,12 @@ class SqLite
         return $this->connection->lastErrorMsg();
     }
 
-    public function fetchArray(\SQLite3Result $result): array|bool
+    public function fetchArray(SQLite3Result $result): array|bool
     {
         return $result->fetchArray(SQLITE3_ASSOC);
     }
 
-    public function query($sql): \SQLite3Result|bool
+    public function query($sql): SQLite3Result|bool
     {
         return $this->connection->query($sql);
     }

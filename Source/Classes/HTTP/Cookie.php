@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\HTTP;
+namespace Neko\Classes\HTTP;
 
 class Cookie
 {

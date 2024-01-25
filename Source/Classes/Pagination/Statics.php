@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Pagination;
+namespace Neko\Classes\Pagination;
 
 class Statics
 {

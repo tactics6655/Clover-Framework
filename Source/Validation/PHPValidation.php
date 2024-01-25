@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Validation;
+namespace Neko\Validation;
 
-use Xanax\Classes\OperationSystem;
+use Neko\Classes\OperationSystem;
 
 class PHPValidation
 {

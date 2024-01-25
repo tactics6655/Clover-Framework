@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Plugin;
+namespace Neko\Plugin;
 
-use Xanax\Classes\ClientURL;
+use Neko\Classes\ClientURL;
 
 class FFmpeg
 {

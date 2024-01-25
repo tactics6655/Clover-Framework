@@ -1,27 +1,27 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
 class Resource
 {
 
-    private $adopted_css_files;
+    private $adoptedCssFiles;
 
-    private $adopted_script_files;
+    private $adoptedScriptFiles;
 
-    private $adopted_body_css_files;
+    private $adoptedBodyCssFiles;
 
-    private $adopted_body_script_files;
+    private $adoptedBodyScriptFiles;
 
-    private $meta_tags;
+    private $metaTags;
 
     private $title;
 
     public function __construct()
     {
-        $this->adopted_css_files = [];
-        $this->adopted_script_files = [];
-        $this->meta_tags = [];
+        $this->adoptedCssFiles = [];
+        $this->adoptedScriptFiles = [];
+        $this->metaTags = [];
     }
 
     public function setTitle($title)
@@ -31,7 +31,7 @@ class Resource
 
     public function addGenericCssFile($file)
     {
-        $this->adopted_css_files[] = array(
+        $this->adoptedCssFiles[] = array(
             'rel' => 'stylesheet',
             'href' => $file,
             'type' => 'text/css',
@@ -41,29 +41,29 @@ class Resource
 
     public function addGenericJavascriptFile($file)
     {
-        $this->adopted_script_files[] = array('src' => $file);
+        $this->adoptedScriptFiles[] = array('src' => $file);
     }
 
     public function addJavascriptFile($map)
     {
-        $this->adopted_script_files[] = $map;
+        $this->adoptedScriptFiles[] = $map;
     }
 
     public function addCssFile($map)
     {
-        $this->adopted_css_files[] = $map;
+        $this->adoptedCssFiles[] = $map;
     }
 
     public function addMetaTag($map)
     {
-        $this->meta_tags[] = $map;
+        $this->metaTags[] = $map;
     }
 
     public function extract()
     {
         return [
-            'cssMap' => $this->adopted_css_files,
-            'scriptMap' => $this->adopted_script_files,
+            'cssMap' => $this->adoptedCssFiles,
+            'scriptMap' => $this->adoptedScriptFiles,
             'title' => $this->title
         ];
     }

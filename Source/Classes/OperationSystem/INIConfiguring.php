@@ -1,6 +1,6 @@
 <?php
 
-use Xanax\Enumeration\PHPINI;
+use Neko\Enumeration\PHPINI;
 
 class INIConfiguration
 {

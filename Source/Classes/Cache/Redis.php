@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
 use Redis as Cache;
 
@@ -13,7 +13,7 @@ class Redis
 
 	public function __construct()
 	{
-		$this->cache = new Redis();
+		$this->cache = new Cache();
 	}
 
 	public function isExists()

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Compression;
+namespace Neko\Classes\Compression;
 
-use Xanax\Enumeration\FileMode;
+use Neko\Enumeration\FileMode;
 
 class GZip
 {

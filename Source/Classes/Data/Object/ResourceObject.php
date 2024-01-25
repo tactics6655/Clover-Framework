@@ -1,12 +1,12 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
 #[\AllowDynamicProperties]
 class ResourceObject
 {
 
-    protected static \resource $data;
+    protected static $data;
 
     public function __construct($data)
     {
@@ -15,6 +15,6 @@ class ResourceObject
 
     public function __toString()
     {
-        return $this->data;
+        return (string)$this->data;
     }
 }

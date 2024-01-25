@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\FileSystem;
+namespace Neko\Classes\FileSystem;
 
-use Xanax\Implement\FileSystemInterface as FileSystemInterface;
+use Neko\Implement\FileSystemInterface as FileSystemInterface;
 
 class Handler implements FileSystemInterface
 {

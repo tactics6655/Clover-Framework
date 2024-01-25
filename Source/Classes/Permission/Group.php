@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Permission;
+namespace Neko\Classes\Permission;
 
-use Xanax\Classes\Permission;
+use Neko\Classes\Permission;
 
 class Group extends Permission
 {

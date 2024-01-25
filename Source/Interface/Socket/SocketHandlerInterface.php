@@ -1,11 +1,19 @@
 <?php
 
-namespace Xanax\Implement;
+namespace Neko\Implement;
 
 interface SocketHandlerInterface
 {
 
-	public function create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP): resource;
+	/**
+	 *
+	 * Domain = [AF_INET, AF_INET6, AF_UNIX]
+	 * Type = [SOCK_STREAM, SOCK_DGRAM, SOCK_SEQPACKET, SOCK_RAW, SOCK_RDM]
+	 * Protocol = [SOL_TCP, SOL_UDP]
+	 * 
+	 * @return \Socket|bool|resource
+	 */
+	public function create($domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP);
 
 	public function getPeerName($socketHandler): array;
 
@@ -19,7 +27,7 @@ interface SocketHandlerInterface
 
 	public function bind($socketHandler, $address, $port): bool;
 
-	public function readPacket($socketHandler, $length, $type = PHP_BINARY_READ): string;
+	public function readPacket($socketHandler, $length, $type = PHP_BINARY_READ): bool|string;
 
 	public function writeSocket($socketHandler, $buffer, $length = -1): int;
 

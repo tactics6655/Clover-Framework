@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Exception\FileHandler;
+namespace Neko\Exception\FileHandler;
 
 class MemoryException extends \RuntimeException
 {

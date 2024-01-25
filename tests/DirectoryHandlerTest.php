@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Xanax\Classes\Directory\Handler as DirectoryHandler;
+use Neko\Classes\Directory\Handler as DirectoryHandler;
 
 class DirectoryHandlerTest extends TestCase
 {

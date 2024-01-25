@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Compression;
+namespace Neko\Classes\Compression;
 
 class Zlib
 {

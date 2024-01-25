@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\File;
+namespace Neko\Classes\File;
 
-use Xanax\Enumeration\FileMode;
-use Xanax\Enumeration\FileSizeUnit;
+use Neko\Enumeration\FileMode;
+use Neko\Enumeration\FileSizeUnit;
 
 // Classes
 
-use Xanax\Classes\FileSystem\Handler as FileSystemHandler;
-use Xanax\Classes\Directory\Handler as DirectoryHandler;
+use Neko\Classes\FileSystem\Handler as FileSystemHandler;
+use Neko\Classes\Directory\Handler as DirectoryHandler;
 
 // Implements
 
-use Xanax\Implement\FileHandlerInterface as FileHandlerInterface;
-use Xanax\Implement\DirectoryHandlerInterface as DirectoryHandlerInterface;
+use Neko\Implement\FileHandlerInterface as FileHandlerInterface;
+use Neko\Implement\DirectoryHandlerInterface as DirectoryHandlerInterface;
 
 // Message
 
-use Xanax\Classes\File\Functions as FileFunctions;
+use Neko\Classes\File\Functions as FileFunctions;
 
 class Handler implements FileHandlerInterface
 {

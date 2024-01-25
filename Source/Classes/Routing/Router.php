@@ -2,27 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\HTTP;
+namespace Neko\Classes\Routing;
 
-use Xanax\Classes\DependencyInjection\Container;
-use Xanax\Classes\HTTP\Router\Route as RouteObject;
-use Xanax\Classes\HTTP\Router\RouteAnnotationReader;
-use Xanax\Classes\HTTP\Request as HTTPRequest;
-use Xanax\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
-use Xanax\Classes\File\Functions as FileFunctions;
-use Xanax\Classes\Reflection\Handler as ReflectionHandler;
-use Xanax\Classes\Directory\Handler as DirectoryHandler;
-use Xanax\Implement\EventDispatcherInterface;
+use Neko\Classes\DependencyInjection\Container;
+use Neko\Classes\Routing\Route as RouteObject;
+use Neko\Classes\Routing\RouteAnnotationReader;
+use Neko\Classes\HTTP\Request as HTTPRequest;
+use Neko\Classes\File\Functions as FileFunctions;
+use Neko\Classes\Reflection\Handler as ReflectionHandler;
+use Neko\Classes\Directory\Handler as DirectoryHandler;
+
+use Neko\Implement\EventDispatcherInterface;
+
+use Neko\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 
 class Router
 {
 	/** @var Container[] $container */
-	private array $container = array();
-	
-	/** @var RouteObject[] $routes */
-	private array $routes = array();
+	private Container $container;
 
-	private mixed $middlewares;
+	/** @var RouteObject[] $routes */
+	private array $routes = [];
+
+	private array $middlewares;
 
 	private string|HTTPRequestMethod $method;
 
@@ -35,6 +37,9 @@ class Router
 		$this->annotationReader = new RouteAnnotationReader();
 	}
 
+	/**
+	 * Set a middleware for using globally
+	 */
 	public function setMiddleware(...$middleware)
 	{
 		$this->middlewares = $middleware;
@@ -42,17 +47,30 @@ class Router
 		return $this;
 	}
 
-	public function setContainer($container)
+	/**
+	 * Set a container
+	 */
+	public function setContainer(Container $container)
 	{
 		$this->container = $container;
 	}
 
+	/**
+	 * Set a pre-append prefix on pattern
+	 */
 	private function addPrefix($pattern)
 	{
 		return $this->prependPrefix . $pattern;
 	}
 
-	private function set(string $method, $pattern, $callback)
+	/**
+	 * Set a route
+	 * 
+	 * @param string $method
+	 * @param string $pattern
+	 * @param string $callback
+	 */
+	private function set(string $method, string $pattern, string $callback)
 	{
 		$pattern = $this->addPrefix($pattern);
 
@@ -64,7 +82,7 @@ class Router
 		$this->prependPrefix = $pattern;
 
 		if (ReflectionHandler::isCallable($callback)) {
-			ReflectionHandler::callClassMethod(self::class, $callback);
+			ReflectionHandler::callMethodOfClass(self::class, $callback);
 		}
 
 		$this->prependPrefix = '';
@@ -117,22 +135,23 @@ class Router
 		foreach ($annotationList as $annotation) {
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
+			$middleware = $annotation->middleware ?? "";
 			$holder = $annotation->holder ?? [];
 			$callback = join('::', $holder);
 
-			$this->addRoute($method, $pattern, $callback);
+			$this->addRoute($method, $pattern, $callback, $middleware);
 		}
 
 		return $this;
 	}
 
-	private function addRoute($method, $pattern, $callback)
+	private function addRoute($method, $pattern, $callback, $middleware = [])
 	{
 		if (!isset($this->routes[$method])) {
 			$this->routes[$method] = [];
 		}
 
-		$this->routes[$method][] = new RouteObject($pattern, $callback);
+		$this->routes[$method][] = new RouteObject($pattern, $callback, $middleware);
 	}
 
 	public function delete($pattern, $callback)
@@ -195,7 +214,9 @@ class Router
 				$route->setMiddleware($this->middlewares);
 			}
 
-			return $route->handle($this->container);
+			$route->setContainer($this->container);
+
+			return $route->handle();
 		}
 
 		return false;

@@ -1,5 +1,7 @@
 <?php
 
+namespace Neko\Classes\Hash;
+
 class SHA512
 {
 	public function encrypt($string, $useBase64 = true)

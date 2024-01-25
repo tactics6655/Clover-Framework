@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Enumeration;
+namespace Neko\Enumeration;
 
 abstract class ServerIndices
 {
@@ -8,6 +8,10 @@ abstract class ServerIndices
      * The filename of the currently executing script, relative to the document root
      */
     const CURRENTLY_EXECUTING_SCRIPT_FILENAME = 'PHP_SELF';
+
+    const HTTP_HOST = 'HTTP_HOST';
+
+    const DOCUMENT_URI = 'DOCUMENT_URI';
 
     /**
      * Array of arguments passed to the script
@@ -121,6 +125,10 @@ abstract class ServerIndices
 
     const APPL_MD_PATH = 'APPL_MD_PATH';
 
+    const AUTH_TYPE = 'AUTH_TYPE';
+
+    const AUTH_PASSWORD = 'AUTH_PASSWORD';
+
     const HTTP_X_REWRITE_URL = 'HTTP_X_REWRITE_URL';
 
     const HTTP_CONNECTION = 'HTTP_CONNECTION';
@@ -168,5 +176,6 @@ abstract class ServerIndices
     const HTTP_ACCEPT_CHARSET = 'HTTP_ACCEPT_CHARSET';
 
     const HTTP_X_FORWARDED_PROTO = 'HTTP_X_FORWARDED_PROTO';
+
     const HTTP_X_FORWARDED_FOR = 'HTTP_X_FORWARDED_FOR';
 }

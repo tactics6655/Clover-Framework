@@ -1,13 +1,13 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
-use Xanax\Classes\OperationSystem as OS;
-use Xanax\Framework\Component\Mapper;
-use Xanax\Framework\Enumeration\Environment;
-use Xanax\Classes\ArrayObject;
-use Xanax\Classes\HTTP\Router as Router;
-use Xanax\Classes\HTTP\Request as Request;
+use Neko\Framework\Component\Mapper;
+use Neko\Framework\Enumeration\Environment;
+
+use Neko\Classes\OperationSystem as OS;
+use Neko\Classes\ArrayObject;
+use Neko\Classes\HTTP\Request as Request;
 
 class Runtime
 {
@@ -57,7 +57,7 @@ class Runtime
     private function setEnvironment($key, $value)
     {
         $array = is_array($key) ? $key : [$key];
-        ArrayObject::setDeep($this->environment, $array, $value);
+        ArrayObject::setDeepCopy($this->environment, $array, $value);
     }
 
     protected function applyOptions()

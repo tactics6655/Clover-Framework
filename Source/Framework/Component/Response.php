@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
 class Response
 {

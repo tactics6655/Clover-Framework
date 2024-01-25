@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Protocol;
+namespace Neko\Classes\Protocol;
 
 class Internet
 {

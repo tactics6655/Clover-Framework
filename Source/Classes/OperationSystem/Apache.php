@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\OperationSystem;
+namespace Neko\Classes\OperationSystem;
 
 class Apache
 {

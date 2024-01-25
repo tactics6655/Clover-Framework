@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
 class CodePoint
 {

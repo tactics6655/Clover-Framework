@@ -1,6 +1,8 @@
 <?php
 
-namespace Xanax\Classes\XML;
+namespace Neko\Classes\XML;
+
+use DOMDocument;
 
 class DOM
 {
@@ -9,7 +11,7 @@ class DOM
 
 	public function __construct()
 	{
-		$this->dom = new \DOMDocument;
+		$this->dom = new DOMDocument;
 	}
 
 	public function parse($xmlString)

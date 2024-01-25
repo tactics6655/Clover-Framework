@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\File;
+namespace Neko\Classes\File;
 
-use Xanax\Classes\File\Handler as FileHandler;
-use Xanax\Classes\Directory\Handler as DirectoryHandler;
+use Neko\Classes\File\Handler as FileHandler;
+use Neko\Classes\Directory\Handler as DirectoryHandler;
 
-use Xanax\Implement\FileObjectInterface;
-use Xanax\Exception\FileHandler\FileIsNotExistsException;
-use Xanax\Exception\FileHandler\TargetIsNotFileException;
-use Xanax\Message\FileHandler\FileHandlerMessage;
+use Neko\Implement\FileObjectInterface;
+use Neko\Exception\FileHandler\FileIsNotExistsException;
+use Neko\Exception\FileHandler\TargetIsNotFileException;
+use Neko\Message\FileHandler\FileHandlerMessage;
 
 class FileObject implements FileObjectInterface
 {

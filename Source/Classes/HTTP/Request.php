@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\HTTP;
+namespace Neko\Classes\HTTP;
 
-use Xanax\Implement\RequestInterface;
-use Xanax\Classes\Data\URLObject as URLObject;
-use Xanax\Classes\Data\StringObject as StringObject;
-use Xanax\Enumeration\HTTPRequestMethod;
-use Xanax\Enumeration\ServerIndices;
+use Neko\Implement\RequestInterface;
+use Neko\Classes\Data\URLObject as URLObject;
+use Neko\Classes\Data\StringObject as StringObject;
+use Neko\Enumeration\HTTPRequestMethod;
+use Neko\Enumeration\ServerIndices;
 
 class Request implements RequestInterface
 {
@@ -107,6 +107,11 @@ class Request implements RequestInterface
 		}
 	}
 
+	/**
+	 * Flushes all response data to the client
+	 * 
+	 * @return void
+	 */
 	public static function flushFastCgiResponseData()
 	{
 		if (function_exists('fastcgi_finish_request')) {
@@ -114,6 +119,9 @@ class Request implements RequestInterface
 		}
 	}
 
+	/**
+	 * Get status messages
+	 */
 	public static function getStatusMesssages()
 	{
 		return self::$statusMesssages;
@@ -149,6 +157,9 @@ class Request implements RequestInterface
 		return null;
 	}
 
+	/**
+	 * Fetch all HTTP request headers
+	 */
 	public static function fetchAllResponseHeaders()
 	{
 		return getallheaders();
@@ -179,6 +190,9 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::X_HTTP_METHOD_OVERRIDE);
 	}
 
+	/**
+	 * Get timestamp of the start of the request
+	 */
 	public static function getServerTime()
 	{
 		return self::getServerArguments(ServerIndices::REQUEST_TIMESTAMP);
@@ -229,6 +243,11 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::APPL_MD_PATH);
 	}
 
+	public static function getHttpHost()
+	{
+		return self::getServerArguments(ServerIndices::HTTP_HOST);
+	}
+
 	/**
 	 * The authentication method that the server uses to validate users.
 	 * It does not mean that the user was authenticated if AUTH_TYPE contains a value and the authentication scheme is not Basic or integrated Windows authentication. 
@@ -238,7 +257,7 @@ class Request implements RequestInterface
 	 */
 	public static function getIISAuthenticateType()
 	{
-		return self::getServerArguments('AUTH_TYPE');
+		return self::getServerArguments(ServerIndices::AUTH_TYPE);
 	}
 
 	/**
@@ -248,7 +267,7 @@ class Request implements RequestInterface
 	 */
 	public static function getIISAuthenticatePassword()
 	{
-		return self::getServerArguments('AUTH_PASSWORD');
+		return self::getServerArguments(ServerIndices::AUTH_PASSWORD);
 	}
 
 	/**
@@ -271,11 +290,17 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::APPL_PHYSICAL_PATH);
 	}
 
+	/**
+	 * Get server identification string
+	 */
 	public static function getServerSoftwareName()
 	{
 		return self::getServerArguments(ServerIndices::SERVER_SOFTWARE_NAME);
 	}
 
+	/**
+	 * Get document root directory under which the current script is executing
+	 */
 	public static function getAbsolutePathOfDocumentRoot()
 	{
 		return self::getServerArguments(ServerIndices::DOCUMENT_ROOT_DIRECTORY);
@@ -298,11 +323,7 @@ class Request implements RequestInterface
 
 	public static function getReferer()
 	{
-		if (self::hasReferer()) {
-			return self::getServerArguments(ServerIndices::HTTP_REFERER);
-		}
-
-		return null;
+		return self::getServerArguments(ServerIndices::HTTP_REFERER);
 	}
 
 	public static function getHTTPAccept()
@@ -343,6 +364,11 @@ class Request implements RequestInterface
 	public static function getAcceptEncoding()
 	{
 		return self::getServerArguments(ServerIndices::HTTP_ACCEPT_ENCODING);
+	}
+
+	public static function getDocumentUrl()
+	{
+		return self::getServerArguments(ServerIndices::DOCUMENT_URI);
 	}
 
 	public static function isXmlHttpRequest()
@@ -391,6 +417,9 @@ class Request implements RequestInterface
 		return new URLObject($uri);
 	}
 
+	/**
+	 * Get query string
+	 */
 	public static function getQueryString()
 	{
 		if (isset($_SERVER[ServerIndices::QUERY_STRING])) {
@@ -402,6 +431,11 @@ class Request implements RequestInterface
 		return null;
 	}
 
+	/**
+	 * Get ip address from which the user is viewing the current page
+	 * 
+	 * @return URLObject|null
+	 */
 	public static function getRemoteIPAddress()
 	{
 		if (isset($_SERVER[ServerIndices::REMOTE_IP_ADDRESS])) {
@@ -533,7 +567,7 @@ class Request implements RequestInterface
 	public static function getRequestUri()
 	{
 		$port = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-		$host = sprintf('%s%s%s', $port, $_SERVER['HTTP_HOST'], dirname($_SERVER['DOCUMENT_URI']));
+		$host = sprintf('%s%s%s', $port, self::getHttpHost(), dirname(self::getDocumentUrl()));
 
 		return new URLObject($host);
 	}
@@ -541,7 +575,7 @@ class Request implements RequestInterface
 	public static function getRequestURL()
 	{
 		$port = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-		$host = sprintf('%s%s%s', $port, $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']);
+		$host = sprintf('%s%s%s', $port, self::getHttpHost(), $_SERVER['REQUEST_URI']);
 
 		return new URLObject($host);
 	}
@@ -667,13 +701,23 @@ class Request implements RequestInterface
 		return preg_match("#$regexp#", $agent);
 	}
 
-	public static function isCrawler()
+
+	public static function getCrawlerUserAgent()
 	{
 		$useragent = strtolower(self::getUserAgent());
 
 		$crawlerRegex = "/bot|archiver|apachebench|wget|curl|crawl|google|yahoo|slurp|wordpress|spider|yeti|daum|teoma|fish|hanrss|facebook|yandex|infoseek|askjeeves|stackrambler|spyder|watchmouse|pingdom\.com|feedfetcher-google/";
 
 		if (preg_match($crawlerRegex, $useragent)) {
+			return $useragent;
+		}
+
+		return false;
+	}
+
+	public static function isCrawler()
+	{
+		if (self::getCrawlerUserAgent()) {
 			return true;
 		}
 
@@ -682,20 +726,20 @@ class Request implements RequestInterface
 
 	public static function isConnectionKeepAlive()
 	{
-		$connection = strtolower(self::getHTTPConnection());
+		$connection = self::getHTTPConnection();
 
-		return $connection === 'keep-alive';
+		return strtolower($connection) === 'keep-alive';
 	}
 
 	public static function hasReferer()
 	{
-		if (isset($_SERVER[ServerIndices::HTTP_REFERER]) && isset($_SERVER['SCRIPT_URL'])) {
-			$referer = $_SERVER[ServerIndices::HTTP_REFERER];
-			$url     = $_SERVER['SCRIPT_URL'];
-
-			return strpos($referer, $url) === 0;
+		if (!isset($_SERVER[ServerIndices::HTTP_REFERER]) || !isset($_SERVER['SCRIPT_URL'])) {
+			return false;
 		}
 
-		return false;
+		$referer = self::getReferer();
+		$url     = $_SERVER['SCRIPT_URL'];
+
+		return strpos($referer, $url) === 0;
 	}
 }

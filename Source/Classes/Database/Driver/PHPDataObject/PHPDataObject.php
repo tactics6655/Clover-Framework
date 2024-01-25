@@ -2,33 +2,78 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Database\Driver;
+namespace Neko\Classes\Database\Driver;
 
-class PHPDataObject extends \PDO
+use PDO;
+use Exception;
+
+class PHPDataObject extends PDO
 {
 
-	public function __construct(string $host = 'localhost', string $database, string $username, string $password)
+	private ?array $options = null;
+
+	private string $port = "3306";
+
+	private string $username;
+
+	private string $password;
+
+	private string $hostname;
+
+	private string $database;
+
+	public function __construct() {}
+
+	public function setPort($port)
+	{
+		$this->port = $port;
+	}
+
+	public function setHostName($hostname)
+	{
+		$this->hostname = $hostname;
+	}
+
+	public function setDatabase($database)
+	{
+		$this->database = $database;
+	}
+
+	public function setUsername($username)
+	{
+		$this->username = $username;
+	}
+
+	public function setPassword($password)
+	{
+		$this->password = $password;
+	}
+
+	public function connect()
 	{
 		try {
-			$dns = ('mysql:' . implode(';', isset($database) ? [
-				'dbname=' . $database,
-				'host=' . $host
+			$dns = ('mysql:' . implode(';', isset($this->database) ? [
+				'host=' . $this->hostname,
+				'port=' . $this->port,
+				'dbname=' . $this->database,
 			] : [
-				'host=' . $host
+				'host=' . $this->hostname
 			]));
 
-			$attributes = [
-				\PDO::MYSQL_ATTR_INIT_COMMAND 		=> "SET NAMES 'utf8'",
-				\PDO::ATTR_TIMEOUT            		=> 5,
-				\PDO::ATTR_ERRMODE            		=> \PDO::ERRMODE_EXCEPTION,
-				\PDO::ATTR_EMULATE_PREPARES   		=> false,
-				\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
-			];
-
-			parent::__construct($dns, $username, $password, $attributes);
-		} catch (\Exception $e) {
-			throw new \Exception($e->getMessage());
+			parent::__construct($dns, $this->username, $this->password, $this->options);
+		} catch (Exception $e) {
+			throw new Exception($this->getLocalizedErrorMessage($e));
 		}
+	}
+
+	public function getDriverName()
+	{
+		return $this->getAttribute(PDO::ATTR_DRIVER_NAME);
+	}
+
+	public function getTimeout()
+	{
+		return $this->getAttribute(PDO::ATTR_TIMEOUT);
 	}
 
 	public function insertByArray($table, $columns, $values)
@@ -238,6 +283,9 @@ class PHPDataObject extends \PDO
 			case "1146":
 				$message = sprintf("%s 테이블이 존재하지 않습니다.", $errCodeArguments[0]);
 				break;
+			case "2002":
+				$message = sprintf("SQLSTATE[HY000] [2002] 연결이 거부되었습니다.");
+				break;
 			default:
 				break;
 		}
@@ -249,31 +297,31 @@ class PHPDataObject extends \PDO
 	{
 		switch ($type) {
 			case 'all':
-				$res = $stm->fetchAll(\PDO::FETCH_ASSOC);
+				$res = $stm->fetchAll(PDO::FETCH_ASSOC);
 				break;
 			case 'one':
 				$res = $stm->fetch()[0] ?? "";
 				break;
 			case 'self':
-				$res = $stm->fetch(\PDO::FETCH_ASSOC);
+				$res = $stm->fetch(PDO::FETCH_ASSOC);
 				break;
 			case 'column':
-				$res = $stm->fetchColumn(\PDO::FETCH_ASSOC);
+				$res = $stm->fetchColumn(PDO::FETCH_ASSOC);
 				break;
 			case 'alias':
-				$res = $stm->fetch(\PDO::FETCH_NAMED);
+				$res = $stm->fetch(PDO::FETCH_NAMED);
 				break;
 			case 'number':
-				$res = $stm->fetch(\PDO::FETCH_NUM);
+				$res = $stm->fetch(PDO::FETCH_NUM);
 				break;
 			case 'both':
-				$res = $stm->fetch(\PDO::FETCH_BOTH);
+				$res = $stm->fetch(PDO::FETCH_BOTH);
 				break;
 			case 'object':
-				$res = $stm->fetch(\PDO::FETCH_OBJ);
+				$res = $stm->fetch(PDO::FETCH_OBJ);
 				break;
 			default:
-				$res = $stm->fetchAll(\PDO::FETCH_ASSOC);
+				$res = $stm->fetchAll(PDO::FETCH_ASSOC);
 				break;
 		}
 

@@ -1,6 +1,6 @@
 <?php
 
-use Xanax\Classes\Data as Data;
+use Neko\Classes\Data as Data;
 
 class ByteArray extends Data
 {

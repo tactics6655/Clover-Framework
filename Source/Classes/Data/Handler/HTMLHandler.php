@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Exception\MemoryAllocatedException;
+use Neko\Exception\MemoryAllocatedException;
 
-use Xanax\Classes\Data\StringHandler;
+use Neko\Classes\Data\StringHandler;
 
 class HTMLHandler extends StringHandler
 {
@@ -209,7 +209,7 @@ class HTMLHandler extends StringHandler
 
 				break;
 			case 'DoubleQuotation':
-				if (preg_match('/^"(.*)"$/', $key, $matches)) {
+				if (preg_match('/^"(.*)"$/', $string, $matches)) {
 					if (isset($matches[1])) {
 						$string = $matches[1];
 					} else {
@@ -243,7 +243,7 @@ class HTMLHandler extends StringHandler
 				break;
 			case 'Numbers':
 				if (!is_numeric($string) || !is_int($string)) {
-					if (preg_match('/^(\d[\d\.]+)$/', $key, $matches)) {
+					if (preg_match('/^(\d[\d\.]+)$/', $string, $matches)) {
 						if (isset($matches[1])) {
 							$string = $matches[1];
 						} else {

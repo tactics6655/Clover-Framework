@@ -2,50 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes;
+namespace Neko\Classes\Crypt;
 
-class AES256CBC
+use Neko\Classes\Crypt\OpenSSL;
+use Exception;
+
+class AES256CBC extends OpenSSLCipher
 {
 	const METHOD = 'AES-256-CBC';
 
-	public static function encrypt($string, $key)
+	public static function encrypt($string, $key, $options = OPENSSL_RAW_DATA)
 	{
-		if (mb_strlen($key, '8bit') !== 32) {
-			throw new \Exception('Needs a 256-bit key!');
-		}
+		parent::setAlgorithm(self::METHOD);
 
-		$ivsize = openssl_cipher_iv_length(self::METHOD);
-		$iv     = openssl_random_pseudo_bytes($ivsize);
-
-		$ciphertext = openssl_encrypt(
-			$string,
-			self::METHOD,
-			$key,
-			OPENSSL_RAW_DATA,
-			$iv
-		);
-
-		return base64_encode($iv . $ciphertext);
+		return parent::encrypt($string, $key, $options);
 	}
 
 	public static function decrypt($string, $key)
 	{
-		$string = base64_decode($string);
+		parent::setAlgorithm(self::METHOD);
 
-		if (mb_strlen($key, '8bit') !== 32) {
-			throw new \Exception('Needs a 256-bit key!');
-		}
-
-		$ivsize     = openssl_cipher_iv_length(self::METHOD);
-		$iv         = mb_substr($string, 0, $ivsize, '8bit');
-		$ciphertext = mb_substr($string, $ivsize, null, '8bit');
-
-		return openssl_decrypt(
-			$ciphertext,
-			self::METHOD,
-			$key,
-			OPENSSL_RAW_DATA,
-			$iv
-		);
+		return parent::decrypt($string, $key);
 	}
 }

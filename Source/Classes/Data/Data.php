@@ -1,16 +1,15 @@
 <?php
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
-use Xanax\Classes\Data\StringObject as StringObject;
-use Xanax\Classes\Data\IntegerObject as IntegerObject;
-use Xanax\Classes\Data\BooleanObject as BooleanObject;
-use Xanax\Classes\Data\DoubleObject as DoubleObject;
-use Xanax\Classes\Data\ArrayObject as ArrayObject;
-use Xanax\Classes\Data\ResourceObject as ResourceObject;
-use Xanax\Classes\Data\NullObject as NullObject;
-
-use Xanax\Classes\Data\Identifier as Identifier;
+use Neko\Classes\Data\StringObject as StringObject;
+use Neko\Classes\Data\IntegerObject as IntegerObject;
+use Neko\Classes\Data\BooleanObject as BooleanObject;
+use Neko\Classes\Data\DoubleObject as DoubleObject;
+use Neko\Classes\Data\ArrayObject as ArrayObject;
+use Neko\Classes\Data\ResourceObject as ResourceObject;
+use Neko\Classes\Data\NullObject as NullObject;
+use Neko\Classes\Data\Identifier as Identifier;
 
 class Data
 {

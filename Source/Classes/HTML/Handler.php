@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\HTML;
+namespace Neko\Classes\HTML;
 
 class Handler
 {

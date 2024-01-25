@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
 class ContentType extends Header
 {
@@ -13,17 +13,17 @@ class ContentType extends Header
 		parent::responseWithKey('Content-Type', $value);
 	}
 
-	public function urlencodedForm()
+	public static function urlencodedForm()
 	{
 		self::response("application/x-www-form-urlencoded");
 	}
 
-	public function gdImage()
+	public static function gdImage()
 	{
 		self::response("image/gd");
 	}
 
-	public function json()
+	public static function json()
 	{
 		self::response("application/json");
 	}

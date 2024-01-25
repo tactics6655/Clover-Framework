@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Implement;
+namespace Neko\Implement;
 
 interface EventDispatcherInterface
 {

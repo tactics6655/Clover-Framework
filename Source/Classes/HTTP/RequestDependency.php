@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\HTTP;
+namespace Neko\Classes\HTTP;
 
-use Xanax\Enumeration\HTTPRequestMethod;
-use Xanax\Classes\HTTP\Request as RequestHandler;
-use Xanax\Classes\HTTP\Request as HTTPRequest;
+use Neko\Enumeration\HTTPRequestMethod;
+use Neko\Classes\HTTP\Request as RequestHandler;
+use Neko\Classes\HTTP\Request as HTTPRequest;
 
 class RequestDependency
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Classes\Data\BaseObject as BaseObject;
+use Neko\Classes\Data\BaseObject as BaseObject;
 
 #[\AllowDynamicProperties]
 
@@ -18,6 +18,6 @@ class DoubleObject extends BaseObject
 
     public function __toString()
     {
-        return $this->raw_data;
+        return (string)$this->raw_data;
     }
 }

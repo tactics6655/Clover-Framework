@@ -1,6 +1,6 @@
 <?php
 
-use Xanax\Classes\HTML\Handler as HTMLHandler;
+use Neko\Classes\HTML\Handler as HTMLHandler;
 ?>
 
 <!DOCTYPE html>
@@ -21,3 +21,5 @@ use Xanax\Classes\HTML\Handler as HTMLHandler;
 
     <title><?= $title; ?></title>
 </head>
+
+<body>

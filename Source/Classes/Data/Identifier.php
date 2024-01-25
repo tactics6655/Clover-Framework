@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Classes\Data as Data;
+use Neko\Classes\Data as Data;
 
 class Identifier extends Data
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Traits\Regex;
+namespace Neko\Traits\Regex;
 
 trait Result
 {

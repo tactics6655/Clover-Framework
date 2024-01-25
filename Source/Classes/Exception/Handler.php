@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Exception;
+namespace Neko\Classes\Exception;
 
 class Handler
 {

@@ -1,5 +1,9 @@
 <?php
 
+namespace Neko\Classes\Database\Driver;
+
+use PDO;
+
 class PHPDataObjectAttributes
 {
 
@@ -17,124 +21,124 @@ class PHPDataObjectAttributes
 
     public function setColumNameCase($value)
     {
-        $this->setAttribute(\PDO::ATTR_CASE, $value);
+        $this->setAttribute(PDO::ATTR_CASE, $value);
     }
 
     public function setColumNameNaturalCase()
     {
-        $this->setColumNameCase(\PDO::CASE_NATURAL);
+        $this->setColumNameCase(PDO::CASE_NATURAL);
     }
 
     public function setColumNameLowerCase()
     {
-        $this->setColumNameCase(\PDO::CASE_LOWER);
+        $this->setColumNameCase(PDO::CASE_LOWER);
     }
 
     public function setColumNameUpperCase()
     {
-        $this->setColumNameCase(\PDO::CASE_UPPER);
+        $this->setColumNameCase(PDO::CASE_UPPER);
     }
 
     public function setErrorReportingMode($value)
     {
-        $this->setAttribute(\PDO::ATTR_ERRMODE, $value);
+        $this->setAttribute(PDO::ATTR_ERRMODE, $value);
     }
 
     public function setSilentErrorReportingMode()
     {
-        $this->setColumNameCase(\PDO::ERRMODE_SILENT);
+        $this->setColumNameCase(PDO::ERRMODE_SILENT);
     }
 
     public function setWarningErrorReportingMode()
     {
-        $this->setColumNameCase(\PDO::ERRMODE_WARNING);
+        $this->setColumNameCase(PDO::ERRMODE_WARNING);
     }
 
     public function setExceptionErrorReportingMode()
     {
-        $this->setColumNameCase(\PDO::ERRMODE_EXCEPTION);
+        $this->setColumNameCase(PDO::ERRMODE_EXCEPTION);
     }
 
     public function setTimeout($value)
     {
-        $this->setAttribute(\PDO::ATTR_TIMEOUT, $value);
+        $this->setAttribute(PDO::ATTR_TIMEOUT, $value);
     }
 
     public function useEmulatePreparedStatement(bool $bool)
     {
-        $this->setAttribute(\PDO::ATTR_EMULATE_PREPARES, $bool);
+        $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, $bool);
     }
 
     // If this attribute is set to true on a PDOStatement, the MySQL driver will use the buffered versions of the MySQL API.
     public function useBufferedQueries(bool $bool)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $bool);
+        $this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $bool);
     }
 
     public function setDefaultFetchMode($string)
     {
-        $this->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, $string);
+        $this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, $string);
     }
 
-    public function setAssociativeArrayFetch(bool $bool)
+    public function setAssociativeArrayFetch()
     {
-        $this->setDefaultFetchMode(\PDO::FETCH_ASSOC, $bool);
+        $this->setDefaultFetchMode(PDO::FETCH_ASSOC);
     }
 
     // Duplicate column avoidance
-    public function setAssociativeArraySameColumnNameFetch(bool $bool)
+    public function setAssociativeArraySameColumnNameFetch()
     {
-        $this->setDefaultFetchMode(\PDO::FETCH_NAMED, $bool);
+        $this->setDefaultFetchMode(PDO::FETCH_NAMED);
     }
 
-    public function setColunNumberFetch(bool $bool)
+    public function setColunNumberFetch()
     {
-        $this->setDefaultFetchMode(\PDO::FETCH_NUM, $bool);
+        $this->setDefaultFetchMode(PDO::FETCH_NUM);
     }
 
-    public function setPredefinedClassFetch(bool $bool)
+    public function setPredefinedClassFetch()
     {
-        $this->setDefaultFetchMode(\PDO::FETCH_OBJ, $bool);
+        $this->setDefaultFetchMode(PDO::FETCH_OBJ);
     }
 
     // Command to execute when connecting to the MySQL server. Will automatically be re-executed when reconnecting.
     public function setConnectionCommand($string)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_INIT_COMMAND, $string);
+        $this->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, $string);
     }
 
     // The file path to the SSL certificate.
     public function setSSLCertificateFilePath($filepath)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_SSL_CERT, $filepath);
+        $this->setAttribute(PDO::MYSQL_ATTR_SSL_CERT, $filepath);
     }
 
     // The file path to the directory that contains the trusted SSL CA certificates, which are stored in PEM format.
     public function setTrustedSSLCACertificateFilePath($filepath)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_SSL_CAPATH, $filepath);
+        $this->setAttribute(PDO::MYSQL_ATTR_SSL_CAPATH, $filepath);
     }
 
     // The file path to the SSL key.
     public function setSSLCertificateKeyFilePath($filepath)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_SSL_KEY, $filepath);
+        $this->setAttribute(PDO::MYSQL_ATTR_SSL_KEY, $filepath);
     }
 
     // Enable network communication compression.
     public function setNetworkCommunicationCompression($enable)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_COMPRESS, $enable);
+        $this->setAttribute(PDO::MYSQL_ATTR_COMPRESS, $enable);
     }
 
     public function setSSLEncryptionCipher($cipher)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_SSL_CIPHER, $cipher);
+        $this->setAttribute(PDO::MYSQL_ATTR_SSL_CIPHER, $cipher);
     }
 
     // Disables multi query execution
     public function useMultiQueryExecution($size)
     {
-        $this->setAttribute(\PDO::MYSQL_ATTR_MULTI_STATEMENTS, $size);
+        $this->setAttribute(PDO::MYSQL_ATTR_MULTI_STATEMENTS, $size);
     }
 }

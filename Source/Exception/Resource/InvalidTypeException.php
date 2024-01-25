@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Exception\ResourceHandler;
+namespace Neko\Exception\ResourceHandler;
 
-use Xanax\Exception\FileHandler\IOException;
+use Neko\Exception\FileHandler\IOException;
 
 class InvalidTypeException extends IOException
 {

@@ -1,58 +1,105 @@
 <?php
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
 use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+use Traversable;
 
 class ArrayObject
 {
 
+	/**
+	 * Return all the keys or a subset of the keys of an array
+	 * 
+	 * @return array
+	 */
 	public static function getKeys(array $array)
 	{
 		return array_keys($array);
 	}
 
+	/**
+	 * Get the last key of the given array without affecting the internal array pointer
+	 * 
+	 * @return int|string|null
+	 */
 	public static function getLastKey(array $array)
 	{
 		return array_key_last($array);
 	}
 
+	/**
+	 * Get the first key of the given array without affecting the internal array pointer.
+	 * 
+	 * @return int|string|null
+	 */
 	public static function getFirstKey(array $array)
 	{
 		return array_key_first($array);
 	}
 
+	/**
+	 * Return all the values of an array
+	 * 
+	 * @return array
+	 */
 	public static function getAllValues(array $array)
 	{
 		return array_values($array);
 	}
 
+	/**
+	 * Shuffle an array
+	 * 
+	 * @return bool
+	 */
 	public static function shuffle(array $array)
 	{
 		return shuffle($array);
 	}
 
+	/**
+	 * Sort an array using a case insensitive "natural order" algorithm
+	 * 
+	 * @return bool
+	 */
 	public static function sortByCaseInsensitiveNaturalOrderAlgorithm(array $array)
 	{
 		return natcasesort($array);
 	}
 
+	/**
+	 * Sort an array using a "natural order" algorithm
+	 * 
+	 * @return bool
+	 */
 	public static function sortByNaturalOrderAlgorithm(array $array)
 	{
 		return natsort($array);
 	}
 
-	public static function sortByKeyInReverseOrder(array $array)
+	/**
+	 * Sort an array by key in descending order
+	 * 
+	 * @return bool
+	 */
+	public static function sortByKeyInDescendingOrder(array $array)
 	{
 		return krsort($array);
 	}
 
-	public static function sortByKey(array $array)
+	/**
+	 * Sort an array by key in ascending order
+	 * 
+	 * @return bool
+	 */
+	public static function sortByKeyInAscendingOrder(array $array)
 	{
 		return ksort($array);
 	}
 
-	public static function setDeep(&$original, $array, $value)
+	public static function setDeepCopy(&$original, $array, $value)
 	{
 		$current = &$original;
 		foreach ($array as $key) {
@@ -62,16 +109,31 @@ class ArrayObject
 		$current = $value;
 	}
 
+	/**
+	 * Fetch a key from an array
+	 * 
+	 * @return int|string|null
+	 */
 	public static function fetchKey(array $array)
 	{
 		return key($array);
 	}
 
+	/**
+	 * Checks if the given key or index exists in the array
+	 * 
+	 * @return bool
+	 */
 	public static function isKeyExists(array $array, $key)
 	{
-		return array_key_exists($array, $key);
+		return array_key_exists($key, $array);
 	}
 
+	/**
+	 * Searches the array for a given value and returns the first corresponding key if successful
+	 * 
+	 * @return bool|int|string
+	 */
 	public static function getKeyByValue(array $array, string $key)
 	{
 		return array_search($key, $array);
@@ -79,7 +141,7 @@ class ArrayObject
 
 	public static function isTraversable($array)
 	{
-		if ($array instanceof \Traversable) {
+		if ($array instanceof Traversable) {
 			return true;
 		}
 
@@ -89,8 +151,8 @@ class ArrayObject
 	public static function getDepth(array $array)
 	{
 		$depth = 0;
-		$arrayReclusive = new \RecursiveArrayIterator($array);
-		$iteratorReclusive = new \RecursiveIteratorIterator($arrayReclusive);
+		$arrayReclusive = new RecursiveArrayIterator($array);
+		$iteratorReclusive = new RecursiveIteratorIterator($arrayReclusive);
 
 		foreach ($iteratorReclusive as $iterator) {
 			$currentDepth = $iterator->getDepth();

@@ -2,25 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
+
+use Neko\Classes\Socket\Handler as SocketHandler;
+
+use Socket;
 
 class ClientObject
 {
 
-	private $SocketHandlerClass;
-	private $SocketHandler;
+	private SocketHandler $socketHandlerClass;
+	private Socket $socketHandler;
 
 	public function __construct($socketHandler)
 	{
-		if ($socketHandler instanceof Xanax\Classes\Socket\Handler) {
-			$this->SocketHandlerClass = $socketHandler;
+		if ($socketHandler instanceof SocketHandler) {
+			$this->socketHandlerClass = $socketHandler;
 		}
 	}
 
 	// Send packet to socket of server
 	public function sendPacket($string = ''): bool
 	{
-		$result = $this->SocketHandlerClass->writeSocket($this->SocketHandler, $string, strlen($string));
+		$result = $this->socketHandlerClass->writeSocket($this->socketHandler, $string, strlen($string));
 
 		if ($result === 0) {
 			return false;
@@ -30,21 +34,21 @@ class ClientObject
 	}
 
 	// Close socket
-	public function close(): void
+	public function close($socket): void
 	{
-		$this->SocketHandlerClass->Close();
+		$this->socketHandlerClass->close($this->socketHandler);
 	}
 
 	// Connect socket
 	public function connect($address, $port, $domain = AF_INET, $type = SOCK_STREAM, $protocol = SOL_TCP): bool
 	{
-		$this->SocketHandler = $this->SocketHandlerClass->Create($domain, $type, $protocol);
+		$this->socketHandler = $this->socketHandlerClass->create($domain, $type, $protocol);
 
-		if (!$this->SocketHandler) {
+		if (!$this->socketHandler) {
 			return false;
 		}
 
-		$result = $this->SocketHandlerClass->Connect($this->SocketHandler, $address, $port);
+		$result = $this->socketHandlerClass->connect($this->socketHandler, $address, $port);
 
 		if (!$result) {
 			return false;

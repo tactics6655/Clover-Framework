@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Trait\File;
+namespace Neko\Trait\File;
 
 trait Storage
 {

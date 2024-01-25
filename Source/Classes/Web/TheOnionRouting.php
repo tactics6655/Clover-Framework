@@ -1,9 +1,9 @@
 <?php
 
-namespace Xanax\Classes\Web;
+namespace Neko\Classes\Web;
 
-use Xanax\Classes\Web\InternetProtocol as InternetProtocol;
-use Xanax\Classes\HTTP\Request as RequestHandler;
+use Neko\Classes\Web\InternetProtocol as InternetProtocol;
+use Neko\Classes\HTTP\Request as RequestHandler;
 
 class TheOnionRouting
 {

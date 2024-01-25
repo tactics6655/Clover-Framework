@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Regex;
+namespace Neko\Classes\Regex;
 
-use Xanax\Traits\Regex\RegexError;
+use Neko\Traits\Regex\RegexError;
 
 class ArrayResult
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Xanax\Classes\XMPP;
+namespace Neko\Classes\XMPP;
 
-use Xanax\Classes\HTML\Handler as HTMLHandler;
+use Neko\Classes\HTML\Handler as HTMLHandler;
 
-use Xanax\Classes\ClientURL;
+use Neko\Classes\ClientURL;
 
 class Bosh
 {

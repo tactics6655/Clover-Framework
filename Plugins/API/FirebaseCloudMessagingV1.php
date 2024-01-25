@@ -1,9 +1,9 @@
 <?php
 
-namespace Xanax\Plugin;
+namespace Neko\Plugin;
 
-use Xanax\Classes\ClientURL;
-use Xanax\Classes\Data\StringHandler;
+use Neko\Classes\ClientURL;
+use Neko\Classes\Data\StringHandler;
 
 class FirebaseCloudMessagingV1
 {

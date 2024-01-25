@@ -1,11 +1,13 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
-use Xanax\Framework\Component\Renderer;
-use Xanax\Framework\Component\Resource;
-use Xanax\Classes\HTTP\Request as HTTPRequest;
-use Xanax\Classes\OperationSystem as OperationSystem;
+use Neko\Framework\Component\Renderer;
+use Neko\Framework\Component\Resource;
+
+use Neko\Classes\HTTP\Request as HTTPRequest;
+use Neko\Classes\OperationSystem as OperationSystem;
+use Neko\Classes\DependencyInjection\Container;
 
 class Mapper
 {

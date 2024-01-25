@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Exception\FileHandler;
+namespace Neko\Exception\FileHandler;
 
-use Xanax\Exception\FileHandler\IOException;
+use Neko\Exception\FileHandler\IOException;
 
 class InvalidFileHandler extends IOException
 {

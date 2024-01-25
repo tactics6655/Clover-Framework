@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Sort;
+namespace Neko\Classes\Sort;
 
 class BubbleSort
 {

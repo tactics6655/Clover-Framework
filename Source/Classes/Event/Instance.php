@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Event;
+namespace Neko\Classes\Event;
 
 class Instance
 {

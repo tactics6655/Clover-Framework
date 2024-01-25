@@ -1,13 +1,17 @@
 <?php
 
-namespace Xanax\Traits\Regex;
+namespace Neko\Traits\Regex;
 
 trait RegexError
 {
 
 	public function getErrorConstant()
 	{
-		return \preg_last_error_constant();
+		if (function_exists("preg_last_error_constant")) {
+			return \preg_last_error_constant();
+		}
+
+		return false;
 	}
 
 	public function getErrorCode()

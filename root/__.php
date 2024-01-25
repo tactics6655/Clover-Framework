@@ -2,8 +2,8 @@
 
 include_once("./../vendor/autoload.php");
 
-use Xanax\Classes\Web\InternetProtocol as IP;
-use Xanax\Classes\Protocol\Internet as InternetProtocol;
+use Neko\Classes\Web\InternetProtocol as IP;
+use Neko\Classes\Protocol\Internet as InternetProtocol;
 
 $filename = 'example.gif';
 

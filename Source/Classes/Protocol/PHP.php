@@ -2,64 +2,49 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Protocol;
+namespace Neko\Classes\Protocol;
+
+use Neko\Enumeration\PHPProtocol;
 
 class PHP
 {
-
-	public const _STANDARD_ERROR_ = "php://stderr";
-
-	public const _STANDARD_OUTPUT_ = "php://stdout";
-
-	public const _STANDARD_INPUT_ = "php://stdin";
-
-	public const _FILTER_ = "php://filter";
-
-	public const _TEMPORARY_ = "php://temp";
-
-	public const _MEMORY_ = "php://memory";
-
-	public const _INPUT_ = "php://input";
-
-	public const _OUTPUT_ = "php://output";
-
 	public function getStandardError()
 	{
-		return _STANDARD_ERROR_;
+		return PHPProtocol::STANDARD_ERROR;
 	}
 
 	public function getStandardOutput()
 	{
-		return _STANDARD_OUTPUT_;
+		return PHPProtocol::STANDARD_OUTPUT;
 	}
 
 	public function getStandardInput()
 	{
-		return _STANDARD_INPUT_;
+		return PHPProtocol::STANDARD_INPUT;
 	}
 
 	public function getFilter()
 	{
-		return _FILTER_;
+		return PHPProtocol::FILTER;
 	}
 
 	public function getTemporary()
 	{
-		return _TEMPORARY_;
+		return PHPProtocol::TEMPORARY;
 	}
 
 	public function getMemory()
 	{
-		return _MEMORY_;
+		return PHPProtocol::MEMORY;
 	}
 
 	public function getInput()
 	{
-		return _INPUT_;
+		return PHPProtocol::INPUT;
 	}
 
 	public function getOutput()
 	{
-		return _OUTPUT_;
+		return PHPProtocol::OUTPUT;
 	}
 }

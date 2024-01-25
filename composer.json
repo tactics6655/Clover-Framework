@@ -1,5 +1,5 @@
 {
-  "name": "kdps/xanax",
+  "name": "kdps/neko",
   "version": "0.0.1",
   "type": "project",
   "description": "PHP Framework or Libraries",
@@ -27,13 +27,14 @@
       }
   ],
   "support": {
-      "issues": "https://github.com/kdps/Xanax/issues",
-      "source": "https://github.com/kdps/Xanax"
+      "issues": "https://github.com/kdps/Neko/issues",
+      "source": "https://github.com/kdps/Neko"
   },
   "autoload": {
     "psr-4": {
-      "Xanax\\": "Classes/Source/",
-      "Xanax\\": "Plugins/",
+      "Neko\\": "Classes/Source/",
+      "Neko\\": "Plugins/",
+      "App\\": "root/App/",
       "Iamport\\RestClient\\": "iamport/"
     },
     "files": [
@@ -47,8 +48,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Xanax\\": "Classes/Source/",
-      "Xanax\\": "Plugins/",
+      "Neko\\": "Classes/Source/",
+      "Neko\\": "Plugins/",
       "Iamport\\RestClient\\": "iamport/"
     },
     "files": [

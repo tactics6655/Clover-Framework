@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Message\FileHandler;
+namespace Neko\Message\FileHandler;
 
 class FileHandlerMessage
 {

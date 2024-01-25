@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Xanax\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
+use Neko\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
 
 class MIMETest extends TestCase
 {

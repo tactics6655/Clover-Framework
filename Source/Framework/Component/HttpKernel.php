@@ -1,19 +1,20 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
-use Xanax\Classes\HTTP\Router as Router;
-use Xanax\Classes\File\Functions as FileFunctions;
+use Neko\Classes\Routing\Router;
+use Neko\Classes\File\Functions as FileFunctions;
+use Neko\Classes\DependencyInjection\Container;
 
 class HttpKernel
 {
-    private $container;
+    private Container $container;
 
     private $environment;
 
     private $options;
 
-    public function __construct($container, $environment = [], $options = [])
+    public function __construct(Container $container, $environment = [], $options = [])
     {
         $this->container = $container;
         $this->environment = $environment;
@@ -27,18 +28,20 @@ class HttpKernel
 
     public function run()
     {
-        Router::fromDirectory('./App/Controller');
+        $router = new Router();
 
-        Router::setContainer($this->container);
+        $router->fromDirectory('./App/Controller');
 
-        $response = Router::handle();
+        $router->setContainer($this->container);
+
+        $response = $router->handle();
 
         if (empty($response)) {
             exit();
         }
 
         if (!$response instanceof Response) {
-            throw new \Exception('Response is must be response type');
+            throw new \Exception('Response is must be type of response');
         }
 
         $header = $this->getEssentialBody($response->getResource(), __DIR__ . '/../Template/Header.php');

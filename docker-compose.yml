@@ -6,20 +6,25 @@ services:
       restart: always
       ports:
         - 8092:8080
-    mariadb:
+    db:
         image: mariadb:latest
         restart: unless-stopped
         environment:
-            - MYSQL_ROOT_PASSWORD=1234
+            - MYSQL_ROOT_PASSWORD = 1234
+            - MYSQL_DATABASE = company
         ports:
-            - "3317:3306"
+            - "3308:3306"
         volumes:
             - ./var_lib_mysql/:/var/lib/mysql
+            - "./my.ini:/etc/mysql/my.ini"
+        env_file: .env
+        networks:
+            - my_network
     php:
         build: .
         restart: unless-stopped
         depends_on:
-            - mariadb
+            - db
         volumes:
             - ./:/var/www/html
     nginx:
@@ -32,3 +37,7 @@ services:
         volumes:
             - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
             - ./root:/var/www/html/root
+
+networks:
+    my_network:
+        driver: bridge

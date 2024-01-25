@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Regex;
+namespace Neko\Classes\Regex;
 
-use Xanax\Traits\Regex\Error;
+use Neko\Traits\Regex\Error;
 
 class Builder
 {

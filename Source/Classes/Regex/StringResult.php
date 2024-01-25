@@ -1,25 +1,33 @@
 <?php
 
-namespace Xanax\Classes\Regex;
+namespace Neko\Classes\Regex;
 
-use Xanax\Traits\Regex\Error;
+use Neko\Traits\Regex\Error;
 
 class StringResult
 {
-  public function __construct(array $result)
-  {
-    $this->boolean = $result['Boolean'];
-    $this->pattern = $result['Pattern'];
-    $this->subject = $result['Subject'];
-    $this->matches = $result['Matches'];
-  }
+	private $boolean;
 
-  public function getSingleton(array $result)
-  {
-    return new \static($result);
-  }
+	private $pattern;
 
-  public function get()
-  {
-  }
+	private $subject;
+
+	private $matches;
+
+	public function __construct(array $result)
+	{
+		$this->boolean = $result['Boolean'];
+		$this->pattern = $result['Pattern'];
+		$this->subject = $result['Subject'];
+		$this->matches = $result['Matches'];
+	}
+
+	public function getSingleton(array $result)
+	{
+		return new \static($result);
+	}
+
+	public function get()
+	{
+	}
 }

@@ -1,10 +1,12 @@
 <?php
 
-use Xanax\Classes\HTTP\Request as HTTPRequest;
-use Xanax\Framework\Component\BaseController;
-use Xanax\Framework\Component\Middleware\ModuleMiddleware;
+namespace App\Controller;
 
-use Xanax\Annotation;
+use Neko\Classes\HTTP\Request as HTTPRequest;
+use Neko\Framework\Component\BaseController;
+use Neko\Framework\Component\Middleware\ModuleMiddleware;
+
+use Neko\Annotation;
 
 class ModuleController extends BaseController
 {

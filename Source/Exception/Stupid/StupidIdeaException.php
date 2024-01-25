@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Exception;
+namespace Neko\Exception;
 
 use Exception;
 

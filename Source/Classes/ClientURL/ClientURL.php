@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
-use Xanax\Classes\Data as DataObject;
-use Xanax\Classes\ClientURLOption as ClientURLOption;
-use Xanax\Classes\ClientURLLastTransferInformation as ClientURLLastTransferInformation;
-use Xanax\Classes\Data\StringObject as StringObject;
-use Xanax\Implement\ClientURLInterface;
+use Neko\Classes\Data as DataObject;
+use Neko\Classes\ClientURLOption as ClientURLOption;
+use Neko\Classes\ClientURLLastTransferInformation as ClientURLLastTransferInformation;
+use Neko\Classes\Data\StringObject as StringObject;
+use Neko\Implement\ClientURLInterface;
 
 class ClientURL implements ClientURLInterface
 {
 	private static $session;
 
-	/** @var \Xanax\Classes\ClientURLOption */
+	/** @var \Neko\Classes\ClientURLOption */
 	public ClientURLOption $option;
 
-	/** @var \Xanax\Classes\ClientURLLastTransferInformation */
+	/** @var \Neko\Classes\ClientURLLastTransferInformation */
 	public ClientURLLastTransferInformation $information;
 
 	public function __construct(bool $useLocalMethod = true, string $url = '')

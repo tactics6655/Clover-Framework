@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\XML;
+namespace Neko\Classes\XML;
 
 class XMLParser
 {

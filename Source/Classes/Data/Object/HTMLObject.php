@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Classes\Data\HTMLHandler as HTMLHandler;
+use Neko\Classes\Data\HTMLHandler as HTMLHandler;
 
 #[\AllowDynamicProperties]
 class HTMLObject extends StringObject

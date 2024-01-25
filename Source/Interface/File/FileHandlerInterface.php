@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Implement;
+namespace Neko\Implement;
 
-use Xanax\Enumeration\FileMode;
+use Neko\Enumeration\FileMode;
 
 interface FileHandlerInterface
 {

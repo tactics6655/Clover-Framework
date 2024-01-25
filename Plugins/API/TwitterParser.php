@@ -2,7 +2,7 @@
 
 include('./vendor/autoload.php');
 
-use Xanax\Classes\ClientURL as ClientURL;
+use Neko\Classes\ClientURL as ClientURL;
 
 class TwitterParser
 {

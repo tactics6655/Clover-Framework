@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Exception\Functions;
+namespace Neko\Exception\Functions;
 
 class FunctionIsNotExistsException extends \RuntimeException
 {

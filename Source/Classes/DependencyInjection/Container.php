@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\DependencyInjection;
+namespace Neko\Classes\DependencyInjection;
 
 class Container
 {

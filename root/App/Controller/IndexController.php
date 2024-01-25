@@ -1,40 +1,90 @@
 <?php
 
-use Xanax\Classes\HTTP\Request as HTTPRequest;
-use Xanax\Classes\Database\Driver\SqLite;
-use Xanax\Classes\Pagination\Dynamic as DynamicPagination;
-use Xanax\Classes\File\Functions;
+namespace App\Controller;
 
-use Xanax\Framework\Component\BaseController;
-use Xanax\Framework\Component\Middleware\ModuleMiddleware;
+use App\Middleware\ModuleMiddleware as ModuleMiddleware;
 
-use Xanax\Annotation;
-
-use Xanax\Plugin\NaverPapago;
+use Neko\Annotation;
+use Neko\Framework\Component\BaseController;
+use Neko\Classes\Database\Driver\PHPDataObject;
+use Neko\Classes\Upload\Handler as UploadHandler;
 
 #[Annotation\Prefix('/')]
 class IndexController extends BaseController
 {
-    #[Annotation\Route('GET', '/translate')]
-    public function translate()
+    private function getConnection()
     {
-        $this->setTitle('translate');
+        $pdo = new PHPDataObject();
+        $pdo->setDatabase('company');
+        $pdo->setHostName('172.18.0.2');
+        $pdo->setUsername('root');
+        $pdo->setPassword('1234');
+        $pdo->setPort('3306');
+        $pdo->connect();
 
-        $papago = new NaverPapago('ek3aVfWELzBXr1iVeMoi', 'yK6OP2Asdh');
-        $translate = $papago->translate('Hello World', 'en', 'ja');
-
-        return $this->render('App/Template/test.php', ['ip' => $translate]);
+        return $pdo;
     }
 
     #[Annotation\Route('GET', '/')]
-    public function index(HTTPRequest $request)
+    #[Annotation\Middleware(ModuleMiddleware::class)]
+    public function index()
     {
-        $ip = $request->getRemoteIPAddress();
-
         $this->setTitle('test');
-        $this->addHeadJsFile('jquery.js');
-        $this->addHeadCssFile('test.css');
+        $this->addJsFileToHead('/App/Template/base.js');
+        $this->addCssFileToHead('/App/Template/layout.css');
+        
+        return $this->render('App/Template/companies.php', ['companies' => null]);
+    }
 
-        return $this->render('App/Template/test.php', ['ip' => $ip]);
+    #[Annotation\Route('POST', '/excel_upload')]
+    #[Annotation\Middleware(ModuleMiddleware::class)]
+    public function excel_upload(UploadHandler $uploadHandler)
+    {
+        $fileName = "";
+
+        if (!$uploadHandler->hasItem()) {
+            $this->responseJson(['message' => '파일을 업로드 할 수 없습니다']);
+        }
+
+        if ($uploadHandler->hasError('excel')) {
+            $this->responseJson(['error' => $uploadHandler->getFileError('excel')]);
+        }
+
+        $extension = $uploadHandler->getExtension('excel');
+        $fileName = $uploadHandler->getFileName('excel');
+        $isUploaded = $uploadHandler->move('excel', './'.$fileName);
+
+        $this->responseJson(['text' => 'json', 'file_name' => $fileName, 'full' => $uploadHandler->get('excel')]);
+    }
+
+    #[Annotation\Route('GET', '/excel')]
+    #[Annotation\Middleware(ModuleMiddleware::class)]
+    public function excel()
+    {
+        return $this->render('App/Template/excel_upload.php');
+    }
+
+    #[Annotation\Route('GET', '/{company_name}/{business_code}')]
+    #[Annotation\Middleware(ModuleMiddleware::class)]
+    public function search($companyName, $businessCode)
+    {
+        $this->setTitle('test');
+        $this->addJsFileToHead('/App/Template/base.js');
+        $this->addCssFileToHead('/App/Template/layout.css');
+
+        $parameters = [
+            'company_name' => urldecode($companyName),
+            'business_code' => $businessCode
+        ];
+
+        $pdo = $this->getConnection();
+        $stmt = $pdo->prepare('SELECT * FROM companies WHERE company_name = :company_name AND business_code = :business_code');
+        $stmt->execute($parameters);
+
+        $fetch = $stmt->fetchAll();
+
+        return $this->render('App/Template/companies.php', [
+            'companies' => $fetch, ...$parameters
+        ]);
     }
 }

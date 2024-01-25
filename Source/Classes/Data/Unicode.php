@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
 class Unicode
 {
@@ -21,6 +21,6 @@ class Unicode
 
 	public static function isValid($text)
 	{
-		return preg_match("[^\w$\x{0080}-\x[FFFF]]+/u", $text);
+		return preg_match("/[^\w$\x{0080}-\x[FFFF]]+//u", $text);
 	}
 }

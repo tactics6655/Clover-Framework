@@ -1,7 +1,7 @@
 {
   "name": "coreJS",
   "version": "1.0.0",
-  "description": "Xanax Javascript",
+  "description": "Neko Javascript",
   "main": "index.ts",
   "scripts": {
     "build": "webpack --config webpack.config.js",
@@ -51,6 +51,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/kdps/Xanax"
+    "url": "http://github.com/kdps/Neko"
   }
 }

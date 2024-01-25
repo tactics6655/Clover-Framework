@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Enumeration;
+namespace Neko\Enumeration;
 
 abstract class FileSizeUnit
 {

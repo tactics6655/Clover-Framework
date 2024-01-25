@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Exception\DirectoryHandler;
+namespace Neko\Exception\DirectoryHandler;
 
-use Xanax\Exception\FileHandler\IOException;
+use Neko\Exception\FileHandler\IOException;
 
 class DirectoryIsNotExistsException extends IOException
 {

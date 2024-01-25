@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Permission;
+namespace Neko\Classes\Permission;
 
 class World extends Permission
 {

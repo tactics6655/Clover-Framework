@@ -1,5 +1,10 @@
 <?php
 
+namespace Neko\Classes\Database\Driver;
+
+use function pg_connect;
+use PgSql;
+
 class PostgreSQL
 {
   private $connection;

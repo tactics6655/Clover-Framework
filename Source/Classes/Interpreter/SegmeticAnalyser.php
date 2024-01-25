@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Interpreter;
+namespace Neko\Interpreter;
 
 class SegmeticAnalyser
 {

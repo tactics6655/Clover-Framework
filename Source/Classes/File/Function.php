@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\File;
+namespace Neko\Classes\File;
 
-use Xanax\Enumeration\FileMode;
-use Xanax\Enumeration\FileSizeUnit;
+use Neko\Enumeration\FileMode;
+use Neko\Enumeration\FileSizeUnit;
+use Neko\Enumeration\LockMode;
 
-use Xanax\Classes\FileSystem\Handler as FileSystemHandler;
-use Xanax\Classes\Protocol\PHP as PHPProtocol;
+use Neko\Classes\FileSystem\Handler as FileSystemHandler;
+use Neko\Classes\Protocol\PHP as PHPProtocol;
 
-use Xanax\Exception\StupidIdeaException as StupidIdeaException;
-use Xanax\Exception\FileHandler\FileIsNotExistsException as FileIsNotExistsException;
-use Xanax\Exception\FileHandler\TargetIsNotFileException as TargetIsNotFileException;
-use Xanax\Exception\FileHandler\InvalidFileHandler as InvalidFileHandler;
-use Xanax\Exception\ResourceHandler\InvalidTypeException as InvalidTypeException;
-use Xanax\Exception\Functions\FunctionIsNotExistsException as FunctionIsNotExistsException;
+use Neko\Exception\StupidIdeaException as StupidIdeaException;
+use Neko\Exception\FileHandler\FileIsNotExistsException as FileIsNotExistsException;
+use Neko\Exception\FileHandler\TargetIsNotFileException as TargetIsNotFileException;
+use Neko\Exception\FileHandler\InvalidFileHandler as InvalidFileHandler;
+use Neko\Exception\ResourceHandler\InvalidTypeException as InvalidTypeException;
+use Neko\Exception\Functions\FunctionIsNotExistsException as FunctionIsNotExistsException;
 
-use Xanax\Validation\FileValidation as FileValidation;
+use Neko\Validation\FileValidation as FileValidation;
 
-use Xanax\Message\FileHandler\FileHandlerMessage as FileHandlerMessage;
-use Xanax\Message\Functions\FunctionMessage as FunctionMessage;
+use Neko\Message\FileHandler\FileHandlerMessage as FileHandlerMessage;
+use Neko\Message\Functions\FunctionMessage as FunctionMessage;
 
 use function clearstatcache;
 use function fileatime;
@@ -334,7 +335,7 @@ class Functions
 	 *
 	 * @return bool|void
 	 */
-	public static function lock($fileHandler, $mode = FileMode::READ_ONLY)
+	public static function lock($fileHandler, $mode = LockMode::ACQUIRE_SHARED_LOCK)
 	{
 		if (!self::isValidHandler($fileHandler)) {
 			throw new InvalidFileHandler(FileHandlerMessage::getInvalidFileHandler());
@@ -343,11 +344,14 @@ class Functions
 		$mode = strtolower($mode);
 
 		switch ($mode) {
-			case FileMode::READ_ONLY:
-				flock($fileHandler, LOCK_SH); // Lock of read mode
+			case LockMode::ACQUIRE_SHARED_LOCK:
+				flock($fileHandler, LOCK_SH); // Acquire a shared lock
 				break;
-			case FileMode::WRITE_ONLY:
-				flock($fileHandler, LOCK_EX); // Lock of write mode
+			case LockMode::ACQUIRE_EXCLUSIVE_LOCK:
+				flock($fileHandler, LOCK_EX); // Acquire an exclusive lock
+				break;
+			case LockMode::RELEASE_LOCK:
+				flock($fileHandler, LOCK_UN); // Non-blocking operation while locking
 				break;
 		}
 	}
@@ -875,7 +879,7 @@ class Functions
 
 		if ($humanReadable) {
 			if (file_exists($filePath)) {
-				$bytes = (int) filesize($filePath);
+				$bytes = (int)filesize($filePath);
 			} else {
 				$bytes = (int)is_int($filePath) ? $filePath : -1;
 			}

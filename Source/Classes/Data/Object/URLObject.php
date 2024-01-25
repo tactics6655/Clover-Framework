@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Classes\Data\StringObject as StringObject;
+use Neko\Classes\Data\StringObject as StringObject;
 
 #[\AllowDynamicProperties]
 class URLObject extends StringObject

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Upload;
+namespace Neko\Classes\Upload;
 
-use Xanax\Classes\File\Handler as FileHandler;
+use Neko\Classes\File\Handler as FileHandler;
 
-use Xanax\Enumeration\UploadedFile;
-use Xanax\Enumeration\UploadedFileErrorMessage;
+use Neko\Enumeration\UploadedFile;
+use Neko\Enumeration\UploadedFileErrorMessage;
 
 class Handler
 {
 
-	public static function get($name, $key = UploadedFile::NAME)
+	public static function get($name, $key = UploadedFile::FULLY_DATA)
 	{
-		if (preg_match('/^([A-Za-z0-9-_]{1,})\[[A-Za-z0-9-_]{1,}\]$/', $name, $match)) {
-			return isset($_FILES[$match[1]][$key][$match[2]]) ? $_FILES[$match[1]][UploadedFile::NAME][$match[2]] : null;
+		if ($key === UploadedFile::FULLY_DATA) {
+			return isset($_FILES[$name]) ? $_FILES[$name] : null;
 		}
 
-		if ($key === UploadedFile::NAME) {
-			return isset($_FILES[$name]) ? $_FILES[$name] : null;
+		if (preg_match('/^([A-Za-z0-9-_]{1,})\[[A-Za-z0-9-_]{1,}\]$/', $name, $match)) {
+			return isset($_FILES[$match[1]][$key][$match[2]]) ? $_FILES[$match[1]][$key][$match[2]] : null;
 		}
 
 		return isset($_FILES[$name][$key]) ? $_FILES[$name][$key] : null;
@@ -103,6 +103,13 @@ class Handler
 	public static function getFileType($name)
 	{
 		return self::get($name, UploadedFile::TYPE);
+	}
+
+	public static function getExtension($name)
+	{
+		$fileName = self::get($name, UploadedFile::NAME);
+
+		return substr($fileName, strrpos($fileName, '.') + 1);
 	}
 
 	public static function getFileName($name)

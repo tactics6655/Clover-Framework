@@ -1,17 +1,17 @@
 <?php
 
-namespace Xanax\Framework\Component;
+namespace Neko\Framework\Component;
 
-use Xanax\Framework\Component\Response;
+use Neko\Framework\Component\Response;
 
-use Xanax\Framework\Component\Container;
+use Neko\Classes\DependencyInjection\Container;
+use Neko\Classes\ContentType as ContentType;
+use Neko\Classes\Data\JSONHandler;
 
 class BaseController
 {
 
-    private Container $container;
-
-    public function __construct($container = [])
+    public function __construct(private ?Container $container = null)
     {
         $this->container = $container;
     }
@@ -21,12 +21,12 @@ class BaseController
         return new Response($body, $resource);
     }
 
-    public function addHeadCssFile($filename)
+    public function addCssFileToHead($filename)
     {
         $this->container->get('Resource')->addGenericCssFile($filename);
     }
 
-    public function addHeadJsFile($filename)
+    public function addJsFileToHead($filename)
     {
         $this->container->get('Resource')->addGenericJavascriptFile($filename);
     }
@@ -34,6 +34,18 @@ class BaseController
     public function setTitle($title)
     {
         $this->container->get('Resource')->setTitle($title);
+    }
+
+    public function responseJson($json)
+    {
+        $encoded = JSONHandler::encode($json);
+
+        if (!JSONHandler::isJSON($encoded)) {
+            return false;
+        }
+
+        echo $encoded;
+        exit();
     }
 
     public function render(string $template, array $data = [])

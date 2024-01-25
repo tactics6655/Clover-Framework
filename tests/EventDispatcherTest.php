@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Xanax\Classes\File\Handler as FileHandler;
-use Xanax\Classes\File\Object as FileObject;
+use Neko\Classes\File\Handler as FileHandler;
+use Neko\Classes\File\Object as FileObject;
 
 class EventDispatcherTest extends TestCase
 {
@@ -12,7 +12,7 @@ class EventDispatcherTest extends TestCase
 
 	public function setUp(): void
 	{
-		$this->factory = new Xanax\Classes\File\Handler();
+		$this->factory = new Neko\Classes\File\Handler();
 	}
 
 	public function testFileCount()

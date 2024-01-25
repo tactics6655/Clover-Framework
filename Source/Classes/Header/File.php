@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Header;
+namespace Neko\Classes\Header;
 
-use \Xanax\Classes\Header as Header;
-use \Xanax\Enumeration\Encoding as Encoding;
-use Xanax\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
+use \Neko\Classes\Header as Header;
+use \Neko\Enumeration\Encoding as Encoding;
+use Neko\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
 
 class File extends Header
 {

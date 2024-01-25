@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Framework\Enumeration;
+namespace Neko\Framework\Enumeration;
 
 abstract class Environment
 {

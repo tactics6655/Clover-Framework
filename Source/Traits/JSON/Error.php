@@ -1,8 +1,8 @@
 <?php
 
-namespace Xanax\Trait\Json;
+namespace Neko\Trait\Json;
 
-use Xanax\Enumeration\JsonErrorMessage;
+use Neko\Enumeration\JsonErrorMessage;
 
 trait JSONError
 {

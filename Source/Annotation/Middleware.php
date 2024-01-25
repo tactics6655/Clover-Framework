@@ -1,10 +1,10 @@
 <?php
 
-namespace Xanax\Annotation;
+namespace Neko\Annotation;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Middleware
 {
     public $value;

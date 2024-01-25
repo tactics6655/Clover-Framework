@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Directory;
+namespace Neko\Classes\Directory;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
-use Xanax\Implement\DirectoryHandlerInterface;
-use Xanax\Implement\FileHandlerInterface;
-use Xanax\Exception\DirectoryHandler\DirectoryIsNotExistsException as DirectoryIsNotExistsException;
-use Xanax\Classes\File\Handler as FileHandler;
-
-use function delete;
+use FilesystemIterator;
+use Neko\Implement\DirectoryHandlerInterface;
+use Neko\Implement\FileHandlerInterface;
+use Neko\Exception\DirectoryHandler\DirectoryIsNotExistsException as DirectoryIsNotExistsException;
+use Neko\Classes\File\Handler as FileHandler;
 
 class Handler implements DirectoryHandlerInterface
 {
@@ -145,7 +144,7 @@ class Handler implements DirectoryHandlerInterface
 			throw new DirectoryIsNotExistsException();
 		}
 
-		$iterator = new RecursiveDirectoryIterator($directoryPath, \FilesystemIterator::SKIP_DOTS);
+		$iterator = new RecursiveDirectoryIterator($directoryPath, FilesystemIterator::SKIP_DOTS);
 		$return   = iterator_count($iterator);
 
 		return $return;
@@ -221,6 +220,7 @@ class Handler implements DirectoryHandlerInterface
 		$directoryIterator = new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS);
 		$iterator          = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::SELF_FIRST);
 
+		/** @var RecursiveDirectoryIterator[] $iterator */
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
 				$this->create($copyPath . DIRECTORY_SEPARATOR . $item->getSubPathName());
@@ -301,6 +301,7 @@ class Handler implements DirectoryHandlerInterface
 			RecursiveIteratorIterator::SELF_FIRST
 		);
 
+		/** @var RecursiveDirectoryIterator[] $iterator */
 		foreach ($iterator as $folderPath => $fileInformation) {
 			if (!$fileInformation->isDir()) {
 				continue;
@@ -384,7 +385,7 @@ class Handler implements DirectoryHandlerInterface
 		return true;
 	}
 
-	public static function getList($path = './', $type = null, $includePath = false, $includeSubdirectory = false)
+	public static function getList($path = './', $type = null, $includePath = false, $includeSubDirectory = false)
 	{
 		$handle = opendir($path);
 		if (!$handle) {
@@ -393,8 +394,9 @@ class Handler implements DirectoryHandlerInterface
 
 		$directoryList = array();
 
-		if ($includeSubdirectory) {
+		if ($includeSubDirectory) {
 			$di = new RecursiveDirectoryIterator($path);
+
 			foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
 				if (strtoupper($type) == 'FILE') {
 					$passed = is_file($filename);
@@ -407,9 +409,9 @@ class Handler implements DirectoryHandlerInterface
 				}
 
 				if ($includePath) {
-					array_push($directoryList, $filename);
+					$directoryList[] = $filename;
 				} else {
-					array_push($directoryList, $file->getFilename());
+					$directoryList[] = $file->getFilename();
 				}
 			}
 
@@ -419,12 +421,12 @@ class Handler implements DirectoryHandlerInterface
 		while (false !== ($file = readdir($handle))) {
 			$passed = true;
 
-			$file_path = $path . '/' . $file;
+			$filePath = $path . '/' . $file;
 
 			if (strtoupper($type) == 'FILE') {
-				$passed = is_file($file_path);
+				$passed = is_file($filePath);
 			} else if (strtoupper($type) == 'PATH') {
-				$passed = is_dir($file_path);
+				$passed = is_dir($filePath);
 			}
 
 			if (!$passed) {
@@ -432,9 +434,9 @@ class Handler implements DirectoryHandlerInterface
 			}
 
 			if ($includePath) {
-				array_push($directoryList, $file_path);
+				$directoryList[] = $filePath;
 			} else {
-				array_push($directoryList, $file);
+				$directoryList[] = $file;
 			}
 		}
 
@@ -466,10 +468,13 @@ class Handler implements DirectoryHandlerInterface
 			$iterator->setMaxDepth($this->getMaxDepth());
 		}
 
+		/** @var RecursiveDirectoryIterator[] $iterator */
 		foreach ($iterator as $fileInformation) {
-			if ($fileInformation->isFile()) {
-				$fileList[] = $fileInformation->getRealPath();
+			if (!$fileInformation->isFile()) {
+				continue;
 			}
+
+			$fileList[] = $fileInformation->getRealPath();
 		}
 
 		if ($sort) {
@@ -494,11 +499,14 @@ class Handler implements DirectoryHandlerInterface
 			$iterator->setMaxDepth($this->getMaxDepth());
 		}
 
+		/** @var RecursiveDirectoryIterator[] $iterator */
 		foreach ($iterator as $fileInformation) {
-			if (!$fileInformation->isDir()) {
-				if (unlink($fileInformation->getRealPath()) === false) {
-					return false;
-				}
+			if ($fileInformation->isDir()) {
+				continue;
+			}
+			
+			if (unlink($fileInformation->getRealPath()) === false) {
+				return false;
 			}
 		}
 

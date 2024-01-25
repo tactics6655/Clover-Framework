@@ -1,10 +1,14 @@
 <?php
 
-namespace Xanax\Classes\Data;
+namespace Neko\Classes\Data;
 
-use Xanax\Classes\Data\BaseObject as BaseObject;
-use Xanax\Classes\Data\IntegerObject as IntegerObject;
-use Xanax\Classes\Data\BooleanObject as BooleanObject;
+use Neko\Classes\Data\BaseObject as BaseObject;
+use Neko\Classes\Data\IntegerObject as IntegerObject;
+use Neko\Classes\Data\BooleanObject as BooleanObject;
+
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+use Traversable;
 
 #[\AllowDynamicProperties]
 class ArrayObject extends BaseObject
@@ -15,6 +19,13 @@ class ArrayObject extends BaseObject
     public function __construct($data)
     {
         $this->raw_data = $data;
+    }
+
+    public function get($key)
+    {
+        $data = $this->raw_data[$key];
+
+        return new StringObject($data);
     }
 
     public function getKeys()
@@ -70,11 +81,12 @@ class ArrayObject extends BaseObject
     {
         $currentDepth = 0;
         $depth = 0;
-        $arrayReclusive = new \RecursiveArrayIterator($this->raw_data);
-        $iteratorReclusive = new \RecursiveIteratorIterator($arrayReclusive);
+        $arrayReclusive = new RecursiveArrayIterator($this->raw_data);
+        $iteratorReclusive = new RecursiveIteratorIterator($arrayReclusive);
 
+        /** @var RecursiveIteratorIterator[RecursiveArrayIterator] $iteratorReclusive */
         foreach ($iteratorReclusive as $iterator) {
-            $currentDepth = $iteratorReclusive->getDepth();
+            $currentDepth = $iterator->getDepth();
 
             $depth = $currentDepth > $depth ? $currentDepth : $depth;
         }
@@ -86,7 +98,7 @@ class ArrayObject extends BaseObject
 
     public function isTraversable($array)
     {
-        $this->raw_data = $array instanceof \Traversable;
+        $this->raw_data = $array instanceof Traversable;
 
         return new BooleanObject($this->raw_data);
     }

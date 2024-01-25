@@ -1,6 +1,6 @@
 <?php
 
-namespace Xanax\Classes\Web;
+namespace Neko\Classes\Web;
 
 use function gethostbyname;
 use function gethostbyaddr;
@@ -10,17 +10,17 @@ class InternetProtocol
 {
 	public static function getHostName()
 	{
-		return \gethostname();
+		return gethostname();
 	}
 
 	public static function getHostByAddress($address)
 	{
-		return \gethostbyaddr($address);
+		return gethostbyaddr($address);
 	}
 
 	public static function getByHostname($hostname)
 	{
-		return \gethostbyname($hostname);
+		return gethostbyname($hostname);
 	}
 
 	public static function toReverseOctet($inputip)

@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Image;
+namespace Neko\Classes\Image;
 
-use Xanax\Implement\ImageHandlerInterface;
+use Neko\Implement\ImageHandlerInterface;
 
-use Xanax\Enumeration\Orientation;
-use Xanax\Enumeration\ImageFilter;
-use Xanax\Enumeration\ExifFileHeader;
-use Xanax\Enumeration\MIME;
+use Neko\Enumeration\Orientation;
+use Neko\Enumeration\ImageFilter;
+use Neko\Enumeration\ExifFileHeader;
+use Neko\Enumeration\MIME;
 
-use Xanax\Classes\Header\File as FileHeader;
+use Neko\Classes\Header\File as FileHeader;
 
 use function getimagesizefromstring;
+use GdImage;
+use Exception;
 
 class Handler implements ImageHandlerInterface
 {
@@ -323,13 +325,13 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Apply specific filter to image resource
 	 *
-	 * @param \GdImage | resource $imageResource
+	 * @param GdImage | resource $imageResource
 	 * @param string $type
 	 * @param resource $args1
 	 * @param resource $args2
 	 * @param resource $args3
 	 *
-	 * @return \GdImage | resource stream
+	 * @return GdImage | resource stream
 	 */
 
 	// TODO get a args by array data
@@ -388,7 +390,7 @@ class Handler implements ImageHandlerInterface
 	/**
 	 * Draw a picture to buffer
 	 *
-	 * @param \GdImage | string | resource $imageResource
+	 * @param GdImage | string | resource $imageResource
 	 *
 	 * @return void
 	 */
@@ -421,7 +423,7 @@ class Handler implements ImageHandlerInterface
 				break;
 			case MIME::IMAGE_XBM:
 				FileHeader::fromMIME('xbm');
-				imagexbm($imageResource);
+				imagexbm($imageResource, null);
 				break;
 			case MIME::IMAGE_GD:
 				header("Content-Type: image/gd");
@@ -499,9 +501,9 @@ class Handler implements ImageHandlerInterface
 		$format = "unknown";
 
 		if (self::isResource($filePath)) {
-			$format = \getimagesizefromstring($filePath);
+			$format = getimagesizefromstring($filePath);
 		} else {
-			$finfo = \getimagesize($filePath);
+			$finfo = getimagesize($filePath);
 			if ($finfo === false) {
 				return false;
 			}
@@ -595,7 +597,7 @@ class Handler implements ImageHandlerInterface
 			$imageResource = self::getInstance($imageResource);
 		}
 
-		if (function_exists('exif_read_data') && false) {
+		if (function_exists('exif_read_data')) {
 			$exifData = exif_read_data($imageResource, null, true, false);
 
 			if (isset($exifData['COMPUTED'])) {
@@ -620,7 +622,7 @@ class Handler implements ImageHandlerInterface
 			$imageResource = self::getInstance($imageResource);
 		}
 
-		if (function_exists('exif_read_data') && false) {
+		if (function_exists('exif_read_data')) {
 			$exif = exif_read_data($imageResource, null, true, false);
 
 			if (isset($exif['COMPUTED'])) {
@@ -641,7 +643,7 @@ class Handler implements ImageHandlerInterface
 	 */
 	public static function isResource(mixed $imageResource)
 	{
-		if (gettype($imageResource) === 'resource' || $imageResource instanceof \GdImage) {
+		if (gettype($imageResource) === 'resource' || $imageResource instanceof GdImage) {
 			return true;
 		}
 
@@ -677,7 +679,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @param mixed $filePath
 	 *
-	 * @return resource
+	 * @return resource|bool
 	 */
 	public static function getimageResource($filePath): mixed
 	{
@@ -712,7 +714,7 @@ class Handler implements ImageHandlerInterface
 				default:
 					return false;
 			}
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 		}
 
 		return $createObject;
@@ -729,7 +731,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @return resource
 	 */
-	public function getBlank($width, $height, $red, $blue, $green): \GdImage|false
+	public function getBlank($width, $height, $red, $blue, $green): GdImage|false
 	{
 		$image = imagecreatetruecolor($width, $height);
 		if (!$image) {
@@ -771,7 +773,7 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @param mixed $sourceCreateObject
 	 * @param mixed $mergeCreateObject
-	 * @param int      $transparent
+	 * @param int $transparent
 	 *
 	 * @return bool
 	 */
@@ -796,9 +798,9 @@ class Handler implements ImageHandlerInterface
 	 *
 	 * @param mixed $filePath
 	 *
-	 * @return \GdImage | resource | false
+	 * @return GdImage | resource | false
 	 */
-	public static function getInstance(mixed $filePath): \GdImage|false|\resource|string
+	public static function getInstance(mixed $filePath)
 	{
 		if (self::isResource($filePath)) {
 			return \getimagesizefromstring($filePath);

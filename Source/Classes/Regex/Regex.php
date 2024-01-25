@@ -1,10 +1,10 @@
 <?php
 
-namespace Xanax\Classes;
+namespace Neko\Classes;
 
-use Xanax\Classes\Regex\StringResult as StringResult;
-use Xanax\Classes\Regex\ArrayResult as ArrayResult;
-use Xanax\Classes\Regex\Executor as Executor;
+use Neko\Classes\Regex\StringResult as StringResult;
+use Neko\Classes\Regex\ArrayResult as ArrayResult;
+use Neko\Classes\Regex\Executor as Executor;
 
 class Regex
 {

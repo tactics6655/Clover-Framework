@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\Event;
+namespace Neko\Classes\Event;
 
-use Xanax\Implement\EventDispatcherInterface;
+use Neko\Implement\EventDispatcherInterface;
 
-use Xanax\Classes\Event\Instance as EventInstance;
+use Neko\Classes\Event\Instance as EventInstance;
 
 class Dispatcher implements EventDispatcherInterface
 {
