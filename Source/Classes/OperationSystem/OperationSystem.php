@@ -7,9 +7,34 @@ namespace Neko\Classes;
 class OperationSystem
 {
 
-	public static function setDefaultDateTimeZone($timeZoneId)
+	/**
+	 * Disable libxml errors and allow user to fetch error information as needed
+	 * 
+	 * @return bool
+	 */
+	public static function disableLibXmlInternalErrors(?bool $use_errors = null) :bool
 	{
-		date_default_timezone_set($timeZoneId);
+		return libxml_use_internal_errors($use_errors);
+	}
+
+	/**
+	 * Find out whether an extension is loaded
+	 * 
+	 * @return bool
+	 */
+	public static function isExtensionLoaded($extension) :bool
+	{
+		return extension_loaded($extension);
+	}
+
+	/**
+	 * Sets the default timezone used by all date/time functions in a script
+	 * 
+	 * @return bool
+	 */
+	public static function setDefaultDateTimeZone($timeZoneId) :bool
+	{
+		return date_default_timezone_set($timeZoneId);
 	}
 
 	public static function setDisplayStatupErrors(bool $displayErrors)
@@ -129,7 +154,7 @@ class OperationSystem
 
 	public static function getHomePath()
 	{
-		return $_SERVER['HOME'];
+		return $_SERVER['HOME'] ?? "";
 	}
 
 	public static function getGatewayInterface()
@@ -139,7 +164,7 @@ class OperationSystem
 
 	public static function getMainServerSoftware()
 	{
-		return array_key_first(self::parseServerServerSoftware());
+		return ucfirst(array_key_first(self::parseServerServerSoftware()));
 	}
 
 	public static function parseServerServerSoftware()

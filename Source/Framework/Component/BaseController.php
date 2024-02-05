@@ -7,6 +7,7 @@ use Neko\Framework\Component\Response;
 use Neko\Classes\DependencyInjection\Container;
 use Neko\Classes\ContentType as ContentType;
 use Neko\Classes\Data\JSONHandler;
+use Neko\Classes\Header;
 
 class BaseController
 {
@@ -23,20 +24,37 @@ class BaseController
 
     public function addCssFileToHead($filename)
     {
-        $this->container->get('Resource')->addGenericCssFile($filename);
+        /** @var \Neko\Framework\Component\Resource $resource */
+        $resource = $this->container->get('Resource');
+
+        $resource->addGenericCssFile($filename);
     }
 
     public function addJsFileToHead($filename)
     {
-        $this->container->get('Resource')->addGenericJavascriptFile($filename);
+        /** @var \Neko\Framework\Component\Resource $resource */
+        $resource = $this->container->get('Resource');
+
+        $resource->addGenericJavascriptFile($filename);
     }
 
+    /**
+     * Set a title in browser
+     */
     public function setTitle($title)
     {
-        $this->container->get('Resource')->setTitle($title);
+        /** @var \Neko\Framework\Component\Resource $resource */
+        $resource = $this->container->get('Resource');
+
+        $resource->setTitle($title);
     }
 
-    public function responseJson($json)
+    public function redirect($location)
+    {
+        Header::responseRedirectLocation($location);
+    }
+
+    public function responseJson($json, $resource = array())
     {
         $encoded = JSONHandler::encode($json);
 
@@ -44,15 +62,20 @@ class BaseController
             return false;
         }
 
-        echo $encoded;
-        exit();
+        return new Response($encoded, $resource, 'json');
     }
 
     public function render(string $template, array $data = [])
     {
-        $resources = $this->container->get('Resource')->extract();
+        /** @var \Neko\Framework\Component\Resource $resource */
+        $resource = $this->container->get('Resource');
 
-        $render = $this->container->get('Renderer')->render($template, $data);
+        $resources = $resource->extract();
+
+        /** @var \Neko\Framework\Component\Renderer $renderer */
+        $renderer = $this->container->get('Renderer');
+
+        $render = $renderer->render($template, $data);
 
         return $this->response($render, $resources);
     }

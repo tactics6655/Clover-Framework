@@ -20,6 +20,28 @@ use Exception;
 class Handler implements ImageHandlerInterface
 {
 
+	public function parseGif($filename)
+	{
+		if (!$fp = @fopen($filename, 'rb')) {
+			return false;
+		}
+
+		$signature = fread($fp, 3);
+		$version = fread($fp, 3);
+		$screen_descriptor = fread($fp, 7);
+
+		$screen_width = ((ord($screen_descriptor[1])) << 8) +
+			((ord($screen_descriptor[0])));
+
+		$screen_height = ((ord($screen_descriptor[3])) << 8) +
+			((ord($screen_descriptor[2])));
+
+		$global_color_table_size = (ord($screen_descriptor[4]) + ord($screen_descriptor[5]));
+		$global_color_table_size = 3 * (2 ^ ($global_color_table_size + 1));
+
+		echo $global_color_table_size;
+	}
+
 	//http://www.php.net/manual/en/function.imagecreatefromgif.php#104473
 	public function isAnimated($filename)
 	{
@@ -601,8 +623,8 @@ class Handler implements ImageHandlerInterface
 			$exifData = exif_read_data($imageResource, null, true, false);
 
 			if (isset($exifData['COMPUTED'])) {
-				$tmp = $exifData['COMPUTED'];
-				return $tmp['Width'];
+				$computed = $exifData['COMPUTED'];
+				return $computed['Width'];
 			}
 		}
 
@@ -626,8 +648,8 @@ class Handler implements ImageHandlerInterface
 			$exif = exif_read_data($imageResource, null, true, false);
 
 			if (isset($exif['COMPUTED'])) {
-				$tmp = $exif['COMPUTED'];
-				return $tmp['Height'];
+				$computed = $exif['COMPUTED'];
+				return $computed['Height'];
 			}
 		}
 
@@ -787,10 +809,10 @@ class Handler implements ImageHandlerInterface
 			$mergeCreateObject = self::getInstance($mergeCreateObject);
 		}
 
-		$source_width = self::getWidth($sourceCreateObject);
-		$source_height = self::getHeight($sourceCreateObject);
+		$sourceWidth = self::getWidth($sourceCreateObject);
+		$sourceHeight = self::getHeight($sourceCreateObject);
 
-		return imagecopymerge($mergeCreateObject, $sourceCreateObject, 0, 0, 0, 0, $source_width, $source_height, $transparent);
+		return imagecopymerge($mergeCreateObject, $sourceCreateObject, 0, 0, 0, 0, $sourceWidth, $sourceHeight, $transparent);
 	}
 
 	/**

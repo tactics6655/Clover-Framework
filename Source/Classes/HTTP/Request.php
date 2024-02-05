@@ -121,13 +121,15 @@ class Request implements RequestInterface
 
 	/**
 	 * Get status messages
+	 * 
+	 * @return string[]
 	 */
 	public static function getStatusMesssages()
 	{
 		return self::$statusMesssages;
 	}
 
-	public static function getStatusMesssage($code)
+	public static function getStatusMesssage($code) :string
 	{
 		return self::$statusMesssages[$code] ?? "";
 	}
@@ -141,6 +143,11 @@ class Request implements RequestInterface
 		}
 
 		return $browserInfo;
+	}
+
+	public static function isSecure(): bool
+	{
+		return self::isHttpsProtocol() || self::isForwardedSecure();
 	}
 
 	public static function isHttpsProtocol(): bool
@@ -341,6 +348,23 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::SERVER_PROTOCOL);
 	}
 
+	/**
+	 * Returns true if the current request is forwarded from a request that is secure.
+	 *
+	 * @return boolean
+	 */
+	public static function isForwardedSecure()
+	{
+		$forwarededProtocol = self::getHTTPXForwardedProtocol();
+
+		return isset($forwarededProtocol) && strtolower($forwarededProtocol) == 'https';
+	}
+
+	public static function getHTTPXForwardedProtocol()
+	{
+		return self::getServerArguments(ServerIndices::HTTP_X_FORWARDED_PROTO);
+	}
+
 	public static function getContentType()
 	{
 		return self::getServerArguments(ServerIndices::CONTENT_TYPE);
@@ -356,9 +380,14 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::HTTP_USER_AGENT);
 	}
 
-	public static function getRequestMethod()
+	public static function getMethod()
 	{
 		return self::getServerArguments(ServerIndices::REQUEST_METHOD);
+	}
+
+	public static function isGzipAcceptEncoding()
+	{
+		return strpos(self::getAcceptEncoding(), 'gzip');
 	}
 
 	public static function getAcceptEncoding()
@@ -469,47 +498,47 @@ class Request implements RequestInterface
 
 	public static function isIdempotentMethod(HTTPRequestMethod $method)
 	{
-		return in_array(strtoupper(self::getRequestMethod()), self::$idempotentMethods);
+		return in_array(strtoupper(self::getMethod()), self::$idempotentMethods);
 	}
 
 	public static function isSafeMethod(HTTPRequestMethod $method)
 	{
-		return in_array(strtoupper(self::getRequestMethod()), self::$safeMethods);
+		return in_array(strtoupper(self::getMethod()), self::$safeMethods);
 	}
 
 	public static function isHeadMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::HEAD) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::HEAD) ? true : false;
 	}
 
 	public static function isPatchMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::PATCH) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::PATCH) ? true : false;
 	}
 
 	public static function isPutMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::PUT) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::PUT) ? true : false;
 	}
 
 	public static function isOptionsMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::OPTIONS) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::OPTIONS) ? true : false;
 	}
 
 	public static function isDeleteMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::DELETE) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::DELETE) ? true : false;
 	}
 
 	public static function isGetMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::GET) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::GET) ? true : false;
 	}
 
 	public static function isPostMethod()
 	{
-		return (strtoupper(self::getRequestMethod()) === HTTPRequestMethod::POST) ? true : false;
+		return (strtoupper(self::getMethod()) === HTTPRequestMethod::POST) ? true : false;
 	}
 
 	public static function getPostParameter($parameter)
@@ -536,7 +565,7 @@ class Request implements RequestInterface
 
 	public static function getExtractedPostParameters()
 	{
-		if (self::getRequestMethod() === HTTPRequestMethod::POST) {
+		if (self::getMethod() === HTTPRequestMethod::POST) {
 			$extracted = array();
 
 			foreach ($_POST as $key => $val) {
@@ -551,7 +580,7 @@ class Request implements RequestInterface
 
 	public static function getExtractedQueryParameters()
 	{
-		if (self::getRequestMethod() === HTTPRequestMethod::GET) {
+		if (self::getMethod() === HTTPRequestMethod::GET) {
 			$extracted = array();
 
 			foreach ($_GET as $key => $val) {
@@ -567,7 +596,7 @@ class Request implements RequestInterface
 	public static function getRequestUri()
 	{
 		$port = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-		$host = sprintf('%s%s%s', $port, self::getHttpHost(), dirname(self::getDocumentUrl()));
+		$host = sprintf('%s%s%s', $port, self::getHttpHost(), dirname(self::getDocumentUrl() ?: $_SERVER["SCRIPT_NAME"]));
 
 		return new URLObject($host);
 	}

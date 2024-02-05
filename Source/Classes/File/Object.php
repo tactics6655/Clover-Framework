@@ -327,7 +327,7 @@ class FileObject implements FileObjectInterface
 
 	public function isEnoughFreeSpace(): bool
 	{
-		$freeSpace = $this->directoryHandler->getFreeSpace();
+		$freeSpace = DirectoryHandler::getFreeSpace();
 		if ($freeSpace === -1) {
 			return true;
 		}

@@ -37,11 +37,11 @@ class Route
      */
     public function __construct(string $pattern, string $callback, $middleware = [])
     {
-        $this->pattern = new StringObject($pattern);
-        $this->callback = $callback;
+        $this->setPattern($pattern);
+        $this->setCallback($callback);
 
         if (!empty($middleware)) {
-            $this->middlewares[] = $middleware;
+            $this->setMiddlewares($middleware);
         }
     }
 
@@ -50,9 +50,19 @@ class Route
      * 
      * @param array(MiddlewareInterface) $middleware
      */
-    public function setMiddleware($middleware)
+    public function setMiddlewares($middleware)
     {
         $this->middlewares = $middleware;
+    }
+
+    public function setCallback($callback)
+    {
+        $this->callback = $callback;
+    }
+
+    public function getMiddlewares()
+    {
+        return $this->middlewares;
     }
 
     /**
@@ -70,9 +80,14 @@ class Route
      * 
      * @return Closure|string
      */
-    private function getCallback() :Closure|string
+    private function getCallback(): Closure|string
     {
         return $this->callback;
+    }
+
+    public function setPattern(string $pattern)
+    {
+        $this->pattern = new StringObject($pattern);
     }
 
     /**
@@ -80,7 +95,7 @@ class Route
      * 
      * @return bool
      */
-    private function isEmptyPattern() :bool
+    private function isEmptyPattern(): bool
     {
         return $this->pattern->isEmpty();
     }
@@ -90,7 +105,7 @@ class Route
      * 
      * @return StringObject|null
      */
-    private function getPattern() :StringObject|null
+    private function getPattern(): StringObject|null
     {
         return $this->pattern;
     }
@@ -100,7 +115,7 @@ class Route
      * 
      * @return RouteExecutor
      */
-    private function getExecutor() :RouteExecutor
+    private function getExecutor(): RouteExecutor
     {
         $class = null;
         $method = null;
@@ -118,20 +133,21 @@ class Route
      * 
      * @return mixed
      */
-    public function handle() :mixed
+    public function handle(): mixed
     {
         $stack = new SplStack();
         $stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
         $stack[] = $this->getExecutor();
 
+        /** @var string $middleware */
         foreach ($this->middlewares as $middleware) {
             $next = $stack->top();
 
             $stack[] = function () use ($middleware, $next) {
                 if (!empty($middleware) && is_string($middleware)) {
-                    $caller = ReflectionHandler::getNewInstance($middleware);
+                    $instance = ReflectionHandler::getNewInstance($middleware);
 
-                    return ReflectionHandler::invoke($caller, [$next], $this->container, 'handle');
+                    return ReflectionHandler::invoke($instance, [$next], $this->container, 'handle');
                 }
 
                 return ReflectionHandler::callMethod($middleware, $next);
@@ -150,7 +166,7 @@ class Route
      * 
      * @return bool
      */
-    public function match(array $urlSegments) :bool
+    public function match(array $urlSegments): bool
     {
         if ($this->isEmptyPattern()) {
             return false;
@@ -161,6 +177,10 @@ class Route
         $count = $separatedSegments->length()->toInteger();
 
         if ($count <= 0) {
+            return false;
+        }
+
+        if ($count < count($urlSegments)) {
             return false;
         }
 

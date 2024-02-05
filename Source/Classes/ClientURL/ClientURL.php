@@ -12,6 +12,7 @@ use Neko\Implement\ClientURLInterface;
 
 class ClientURL implements ClientURLInterface
 {
+
 	private static $session;
 
 	/** @var \Neko\Classes\ClientURLOption */
@@ -95,7 +96,7 @@ class ClientURL implements ClientURLInterface
 
 	public function getHeaderOptions()
 	{
-		return $this->option::$headerArrayData;
+		return $this->option::$headers;
 	}
 
 	public function execute()

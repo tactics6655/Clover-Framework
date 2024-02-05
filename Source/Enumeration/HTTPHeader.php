@@ -4,7 +4,7 @@ namespace Neko\Enumeration;
 
 abstract class HTTPHeader
 {
-    const Accept = 'Accept';
+    const ACCEPT = 'Accept';
 
     const AcceptCharset = 'Accept-Charset';
 

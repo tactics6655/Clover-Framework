@@ -21,6 +21,8 @@ use Neko\Implement\DirectoryHandlerInterface as DirectoryHandlerInterface;
 
 use Neko\Classes\File\Functions as FileFunctions;
 
+use RecursiveDirectoryIterator;
+
 class Handler implements FileHandlerInterface
 {
 	protected $useStatFunction = [

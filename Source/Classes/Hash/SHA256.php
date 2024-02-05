@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Neko\Classes\Hash;
 
-class SHA256
+class SHA256 extends Handler
 {
-	public function encrypt($string, $useBase64 = true)
+	public function __construct()
 	{
-		$hashed = base64_encode(hash('sha256', $string, true));
-
-		return $useBase64 ? base64_encode($hashed) : $hashed;
+		parent::__construct('sha256');
 	}
+
 }

@@ -43,7 +43,7 @@ class ArrayResult
 		return $this->subject;
 	}
 
-	public function getMatches()
+	public function getMatches(): array
 	{
 		return $this->matches;
 	}

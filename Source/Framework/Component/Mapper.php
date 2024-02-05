@@ -8,44 +8,45 @@ use Neko\Framework\Component\Resource;
 use Neko\Classes\HTTP\Request as HTTPRequest;
 use Neko\Classes\OperationSystem as OperationSystem;
 use Neko\Classes\DependencyInjection\Container;
+use Neko\Classes\Event\Dispatcher as EventDispatcher;
+use Neko\Classes\XML\SimpleXML;
+use Neko\Classes\File\Functions as FileFunction;
 
 class Mapper
 {
     private $method;
 
-    private $accept_encoding;
+    private $acceptEncoding;
 
-    private $remote_ip_address;
+    private $remoteIPAddress;
 
-    private $http_connection;
+    private $httpConnection;
 
-    private $x_forwared_for;
+    private $acceptLanguage;
 
-    private $accept_language;
+    private $hasReferer;
 
-    private $has_referer;
+    private $isMobile;
 
-    private $is_mobile;
+    private $isCrawler;
 
-    private $is_crawler;
-
-    private $request_uri;
+    private $requestUri;
 
     private $scheme;
 
     private $domain;
 
-    private $user_agent;
+    private $userAgent;
 
-    private $is_commnadline_interface;
+    private $isCommnadLineInterface;
 
-    private $is_xml_http_request;
+    private $isXMLHttpRequest;
 
-    private $query_string;
+    private $queryString;
 
-    private $request_url;
+    private $requestUrl;
 
-    private $url_path;
+    private $urlPath;
 
     private $container;
 
@@ -53,34 +54,36 @@ class Mapper
 
     private $environment;
 
+    private EventDispatcher $eventDispatcher;
+
     public function __construct($options, $environment)
     {
         $this->options = $options ?? [];
         $this->environment = $environment ?? [];
 
-        $this->setMethod(HTTPRequest::getRequestMethod());
+        $this->setMethod(HTTPRequest::getMethod());
         $this->setAcceptEncoding(HTTPRequest::getAcceptEncoding());
-        $this->remote_ip_address = HTTPRequest::getRemoteIPAddress()->__toString();
-        $this->http_connection = HTTPRequest::getHTTPConnection();
-        $this->x_forwared_for = HTTPRequest::getHTTPXForwardedFor();
-        $this->accept_language = HTTPRequest::getAcceptLanguage();
-        $this->has_referer = HTTPRequest::hasReferer();
-        $this->is_mobile = HTTPRequest::isMobile();
-        $this->is_crawler = HTTPRequest::isCrawler();
-        $this->request_uri = HTTPRequest::getRequestUri()->__toString();
+        $this->remoteIPAddress = HTTPRequest::getRemoteIPAddress()->__toString();
+        $this->httpConnection = HTTPRequest::getHTTPConnection();
+        $this->acceptLanguage = HTTPRequest::getAcceptLanguage();
+        $this->hasReferer = HTTPRequest::hasReferer();
+        $this->isMobile = HTTPRequest::isMobile();
+        $this->isCrawler = HTTPRequest::isCrawler();
+        $this->requestUri = HTTPRequest::getRequestUri()->__toString();
         $this->scheme = HTTPRequest::getScheme();
-        $this->user_agent = HTTPRequest::getUserAgent();
-        $this->is_xml_http_request = HTTPRequest::isAjax();
-        $this->query_string = HTTPRequest::getQueryString()->__toString();
-        $this->request_url = HTTPRequest::getRequestURL()->__toString();
-        $this->url_path = HTTPRequest::getUrlPath();
+        $this->userAgent = HTTPRequest::getUserAgent();
+        $this->isXMLHttpRequest = HTTPRequest::isAjax();
+        $this->queryString = HTTPRequest::getQueryString()->__toString();
+        $this->requestUrl = HTTPRequest::getRequestURL()->__toString();
+        $this->urlPath = HTTPRequest::getUrlPath();
+        $this->isCommnadLineInterface = OperationSystem::isCommandLineInterface();
 
-        $this->is_commnadline_interface = OperationSystem::isCommandLineInterface();
+        $this->eventDispatcher = new EventDispatcher();
     }
 
     public function setAcceptEncoding($accept_encoding)
     {
-        $this->accept_encoding = $accept_encoding;
+        $this->acceptEncoding = $accept_encoding;
     }
 
     public function setMethod($method)
@@ -92,34 +95,42 @@ class Mapper
     {
         return [
             'method' => $this->method,
-            'accept_encoding' => $this->accept_encoding,
-            'remote_ip_address' => $this->remote_ip_address,
-            'http_connection' => $this->http_connection,
-            'x_forwared_for' => $this->x_forwared_for,
-            'accept_language' => $this->accept_language,
-            'has_referer' => $this->has_referer,
-            'is_mobile' => $this->is_mobile,
-            'is_crawler' => $this->is_crawler,
-            'request_uri' => $this->request_uri,
+            'acceptEncoding' => $this->acceptEncoding,
+            'remoteIPAddress' => $this->remoteIPAddress,
+            'httpConnection' => $this->httpConnection,
+            'acceptLanguage' => $this->acceptLanguage,
+            'hasReferer' => $this->hasReferer,
+            'isMobile' => $this->isMobile,
+            'isCrawler' => $this->isCrawler,
+            'requestUri' => $this->requestUri,
             'scheme' => $this->scheme,
-            'user_agent' => $this->user_agent,
-            'is_xml_http_request' => $this->is_xml_http_request,
-            'query_string' => $this->query_string,
-            'request_url' => $this->request_url,
-            'url_path' => $this->url_path,
+            'userAgent' => $this->userAgent,
+            'isXMLHttpRequest' => $this->isXMLHttpRequest,
+            'queryString' => $this->queryString,
+            'requestUrl' => $this->requestUrl,
+            'urlPath' => $this->urlPath,
         ];
     }
 
     public function isCommentLineInterface()
     {
-        return $this->is_commnadline_interface;
+        return $this->isCommnadLineInterface;
     }
 
     private function setContainer()
     {
         $this->container = new Container();
-        $this->container->set("Renderer",  new Renderer());
-        $this->container->set("Resource",  new Resource());
+
+        $parser = new SimpleXML();
+        $parser->fromFile(dirname(__ROOT__)."/Source/Framework/Configure/default_services.xml");
+        $services = $parser->getChildren('container')->getChildren('services')->getData();
+        /** @var \SimpleXMLElement[] $services */
+        foreach ($services as $service) {
+            $key = $service->attributes()->key->__toString();
+            $class = $service->attributes()->class->__toString();
+            $instance = (new $class);
+            $this->container->set($key, $instance);
+        }
     }
 
     public function getOptions()
@@ -133,7 +144,7 @@ class Mapper
 
         if ($this->isCommentLineInterface()) {
         } else {
-            return new HttpKernel($this->container, $this->getEnvironment(), $this->getOptions());
+            return new HttpKernel($this->eventDispatcher, $this->container, $this->getEnvironment(), $this->getOptions());
         }
     }
 }

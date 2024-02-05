@@ -2,6 +2,8 @@
 
 namespace Neko\Classes\Permission;
 
+use Neko\Classes\Permission;
+
 class World extends Permission
 {
 

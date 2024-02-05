@@ -4,127 +4,127 @@ namespace Neko\Enumeration;
 
 abstract class HTTPStatusCode
 {
-    const Continue = 100;
+    const CONTINUE = 100;
 
-    const SwitchingProtocols = 101;
+    const SWITCHING_PROTOCOLS = 101;
 
-    const Processing = 102;
+    const PROCESSING = 102;
 
-    const EarlyHints = 103;
+    const EARLY_HINTS = 103;
 
     const OK = 200;
 
-    const Created = 201;
+    const CREATED = 201;
 
-    const Accepted = 202;
+    const ACCEPTED = 202;
 
-    const NonAuthoritativeInformation = 203;
+    const NON_AUTHORITATIVE_INFORMATION = 203;
 
-    const NoContent = 204;
+    const NO_CONTENT = 204;
 
-    const ResetContent = 205;
+    const RESET_CONTENT = 205;
 
-    const PartialContent = 206;
+    const PARTIAL_CONTENT = 206;
 
-    const MultipleChoices = 300;
+    const MULTIPLE_CHOICES = 300;
 
-    const MovedPermanently = 301;
+    const MOVED_PERMANENTLY = 301;
 
-    const Found = 302;
+    const FOUND = 302;
 
-    const SeeOther = 303;
+    const SEE_OTHER = 303;
 
-    const NotModified = 304;
+    const NOT_MODIFIED = 304;
 
-    const UseProxy = 305;
+    const USE_PROXY = 305;
 
-    const Unused = 306;
+    const UNUSED = 306;
 
-    const TemporaryRedirect = 307;
+    const TEMPORARY_REDIRECT = 307;
 
-    const PermanentRedirect = 308;
+    const PERMANENT_REDIRECT = 308;
 
-    const BadRequest = 400;
+    const BAD_REQUEST = 400;
 
-    const Unauthorized = 401;
+    const UNAUTHORIZED = 401;
 
-    const PaymentRequired = 402;
+    const PAYMENT_REQUIRED = 402;
 
-    const Forbidden = 403;
+    const FORBIDDEN = 403;
 
-    const NotFound = 404;
+    const NOT_FOUND = 404;
 
-    const MethodNotAllowed = 405;
+    const METHOD_NOT_ALLOWED = 405;
 
-    const NotAcceptable = 406;
+    const NOT_ACCEPTABLE = 406;
 
-    const ProxyAuthenticationRequired = 407;
+    const PROXY_AUTHENTICATION_REQUIRED = 407;
 
-    const RequestTimeout = 408;
+    const REQUEST_TIMEOUT = 408;
 
-    const Conflict = 409;
+    const CONFLICT = 409;
 
-    const Gone = 410;
+    const GONE = 410;
 
-    const LengthRequired = 411;
+    const LENGTH_REQUIRED = 411;
 
-    const PreconditionFailed = 412;
+    const PRECONDITION_FAILED = 412;
 
-    const RequestEntityTooLarge = 413;
+    const REQUEST_ENTITY_TOO_LARGE = 413;
 
-    const RequestURITooLong = 414;
+    const REQUEST_URI_TOO_LONG = 414;
 
-    const UnsupportedMediaType = 415;
+    const UNSUPPORTED_MEDIA_TYPE = 415;
 
-    const RequestedRangeNotSatisfiable = 416;
+    const REQUESTED_RANGE_NOT_SATISFIABLE = 416;
 
-    const ExpectationFailed = 417;
+    const EXPECTATION_FAILED = 417;
 
-    const ImATeapot = 418;
+    const IM_A_TEAPOT = 418;
 
-    const MisdirectedRequest = 421;
+    const MISDIRECTED_REQUEST = 421;
 
-    const UnprocessableEntity = 422;
+    const UNPROCESSABLE_ENTITY = 422;
 
-    const Locked = 423;
+    const LOCKED = 423;
 
-    const TooEarly = 425;
+    const TOO_EARLY = 425;
 
-    const UpgradeRequired = 426;
+    const UPGRADE_REQUIRED = 426;
 
-    const PreconditionRequired = 428;
+    const PRECONDITION_REQUIRED = 428;
 
-    const TooManyRequests = 429;
+    const TOO_MANY_REQUESTS = 429;
 
-    const RequestHeaderFieldsTooLarge = 431;
+    const REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
 
-    const UnavailableForLegalReasons = 451;
+    const UNAVAILABLE_FOR_LEGAL_REASONS = 451;
 
-    const InternalServerError = 500;
+    const INTERNAL_SERVER_ERROR = 500;
 
-    const NotImplemented = 501;
+    const NOT_IMPLEMENTED = 501;
 
-    const BadGateway = 502;
+    const BAD_GATEWAY = 502;
 
-    const ServiceUnavailable = 503;
+    const SERVICE_UNAVAILABLE = 503;
 
-    const GatewayTimeout = 504;
+    const GATEWAY_TIMEOUT = 504;
 
-    const HTTPVersionNotSupported = 505;
+    const HTTP_VERSION_NOT_SUPPORTED = 505;
 
-    const VariantAlsoNegotiates = 506;
+    const VARIANT_ALSO_NEGOTIATES = 506;
 
-    const InsufficientStorage = 507;
+    const INSUFFICIENT_STORAGE = 507;
 
-    const LoopDetected = 508;
+    const LOOP_DETECTED = 508;
 
-    const NotExtended = 510;
+    const NOT_EXTENDED = 510;
 
-    const NetworkAuthenticationRequired = 511;
+    const NETWORK_AUTHENTICATION_REQUIRED = 511;
 
-    const WebserverIsReturningAnUnknownError = 520;
+    const WEBSERVER_IS_RETURNING_AN_UNKNOWN_ERROR = 520;
 
-    const ConnectionTimedOut = 522;
+    const CONNECTION_TIMEOUT = 522;
 
-    const ATimeoutOccurred = 524;
+    const A_TIMEOUT_OCCURRED = 524;
 }

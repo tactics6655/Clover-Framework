@@ -27,6 +27,6 @@ class FileHandlerMessage
 
 	public static function getFileIsNotExistsMessage($filePath)
 	{
-		return "'${filePath}' File doesn't Exist";
+		return "'{$filePath}' File doesn't exist";
 	}
 }

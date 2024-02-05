@@ -6,6 +6,8 @@ namespace Neko\Classes\Reflection;
 
 use Closure;
 use Exception;
+use Reflector;
+use Reflection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionFunction;
@@ -16,6 +18,20 @@ use ReflectionParameter;
 
 class Handler
 {
+
+    public static function getStaticClassConstructor()
+    {
+        if (!self::hasStaticClassConstructor()) {
+            return false;
+        }
+
+        return self::getMethod(static::class, '__construct');
+    }
+
+    public static function hasStaticClassConstructor()
+    {
+        return method_exists(static::class, '__construct');
+    }
 
     /**
      * Gets an array of methods for the class.
@@ -64,6 +80,46 @@ class Handler
     public static function isAbstractClassDescriptor(ReflectionClass $class): bool
     {
         return $class->isAbstract();
+    }
+
+    /**
+     * Check if has document comments
+     * 
+     * @param \ReflectionClass|\ReflectionMethod|\ReflectionProperty $reflector
+     */
+    public static function hasDocumentComment(Reflector $reflector) : string|false
+    {
+        return $reflector->getDocComment() == false;
+    }
+
+    public static function getRootDirectory(object|null $object)
+    {
+        $reflectionObject = new \ReflectionObject($object);
+        $directory = dirname($reflectionObject->getFileName());
+
+        return $directory;
+    }
+
+    /**
+     * Gets document comments
+     * 
+     * @param \ReflectionClass|\ReflectionMethod|\ReflectionProperty $reflector
+     */
+    public static function getDocumentComment(Reflector $reflector) : string|false
+    {
+        $rawComment = $reflector->getDocComment();
+        if (!$rawComment) {
+            return false;
+        }
+
+        $comments = explode("\n", $rawComment);
+
+        foreach ($comments as &$comment) {
+            $comment = ltrim($comment);
+            $comment = ltrim($comment, "*");
+        }
+
+        return $comments;
     }
 
     /**
@@ -202,6 +258,16 @@ class Handler
     }
 
     /**
+     * Retrieves the parent class name for object or class
+     * 
+     * @return string|false
+     */
+    public static function getParentClass($object)
+    {
+        return get_parent_class($object);
+    }
+
+    /**
      * Call the callback given by the first parameter
      * 
      * @param callable $method
@@ -293,11 +359,12 @@ class Handler
         return get_class_methods($object_or_class);
     }
 
-    public static function getNewInstance($class) {
+    public static function getNewInstance($class) :object|bool
+    {
         if (!class_exists($class)) {
             return false;
         }
-        
+
         return new ($class);
     }
 

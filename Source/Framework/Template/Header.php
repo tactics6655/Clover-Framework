@@ -11,13 +11,13 @@ use Neko\Classes\HTML\Handler as HTMLHandler;
     <meta http-equiv="Content-Type" content="charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <?php foreach ($scriptMap as $resource) : ?>
-        <?= HTMLHandler::generateElement('script', '', $resource); ?>
-    <?php endforeach; ?>
+<?php foreach ($scriptMap as $resource) : ?>
+    <?= HTMLHandler::generateElement('script', '', $resource); ?>
+<?php endforeach; ?>
 
-    <?php foreach ($cssMap as $resource) : ?>
-        <?= HTMLHandler::generateElement('link', '', $resource); ?>
-    <?php endforeach; ?>
+<?php foreach ($cssMap as $resource) : ?>
+    <?= HTMLHandler::generateElement('link', '', $resource, true); ?>
+<?php endforeach; ?>
 
     <title><?= $title; ?></title>
 </head>

@@ -31,13 +31,15 @@ class RouteExecutor
         $this->container = $container;
     }
 
-    public function __invoke()
+    public function __invoke($next_arguments = [])
     {
         $class = $this->class;
         $callback = $this->callback;
         $method = $this->method;
         $arguments = $this->arguments ?? [];
         $container = $this->container;
+
+        $arguments = [... $arguments, (is_array($next_arguments) ? $next_arguments : $next_arguments)];
 
         if (isset($class) && !empty($class) && class_exists($class)) {
             $callback = new $class;

@@ -28,6 +28,11 @@ class Handler implements DirectoryHandlerInterface
 		$this->directoryDepth = -1;
 	}
 
+	public static function remove($directory, $context = NULL)
+	{
+		rmdir($directory, $context);
+	}
+
 	/**
 	 * Get free space of root directory
 	 *
@@ -35,7 +40,7 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return int
 	 */
-	public function getFreeSpace($prefix = '/')
+	public static function getFreeSpace($prefix = '/')
 	{
 		$diskFreeSpaces = -1;
 
@@ -90,6 +95,7 @@ class Handler implements DirectoryHandlerInterface
 
 	public static function makeMultiple(array $pathList, int $mode = 644)
 	{
+		/** @var string $path */
 		foreach ($pathList as $path) {
 			if (self::isDirectory($path)) {
 				continue;
@@ -190,6 +196,7 @@ class Handler implements DirectoryHandlerInterface
 
 		$iterator->setMaxDepth(-1); // Absolutely delete folders
 
+		/** @var RecursiveDirectoryIterator $fileInformation */
 		foreach ($iterator as $fileInformation) {
 			if (!$fileInformation->isDir()) {
 				continue;
@@ -222,11 +229,14 @@ class Handler implements DirectoryHandlerInterface
 
 		/** @var RecursiveDirectoryIterator[] $iterator */
 		foreach ($iterator as $item) {
+			$destination = sprintf("%s%s%S", $copyPath, DIRECTORY_SEPARATOR, $item->getSubPathName());
+
 			if ($item->isDir()) {
-				$this->create($copyPath . DIRECTORY_SEPARATOR . $item->getSubPathName());
-			} else {
-				$this->fileHandler->copy($item, $copyPath . DIRECTORY_SEPARATOR . $item->getSubPathName());
+				$this->create($destination);
+				continue;
 			}
+
+			$this->fileHandler->copy($item->getRealPath(), $destination);
 		}
 	}
 
@@ -247,6 +257,7 @@ class Handler implements DirectoryHandlerInterface
 
 		$skipDots = new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS);
 
+		/** @var RecursiveDirectoryIterator $file */
 		foreach (new RecursiveIteratorIterator($skipDots) as $file) {
 			$size += $file->getSize();
 		}
@@ -397,6 +408,7 @@ class Handler implements DirectoryHandlerInterface
 		if ($includeSubDirectory) {
 			$di = new RecursiveDirectoryIterator($path);
 
+			/** @var RecursiveDirectoryIterator $file */
 			foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
 				if (strtoupper($type) == 'FILE') {
 					$passed = is_file($filename);
@@ -504,7 +516,7 @@ class Handler implements DirectoryHandlerInterface
 			if ($fileInformation->isDir()) {
 				continue;
 			}
-			
+
 			if (unlink($fileInformation->getRealPath()) === false) {
 				return false;
 			}

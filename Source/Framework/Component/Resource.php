@@ -2,6 +2,8 @@
 
 namespace Neko\Framework\Component;
 
+use Neko\Classes\File\Functions as FileFunctions;
+
 class Resource
 {
 
@@ -33,15 +35,22 @@ class Resource
     {
         $this->adoptedCssFiles[] = array(
             'rel' => 'stylesheet',
-            'href' => $file,
+            'href' => $this->appendTimestampToResource($file),
             'type' => 'text/css',
             'media' => 'all'
         );
     }
 
+    protected function appendTimestampToResource($file)
+    {
+        $createdDate = FileFunctions::getCreatedDate(__ROOT__.$file);
+
+        return sprintf("%s?t=%d", $file, $createdDate);
+    }
+
     public function addGenericJavascriptFile($file)
     {
-        $this->adoptedScriptFiles[] = array('src' => $file);
+        $this->adoptedScriptFiles[] = array('src' => $this->appendTimestampToResource($file));
     }
 
     public function addJavascriptFile($map)

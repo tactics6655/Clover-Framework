@@ -22,7 +22,9 @@ class PHPDataObject extends PDO
 
 	private string $database;
 
-	public function __construct() {}
+	public function __construct()
+	{
+	}
 
 	public function setPort($port)
 	{

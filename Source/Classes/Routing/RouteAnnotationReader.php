@@ -7,6 +7,7 @@ use Neko\Annotation\Route;
 use Neko\Annotation\Prefix;
 use Neko\Annotation\Middleware;
 
+use ReflectionMethod;
 use ReflectionClass;
 
 class RouteAnnotationReader
@@ -24,8 +25,9 @@ class RouteAnnotationReader
 		}
 
 		$middlewareAnnotation = ReflectionHandler::getAnnotations($reflection, Middleware::class);
+		/** @var Middleware $annotation */
 		foreach ($middlewareAnnotation as $annotation) {
-			$descriptor->middleware = $annotation->value;
+			$descriptor->middleware[] = $annotation->value;
 		}
 	}
 
@@ -50,6 +52,7 @@ class RouteAnnotationReader
 			$annotations[] = $descriptor;
 		}
 
+		/** @var ReflectionMethod $method */
 		foreach ($class->getMethods() as $method) {
 			if ($method->isStatic() || $method->isPrivate() || $method->isProtected()) {
 				continue;

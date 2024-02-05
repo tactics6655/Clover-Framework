@@ -23,6 +23,8 @@ use Neko\Validation\FileValidation as FileValidation;
 use Neko\Message\FileHandler\FileHandlerMessage as FileHandlerMessage;
 use Neko\Message\Functions\FunctionMessage as FunctionMessage;
 
+use RecursiveDirectoryIterator;
+
 use function clearstatcache;
 use function fileatime;
 use function filetype;
@@ -36,6 +38,15 @@ use function rename;
 class Functions
 {
 	private static $lastError;
+
+	public static function isAllowedCharacter($character)
+	{
+		if (substr(PHP_OS, 0, 3) == 'WIN') {
+			return !in_array([':', '*', '?', '"', '<', '>', '|'], $character);
+		}
+
+		return true;
+	}
 
 	public static function getClassName($filePath)
 	{
@@ -845,15 +856,29 @@ class Functions
 		return $return;
 	}
 
-	public static function getSizeUnit(FileSizeUnit $type)
+	public static function getSizeUnit(string $type)
 	{
 		switch ($type) {
 			case FileSizeUnit::LONG:
 				return ['B', 'Kilo B', 'Mega B', 'Giga B', 'Tera B', 'Peta B', 'Exa B', 'Zetta B', 'Yotta B'];
 			default:
 			case FileSizeUnit::SHORT:
-				return ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+				return ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 		}
+	}
+
+	public static function formatSize($bytes, ?string $type = NULL, $round = true, $presicion = 0)
+	{
+		if ($bytes > 0) {
+			$sizes            = self::getSizeUnit($type ?? FileSizeUnit::LONG);
+			$measure          = strlen((string) ($bytes >> 10));
+			$factor           = $bytes < (1024 ** 6) ? ($measure > 1 ? floor((($measure - 1) / 3) + 1) : 1) : floor((strlen($bytes) - 1) / 3);
+			$capacity         = $bytes / pow(1024, $factor);
+			$multiBytesPrefix = ($capacity === intval($capacity) ?: ($type == FileSizeUnit::LONG ? 'ytes' : ''));
+			$bytes            = sprintf('%s%s%s', $round ? round($capacity, $presicion) : $capacity, $sizes[$factor], $multiBytesPrefix);
+		}
+
+		return $bytes;
 	}
 
 	/**
@@ -884,16 +909,7 @@ class Functions
 				$bytes = (int)is_int($filePath) ? $filePath : -1;
 			}
 
-			if ($bytes > 0) {
-				$sizes            = self::getSizeUnit($type ?? FileSizeUnit::LONG);
-				$measure          = strlen((string) ($bytes >> 10));
-				$factor           = $bytes < (1024 ** 6) ? ($measure > 1 ? floor((($measure - 1) / 3) + 1) : 1) : floor((strlen($bytes) - 1) / 3);
-				$capacity         = $bytes / pow(1024, $factor);
-				$multiBytesPrefix = ($capacity === intval($capacity) ?: 'ytes');
-				$bytes            = sprintf('%s%s%s', $capacity, $sizes[$factor], $multiBytesPrefix);
-			}
-
-			return $bytes;
+			return self::formatSize($bytes, $type);
 		}
 
 		$return = filesize($filePath);

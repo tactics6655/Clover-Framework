@@ -5,7 +5,7 @@ namespace Neko\Implement;
 interface DirectoryHandlerInterface
 {
 
-	public function getFreeSpace($prefix = '/');
+	public static function getFreeSpace($prefix = '/');
 
 	public function renameInnerFiles(string $directoryPath, $replacement, $string = null);
 

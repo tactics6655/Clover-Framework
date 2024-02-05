@@ -13,6 +13,8 @@ use Neko\Enumeration\HTTPRequestMethod;
 class ClientURLOption implements ClientURLOptionInterface
 {
 
+	public static $headers = [];
+
 	private static $session;
 
 	public static $options = [];

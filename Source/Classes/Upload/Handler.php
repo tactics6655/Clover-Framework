@@ -127,6 +127,13 @@ class Handler
 		return self::get($name, UploadedFile::ERROR);
 	}
 
+	public static function getFileErrorMessage($name)
+	{
+		$code = self::getFileError($name);
+
+		return self::getErrorMessageFromCode($code);
+	}
+
 	public static function isExists($name = UploadedFile::TEMPORARY_NAME)
 	{
 		if (self::get($name) === null) {

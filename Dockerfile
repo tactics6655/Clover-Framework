@@ -5,6 +5,8 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends libpq-dev
 
 RUN apt-get install -y \
+      zip \
+      unzip \
       curl \
       libmagickwand-dev \
       libpq-dev \
@@ -16,6 +18,8 @@ RUN apt-get install -y \
       libssl-dev \
       libmcrypt-dev \
       libxpm-dev \
+      libzip-dev \
+      libzip4 \
       nano \
       git \
       dnsutils
@@ -30,7 +34,8 @@ RUN docker-php-ext-configure exif \
   && docker-php-ext-install bz2 \
   && docker-php-ext-install pdo_mysql \
   && docker-php-ext-install opcache \
-  && docker-php-ext-install iconv
+  && docker-php-ext-install iconv \
+  && docker-php-ext-install zip
 
 RUN docker-php-ext-enable opcache
 

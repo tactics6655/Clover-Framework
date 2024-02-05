@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<container>
+    <services>
+        <service key="Renderer" class="Neko\Framework\Component\Renderer"/>
+        <service key="Resource" class="Neko\Framework\Component\Resource"/>
+    </services>
+</container>

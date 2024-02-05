@@ -11,6 +11,11 @@ class Header
 		header($data);
 	}
 
+	public static function isSent()
+	{
+		return headers_sent();
+	}
+
 	public static function responseWithKeyAndArray(String $header, array $pair)
 	{
 		if (function_exists('create_function')) {
@@ -177,6 +182,14 @@ class Header
 		}
 
 		return $stateMessage;
+	}
+
+	/**
+	 * Return the nesting level of the output buffering mechanism
+	 */
+	public static function getNestingLevelOfOutputBufferingMechanism()
+	{
+		return ob_get_level();
 	}
 
 	public static function responseXSSBlock()

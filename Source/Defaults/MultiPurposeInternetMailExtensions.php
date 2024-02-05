@@ -276,6 +276,9 @@ return [
     'xlsb' => [
         'type' => 'application/vnd.ms-excel.sheet.binary.macroenabled.12'
     ],
+    'xlsm' => [
+        'type' => 'application/vnd.ms-excel.sheet.macroEnabled.12'
+    ],
     'xlsx' => [
         'type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     ],

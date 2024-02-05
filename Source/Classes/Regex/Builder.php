@@ -15,7 +15,7 @@ class Builder
 
 	public function negativeSet($expression)
 	{
-		return "[^${expression}]";
+		return "[^{$expression}]";
 	}
 
 	public function url()
@@ -25,12 +25,12 @@ class Builder
 
 	public function repetition($expression, $repeat)
 	{
-		return "\\b${expression}\{${repeat}\}\b";
+		return "\\b{$expression}\{{$repeat}\}\b";
 	}
 
 	public function setComment($content)
 	{
-		return "(?#${content})";
+		return "(?#{$content})";
 	}
 
 	public function recursion()
@@ -42,44 +42,44 @@ class Builder
 
 	public function namedSubroutine($name)
 	{
-		return "(?P>${$name})";
+		return "(?P>\${$name})";
 	}
 
 	public function numericSubroutine($number)
 	{
-		return "(?${$number})"; // isEqual \g'${$number}'
+		return "(?\${$number})"; // isEqual \g'${$number}'
 	}
 
 	public function numericPrecedingSubroutine($number)
 	{
-		return "(?-${$number})";
+		return "(?-\${$number})";
 	}
 
 	public function numericNextSubroutine($number)
 	{
-		return "(?+${$number})";
+		return "(?+\${$number})";
 	}
 
 	public function backreferenceNumericSubroutine($expression, $number)
 	{
-		return "(${expression})\g<${number}>";
+		return "({$expression})\g<{$number}>";
 	}
 
 	// Condition
 
 	public function condition($expression, $then, $else)
 	{
-		return "(?(?=${expression})${then}|${else})";
+		return "(?(?={$expression}){$then}|{$else})";
 	}
 
 	public function namedConditionGroupingWhenValid($name, $expression, $condition, $then, $else)
 	{
-		return "(?<${name}>${expression})?${condition}(?(${name})${then}|${else})";
+		return "(?<{$name}>{$expression})?{$condition}(?({$name}){$then}|{$else})";
 	}
 
 	public function conditionGrouping($expression, $condition, $then, $else)
 	{
-		return "(${expression})?${condition}(?(1)${then}|${else})";
+		return "({$expression})?{$condition}(?(1){$then}|{$else})";
 	}
 
 	// Mode
@@ -166,39 +166,39 @@ class Builder
 
 	public function balancingGroup($captureSubtract, $expression)
 	{
-		return "(?<${captureSubtract}>${expression})";
+		return "(?<{$captureSubtract}>{$expression})";
 	}
 
 	public function branchResetGroup($subexpression)
 	{
-		return "(?|${subexpression})";
+		return "(?|{$subexpression})";
 	}
 
 	public function atomicGroup($name, $subexpression)
 	{
-		return "(?>${subexpression})";
+		return "(?>{$subexpression})";
 	}
 
 	public function namedCapturingGroup($name, $subexpression)
 	{
-		return "(?P<${name}>${subexpression})";
+		return "(?P<{$name}>{$subexpression})";
 	}
 
 	public function noneCapturingGroup($subexpression)
 	{
-		return "(?:${subexpression})";
+		return "(?:{$subexpression})";
 	}
 
 	// Expression
 
 	public function nodeWithoutAfterSpecifyAttributes($node, $attribute)
 	{
-		return "(<${node} .*?)(?:${attribute}=\".*\")?(.*?\/>)";
+		return "(<{$node} .*?)(?:{$attribute}=\".*\")?(.*?\/>)";
 	}
 
 	public function nodeWithoutSpecifyAttributes($node, $attribute)
 	{
-		return "(<${node} .*?)(?:${attribute}=\".*\")(.*?\/>)";
+		return "(<{$node} .*?)(?:{$attribute}=\".*\")(.*?\/>)";
 	}
 
 	public function positiveLookbehind()
@@ -225,7 +225,7 @@ class Builder
 
 	public function blockTag($name)
 	{
-		return "<${name}>.*?<\/${name}>";
+		return "<{$name}>.*?<\/{$name}>";
 	}
 
 	// Et greta

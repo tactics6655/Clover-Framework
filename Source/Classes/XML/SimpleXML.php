@@ -2,13 +2,25 @@
 
 namespace Neko\Classes\XML;
 
+use SimpleXMLElement;
+
 class SimpleXML
 {
 
-	private $data;
+	private SimpleXMLElement|bool $data;
 
 	public function __construct()
 	{
+	}
+
+	public function hasChildren()
+	{
+		return $this->data->hasChildren();
+	}
+
+	public function getData()
+	{
+		return $this->data;
 	}
 
 	public function parse($text)
@@ -30,8 +42,10 @@ class SimpleXML
 		return true;
 	}
 
-	public function getChildren()
+	public function getChildren(string|null $namespaceOrPrefix = null, bool|null $isPrefix = false)
 	{
-		return $this->data->children();
+		$this->data = $this->data->children();
+
+		return $this;
 	}
 }

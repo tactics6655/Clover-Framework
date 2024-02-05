@@ -12,18 +12,21 @@ use Neko\Classes\File\Functions as FileFunctions;
 use Neko\Classes\Reflection\Handler as ReflectionHandler;
 use Neko\Classes\Directory\Handler as DirectoryHandler;
 
+use Neko\Annotation\Route as RouteAnnotation;
+
 use Neko\Implement\EventDispatcherInterface;
 
 use Neko\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 
 class Router
 {
-	/** @var Container[] $container */
+	/** @var Container $container */
 	private Container $container;
 
 	/** @var RouteObject[] $routes */
 	private array $routes = [];
 
+	/** @var Middleware[] $middlewares */
 	private array $middlewares;
 
 	private string|HTTPRequestMethod $method;
@@ -37,10 +40,15 @@ class Router
 		$this->annotationReader = new RouteAnnotationReader();
 	}
 
+	public function getMiddlewares()
+	{
+		return $this->middlewares;
+	}
+
 	/**
 	 * Set a middleware for using globally
 	 */
-	public function setMiddleware(...$middleware)
+	public function setMiddlewares(...$middleware)
 	{
 		$this->middlewares = $middleware;
 
@@ -128,10 +136,12 @@ class Router
 
 		$annotationList = [];
 
+		/** @var string[] $classNames */
 		foreach ($classNames as $className) {
 			$annotationList = array_merge($annotationList, $this->annotationReader->read($className));
 		}
 
+		/** @var RouteAnnotation $annotation */
 		foreach ($annotationList as $annotation) {
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
@@ -192,9 +202,12 @@ class Router
 		return $this->routes[$method];
 	}
 
+    /**
+     * Handle matched callback
+     */
 	public function handle()
 	{
-		$this->method = HTTPRequest::getRequestMethod();
+		$this->method = HTTPRequest::getMethod();
 
 		if (!$this->has($this->method)) {
 			return false;
@@ -203,6 +216,7 @@ class Router
 		$routes = $this->getRoute($this->method);
 		$urlPathSegments = HTTPRequest::getUrlPathSegments();
 
+		/** @var Route $route */
 		foreach ($routes as $route) {
 			$match = $route->match($urlPathSegments);
 
@@ -211,10 +225,12 @@ class Router
 			}
 
 			if (isset($this->middlewares)) {
-				$route->setMiddleware($this->middlewares);
+				$route->setMiddlewares($this->middlewares);
 			}
 
-			$route->setContainer($this->container);
+			if (isset($this->container)) {
+				$route->setContainer($this->container);
+			}
 
 			return $route->handle();
 		}

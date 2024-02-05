@@ -43,6 +43,14 @@ class Handler
 		set_exception_handler($exceptionFunction);
 	}
 
+	/**
+	 * Generates a backtrace
+	 */
+	public static function generatesBacktrace(int $options = DEBUG_BACKTRACE_PROVIDE_OBJECT, int $limit = 0)
+	{
+		return debug_backtrace($options, $limit);
+	}
+
 	public static function restorePreviousErrorStack()
 	{
 		restore_error_handler();

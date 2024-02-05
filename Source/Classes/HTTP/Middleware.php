@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xanax\Classes\HTTP\Router;
+namespace Neko\Classes\HTTP\Router;
 
 class Middleware
 {

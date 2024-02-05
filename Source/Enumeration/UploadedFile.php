@@ -3,7 +3,7 @@
 namespace Neko\Enumeration;
 
 abstract class UploadedFile
-{   
+{
     const FULLY_DATA = 'fully_data';
 
     const TEMPORARY_NAME = 'tmp_name';

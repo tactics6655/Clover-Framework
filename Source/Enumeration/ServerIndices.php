@@ -127,6 +127,8 @@ abstract class ServerIndices
 
     const AUTH_TYPE = 'AUTH_TYPE';
 
+    const ORIG_SCRIPT_NAME = 'ORIG_SCRIPT_NAME';
+
     const AUTH_PASSWORD = 'AUTH_PASSWORD';
 
     const HTTP_X_REWRITE_URL = 'HTTP_X_REWRITE_URL';
@@ -173,9 +175,13 @@ abstract class ServerIndices
 
     const APP_POOL_ID = 'APP_POOL_ID';
 
+    const HTTP_SSL_HTTPS = 'HTTP_SSL_HTTPS';
+
     const HTTP_ACCEPT_CHARSET = 'HTTP_ACCEPT_CHARSET';
 
     const HTTP_X_FORWARDED_PROTO = 'HTTP_X_FORWARDED_PROTO';
+
+    const HTTP_X_FORWARDED_HOST = 'HTTP_X_FORWARDED_HOST';
 
     const HTTP_X_FORWARDED_FOR = 'HTTP_X_FORWARDED_FOR';
 }

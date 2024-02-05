@@ -15,10 +15,10 @@ class Dispatcher implements EventDispatcherInterface
 	/**
 	 * Dispatch registered event with event name
 	 * 
-	 * @String event
-	 * @String eventName
+	 * @param object event
+	 * @param string eventName
 	 */
-	public function dispatch($event, string $eventName = null)
+	public function dispatch(object $event, string $eventName = null)
 	{
 		if (\is_object($event)) {
 			$eventName = $eventName ?? \get_class($event);
@@ -53,19 +53,29 @@ class Dispatcher implements EventDispatcherInterface
 	/**
 	 * Remove listener from matched by event name
 	 * 
-	 * @String eventName
-	 * @Callable Listener
+	 * @String $eventName
+	 * @Callable $caller
 	 */
-	public function removeListener(string $eventName, callable $listener)
+	public function removeListener(string $eventName, callable $caller)
 	{
 		if (!$this->hasListener($eventName)) {
 			return false;
 		}
+
+		$key = array_search($caller, $this->listeners[$eventName]);
+
+		if ($key === false) {
+			return false;
+		}
+
+		unset($this->listeners[$eventName][$key]);
+
+		return true;
 	}
 
 	public function getListeners($eventName = '')
 	{
-		return isset($eventName) ? $this->listeners[$eventName] : $this->listeners;
+		return isset($this->listeners[$eventName]) ? $this->listeners[$eventName] : $this->listeners;
 	}
 
 	/**
