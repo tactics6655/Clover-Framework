@@ -15,7 +15,7 @@ class SimpleXML
 
 	public function hasChildren()
 	{
-		return $this->data->hasChildren();
+		return $this->data?->hasChildren();
 	}
 
 	public function getData()

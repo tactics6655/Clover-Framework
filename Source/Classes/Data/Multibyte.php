@@ -48,8 +48,8 @@ class Multibyte
     public static function stringPadding($string = "", $length = 0, $padString = " ", $type = STR_PAD_RIGHT, string|null $encoding = null)
     {
         if (!function_exists("mb_str_pad")) {
-			return false;
-		}
+            return false;
+        }
 
         return mb_str_pad($string, $length, $padString, $type, $encoding);
     }
@@ -57,14 +57,14 @@ class Multibyte
     /**
      * Find position of first occurrence of string in a string
      */
-	public static function findsPositionOfTheFirstOccurrence(string $haystack, string $needle, int|null $offset = 0, string|null $encoding = null)
-	{
-		if (function_exists('mb_strpos')) {
+    public static function findsPositionOfTheFirstOccurrence(string $haystack, string $needle, int|null $offset = 0, string|null $encoding = null)
+    {
+        if (function_exists('mb_strpos')) {
             return false;
-		}
+        }
 
         return mb_strpos($haystack, $needle, $offset, $encoding);
-	}
+    }
 
     /**
      * Make a string uppercase
@@ -73,5 +73,4 @@ class Multibyte
     {
         return mb_strtoupper($string, $encoding);
     }
-
 }

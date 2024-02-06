@@ -8,11 +8,23 @@ class OperationSystem
 {
 
 	/**
+	 * Limits the maximum execution time
+	 * 
+	 * @param int $seconds
+	 * 
+	 * @return bool
+	 */
+	public static function setMaximumExecutionTimeLimit(int $seconds)
+	{
+		return set_time_limit($seconds);
+	}
+
+	/**
 	 * Disable libxml errors and allow user to fetch error information as needed
 	 * 
 	 * @return bool
 	 */
-	public static function disableLibXmlInternalErrors(?bool $use_errors = null) :bool
+	public static function disableLibXmlInternalErrors(?bool $use_errors = null): bool
 	{
 		return libxml_use_internal_errors($use_errors);
 	}
@@ -22,7 +34,7 @@ class OperationSystem
 	 * 
 	 * @return bool
 	 */
-	public static function isExtensionLoaded($extension) :bool
+	public static function isExtensionLoaded($extension): bool
 	{
 		return extension_loaded($extension);
 	}
@@ -32,7 +44,7 @@ class OperationSystem
 	 * 
 	 * @return bool
 	 */
-	public static function setDefaultDateTimeZone($timeZoneId) :bool
+	public static function setDefaultDateTimeZone($timeZoneId): bool
 	{
 		return date_default_timezone_set($timeZoneId);
 	}

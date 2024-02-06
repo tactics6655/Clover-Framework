@@ -22,7 +22,7 @@ class RouteExecutor
 
     private Container $container;
 
-    public function __construct($class, $method, $callback, $arguments, Container $container)
+    public function __construct(string $class, string $method, string $callback, $arguments, Container $container)
     {
         $this->class = $class;
         $this->method = $method;
@@ -31,7 +31,7 @@ class RouteExecutor
         $this->container = $container;
     }
 
-    public function __invoke($next_arguments = [])
+    public function __invoke(mixed $next_arguments = [])
     {
         $class = $this->class;
         $callback = $this->callback;
@@ -39,7 +39,7 @@ class RouteExecutor
         $arguments = $this->arguments ?? [];
         $container = $this->container;
 
-        $arguments = [... $arguments, (is_array($next_arguments) ? $next_arguments : $next_arguments)];
+        $arguments = [...$arguments, (is_array($next_arguments) ? $next_arguments : $next_arguments)];
 
         if (isset($class) && !empty($class) && class_exists($class)) {
             $callback = new $class;
@@ -52,5 +52,7 @@ class RouteExecutor
         if (is_object($callback)) {
             return ReflectionHandler::invoke($callback, ($arguments), $container, $method);
         }
+
+        return false;
     }
 }

@@ -8,15 +8,7 @@ use Neko\Framework\Enumeration\Environment;
 use Neko\Classes\OperationSystem as OS;
 use Neko\Classes\ArrayObject;
 use Neko\Classes\HTTP\Request as Request;
-
-use Neko\Classes\Exception\Handler as ExceptionHandler;
-
-use Neko\Classes\File\Functions as FileFunction;
-
-use Neko\Classes\Dom\Document;
-
-use ReflectionMethod;
-use Exception;
+use Neko\Classes\Debug\ErrorHandler;
 
 class Runtime
 {
@@ -45,72 +37,8 @@ class Runtime
     }
 
     public function setErrorHandler()
-    { 
-        ExceptionHandler::setExceptionHandler(function (\Throwable $e) {
-            $code = $e->getCode();
-            $traces = $e->getTrace();
-            $className = get_class($e);
-
-            foreach ($traces as $key => $trace) {
-                if (!array_key_exists("class", $trace) || empty($trace)) {
-                    continue;
-                }
-
-                $traces[$key]['absolute_file_path'] = trim(str_replace(dirname(__ROOT__), '', $trace['file'] ?? ''), "/");
-
-                $reflectionClass = new \ReflectionClass($trace['class']);
-
-                $methods = $reflectionClass->getMethods();
-
-                $filtered = array_filter($methods, function ($method) use ($trace) {
-                    return $method->name == $trace['function'];
-                });
-
-                if (empty($filtered)) {
-                    continue;
-                }
-
-                $method = $reflectionClass->getMethod($trace['function']);
-                
-                $shortName = $reflectionClass->getShortName();
-                $traces[$key]['short_name'] = $shortName;
-
-                $parameters = $method->getParameters();
-                $traces[$key]['parameters'] = $parameters;
-
-                $returnType = $method->getReturnType();
-                $traces[$key]['return_type'] = $returnType;
-
-                $comment = $method->getDocComment();
-                if (empty($comment)) {
-                    continue;
-                }
-
-                $comments = array_slice(explode("\n", $comment), 1);
-                foreach ($comments as $key => &$comment) {
-                    $comment = trim($comment);
-                    $comment = rtrim($comment, "/");
-                    $comment = ltrim($comment, "*");
-                    $comment = trim($comment);
-
-                    if (str_starts_with($comment, "@")) {
-                        unset($comments[$key]);
-                    } else if (empty($comment)) {
-                        unset($comments[$key]);
-                    }
-                }
-
-                $traces[$key]['comment'] = implode("<br/>", array_values($comments));
-            }
-
-            echo FileFunction::getInterpretedContent((__DIR__.'/../Template/Exception.php'), [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'traces' => $traces,
-                'className' => $className
-            ]);
-        });
+    {
+        ErrorHandler::register();
     }
 
     private function flushResponseData()
@@ -124,7 +52,7 @@ class Runtime
         }
     }
 
-    private function setMapping() :void
+    private function setMapping(): void
     {
         $mapper = new Mapper($this->options, $this->environment);
         $runner = $mapper->matchRunner();
@@ -132,7 +60,7 @@ class Runtime
         if ($response instanceof Response) {
             $response->printBody();
         }
-        
+
         $this->flushResponseData();
     }
 

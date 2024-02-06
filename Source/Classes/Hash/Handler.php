@@ -2,7 +2,7 @@
 
 namespace Neko\Classes\Hash;
 
-class Handler 
+class Handler
 {
     public $algorithm;
 

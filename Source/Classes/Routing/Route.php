@@ -9,11 +9,10 @@ use Neko\Classes\Data\StringObject;
 use Neko\Classes\Routing\RouteExecutor;
 use Neko\Classes\DependencyInjection\Container;
 use Neko\Classes\Reflection\Handler as ReflectionHandler;
+use Neko\Classes\Routing\QueueableRequestHandler;
+use Neko\Classes\Routing\StackableRequestHandler;
 
-use SplStack;
 use Closure;
-use SplDoublyLinkedList;
-
 class Route
 {
     private Closure | string $callback;
@@ -48,18 +47,32 @@ class Route
     /**
      * Set a middleware for using on route
      * 
-     * @param array(MiddlewareInterface) $middleware
+     * @param MiddlewareInterface[] $middleware
+     * 
+     * @return void
      */
     public function setMiddlewares($middleware)
     {
         $this->middlewares = $middleware;
     }
 
-    public function setCallback($callback)
+    /**
+     * Set a callback
+     * 
+     * @param Closure|string $callback
+     * 
+     * @return void
+     */
+    public function setCallback(Closure|string $callback)
     {
         $this->callback = $callback;
     }
 
+    /**
+     * Gets middlewares
+     * 
+     * @return Closure[]
+     */
     public function getMiddlewares()
     {
         return $this->middlewares;
@@ -69,6 +82,8 @@ class Route
      * Set a container
      * 
      * @param Container $container
+     * 
+     * @return void
      */
     public function setContainer(Container $container)
     {
@@ -85,7 +100,14 @@ class Route
         return $this->callback;
     }
 
-    public function setPattern(string $pattern)
+    /**
+     * Set a route pattern
+     * 
+     * @param string $pattern
+     * 
+     * @return void
+     */
+    public function setPattern(string $pattern): void
     {
         $this->pattern = new StringObject($pattern);
     }
@@ -135,28 +157,10 @@ class Route
      */
     public function handle(): mixed
     {
-        $stack = new SplStack();
-        $stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
-        $stack[] = $this->getExecutor();
-
-        /** @var string $middleware */
-        foreach ($this->middlewares as $middleware) {
-            $next = $stack->top();
-
-            $stack[] = function () use ($middleware, $next) {
-                if (!empty($middleware) && is_string($middleware)) {
-                    $instance = ReflectionHandler::getNewInstance($middleware);
-
-                    return ReflectionHandler::invoke($instance, [$next], $this->container, 'handle');
-                }
-
-                return ReflectionHandler::callMethod($middleware, $next);
-            };
-        }
-
-        $top = $stack->top();
-
-        return $top();
+        $stackRequestHandler = new StackableRequestHandler();
+        $stackRequestHandler->pushItem($this->getExecutor());
+        $stackRequestHandler->addMiddlewares($this->middlewares, $this->container);
+        return $stackRequestHandler->handle();
     }
 
     /**

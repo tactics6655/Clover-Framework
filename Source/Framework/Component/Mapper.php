@@ -65,7 +65,7 @@ class Mapper
         $this->setAcceptEncoding(HTTPRequest::getAcceptEncoding());
         $this->remoteIPAddress = HTTPRequest::getRemoteIPAddress()->__toString();
         $this->httpConnection = HTTPRequest::getHTTPConnection();
-        $this->acceptLanguage = HTTPRequest::getAcceptLanguage();
+        $this->acceptLanguage = HTTPRequest::parseAcceptLanguage(HTTPRequest::getAcceptLanguage());
         $this->hasReferer = HTTPRequest::hasReferer();
         $this->isMobile = HTTPRequest::isMobile();
         $this->isCrawler = HTTPRequest::isCrawler();
@@ -122,7 +122,7 @@ class Mapper
         $this->container = new Container();
 
         $parser = new SimpleXML();
-        $parser->fromFile(dirname(__ROOT__)."/Source/Framework/Configure/default_services.xml");
+        $parser->fromFile(dirname(__ROOT__) . "/Source/Framework/Configure/default_services.xml");
         $services = $parser->getChildren('container')->getChildren('services')->getData();
         /** @var \SimpleXMLElement[] $services */
         foreach ($services as $service) {

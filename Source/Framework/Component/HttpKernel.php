@@ -37,7 +37,7 @@ class HttpKernel
     {
         $router = new Router();
 
-        $router->fromDirectory(__ROOT__.'/App/Controller');
+        $router->fromDirectory(__ROOT__ . '/App/Controller');
 
         $router->setContainer($this->container);
 
@@ -63,10 +63,11 @@ class HttpKernel
                 'phpVersion' => OperationSystem::getPHPVersion(),
                 'serverSoftware' => OperationSystem::getMainServerSoftware(),
                 'builtOperationSystem' => OperationSystem::getBuiltOperationSystemString(),
-                'freeSpace' => FileFunctions::formatSize(DirectoryHandler::getFreeSpace(), FileSizeUnit::SHORT)
+                'freeSpace' => FileFunctions::formatSize(DirectoryHandler::getFreeSpace(), FileSizeUnit::SHORT),
+                'environment' => $this->environment
             ];
 
-            $response->appendBody(FileFunctions::getInterpretedContent(__DIR__.'/../Template/Debugger.php', $debuggerInformation));
+            $response->appendBody(FileFunctions::getInterpretedContent(__DIR__ . '/../Template/Debugger.php', $debuggerInformation));
         }
 
         return $response;

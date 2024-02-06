@@ -3,5 +3,4 @@
 class FTP
 {
     private $socket;
-
 }

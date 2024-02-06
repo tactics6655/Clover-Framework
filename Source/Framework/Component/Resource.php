@@ -43,7 +43,7 @@ class Resource
 
     protected function appendTimestampToResource($file)
     {
-        $createdDate = FileFunctions::getCreatedDate(__ROOT__.$file);
+        $createdDate = FileFunctions::getCreatedDate(__ROOT__ . $file);
 
         return sprintf("%s?t=%d", $file, $createdDate);
     }

@@ -23,7 +23,7 @@ class RequestDependency
         $this->queryParameters = RequestHandler::getExtractedQueryParameters();
         $this->postParameters = RequestHandler::getExtractedPostParameters();
         $this->requestMethod = HTTPRequest::getMethod();
-        $this->acceptLanguage = HTTPRequest::getAcceptLanguage();
+        $this->acceptLanguage = HTTPRequest::parseAcceptLanguage(HTTPRequest::getAcceptLanguage());
     }
 
     public function queryParameter($key)

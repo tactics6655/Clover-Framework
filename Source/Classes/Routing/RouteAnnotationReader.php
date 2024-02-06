@@ -21,7 +21,7 @@ class RouteAnnotationReader
 	{
 		$prefixAnnotation = ReflectionHandler::getAnnotations($reflection, Prefix::class);
 		if (isset($prefixAnnotation[0])) {
-			$descriptor->pattern = $prefixAnnotation[0]->value . $descriptor->pattern;
+			$descriptor->pattern = sprintf("%s%S", $prefixAnnotation[0]->value, $descriptor->pattern);
 		}
 
 		$middlewareAnnotation = ReflectionHandler::getAnnotations($reflection, Middleware::class);

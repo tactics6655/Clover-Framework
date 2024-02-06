@@ -11,6 +11,8 @@ use Neko\Enumeration\ImageFilter;
 use Neko\Enumeration\ExifFileHeader;
 use Neko\Enumeration\MIME;
 
+use Neko\Exception\Functions\FunctionIsNotExistsException;
+
 use Neko\Classes\Header\File as FileHeader;
 
 use function getimagesizefromstring;
@@ -550,32 +552,29 @@ class Handler implements ImageHandlerInterface
 		$format = self::getType($filePath);
 
 		switch ($format) {
-			case 'image/jpeg':
-				imagejpeg($imageResource, $outputPath, $quality);
-				break;
-			case  'image/png':
-				imagepng($imageResource, $outputPath);
-				break;
-			case  'image/gif':
-				imagegif($imageResource, $outputPath);
-				break;
-			case  'image/wbmp':
-				imagewbmp($imageResource, $outputPath);
-				break;
-			case  'image/xbm':
-				imagexbm($imageResource, $outputPath);
-				break;
-			case  'image/gd':
-				imagegd($imageResource, $outputPath);
-				break;
-			case  'image/gd2':
-				imagegd2($imageResource, $outputPath);
-				break;
-			default:
-				return false;
+			case MIME::IMAGE_JPEG:
+				return imagejpeg($imageResource, $outputPath, $quality);
+			case MIME::IMAGE_PNG:
+				return imagepng($imageResource, $outputPath);
+			case MIME::IMAGE_GIF:
+				return imagegif($imageResource, $outputPath);
+			case MIME::IMAGE_WBMP:
+				return imagewbmp($imageResource, $outputPath);
+			case MIME::IMAGE_XBM:
+				return imagexbm($imageResource, $outputPath);
+			case MIME::IMAGE_GD:
+				return imagegd($imageResource, $outputPath);
+			case MIME::IMAGE_GD2:
+				return imagegd2($imageResource, $outputPath);
+			case MIME::IMAGE_AVIF:
+				if (80100 <= PHP_VERSION_ID && function_exists('imageavif')) {
+					return imageavif($imageResource, $outputPath);
+				}
+			case MIME::IMAGE_WEBP:
+				return imagewebp($imageResource, $outputPath);
 		}
 
-		return true;
+		return false;
 	}
 
 	/**
@@ -706,40 +705,44 @@ class Handler implements ImageHandlerInterface
 	public static function getimageResource($filePath): mixed
 	{
 		$format = self::getType($filePath);
-		$createObject = null;
 
 		try {
 			switch ($format) {
-				case 'image/jpeg':
-					if (self::isGdExtensionLoaded()) {
-						$createObject = \imagecreatefromjpeg($filePath);
+				case MIME::IMAGE_JPEG:
+					if (!self::isGdExtensionLoaded() || !function_exists('imagecreatefromjpeg')) {
+						throw new FunctionIsNotExistsException("Cannot found function 'imagecreatefromjpeg'");
 					}
-					break;
-				case 'image/bmp':
-					$createObject = \imagecreatefrombmp($filePath);
-					break;
-				case 'image/png':
-					if (self::isGdExtensionLoaded()) {
-						$createObject = \imagecreatefrompng($filePath);
+
+					return imagecreatefromjpeg($filePath);
+				case MIME::IMAGE_BMP:
+					if (!function_exists('imagecreatefrombmp')) {
+						throw new FunctionIsNotExistsException("Cannot found function 'imagecreatefrombmp'");
 					}
-					break;
-				case 'image/gif':
-					if (self::isGdExtensionLoaded()) {
-						$createObject = \imagecreatefromgif($filePath);
+
+					return imagecreatefrombmp($filePath);
+				case MIME::IMAGE_PNG:
+					if (!self::isGdExtensionLoaded() || !function_exists('imagecreatefrompng')) {
+						throw new FunctionIsNotExistsException("Cannot found function 'imagecreatefrompng'");
 					}
-					break;
-				case 'image/webp':
-					if (self::isGdExtensionLoaded()) {
-						$createObject = \imagecreatefromwebp($filePath);
+
+					return imagecreatefrompng($filePath);
+				case MIME::IMAGE_GIF:
+					if (!self::isGdExtensionLoaded() || !function_exists('imagecreatefromgif')) {
+						throw new FunctionIsNotExistsException("Cannot found function 'imagecreatefromgif'");
 					}
-					break;
-				default:
-					return false;
+
+					return imagecreatefromgif($filePath);
+				case MIME::IMAGE_WEBP:
+					if (!self::isGdExtensionLoaded() || !function_exists('imagecreatefromwebp')) {
+						throw new FunctionIsNotExistsException("Cannot found function 'imagecreatefromwebp'");
+					}
+
+					return imagecreatefromwebp($filePath);
 			}
 		} catch (Exception $e) {
 		}
 
-		return $createObject;
+		return false;
 	}
 
 	/**
@@ -825,10 +828,10 @@ class Handler implements ImageHandlerInterface
 	public static function getInstance(mixed $filePath)
 	{
 		if (self::isResource($filePath)) {
-			return \getimagesizefromstring($filePath);
+			return getimagesizefromstring($filePath);
 		}
 
-		if (is_array(\getImageSize($filePath))) {
+		if (is_array(getImageSize($filePath))) {
 			return self::getImageResource($filePath);
 		}
 

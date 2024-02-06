@@ -12,6 +12,8 @@ abstract class MIME
 
     const IMAGE_BMP = 'image/bmp';
 
+    const IMAGE_AVIF = 'image/avif';
+
     const IMAGE_GIF = 'image/gif';
 
     const IMAGE_WEBP = 'image/webp';
@@ -22,7 +24,7 @@ abstract class MIME
 
     const IMAGE_GD2 = 'image/gd2';
 
-    const IMAGE_WBMP = 'vnd.wap.wbmp';
+    const IMAGE_WBMP = 'image/wbmp';
 
     const IMAGE_DJVU = 'image/vnd.djvu';
 }

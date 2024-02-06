@@ -40,6 +40,11 @@ class Router
 		$this->annotationReader = new RouteAnnotationReader();
 	}
 
+	/**
+	 * Gets middlewares
+	 * 
+	 * @return Middleware[]
+	 */
 	public function getMiddlewares()
 	{
 		return $this->middlewares;
@@ -47,6 +52,10 @@ class Router
 
 	/**
 	 * Set a middleware for using globally
+	 * 
+	 * @param Middleware[] $middleware
+	 * 
+	 * @return Router
 	 */
 	public function setMiddlewares(...$middleware)
 	{
@@ -57,6 +66,8 @@ class Router
 
 	/**
 	 * Set a container
+	 * 
+	 * @param Container $container
 	 */
 	public function setContainer(Container $container)
 	{
@@ -122,6 +133,9 @@ class Router
 	public function fromDirectory($path)
 	{
 		$fileList = DirectoryHandler::getList($path, 'file', true, true);
+		if (!$fileList) {
+			return false;
+		}
 
 		foreach ($fileList as $file) {
 			$this->fromFile($file);
@@ -192,19 +206,35 @@ class Router
 		return $this;
 	}
 
-	private function has($method)
+	/**
+	 * Check that if exists specify method routes
+	 * 
+	 * @param string $method
+	 * 
+	 * @return bool
+	 */
+	private function has(string $method)
 	{
 		return isset($this->routes[$method]);
 	}
 
-	private function getRoute($method)
+	/**
+	 * Get a route
+	 * 
+	 * @param string $method
+	 * 
+	 * @return Route
+	 */
+	private function getRoute(string $method)
 	{
 		return $this->routes[$method];
 	}
 
-    /**
-     * Handle matched callback
-     */
+	/**
+	 * Handle a matched callback
+	 * 
+	 * @return mixed
+	 */
 	public function handle()
 	{
 		$this->method = HTTPRequest::getMethod();

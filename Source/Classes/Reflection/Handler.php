@@ -87,7 +87,7 @@ class Handler
      * 
      * @param \ReflectionClass|\ReflectionMethod|\ReflectionProperty $reflector
      */
-    public static function hasDocumentComment(Reflector $reflector) : string|false
+    public static function hasDocumentComment(Reflector $reflector): string|false
     {
         return $reflector->getDocComment() == false;
     }
@@ -105,7 +105,7 @@ class Handler
      * 
      * @param \ReflectionClass|\ReflectionMethod|\ReflectionProperty $reflector
      */
-    public static function getDocumentComment(Reflector $reflector) : string|false
+    public static function getDocumentComment(Reflector $reflector): string|false
     {
         $rawComment = $reflector->getDocComment();
         if (!$rawComment) {
@@ -359,13 +359,35 @@ class Handler
         return get_class_methods($object_or_class);
     }
 
-    public static function getNewInstance($class) :object|bool
+    public static function getNewInstance($class): object|bool
     {
         if (!class_exists($class)) {
             return false;
         }
 
         return new ($class);
+    }
+
+    public static function getModifierString(ReflectionMethod $method)
+    {
+        $modifier = $method->getModifiers();
+
+        switch ($modifier) {
+            case ReflectionMethod::IS_FINAL:
+                return 'final';
+            case ReflectionMethod::IS_PRIVATE:
+                return 'private';
+            case ReflectionMethod::IS_PUBLIC:
+                return 'public';
+            case ReflectionMethod::IS_ABSTRACT:
+                return 'abstract';
+            case ReflectionMethod::IS_PROTECTED:
+                return 'protected';
+            case ReflectionMethod::IS_STATIC:
+                return 'static';
+        }
+
+        return '';
     }
 
     /**

@@ -23,7 +23,7 @@ class Response
         $this->type = $type;
         $this->statusCode = $statusCode;
     }
-    
+
     public function setStatusCode($statusCode)
     {
         $this->statusCode = $statusCode;
@@ -54,8 +54,6 @@ class Response
         if (Header::isSent()) {
             return false;
         }
-
-
     }
 
     public function printBody()

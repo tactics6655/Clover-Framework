@@ -10,5 +10,4 @@ class SHA256 extends Handler
 	{
 		parent::__construct('sha256');
 	}
-
 }

@@ -14,14 +14,19 @@ use Neko\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-#[Annotation\Prefix('/')]
+#[Annotation\Prefix('/test')]
 #[Annotation\Middleware(ModuleMiddleware::class)]
 class IndexController extends BaseController
 {
 
+    /**
+     * Main Page
+     */
     #[Annotation\Route('GET', '/')]
+    #[Annotation\Middleware(ModuleMiddleware::class)]
     public function index()
     {
+        $this->test();
         return $this->response('test');
     }
 }

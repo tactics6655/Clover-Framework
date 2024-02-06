@@ -8,5 +8,4 @@ class MD5 extends Handler
 	{
 		parent::__construct('md5');
 	}
-
 }

@@ -129,7 +129,7 @@ class Request implements RequestInterface
 		return self::$statusMesssages;
 	}
 
-	public static function getStatusMesssage($code) :string
+	public static function getStatusMesssage($code): string
 	{
 		return self::$statusMesssages[$code] ?? "";
 	}
