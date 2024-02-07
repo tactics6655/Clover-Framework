@@ -81,6 +81,9 @@
         border-bottom: 1px solid #e4e4e4;
         padding: 12px;
         background-color: #06469b;
+        background-image: linear-gradient(159deg, #ffffff, #06469b 25%, transparent 25%, transparent );
+        background-repeat: no-repeat;
+        background-size: 168px 38px;
     }
 
     #debugger>#trace>.item>.short_wrap>.short_name {
