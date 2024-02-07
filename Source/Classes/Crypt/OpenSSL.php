@@ -7,6 +7,11 @@ namespace Neko\Classes\Crypt;
 class OpenSSL
 {
 
+    public static function isExtensionLoaded()
+    {
+        return extension_loaded('openssl');
+    }
+
     /**
      * Encrypts data
      */

@@ -27,6 +27,9 @@ class StackableRequestHandler extends Stack
         }
     }
     
+    /**
+     * Call a top callback of last node
+     */
     public function handle()
     {
         $top = parent::$stock->top();

@@ -15,6 +15,11 @@ class Request implements RequestInterface
 
 	protected $statusCode = 200;
 
+	protected static $cacheableMethods = [
+		HTTPRequestMethod::GET,
+		HTTPRequestMethod::HEAD
+	];
+
 	protected static $safeMethods = [
 		HTTPRequestMethod::GET,
 		HTTPRequestMethod::HEAD,
@@ -134,15 +139,15 @@ class Request implements RequestInterface
 		return self::$statusMesssages[$code] ?? "";
 	}
 
-	public static function getBrowserInfo(): array
+	public static function getBrowserInformation(): array
 	{
-		$browserInfo = [];
+		$browserInformation = [];
 
 		if (!empty(ini_get('browscap'))) {
-			$browserInfo = print_r(get_browser(null, true));
+			$browserInformation = print_r(get_browser(null, true));
 		}
 
-		return $browserInfo;
+		return $browserInformation;
 	}
 
 	public static function isSecure(): bool
@@ -152,7 +157,9 @@ class Request implements RequestInterface
 
 	public static function isHttpsProtocol(): bool
 	{
-		return empty($_SERVER[ServerIndices::HTTPS]) ? false : (self::getServerArguments(ServerIndices::HTTPS) === 'on' ? true : false);
+		$https = self::getServerArguments(ServerIndices::HTTPS);
+
+		return empty($https) ? false : ($https === 'on' ? true : false);
 	}
 
 	public static function getServerArguments($argument)
@@ -217,7 +224,10 @@ class Request implements RequestInterface
 
 	public static function getProtocol(): string
 	{
-		return substr(strtolower(self::getServerArguments(ServerIndices::SERVER_PROTOCOL)), 0, strpos(strtolower(self::getServerArguments(ServerIndices::SERVER_PROTOCOL)), '/'));
+		$protocol = self::getServerArguments(ServerIndices::SERVER_PROTOCOL);
+		$lowercase = strtolower($protocol);
+
+		return substr($lowercase, 0, strpos($lowercase, '/'));
 	}
 
 	/**
@@ -402,7 +412,9 @@ class Request implements RequestInterface
 
 	public static function isXmlHttpRequest()
 	{
-		return (strtolower(self::getServerArguments(ServerIndices::HTTP_X_REQUESTED_WITH)) == 'xmlhttprequest');
+		$httpXRequestedWith = self::getServerArguments(ServerIndices::HTTP_X_REQUESTED_WITH);
+
+		return (strtolower($httpXRequestedWith) == 'xmlhttprequest');
 	}
 
 	public static function isAjax()
@@ -496,14 +508,19 @@ class Request implements RequestInterface
 		return null;
 	}
 
-	public static function isIdempotentMethod(HTTPRequestMethod $method)
+	public static function isIdempotentMethod(?HTTPRequestMethod $method = null)
 	{
-		return in_array(strtoupper(self::getMethod()), self::$idempotentMethods);
+		return in_array(strtoupper($method ?? self::getMethod()), self::$idempotentMethods);
 	}
 
-	public static function isSafeMethod(HTTPRequestMethod $method)
+	public static function isCacheableMethod(?HTTPRequestMethod $method = null)
 	{
-		return in_array(strtoupper(self::getMethod()), self::$safeMethods);
+		return in_array(strtoupper($method ?? self::getMethod()), self::$cacheableMethods);
+	}
+
+	public static function isSafeMethod(?HTTPRequestMethod $method = null)
+	{
+		return in_array(strtoupper($method ?? self::getMethod()), self::$safeMethods);
 	}
 
 	public static function isHeadMethod()

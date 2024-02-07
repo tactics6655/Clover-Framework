@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Neko\Classes\Reflection;
 
+use Neko\Classes\File\Functions as FileFunctions;
+
+use Neko\Exception\Argument\ArgumentEmptyException;
+
 use Closure;
 use Exception;
 use Reflector;
@@ -15,6 +19,7 @@ use ReflectionNamedType;
 use ReflectionUnionType;
 use ReflectionIntersectionType;
 use ReflectionParameter;
+use ReflectionType;
 
 class Handler
 {
@@ -359,6 +364,200 @@ class Handler
         return get_class_methods($object_or_class);
     }
 
+    /**
+     * Parse exception traces
+     * 
+     * @param array $traces
+     * 
+     * @return array
+     */
+    public static function parseTrace(array $traces)
+    {
+        foreach ($traces as $key => &$trace) {
+            if (!array_key_exists("class", $trace) || empty($trace)) {
+                continue;
+            }
+
+            $reflectionClass = new ReflectionClass($trace['class']);
+
+            $methods = $reflectionClass->getMethods();
+
+            $filtered = array_filter($methods, function ($method) use ($trace) {
+                return $method->name == $trace['function'];
+            });
+            
+            $trace['absolute_file_path'] = trim(str_replace(dirname(__ROOT__), '', $trace['file'] ?? ''), "/");
+            $trace['full_string'] = sprintf("%s%s%s()", $trace['short_name'] ?? "", $trace['type'], $trace['function']);
+
+            if (empty($filtered)) {
+                continue;
+            }
+
+            $method = $reflectionClass->getMethod($trace['function']);
+
+            $shortName = $reflectionClass->getShortName();
+            $trace['short_name'] = $shortName;
+
+            $arguments = "";
+
+            if ($method->getNumberOfParameters() > 0) {
+                $parameterArguments = [];
+                $parameters = $method->getParameters();
+                $methodArguments = [];
+
+                if (isset($trace['file'])) {
+                    $startLine = $trace['line'] - 10 < 0 ? 0 : $trace['line'] - 10;
+                    $endLine = (int)($startLine + 15);
+
+                    $codes = explode("\r\n", htmlspecialchars(FileFunctions::read($trace['file'])));
+                    if (isset($codes[$trace['line'] - 1])) {
+                        $codes[$trace['line'] - 1] = "<a class='highlight'>{$codes[$trace['line'] - 1]}</a>";
+                    }
+                    $codes = array_slice($codes, $startLine, (int)($endLine - $startLine));
+
+                    if (count($codes) > 1) {
+                        $trace['debug_codes'] = implode("\r\n", $codes);
+                    }
+                }
+
+                /** @var ReflectionParameter|ReflectionType|null, mixed[] $parameters $parameters */
+                foreach ($parameters as $parameterKey => &$parameter) {
+                    if ($parameter === null) {
+                        continue;
+                    }
+
+                    $isArgumentExist = false;
+
+                    $parameterArguments[$parameterKey] = new \stdClass();
+
+                    $values = [];
+
+                    /* Type */
+                    if ($parameter->hasType()) {
+                        $type = $parameter->getType()->__toString();
+                        $parameterArguments[$parameterKey]->parameter_type = $type;
+
+                        $values[] = $type;
+                    }
+
+                    /* Name */
+                    $name = "$".$parameter->getName();
+                    $parameterArguments[$parameterKey]->name = $parameter->getName();
+                    
+                    if ($parameter->isPassedByReference()) {
+                        $name = "&".$name;
+                    }
+
+                    $values[] = $name;
+
+                    /* Default Value */
+                    if ($parameter->isDefaultValueAvailable() && !isset($trace['args'][$parameterKey])) {
+                        $defaultValue = $parameter->getDefaultValue();
+                        $parameterArguments[$parameterKey]->default_value = $defaultValue;
+
+                        $values[] = $defaultValue;
+
+                        $isArgumentExist = true;
+                    }
+                    
+                    /* Arguments */
+                    if (isset($trace['args'][$parameterKey])) {
+                        $argumentsData = [];
+                        $arguments = $trace['args'][$parameterKey];
+
+                        $argumentMap = is_array($arguments) ? $arguments : [$arguments];
+
+                        foreach ($argumentMap as $argument) {
+                            if (is_string($argument)) {
+                                $argumentsData[] = empty($argument) ? "null" : "'{$argument}'";
+                            } else if (is_object($argument)) {
+                                $argumentsData[] = get_class($argument) ?? ";;";
+                            } else if (is_array($argument)) {
+                                $argumentsData[] = "[".join(",", $argument)."]";
+                            } else {
+                                $argumentsData[] = "null";
+                            }
+                        }
+
+                        $joinArgument = join(', ', $argumentsData);
+
+                        if (count($argumentsData) > 1) {
+                            $joinArgument = "[" . $joinArgument . "]";
+                        }
+
+                        $isArgumentExist = true;
+                        $values[] = $joinArgument;
+                    }
+
+                    $values = array_map(function ($value) {
+                        if (is_array($value)) {
+                            return "[".join(", ", $value)."]";
+                        }
+
+                        return $value;
+                    }, $values);
+
+                    $typeArgument = (!$parameter->hasType() ?!! "" : "%s ");
+                    $methodArgument = ($isArgumentExist ? "%s = %s" : "$%s");
+
+                    $methodArguments[] = vsprintf($typeArgument.$methodArgument, $values ?? []);
+                }
+                
+                $arguments = join(', ', $methodArguments);
+
+                $trace['arguments'] = $arguments;
+                $trace['parameters'] = $parameterArguments;
+            }
+
+            if ($method->hasReturnType()) {
+                $returnType = $method->getReturnType();
+                $trace['return_type'] = $returnType;
+            }
+
+            $modifier = self::getModifierString($method);
+            
+            $returnType = $trace['return_type'] ?? "";
+            $trace['full_string'] = sprintf("%s %s%s%s(%s)".($returnType ? " : %s" : ""), $modifier, $trace['short_name'], $trace['type'], $trace['function'], $arguments ?? "", $returnType);
+            
+            $comment = $method->getDocComment();
+            if (!$comment) {
+                continue;
+            }
+
+            $comments = self::parseComments($comment);
+
+            $trace['comment'] = implode("\r\n", array_values($comments));
+        }
+
+        return $traces;
+    }
+
+    public static function parseComments($comment)
+    {
+        $comments = array_slice(explode("\n", $comment), 1);
+        foreach ($comments as $key => &$comment) {
+            $comment = self::trimComment($comment);
+
+            if (str_starts_with($comment, "@")) {
+                unset($comments[$key]);
+            } else if (empty($comment)) {
+                unset($comments[$key]);
+            }
+        }
+
+        return $comments;
+    }
+
+    public static function trimComment($comment)
+    {
+        $comment = trim($comment);
+        $comment = rtrim($comment, "/");
+        $comment = ltrim($comment, "*");
+        $comment = trim($comment);
+
+        return $comment;
+    }
+
     public static function getNewInstance($class): object|bool
     {
         if (!class_exists($class)) {
@@ -366,6 +565,62 @@ class Handler
         }
 
         return new ($class);
+    }
+
+    /**
+     * Throw argument empty errors
+     */
+    public static function throwEmptyParameterError($self, $function, $defineValues)
+    {
+        $class = self::getClass($self);
+
+        $method = $class->getMethod($function);
+
+        $parameters = $method->getParameters();
+        $countOfRequiredParameters = $method->getNumberOfRequiredParameters();
+        if ($countOfRequiredParameters == 0) {
+            return false;
+        }
+
+        $requiredParameters = [];
+        foreach ($parameters as $parameter) {
+            $isDefaultValueAvailable = $parameter->isDefaultValueAvailable();
+
+            if ($isDefaultValueAvailable) {
+                continue;
+            }
+
+            if ($parameter->allowsNull()) {
+                continue;
+            }
+
+            if ($parameter->isOptional()) {
+                continue;
+            }
+
+            $requiredParameters[] = $parameter;
+        }
+
+        $messages = [];
+        foreach ($requiredParameters as $parameter) {
+            $position = $parameter->getPosition() + 1;
+            $name = $parameter->getName();
+            $className = $class->getName();
+            
+            $arrow = "->";
+            if ($method->isStatic()) {
+                $arrow = "::";
+            }
+            $methodName = $method->getName();
+
+            if (!in_array($name, array_keys($defineValues))) {
+                continue;
+            }
+
+            $messages[] = "[{$className}{$arrow}{$methodName}] Argument #{$position} (\${$name}) cannot be empty";
+        }
+
+        throw new ArgumentEmptyException(join("\r\n", $messages));
     }
 
     public static function getModifierString(ReflectionMethod $method)

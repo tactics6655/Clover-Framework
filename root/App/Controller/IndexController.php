@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Middleware\ModuleMiddleware as ModuleMiddleware;
 
 use Neko\Annotation;
+use Neko\Classes\Data\StringObject;
 use Neko\Framework\Component\BaseController;
 use Neko\Classes\Database\Driver\PHPDataObject;
 use Neko\Classes\Database\Driver\SqLite;
@@ -26,7 +27,13 @@ class IndexController extends BaseController
     #[Annotation\Middleware(ModuleMiddleware::class)]
     public function index()
     {
-        $this->test();
-        return $this->response('test');
+        $str = new StringObject('TEST.');
+        $str = $str->quotemeta()->split('');
+        $str = $str->filter(function ($a) {
+            return $a == 'T';
+        });
+        $str = $str->join('');
+
+        return $this->response($str);
     }
 }

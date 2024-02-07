@@ -19,7 +19,7 @@ class StringHandler
 	 *
 	 * @return bool
 	 */
-	public static function contains($haystack, $needle)
+	public static function contains(string $haystack, string $needle)
 	{
 		$isGreaterThanRequiredVersion = PHPValidation::versionGreaterThanCurrent("8.0");
 
@@ -182,9 +182,9 @@ class StringHandler
 		return preg_replace("#(.*)-(.*)-(.*).(\d)-(.*)#", "$1-$2-$3$4-$5", $text);
 	}
 
-	public static function substring($binaryText, $start, $length)
+	public static function substring(string $string, int $start, int|null $length = null)
 	{
-		return substr($binaryText, $start, $length);
+		return substr($string, $start, $length);
 	}
 
 	public static function binaryToHex($binaryText)

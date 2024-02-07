@@ -33,6 +33,9 @@ class HttpKernel
         return FileFunctions::getInterpretedContent($filePath, $resource);
     }
 
+    /**
+     * Run http kernel
+     */
     public function run()
     {
         $router = new Router();

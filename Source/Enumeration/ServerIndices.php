@@ -98,6 +98,10 @@ abstract class ServerIndices
      */
     const SCRIPT_ABSOLUTE_PATHNAME = 'SCRIPT_FILENAME';
 
+    const PHP_AUTH_PW = 'PHP_AUTH_PW';
+
+    const PHP_AUTH_USER = 'PHP_AUTH_USER';
+
     /**
      * The port on the server machine being used by the web server for communication
      */
@@ -107,6 +111,8 @@ abstract class ServerIndices
 
     const HEADER_X_FORWARDED_AWS_ELB = 'HEADER_X_FORWARDED_AWS_ELB';
 
+    const HEADER_X_FORWARDED_TRAEFIK = 'HEADER_X_FORWARDED_TRAEFIK';
+
     const HEADER_X_FORWARDED_PROTO = 'HEADER_X_FORWARDED_PROTO';
 
     const HEADER_X_FORWARDED_PORT = 'HEADER_X_FORWARDED_PORT';
@@ -114,6 +120,16 @@ abstract class ServerIndices
     const HEADER_X_FORWARDED_HOST = 'HEADER_X_FORWARDED_HOST';
 
     const HEADER_X_FORWARDED_FOR = 'HEADER_X_FORWARDED_FOR';
+
+    const IF_NONE_MATH = 'If-None-Match';
+
+    const IIS_WAS_URL_REWRITTEN = 'IIS_WasUrlRewritten';
+
+    const ORIG_PATH_INFO = 'ORIG_PATH_INFO';
+
+    const UNENCODED_URL = 'UNENCODED_URL';
+
+    const PRAGMA = 'Pragma';
 
     const X_HTTP_METHOD_OVERRIDE = 'X-HTTP-METHOD-OVERRIDE';
 
@@ -184,4 +200,7 @@ abstract class ServerIndices
     const HTTP_X_FORWARDED_HOST = 'HTTP_X_FORWARDED_HOST';
 
     const HTTP_X_FORWARDED_FOR = 'HTTP_X_FORWARDED_FOR';
+
+    const HTTP_X_FORWARDED_PREFIX = 'HTTP_X_FORWARDED_PREFIX';
+
 }

@@ -21,6 +21,39 @@ class ArrayObject extends BaseObject
         $this->raw_data = $data;
     }
 
+    public function reduce($method, $initial = null)
+    {
+        $data = array_reduce($this->raw_data, $method, $initial);
+
+        if (isset($data)) {
+            $this->raw_data = $data;
+        }
+
+        return $this;
+    }
+
+    public function filter($method)
+    {
+        $data = array_filter($this->raw_data, $method);
+
+        if (isset($data)) {
+            $this->raw_data = $data;
+        }
+
+        return $this;
+    }
+
+    public function map($method)
+    {
+        $data = array_map($method, $this->raw_data);
+
+        if (isset($data)) {
+            $this->raw_data = $data;
+        }
+
+        return $this;
+    }
+
     public function get($key)
     {
         $data = $this->raw_data[$key];

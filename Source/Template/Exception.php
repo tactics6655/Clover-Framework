@@ -24,6 +24,9 @@
                 <div class="long_wrap">
                     <?= $trace['absolute_file_path'] ? sprintf('%s', $trace['absolute_file_path']) : $trace['class'] ?><? if (isset($trace['line'])) : ?>:<a class="line"><?= $trace['line'] ?></a><? endif; ?>
                 </div>
+                <? if (isset($trace['debug_codes'])) : ?>
+                    <pre class="code"><?= $trace['debug_codes'] ?></pre>
+                <? endif; ?>
                 <? if (isset($trace['comment'])) : ?>
                     <div class="comment">
                         <?= $trace['comment'] ?>
@@ -48,6 +51,8 @@
         padding: 17px;
         font-size: 13px;
         line-height: 13px;
+        background-image: linear-gradient(135deg, #eee, #f3f3f3 25%, transparent 25%, transparent 50%, #f3f3f3 50%, #f3f3f3 75%,transparent 75%, transparent );
+        background-size: 8px 8px;
     }
     #debugger>#trace>.item {
         box-shadow: 1px 2px 5px #e2e2e2;
@@ -59,6 +64,7 @@
         font-size: 11px;
         line-height: 11px;
         padding: 11px;
+        border-top: 1px dashed #868181;
     }
 
     #debugger>#trace>.item>.long_wrap {
@@ -74,9 +80,7 @@
         line-height: 11px;
         border-bottom: 1px solid #e4e4e4;
         padding: 12px;
-        background-color: #f8f8f8;
-        color: #000;
-        border-radius: 10px 10px 0px 0px;
+        background-color: #06469b;
     }
 
     #debugger>#trace>.item>.short_wrap>.short_name {
@@ -87,7 +91,7 @@
         font-size: 13px;
         line-height: 13px;
         font-weight: 500;
-        color: #3d3d3d;
+        color: #fff;
     }
 
     #debugger>#trace>.item>.short_wrap>.return_type {
@@ -158,18 +162,42 @@
 
     #debugger>#header>#file {
         color: white;
-        padding: 10px 18px;
+        padding: 10px 7px;
         background-color: #353535;
         line-height: 12px;
         font-size: 12px;
+        background-image: linear-gradient(135deg, #000, #292929 25%, transparent 25%, transparent 50%, #292929 50%, #292929 75%,transparent 75%, transparent );
+        background-size: 8px 8px;
     }
 
     #debugger>#header>#message {
         color: #393939;
-        padding: 22px 19px;
-        font-size: 16px;
+        padding: 40px 19px;
+        font-size: 20px;
+        text-shadow: 2px 2px 3px #c1c1c1;
         line-height: 16px;
         font-weight: bold;
+        background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%,transparent 75%, transparent );
+        background-size: 8px 8px;
     }
-
+    .code {
+        white-space: pre-wrap;
+        background-color: #f0f0f0;
+        margin: 0px 10px 10px 10px;
+        padding: 10px;
+        border-radius: 5px;
+        color: #424242;
+        font-size: 11px;
+        background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%,transparent 75%, transparent );
+        background-size: 8px 8px;
+    }
+    .highlight {
+        background-color: #f3ff86;
+        display: -webkit-box;
+        color: red;
+        font-weight: bold;
+        padding: 3px 0px;
+        border-radius: 5px;
+        border: 1px dashed #f07979;
+    }
 </style>

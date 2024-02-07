@@ -19,6 +19,11 @@ class OperationSystem
 		return set_time_limit($seconds);
 	}
 
+	public static function clearLibxmlErrors()
+	{
+		libxml_clear_errors();
+	}
+
 	/**
 	 * Disable libxml errors and allow user to fetch error information as needed
 	 * 

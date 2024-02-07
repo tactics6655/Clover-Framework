@@ -31,6 +31,9 @@ class RouteExecutor
         $this->container = $container;
     }
 
+    /**
+     * Call a callback from this route
+     */
     public function __invoke(mixed $next_arguments = [])
     {
         $class = $this->class;
