@@ -9,7 +9,7 @@ interface FileHandlerInterface
 
 	public static function open($filePath, $mode, $use_include_path = false);
 
-	public static function generateHashByContents($algorithm = 'md5', $filePath, $rawContents): string;
+	public static function generateHashByContents($algorithm = 'md5', string $filePath = "", string|null $rawContents = ""): string;
 
 	public static function openProcess($processPath, $mode = 'w');
 

@@ -2,6 +2,10 @@
     <title>500 Error</title>
 </head>
 
+<?php
+use Neko\Classes\Debug\TraceObject;
+?>
+
 <div id="debugger">
     <div id="header">
         <div id="file">500 Error (<?= $className ?>) > <?= $file ?>:<?= $line ?></div>
@@ -9,27 +13,27 @@
     </div>
 
     <div id="trace">
-        <? /** @var string[] $trace */ ?>
+        <? /** @var TraceObject $trace */ ?>
         <? foreach ($traces as $trace) : ?>
             <div class="item">
-                <?
-                /** @var ReflectionType $returnType */
-                $returnType = $trace['return_type'];
-                ?>
                 <div class="short_wrap">
                     <a class="short_name">
-                        <b><?= $trace['full_string'] ?></b>
+                        <b><?= $trace->getText() ?></b>
                     </a>
                 </div>
-                <div class="long_wrap">
-                    <?= $trace['absolute_file_path'] ? sprintf('%s', $trace['absolute_file_path']) : $trace['class'] ?><? if (isset($trace['line'])) : ?>:<a class="line"><?= $trace['line'] ?></a><? endif; ?>
-                </div>
-                <? if (isset($trace['debug_codes'])) : ?>
-                    <pre class="code"><?= $trace['debug_codes'] ?></pre>
+                <? if ($trace->hasAnnotation()) : ?>
+                    <a class="annotation"><?= $trace->getAnnotation() ?></a>
                 <? endif; ?>
-                <? if (isset($trace['comment'])) : ?>
+                <div class="long_wrap">
+                    <?= $trace->hasFile() ? sprintf('%s', $trace->getFile()) : $trace->getClass() ?>
+                    <? if ($trace->hasClass()) : ?>:<a class="line"><?= $trace->getLine() ?></a><? endif; ?>
+                </div>
+                <? if ($trace->hasCode()) : ?>
+                    <pre class="code"><?= $trace->getCode() ?></pre>
+                <? endif; ?>
+                <? if ($trace->hasComment()) : ?>
                     <div class="comment">
-                        <?= $trace['comment'] ?>
+                        <?= $trace->getCommentTag() ?>
                     </div>
                 <? endif; ?>
             </div>
@@ -69,10 +73,10 @@
 
     #debugger>#trace>.item>.long_wrap {
         padding-top: 4px;
-        font-size: 13px;
+        font-size: 11px;
         color: #5d5d5d;
         padding: 12px 11px;
-        line-height: 13px;
+        line-height: 11px;
     }
 
     #debugger>#trace>.item>.short_wrap {
@@ -80,8 +84,8 @@
         line-height: 11px;
         border-bottom: 1px solid #e4e4e4;
         padding: 12px;
-        background-color: #06469b;
-        background-image: linear-gradient(159deg, #ffffff, #06469b 25%, transparent 25%, transparent );
+        background-color: #353535;
+        background-image: linear-gradient(147deg, #000000, #070707 25%, transparent 25%, transparent );
         background-repeat: no-repeat;
         background-size: 168px 38px;
     }
@@ -91,8 +95,8 @@
     }
 
     #debugger>#trace>.item>.short_wrap>.short_name>b {
-        font-size: 13px;
-        line-height: 13px;
+        font-size: 11px;
+        line-height: 11px;
         font-weight: 500;
         color: #fff;
     }
@@ -175,6 +179,7 @@
 
     #debugger>#header>#message {
         color: #393939;
+        text-wrap: balance;
         padding: 40px 19px;
         font-size: 20px;
         text-shadow: 2px 2px 3px #c1c1c1;
@@ -184,11 +189,12 @@
         background-size: 8px 8px;
     }
     .code {
+        box-shadow: 0px 0px 7px 0px gainsboro;
+        border: 1px solid #c3c3c3;
         white-space: pre-wrap;
         background-color: #f0f0f0;
         margin: 0px 10px 10px 10px;
         padding: 10px;
-        border-radius: 5px;
         color: #424242;
         font-size: 11px;
         background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%,transparent 75%, transparent );
@@ -202,5 +208,14 @@
         padding: 3px 0px;
         border-radius: 5px;
         border: 1px dashed #f07979;
+    }
+    .annotation {
+        white-space: break-spaces;
+        padding: 10px;
+        display: block;
+        background-color: #fffccc;
+        font-size: 11px;
+        line-height: 12px;
+        border-bottom: 1px dotted #cbad0e;
     }
 </style>

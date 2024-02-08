@@ -29,7 +29,7 @@ interface FileObjectInterface
 
 	public function removeTemporary();
 
-	public function writeContent(string $content, $isLarge = false, int $bufferSize): bool;
+	public function writeContent(string $content, bool $isLarge = false, int $bufferSize = 1024): bool;
 
 	public function getCurrentSize(): int;
 

@@ -9,9 +9,10 @@ use Neko\Classes\Data\StringObject;
 use Neko\Framework\Component\BaseController;
 use Neko\Classes\Database\Driver\PHPDataObject;
 use Neko\Classes\Database\Driver\SqLite;
+use Neko\Classes\HTTP\Request;
 use Neko\Classes\Upload\Handler as UploadHandler;
 use Neko\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
-
+use Neko\Framework\Component\Response;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
@@ -25,15 +26,8 @@ class IndexController extends BaseController
      */
     #[Annotation\Route('GET', '/')]
     #[Annotation\Middleware(ModuleMiddleware::class)]
-    public function index()
+    public function index(Request $request)
     {
-        $str = new StringObject('TEST.');
-        $str = $str->quotemeta()->split('');
-        $str = $str->filter(function ($a) {
-            return $a == 'T';
-        });
-        $str = $str->join('');
-
-        return $this->response($str);
+        return $this->response($request->getRemoteIPAddress()->shuffle()->removeNullByte());
     }
 }
