@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@vue/cli": "^4.5.13",
-    "axios": "^0.21.4",
+    "axios": "^1.6.7",
     "jquery": "^3.6.0",
     "jsdom": "^19.0.0",
     "redis": "^3.1.2",
