@@ -87,9 +87,9 @@ class Router
 	 * 
 	 * @param string $method
 	 * @param string $pattern
-	 * @param string $callback
+	 * @param mixed $callback
 	 */
-	private function set(string $method, string $pattern, string $callback)
+	private function set(string $method, string $pattern, mixed $callback)
 	{
 		$pattern = $this->addPrefix($pattern);
 
@@ -144,10 +144,11 @@ class Router
 		return $this;
 	}
 
-	public function fromFile($path)
+	public function fromFile(string $path)
 	{
 		$classNames = FileFunctions::getClassName($path);
 
+		/** @var ?RouteAnnotation[] $annotationList */
 		$annotationList = [];
 
 		/** @var string[] $classNames */

@@ -10,6 +10,9 @@ use Neko\Classes\ClientURLLastTransferInformation as ClientURLLastTransferInform
 use Neko\Classes\Data\StringObject as StringObject;
 use Neko\Implement\ClientURLInterface;
 
+use CurlHandle;
+use resource;
+
 class ClientURL implements ClientURLInterface
 {
 
@@ -35,7 +38,7 @@ class ClientURL implements ClientURLInterface
 		}
 	}
 
-	public function getSession()
+	public function getSession() :?ClientURL
 	{
 		if (self::$session == null) {
 			self::$session = $this->initialize();
@@ -54,19 +57,19 @@ class ClientURL implements ClientURLInterface
 		return curl_errno(self::$session);
 	}
 
-	public function initialize($instance = '')
+	public function initialize($instance = '') :mixed
 	{
 		return curl_init($instance);
 	}
 
-	public function reset()
+	public function reset() :void
 	{
 		if (function_exists('curl_reset')) {
 			curl_reset(self::$session);
 		}
 	}
 
-	public function option()
+	public function option() :?ClientURLOption
 	{
 		if (!$this->option) {
 			$this->option = new ClientURLOption(self::$session);
@@ -75,7 +78,7 @@ class ClientURL implements ClientURLInterface
 		return $this->option;
 	}
 
-	public function information()
+	public function information() :?ClientURLLastTransferInformation
 	{
 		if (!$this->information) {
 			$this->information = new ClientURLLastTransferInformation(self::$session);
@@ -84,9 +87,9 @@ class ClientURL implements ClientURLInterface
 		return $this->information;
 	}
 
-	public function setOption(int $option, $value)
+	public function setOption(int $option, $value) :bool
 	{
-		curl_setopt(self::$session, $option, $value);
+		return curl_setopt(self::$session, $option, $value);
 	}
 
 	public function close(): void
@@ -94,12 +97,12 @@ class ClientURL implements ClientURLInterface
 		curl_close(self::$session);
 	}
 
-	public function getHeaderOptions()
+	public function getHeaderOptions() :array
 	{
 		return $this->option::$headers;
 	}
 
-	public function execute()
+	public function execute() :mixed
 	{
 		$result = curl_exec(self::$session);
 

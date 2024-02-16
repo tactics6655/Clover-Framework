@@ -129,7 +129,7 @@ class TraceObject
 
     public function hasLine() :bool
     {
-        return isset($this->line);
+        return isset($this->line) && !empty($this->line);
     }
 
     public function getLine() :?int
@@ -252,13 +252,20 @@ class TraceObject
         return isset($this->declaring_class);
     }
 
-    public function setDeclaringClass($declaring_class) :void
+    /**
+     * Set the declaring class for the reflected method
+     * 
+     * @param ReflectionClass $declaring_class
+     * 
+     * @return void
+     */
+    public function setDeclaringClass(ReflectionClass $declaring_class) :void
     {
         $this->declaring_class = $declaring_class;
     }
 
     /**
-     * Get declaring class
+     * Gets the declaring class for the reflected method
      * 
      * @return string
      */
@@ -306,7 +313,7 @@ class TraceObject
         $arguments = $this->argumentToString($arguments);
 
         $modifier = self::getModifierString($method);
-        $this->setText(sprintf("%s %s%s%s(%s)" . ($this->getShortName() ? " : %s" : ""), $modifier, $this->getShortName(), $this->getType(), $this->getFunction(), $arguments ?? "", $this->getReturnType() ?? ""));
+        $this->setText(sprintf("%s %s%s%s(%s)" . ($this->hasReturnType() ? " : %s" : ""), $modifier, $this->getShortName(), $this->getType(), $this->getFunction(), $arguments ?? "", $this->getReturnType() ?? ""));
         $this->parseMethodComment($method);
 
         $annotations = [];
@@ -381,6 +388,7 @@ class TraceObject
             $values = [];
             $isArgumentExist = false;
 
+            /** @var ReflectionParameter $parameter */
             if ($parameter === null) {
                 continue;
             }
@@ -389,8 +397,14 @@ class TraceObject
             if ($parameter->hasType()) {
                 /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
                 $type = $parameter->getType();
-                $traceArgumentObject->setType($type->__toString());
-                $values[] = $type;
+
+                if ($type instanceof ReflectionIntersectionType && PHP_VERSION_ID > 80100) {
+                    $traceArgumentObject->setType($type->__toString());
+                    $values[] = $type;
+                } else if ($type instanceof ReflectionType) {
+                    $traceArgumentObject->setType($type->__toString());
+                    $values[] = $type;
+                }
             }
 
             $name = $parameter->getName();
@@ -405,12 +419,13 @@ class TraceObject
                 $traceArgumentObject->setDefaultValue($defaultValue);
                 $values[] = $defaultValue;
             } else if (isset($this->args)) {
-                $isArgumentExist = true;
-
                 $arguments = $this->args[$key] ?? null;
-                $parsedArguments = $this->parseArgument($arguments);
-                $joinArgument = join(', ', $parsedArguments);
-                $values[] = $joinArgument;
+                if ($arguments) {
+                    $isArgumentExist = true;
+                    $parsedArguments = $this->parseArgument($arguments);
+                    $joinArgument = join(', ', $parsedArguments);
+                    $values[] = $joinArgument;
+                }
             }
 
             $typeFormat = (!$parameter->hasType() ? !!"" : "%s ");
@@ -439,7 +454,7 @@ class TraceObject
             }
 
             if (is_object($argument)) {
-                $parsedArguments[] = get_class($argument) ?? ";;";
+                $parsedArguments[] = get_class($argument) ?? "::";
                 continue;
             }
 

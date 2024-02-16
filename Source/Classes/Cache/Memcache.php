@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Neko\Classes;
 
+use Memcached;
+use Memcache;
+
 class Memcache
 {
 	protected $type;
-	protected \Memcached | \Memcache $cache;
+	protected Memcached | Memcache $cache;
 
 	public function __construct()
 	{

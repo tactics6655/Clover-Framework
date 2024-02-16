@@ -78,7 +78,7 @@ class Tokenizer
 		$brackets = [];
 
 		// Lexical analysis
-		for ($i = 0; $i <= $count; $i++) {
+		for ($i = 0; $i < $count; $i++) {
 			$character = $string[$i < $count ? $i : $count - 1];
 
 			switch ($state) {

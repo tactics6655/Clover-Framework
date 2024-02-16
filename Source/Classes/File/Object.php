@@ -325,6 +325,9 @@ class FileObject implements FileObjectInterface
 		}
 	}
 
+	/**
+	 * Check that free space is enought for write to file
+	 */
 	public function isEnoughFreeSpace(): bool
 	{
 		$freeSpace = DirectoryHandler::getFreeSpace();

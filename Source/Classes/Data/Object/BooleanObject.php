@@ -8,7 +8,7 @@ use Neko\Classes\Data\BaseObject as BaseObject;
 class BooleanObject extends BaseObject
 {
 
-    protected static $raw_data;
+    protected $raw_data;
 
     public function __construct(bool $data)
     {

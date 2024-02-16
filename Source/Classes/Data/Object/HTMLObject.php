@@ -8,7 +8,7 @@ use Neko\Classes\Data\HTMLHandler as HTMLHandler;
 class HTMLObject extends StringObject
 {
 
-    protected static $raw_data;
+    protected $raw_data;
     private $handler;
 
     public function __construct($data)

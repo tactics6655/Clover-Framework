@@ -6,7 +6,7 @@ namespace Neko\Classes\Data;
 class BaseObject
 {
 
-    protected static $raw_data;
+    protected $raw_data;
 
     public function __construct($data)
     {

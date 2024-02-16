@@ -2,6 +2,7 @@
 
 namespace Neko\Framework\Component;
 
+use App\Controller\IndexController;
 use Neko\Classes\Routing\Router as Router;
 use Neko\Classes\File\Functions as FileFunctions;
 use Neko\Classes\Directory\Handler as DirectoryHandler;

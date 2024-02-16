@@ -2,13 +2,15 @@
 
 namespace Neko\Traits\Regex;
 
+use function preg_last_error_constant;
+
 trait RegexError
 {
 
 	public function getErrorConstant()
 	{
 		if (function_exists("preg_last_error_constant")) {
-			return \preg_last_error_constant();
+			return preg_last_error_constant();
 		}
 
 		return false;

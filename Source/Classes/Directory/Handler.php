@@ -147,7 +147,7 @@ class Handler implements DirectoryHandlerInterface
 	public function getFileCount(string $directoryPath): int
 	{
 		if (!self::isDirectory($directoryPath)) {
-			throw new DirectoryIsNotExistsException();
+			throw new DirectoryIsNotExistsException(sprintf('Directory %s is empty', $directoryPath));
 		}
 
 		$iterator = new RecursiveDirectoryIterator($directoryPath, FilesystemIterator::SKIP_DOTS);

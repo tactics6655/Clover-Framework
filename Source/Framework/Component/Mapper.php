@@ -143,6 +143,7 @@ class Mapper
         $this->setContainer();
 
         if ($this->isCommentLineInterface()) {
+            return new CliKernel($this->container);
         } else {
             return new HttpKernel($this->eventDispatcher, $this->container, $this->getEnvironment(), $this->getOptions());
         }

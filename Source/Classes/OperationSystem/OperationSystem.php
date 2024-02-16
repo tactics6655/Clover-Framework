@@ -199,7 +199,7 @@ class OperationSystem
 
 	public static function getServerSoftware()
 	{
-		return $_SERVER['SERVER_SOFTWARE'];
+		return $_SERVER['SERVER_SOFTWARE'] ?? "";
 	}
 
 	public static function getShortOperationSystemString()

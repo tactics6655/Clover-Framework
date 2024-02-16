@@ -2,33 +2,33 @@
 
 namespace Neko\Enumeration;
 
-abstract class Encoding
+enum Encoding: string
 {
-    const UTF_7 = 'UTF-7';
+    case UTF_7 = 'UTF-7';
 
-    const UTF_8 = 'UTF-8';
+    case UTF_8 = 'UTF-8';
 
-    const UTF_16_BIG_ENDIAN = 'UTF-16BE';
+    case UTF_16_BIG_ENDIAN = 'UTF-16BE';
 
-    const UTF_16_LITTLE_ENDIAN = 'UTF-16LE';
+    case UTF_16_LITTLE_ENDIAN = 'UTF-16LE';
 
-    const UTF_32_BIG_ENDIAN = 'UTF-32BE';
+    case UTF_32_BIG_ENDIAN = 'UTF-32BE';
 
-    const UTF_32_LITTLE_ENDIAN = 'UTF-32LE';
+    case UTF_32_LITTLE_ENDIAN = 'UTF-32LE';
 
-    const KOI8_R = 'KOI8-R';
+    case KOI8_R = 'KOI8-R';
 
-    const WINDOWS_1251 = 'Windows-1251';
+    case WINDOWS_1251 = 'Windows-1251';
 
-    const CP936 = 'CP936';
+    case CP936 = 'CP936';
 
-    const EUC_KR = 'EUC-KR';
+    case EUC_KR = 'EUC-KR';
 
-    const JIS = 'JIS';
+    case JIS = 'JIS';
 
-    const EUC_JP = 'EUC-JP';
+    case EUC_JP = 'EUC-JP';
 
-    const ASCII = 'ASCII';
+    case ASCII = 'ASCII';
 
-    const HTML_ENTITIES = 'HTML-ENTITIES';
+    case HTML_ENTITIES = 'HTML-ENTITIES';
 }

@@ -6,7 +6,7 @@ namespace Neko\Classes\Data;
 class ResourceObject
 {
 
-    protected static $data;
+    protected $data;
 
     public function __construct($data)
     {

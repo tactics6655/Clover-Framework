@@ -991,7 +991,7 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getInterpretedContent(string $filePath, $data = []): string
+	public static function getInterpretedContent(string $filePath, ?array $data = []): string
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1005,7 +1005,7 @@ class Functions
 
 		ob_start();
 
-		extract($data);
+		extract($data ?? []);
 
 		if (isset($filePath)) {
 			if (file_exists($filePath)) {

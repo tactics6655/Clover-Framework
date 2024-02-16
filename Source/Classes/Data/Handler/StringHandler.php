@@ -40,7 +40,7 @@ class StringHandler
 	public static function pad($string = "", $length = 0, $padString = " ", $type = STR_PAD_BOTH, $encoding = Encoding::UTF_8)
 	{
 		if (function_exists("mb_str_pad")) {
-			return mb_str_pad($string, $length, $padString, $type, $encoding);
+			return mb_str_pad($string, $length, $padString, $type, $encoding->value);
 		}
 
 		return str_pad($string, $length, $padString, $type);
@@ -157,7 +157,7 @@ class StringHandler
 	public static function toUpperCase($text, Encoding $encoding = Encoding::UTF_8)
 	{
 		if (function_exists('mb_strupper')) {
-			return mb_strtoupper($text, $encoding);
+			return mb_strtoupper($text, $encoding->value);
 		}
 
 		return strtoupper($text);

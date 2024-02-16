@@ -33,10 +33,10 @@ class File extends Header
 		self::responseWithKeyAndArray("Content-Type:" . $application, $characterSet);
 	}
 
-	public static function responseWithOption($application, $characterSet)
+	public static function responseWithOption($application, Encoding $characterSet)
 	{
 		if ($characterSet) {
-			self::responseWithCharset($application, $characterSet);
+			self::responseWithCharset($application, $characterSet->value);
 		} else {
 			self::response('application/zip; charset=UTF-8');
 		}

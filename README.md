@@ -22,7 +22,11 @@ Docker
 
 1. Type "docker-compose up --build"
 
-Compatible
+PHPUnit
+
+1. Type "php ./Binary/phpunit.phar ./tests/"
+
+Compatibility
 ------------
 
 

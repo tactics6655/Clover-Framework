@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Neko\Classes\AES256CBC as AES256CBC;
+use Neko\Classes\Crypt\AES256CBC as AES256CBC;
 
 class AES256CBCTest extends TestCase
 {

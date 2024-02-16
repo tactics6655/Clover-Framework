@@ -6,12 +6,14 @@ use Neko\Classes\Data\StringHandler as StringHandler;
 use Neko\Classes\Data\ArrayObject as ArrayObject;
 use Neko\Classes\Data\BaseObject as BaseObject;
 use Neko\Classes\Reflection\Handler as ReflectionHandler;
+use Neko\Classes\Data\Multibyte as Multibyte;
+use Neko\Enumeration\Encoding;
 
 #[\AllowDynamicProperties]
 class StringObject extends BaseObject
 {
 
-    protected static $raw_data = '';
+    protected $raw_data = '';
 
     public function __construct($data)
     {
@@ -21,6 +23,13 @@ class StringObject extends BaseObject
     public function __toString()
     {
         return $this->raw_data;
+    }
+
+    public function getEncoding()
+    {
+        $this->raw_data = Multibyte::detectCharacterEncoding($this->raw_data);
+
+        return $this;
     }
 
     /**
@@ -143,6 +152,16 @@ class StringObject extends BaseObject
         return new ArrayObject($array);
     }
 
+    public function startsWith(string $string)
+    {
+        return strpos($this->raw_data, $string) === 0;
+    }
+
+    public function endsWith(string $string)
+    {
+        return strpos($this->raw_data, $string) === (strlen($this->raw_data) - strlen($string));
+    }
+
     /**
      * Return part of a string
      * 
@@ -192,6 +211,194 @@ class StringObject extends BaseObject
     public function contains(string $needle)
     {
         $this->raw_data = StringHandler::contains($this->raw_data, $needle);
+
+        return $this;
+    }
+
+    /**
+     * Camelize the string
+     * 
+     * @return StringObject
+     */
+    public function camelize()
+    {
+        $this->raw_data = StringHandler::camelize($this->raw_data);
+
+        return $this;
+    }
+
+    /**
+     * Replaces all both side strings
+     * 
+     * @param string $replace
+     * 
+     * @return StringObject
+     */
+    public function replaceBoth($string)
+    {
+        $length = strlen($string);
+
+        $this->raw_data = preg_replace("/^\w{{$length}}(.*)\w{{$length}}/i", "$string\$1$string", $this->raw_data);
+
+        return $this;
+    }
+    
+    public function replaceCenter($string)
+    {
+        $length = ceil(strlen($this->raw_data) / 2) - ceil(strlen($string) / 2);
+        $tail = strlen($this->raw_data) - (($length * 2) + strlen($string));
+        $append = $tail > 0 ? str_repeat($string[0], $tail) : "";
+        $string .= $append;
+
+        $this->raw_data = preg_replace("/^(\w{{$length}}).*(\w{{$length}})/i", "\$1$string\$2", $this->raw_data);
+
+        return $this;
+    }
+
+    public function appendBoth($string)
+    {
+        $lenth = strlen($string);
+        $this->raw_data = $string . $this->raw_data . $string;
+
+        return $this;
+    }
+
+    public function appendWord($string)
+    {
+        $lenth = strlen($string);
+        $this->raw_data = preg_replace("/(?!\s)(?!\s\b.{0,1}\b)/i", $string, $this->raw_data);
+
+        return $this;
+    }
+
+    public function appendInner($string)
+    {
+        $lenth = strlen($string);
+        $this->raw_data = preg_replace("/(?:\s)(\b.{0,1}\b)(?!\s)/i", "{$string}\$1", $this->raw_data);
+
+        return $this;
+    }
+
+    /**
+     * Make a string's first character uppercase
+     * 
+     * @return StringObject
+     */
+    public function capitalizeFirstLetter()
+    {
+        $this->raw_data = ucfirst($this->raw_data);
+
+        return $this;
+    }
+
+    /**
+     * Tokenize string
+     * 
+     * @return StringObject | bool
+     */
+    public function tokenize()
+    {
+        $this->raw_data = strtok($this->raw_data);
+
+        if (!$this->raw_data) {
+            return false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Perform a regular expression match
+     * 
+     * @param string $string
+     * @param &$matches
+     * 
+     * @return StringObject
+     */
+    public function match(string $string, &$matches)
+    {
+        $this->raw_data = preg_match($string, $this->raw_data, $matches);
+
+        return $this;
+    }
+
+    /**
+     * Replaces all even position strings
+     * 
+     * @param string $replace
+     * 
+     * @return StringObject
+     */
+    public function replaceEven(string $replace)
+    {
+        $this->raw_data = preg_replace('/(.)./', "\$1{$replace}", $this->raw_data);
+
+        return $this;
+    }
+
+    /**
+     * Replaces all odd position strings
+     * 
+     * @param string $replace
+     * 
+     * @return StringObject
+     */
+    public function replaceOdd(string $replace)
+    {
+        $this->raw_data = preg_replace('/.(.)/', "{$replace}\$1", $this->raw_data);
+
+        return $this;
+    }
+
+    /**
+     * Cut the string
+     * 
+     * @param int $length
+     * 
+     * @return StringObject
+     */
+    public function cut(int $length)
+    {
+        $this->raw_data = substr($this->raw_data, 0, $length);
+
+        return $this;
+    }
+
+    /**
+     * Get truncated string with specified width
+     * 
+     * @param int $limit
+     * @param string $trimMarker = ''
+     * 
+     * @return StringObject
+     */
+    public function limit(int $limit, string $trimMarker = '')
+    {
+        $this->raw_data = mb_strimwidth($this->raw_data, 0, $limit, $trimMarker);
+
+        return $this;
+    }
+
+    /**
+     * Locale based string comparison
+     * 
+     * @param string $string
+     * 
+     * @return int
+     */
+    public function localeBasedComparison(string $string)
+    {
+        return strcoll($this->raw_data, $string);
+    }
+
+    /**
+     * Make a string's first character lowercase
+     * 
+     * @return StringObject
+     */
+    public function lowercaseFirstLetter()
+    {
+        $this->raw_data = lcfirst($this->raw_data);
 
         return $this;
     }
@@ -274,8 +481,15 @@ class StringObject extends BaseObject
 
     /**
      * Calculate Levenshtein distance between two strings
+     * 
+     * @param string $compare
+     * @param int|null $insertion_cost = 1
+     * @param int|null $replacement_cost = 1
+     * @param int|null $deletion_cost = 1
+     * 
+     * @return StringObject
      */
-    public function levenshteinDistance($compare, int|null $insertion_cost = 1, int|null $replacement_cost = 1, int|null $deletion_cost = 1)
+    public function levenshteinDistance(string $compare, int|null $insertion_cost = 1, int|null $replacement_cost = 1, int|null $deletion_cost = 1)
     {
         $this->raw_data = levenshtein($this->raw_data, $compare, $insertion_cost, $replacement_cost, $deletion_cost);
 
@@ -284,6 +498,10 @@ class StringObject extends BaseObject
 
     public function decrement()
     {
+        if (PHP_VERSION_ID < 80300) {
+            return false;
+        }
+
         $this->raw_data = str_decrement($this->raw_data);
 
         return $this;
@@ -291,6 +509,10 @@ class StringObject extends BaseObject
 
     public function increment()
     {
+        if (PHP_VERSION_ID < 80300) {
+            return false;
+        }
+        
         $this->raw_data = str_increment($this->raw_data);
 
         return $this;
@@ -342,6 +564,20 @@ class StringObject extends BaseObject
     public function removeNullByte()
     {
         $this->raw_data = StringHandler::removeNullByte($this->raw_data);
+
+        return $this;
+    }
+
+    /**
+     * Concatenates the string
+     * 
+     * @param string $string
+     * 
+     * @return StringObject
+     */
+    public function concat(string $string)
+    {
+        $this->raw_data = sprintf("%s%s", $this->raw_data, $string);
 
         return $this;
     }

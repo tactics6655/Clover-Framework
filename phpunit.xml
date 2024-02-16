@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="vendor/autoload.php" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true">
-    <testsuites>
-        <testsuite name="Test Suite">
-            <directory>./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./Source/</directory>
-            <directory>./Classes/</directory>
-            <directory>./Application/</directory>
-            <directory>./Example/</directory>
-            <directory>./Framework/</directory>
-            <directory>./Frontend/</directory>
-            <directory>./Logo/</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd" cacheDirectory=".phpunit.cache">
+  <coverage/>
+  <testsuites>
+    <testsuite name="Test Suite">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>./Source/</directory>
+      <directory>./Classes/</directory>
+      <directory>./Application/</directory>
+      <directory>./Example/</directory>
+      <directory>./Framework/</directory>
+      <directory>./Frontend/</directory>
+      <directory>./Logo/</directory>
+    </include>
+  </source>
 </phpunit>

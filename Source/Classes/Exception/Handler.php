@@ -23,12 +23,12 @@ class Handler
 		return set_error_handler($callback, $error_level);
 	}
 
-	public static function registerShutdownFunction($callback, ...$args)
+	public static function registerShutdownFunction($callback, ...$args) :void
 	{
 		register_shutdown_function($callback, ...$args);
 	}
 
-	public static function clearLastError(): Void
+	public static function clearLastError(): void
 	{
 		error_clear_last();
 	}

@@ -38,6 +38,14 @@ class Handler
         return self::getMethod(static::class, '__construct');
     }
 
+    /**
+     * Checks if the class method exists
+     */
+    public static function isMethodExists($object_or_class, string $method)
+    {
+        return method_exists($object_or_class, $method);
+    }
+
     public static function hasStaticClassConstructor()
     {
         return method_exists(static::class, '__construct');

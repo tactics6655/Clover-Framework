@@ -15,14 +15,14 @@ class RouteExecutor
 
     private string $method;
 
-    private string $callback;
+    private mixed $callback;
 
     /** @var string[] */
     private $arguments;
 
     private Container $container;
 
-    public function __construct(string $class, string $method, string $callback, $arguments, Container $container)
+    public function __construct(string $class, string $method, mixed $callback, $arguments, Container $container)
     {
         $this->class = $class;
         $this->method = $method;
@@ -33,6 +33,8 @@ class RouteExecutor
 
     /**
      * Call a callback from this route
+     * 
+     * @return mixed
      */
     public function __invoke(mixed $next_arguments = [])
     {

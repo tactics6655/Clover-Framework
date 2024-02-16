@@ -6,6 +6,7 @@ namespace Neko\Classes\Database\Driver;
 
 use SQLite3;
 use SQLite3Result;
+use Closure;
 
 class SqLite
 {
@@ -24,6 +25,12 @@ class SqLite
     public function getLastErrorMessage()
     {
         return $this->connection->lastErrorMsg();
+    }
+
+    public function fetchRows($result, Closure $closure) {
+        while ($row = $this->fetchArray($result)) {
+            $closure($row);
+        }
     }
 
     public function fetchArray(SQLite3Result $result): array|bool

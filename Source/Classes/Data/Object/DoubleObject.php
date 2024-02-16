@@ -9,7 +9,7 @@ use Neko\Classes\Data\BaseObject as BaseObject;
 class DoubleObject extends BaseObject
 {
 
-    protected static $raw_data;
+    protected $raw_data;
 
     public function __construct($data)
     {

@@ -14,6 +14,14 @@ class Multibyte
     }
 
     /**
+     * Convert character encoding
+     */
+    public static function convertCharacterEncoding(array|string $string, string $to_encoding, null|array|string $from_encoding = null)
+    {
+        return mb_convert_encoding($string, $to_encoding, $from_encoding);
+    }
+
+    /**
      * Detect character encoding
      */
     public static function detectCharacterEncoding(string $string, array|string|null $encodings = null, bool|null $strict = false)

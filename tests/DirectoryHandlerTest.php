@@ -16,6 +16,6 @@ class DirectoryHandlerTest extends TestCase
 
 	public function testFileCount()
 	{
-		$this->assertSame("testSuccess", $this->factory->getFileCount(__DIR__ . "/testFile.txt"));
+		$this->assertGreaterThan(1, $this->factory->getFileCount(__DIR__ . "\\"));
 	}
 }

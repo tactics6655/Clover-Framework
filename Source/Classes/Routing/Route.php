@@ -15,7 +15,7 @@ use Neko\Classes\Routing\StackableRequestHandler;
 use Closure;
 class Route
 {
-    private Closure | string $callback;
+    private Closure | string | array $callback;
 
     private Container $container;
 
@@ -31,10 +31,10 @@ class Route
      * Construct of route
      * 
      * @param string $pattern
-     * @param string $callback
+     * @param mixed $callback
      * @param MiddlewareInterface[] $middleware
      */
-    public function __construct(string $pattern, string $callback, $middleware = [])
+    public function __construct(string $pattern, mixed $callback, $middleware = [])
     {
         $this->setPattern($pattern);
         $this->setCallback($callback);
@@ -63,7 +63,7 @@ class Route
      * 
      * @return void
      */
-    public function setCallback(Closure|string $callback)
+    public function setCallback(Closure|string|array $callback)
     {
         $this->callback = $callback;
     }
@@ -95,7 +95,7 @@ class Route
      * 
      * @return Closure|string
      */
-    private function getCallback(): Closure|string
+    private function getCallback(): Closure|string|array
     {
         return $this->callback;
     }
@@ -143,8 +143,12 @@ class Route
         $method = null;
         $callback = $this->getCallback();
 
-        if (!is_callable($callback) && is_string($callback)) {
-            [$class, $method] = explode('::', $this->callback);
+        if (!is_callable($callback) && is_string($callback) && !empty($callback) && strpos($callback, '::') > 0) {
+            [$class, $method] = explode('::', $callback);
+        }
+
+        if (is_array($callback)) {
+            [$class, $method] = $callback;
         }
 
         return new RouteExecutor($class, $method, $callback, $this->arguments, $this->container);

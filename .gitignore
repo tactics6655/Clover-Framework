@@ -10,6 +10,7 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
+.cache
 .history
 sessions
 logs

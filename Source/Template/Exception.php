@@ -2,44 +2,42 @@
     <title>500 Error</title>
 </head>
 
-<?php
-use Neko\Classes\Debug\TraceObject;
-?>
+<body>    
+    <div id="debugger">
+        <div id="header">
+            <div id="file">500 Error (<?= $className ?>) > <?= $file ?>:<?= $line ?></div>
+            <div id="message"><?= $message ?></div>
+        </div>
 
-<div id="debugger">
-    <div id="header">
-        <div id="file">500 Error (<?= $className ?>) > <?= $file ?>:<?= $line ?></div>
-        <div id="message"><?= $message ?></div>
-    </div>
-
-    <div id="trace">
-        <? /** @var TraceObject $trace */ ?>
-        <? foreach ($traces as $trace) : ?>
-            <div class="item">
-                <div class="short_wrap">
-                    <a class="short_name">
-                        <b><?= $trace->getText() ?></b>
-                    </a>
-                </div>
-                <? if ($trace->hasAnnotation()) : ?>
-                    <a class="annotation"><?= $trace->getAnnotation() ?></a>
-                <? endif; ?>
-                <div class="long_wrap">
-                    <?= $trace->hasFile() ? sprintf('%s', $trace->getFile()) : $trace->getClass() ?>
-                    <? if ($trace->hasClass()) : ?>:<a class="line"><?= $trace->getLine() ?></a><? endif; ?>
-                </div>
-                <? if ($trace->hasCode()) : ?>
-                    <pre class="code"><?= $trace->getCode() ?></pre>
-                <? endif; ?>
-                <? if ($trace->hasComment()) : ?>
-                    <div class="comment">
-                        <?= $trace->getCommentTag() ?>
+        <div id="trace">
+            <? /** @var Neko\Classes\Debug\TraceObject $trace */ ?>
+            <? foreach ($traces as $trace) : ?>
+                <div class="item">
+                    <div class="short_wrap">
+                        <a class="short_name">
+                            <b><?= $trace->getText() ?></b>
+                        </a>
                     </div>
-                <? endif; ?>
-            </div>
-        <? endforeach; ?>
+                    <? if ($trace->hasAnnotation()) : ?>
+                        <a class="annotation"><?= $trace->getAnnotation() ?></a>
+                    <? endif; ?>
+                    <div class="long_wrap">
+                        <?= $trace->hasFile() ? sprintf('%s', $trace->getFile()) : $trace->getClass() ?><? if ($trace->hasClass() && $trace->hasLine()) : ?>:<a class="line"><?= $trace->getLine() ?></a><? endif; ?>
+                    </div>
+                    <? if ($trace->hasCode()) : ?>
+                        <pre class="code"><?= $trace->getCode() ?></pre>
+                    <? endif; ?>
+                    <? if ($trace->hasComment()) : ?>
+                        <div class="comment">
+                            <?= $trace->getCommentTag() ?>
+                        </div>
+                    <? endif; ?>
+                </div>
+            <? endforeach; ?>
+        </div>
     </div>
-</div>
+</body>
+
 
 <style>
     * {
@@ -87,6 +85,7 @@ use Neko\Classes\Debug\TraceObject;
         background-color: #353535;
         background-image: linear-gradient(147deg, #000000, #070707 25%, transparent 25%, transparent );
         background-repeat: no-repeat;
+        border-top: 4px solid #4384ae;
         background-size: 168px 38px;
     }
 
@@ -213,7 +212,7 @@ use Neko\Classes\Debug\TraceObject;
         white-space: break-spaces;
         padding: 10px;
         display: block;
-        background-color: #fffccc;
+        background-color: #e5f2f9;
         font-size: 11px;
         line-height: 12px;
         border-bottom: 1px dotted #cbad0e;

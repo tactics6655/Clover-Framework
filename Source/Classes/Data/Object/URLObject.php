@@ -8,7 +8,7 @@ use Neko\Classes\Data\StringObject as StringObject;
 class URLObject extends StringObject
 {
 
-    protected static $raw_data;
+    protected $raw_data;
 
     public function __construct($data)
     {
@@ -35,7 +35,7 @@ class URLObject extends StringObject
     {
         preg_match("/(https?(?=:\/\/))?(www\.)?[a-zA-Z0-9\-\_]{0,61}((\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,}))|(\:[0-9]{2,}))/i", $this->raw_data, $matches);
 
-        $this->raw_data = is_array($matches) ? $matches[0] : "";
+        $this->raw_data = empty($matches) ? "" : (is_array($matches) ? $matches[0] : "");
 
         return $this;
     }

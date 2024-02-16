@@ -10,6 +10,8 @@ use Neko\Classes\Data\StringObject as StringObject;
 use Neko\Enumeration\HTTPRequestMethod;
 use Neko\Enumeration\ServerIndices;
 
+use litespeed_finish_request;
+
 class Request implements RequestInterface
 {
 
@@ -108,7 +110,7 @@ class Request implements RequestInterface
 	public static function flushLightSpeedResponseData()
 	{
 		if (function_exists('litespeed_finish_request')) {
-			litespeed_finish_request();
+			\litespeed_finish_request();
 		}
 	}
 
@@ -186,7 +188,7 @@ class Request implements RequestInterface
 
 	public static function getUrlPath(): string
 	{
-		return parse_url($_SERVER[ServerIndices::REQUEST_URI], PHP_URL_PATH);
+		return parse_url($_SERVER[ServerIndices::REQUEST_URI] ?? "", PHP_URL_PATH);
 	}
 
 	public static function getForwarededPorto()
@@ -330,7 +332,7 @@ class Request implements RequestInterface
 
 	public static function getHTTPConnection(): string
 	{
-		return self::getServerArguments(ServerIndices::HTTP_CONNECTION);
+		return self::getServerArguments(ServerIndices::HTTP_CONNECTION) ?? "";
 	}
 
 	public static function getPort(): string
@@ -387,7 +389,7 @@ class Request implements RequestInterface
 
 	public static function getUserAgent()
 	{
-		return self::getServerArguments(ServerIndices::HTTP_USER_AGENT);
+		return self::getServerArguments(ServerIndices::HTTP_USER_AGENT) ?? "";
 	}
 
 	public static function getMethod()
@@ -463,13 +465,13 @@ class Request implements RequestInterface
 	 */
 	public static function getQueryString()
 	{
+		$queryString = "";
+
 		if (isset($_SERVER[ServerIndices::QUERY_STRING])) {
 			$queryString = $_SERVER[ServerIndices::QUERY_STRING];
-
-			return new URLObject($queryString);
 		}
 
-		return null;
+		return new URLObject($queryString);
 	}
 
 	/**
@@ -479,18 +481,18 @@ class Request implements RequestInterface
 	 */
 	public static function getRemoteIPAddress()
 	{
+		$remoteAddress = "";
+
 		if (isset($_SERVER[ServerIndices::REMOTE_IP_ADDRESS])) {
 			$remoteAddress = $_SERVER[ServerIndices::REMOTE_IP_ADDRESS];
-
-			return new URLObject($remoteAddress);
 		}
 
-		return null;
+		return new URLObject($remoteAddress);
 	}
 
 	public static function parseAcceptLanguage($field)
 	{
-		$fields = explode(",", $field);
+		$fields = explode(",", $field ?? "");
 
 		return array_reduce($fields, function ($res, $el) {
 			list($l, $q) = array_merge(explode(';q=', $el), [1]);
@@ -621,7 +623,7 @@ class Request implements RequestInterface
 	public static function getRequestURL()
 	{
 		$port = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
-		$host = sprintf('%s%s%s', $port, self::getHttpHost(), $_SERVER['REQUEST_URI']);
+		$host = sprintf('%s%s%s', $port, self::getHttpHost(), $_SERVER['REQUEST_URI'] ?? "");
 
 		return new URLObject($host);
 	}
