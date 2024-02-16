@@ -20,9 +20,11 @@
     * {
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
+
     body {
         background-color: #eee;
     }
+
     #fatal {
         background-color: #fff;
         width: 600px;
@@ -36,12 +38,14 @@
         display: flex;
         flex-direction: column;
     }
+
     .title {
         font-size: 19px;
         color: #a61b4d;
         font-weight: bold;
         flex: 1;
     }
+
     .message {
         margin-top: 15px;
         font-size: 14px;
@@ -49,6 +53,7 @@
         font-weight: bold;
         color: red;
     }
+
     .file {
         margin-top: 15px;
         font-size: 12px;

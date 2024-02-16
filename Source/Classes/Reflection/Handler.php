@@ -448,7 +448,7 @@ class Handler
             $name = $parameter->getName();
             $className = $class->getName();
             $methodName = $method->getName();
-            
+
             $arrow = "->";
             if ($method->isStatic()) {
                 $arrow = "::";
@@ -534,7 +534,7 @@ class Handler
         if (isset($arguments) && !empty($arguments)) {
             $class = new ReflectionClass($instanceClass);
             $instance = $class->newInstance($arguments);
-            
+
             if (!$class->isInstance($instance)) {
                 return false;
             }

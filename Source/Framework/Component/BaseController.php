@@ -75,7 +75,7 @@ class BaseController
         /** @var \Neko\Framework\Component\Renderer $renderer */
         $renderer = $this->container->get('Renderer');
 
-        $render = $renderer->render(__ROOT__.$template, $data);
+        $render = $renderer->render(__ROOT__ . $template, $data);
 
         return $this->response($render, $resources);
     }

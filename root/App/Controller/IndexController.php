@@ -23,6 +23,7 @@ class IndexController extends BaseController
     #[Route('GET', '/')]
     public function index()
     {
+        $this->test();
         return $this->response('Hello World');
     }
 }

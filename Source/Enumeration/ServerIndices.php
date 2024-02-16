@@ -202,5 +202,4 @@ abstract class ServerIndices
     const HTTP_X_FORWARDED_FOR = 'HTTP_X_FORWARDED_FOR';
 
     const HTTP_X_FORWARDED_PREFIX = 'HTTP_X_FORWARDED_PREFIX';
-
 }

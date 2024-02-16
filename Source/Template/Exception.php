@@ -2,7 +2,7 @@
     <title>500 Error</title>
 </head>
 
-<body>    
+<body>
     <div id="debugger">
         <div id="header">
             <div id="file">500 Error (<?= $className ?>) > <?= $file ?>:<?= $line ?></div>
@@ -43,6 +43,7 @@
     * {
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
+
     body {
         padding: 0px;
         margin: 0px;
@@ -53,12 +54,14 @@
         padding: 17px;
         font-size: 13px;
         line-height: 13px;
-        background-image: linear-gradient(135deg, #eee, #f3f3f3 25%, transparent 25%, transparent 50%, #f3f3f3 50%, #f3f3f3 75%,transparent 75%, transparent );
+        background-image: linear-gradient(135deg, #eee, #f3f3f3 25%, transparent 25%, transparent 50%, #f3f3f3 50%, #f3f3f3 75%, transparent 75%, transparent);
         background-size: 8px 8px;
     }
+
     #debugger>#trace>.item {
         box-shadow: 1px 2px 5px #e2e2e2;
     }
+
     #debugger>#trace>.item>.comment {
         background-color: #e9e9e9;
         color: #0008d4;
@@ -83,7 +86,7 @@
         border-bottom: 1px solid #e4e4e4;
         padding: 12px;
         background-color: #353535;
-        background-image: linear-gradient(147deg, #000000, #070707 25%, transparent 25%, transparent );
+        background-image: linear-gradient(147deg, #000000, #070707 25%, transparent 25%, transparent);
         background-repeat: no-repeat;
         border-top: 4px solid #4384ae;
         background-size: 168px 38px;
@@ -159,6 +162,7 @@
     #debugger>#trace>.item>.long_wrap>.line {
         color: #949494;
     }
+
     #debugger>#header {
         background-color: #f0f0f0;
         white-space: normal;
@@ -172,7 +176,7 @@
         background-color: #353535;
         line-height: 12px;
         font-size: 12px;
-        background-image: linear-gradient(135deg, #000, #292929 25%, transparent 25%, transparent 50%, #292929 50%, #292929 75%,transparent 75%, transparent );
+        background-image: linear-gradient(135deg, #000, #292929 25%, transparent 25%, transparent 50%, #292929 50%, #292929 75%, transparent 75%, transparent);
         background-size: 8px 8px;
     }
 
@@ -184,9 +188,10 @@
         text-shadow: 2px 2px 3px #c1c1c1;
         line-height: 16px;
         font-weight: bold;
-        background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%,transparent 75%, transparent );
+        background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%, transparent 75%, transparent);
         background-size: 8px 8px;
     }
+
     .code {
         box-shadow: 0px 0px 7px 0px gainsboro;
         border: 1px solid #c3c3c3;
@@ -196,9 +201,10 @@
         padding: 10px;
         color: #424242;
         font-size: 11px;
-        background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%,transparent 75%, transparent );
+        background-image: linear-gradient(135deg, #eee, #dedede 25%, transparent 25%, transparent 50%, #dedede 50%, #dedede 75%, transparent 75%, transparent);
         background-size: 8px 8px;
     }
+
     .highlight {
         background-color: #f3ff86;
         display: -webkit-box;
@@ -208,6 +214,7 @@
         border-radius: 5px;
         border: 1px dashed #f07979;
     }
+
     .annotation {
         white-space: break-spaces;
         padding: 10px;

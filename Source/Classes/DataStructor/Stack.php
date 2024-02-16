@@ -16,5 +16,4 @@ class Stack extends DoubleyLinkedList
         parent::$stock = new SplStack();
         parent::$stock->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
     }
-
 }

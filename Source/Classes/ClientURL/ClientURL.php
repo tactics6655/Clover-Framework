@@ -38,7 +38,7 @@ class ClientURL implements ClientURLInterface
 		}
 	}
 
-	public function getSession() :?ClientURL
+	public function getSession(): ?ClientURL
 	{
 		if (self::$session == null) {
 			self::$session = $this->initialize();
@@ -57,19 +57,19 @@ class ClientURL implements ClientURLInterface
 		return curl_errno(self::$session);
 	}
 
-	public function initialize($instance = '') :mixed
+	public function initialize($instance = ''): mixed
 	{
 		return curl_init($instance);
 	}
 
-	public function reset() :void
+	public function reset(): void
 	{
 		if (function_exists('curl_reset')) {
 			curl_reset(self::$session);
 		}
 	}
 
-	public function option() :?ClientURLOption
+	public function option(): ?ClientURLOption
 	{
 		if (!$this->option) {
 			$this->option = new ClientURLOption(self::$session);
@@ -78,7 +78,7 @@ class ClientURL implements ClientURLInterface
 		return $this->option;
 	}
 
-	public function information() :?ClientURLLastTransferInformation
+	public function information(): ?ClientURLLastTransferInformation
 	{
 		if (!$this->information) {
 			$this->information = new ClientURLLastTransferInformation(self::$session);
@@ -87,7 +87,7 @@ class ClientURL implements ClientURLInterface
 		return $this->information;
 	}
 
-	public function setOption(int $option, $value) :bool
+	public function setOption(int $option, $value): bool
 	{
 		return curl_setopt(self::$session, $option, $value);
 	}
@@ -97,12 +97,12 @@ class ClientURL implements ClientURLInterface
 		curl_close(self::$session);
 	}
 
-	public function getHeaderOptions() :array
+	public function getHeaderOptions(): array
 	{
 		return $this->option::$headers;
 	}
 
-	public function execute() :mixed
+	public function execute(): mixed
 	{
 		$result = curl_exec(self::$session);
 

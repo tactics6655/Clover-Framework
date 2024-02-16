@@ -62,22 +62,22 @@ class TraceObject
         }
     }
 
-    public function hasArguments() :bool
+    public function hasArguments(): bool
     {
         return isset($this->arguments);
     }
 
-    public function getArguments() :?array
+    public function getArguments(): ?array
     {
         return $this->arguments;
     }
 
-    public function hasReturnType() :bool
+    public function hasReturnType(): bool
     {
         return isset($this->return_type);
     }
 
-    public function setReturnType($return_type) :void
+    public function setReturnType($return_type): void
     {
         $this->return_type = $return_type;
     }
@@ -87,72 +87,72 @@ class TraceObject
      * 
      * @return ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null
      */
-    public function getReturnType() :ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null
+    public function getReturnType(): ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null
     {
         return $this->return_type;
     }
 
-    public function hasFile() :bool
+    public function hasFile(): bool
     {
         return isset($this->file);
     }
 
-    public function getFile() :?string
+    public function getFile(): ?string
     {
         return $this->file;
     }
 
-    public function hasShortName() :bool
+    public function hasShortName(): bool
     {
         return isset($this->short_name);
     }
 
-    public function setShortName($short_name) :void
+    public function setShortName($short_name): void
     {
         $this->short_name = $short_name;
     }
 
-    public function getShortName() :?string
+    public function getShortName(): ?string
     {
         return $this->short_name;
     }
 
-    public function hasType() :bool
+    public function hasType(): bool
     {
         return isset($this->type);
     }
 
-    public function getType() :?string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function hasLine() :bool
+    public function hasLine(): bool
     {
         return isset($this->line) && !empty($this->line);
     }
 
-    public function getLine() :?int
+    public function getLine(): ?int
     {
         return $this->line;
     }
 
-    public function hasText() :bool
+    public function hasText(): bool
     {
         return isset($this->text);
     }
 
-    public function setText($text) :void
+    public function setText($text): void
     {
         $this->text = $text;
     }
 
-    public function getText() :?string
+    public function getText(): ?string
     {
         return $this->text;
     }
 
-    public function hasClass() :bool
+    public function hasClass(): bool
     {
         return isset($this->class);
     }
@@ -162,7 +162,7 @@ class TraceObject
      * 
      * @return string
      */
-    public function getClass() :?string
+    public function getClass(): ?string
     {
         return $this->class;
     }
@@ -172,7 +172,7 @@ class TraceObject
      * 
      * @return bool
      */
-    public function hasCode() :bool
+    public function hasCode(): bool
     {
         return isset($this->code);
     }
@@ -182,7 +182,7 @@ class TraceObject
      * 
      * @return string
      */
-    public function getCode() :string
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -192,7 +192,7 @@ class TraceObject
      * 
      * @return bool
      */
-    public function hasComment() :bool
+    public function hasComment(): bool
     {
         return isset($this->comments);
     }
@@ -202,7 +202,7 @@ class TraceObject
      * 
      * @return string[]
      */
-    public function getComment() :?array
+    public function getComment(): ?array
     {
         return $this->comments;
     }
@@ -212,12 +212,12 @@ class TraceObject
      * 
      * @return string
      */
-    public function getCommentTag() :string
+    public function getCommentTag(): string
     {
         return join("\r\n", $this->comments);
     }
 
-    public function hasAnnotation() :bool
+    public function hasAnnotation(): bool
     {
         return isset($this->annotation) && !empty($this->annotation);
     }
@@ -227,27 +227,27 @@ class TraceObject
      * 
      * @return string
      */
-    public function getAnnotation() :?string
+    public function getAnnotation(): ?string
     {
         return $this->annotation;
     }
 
-    public function setFunction($function) :void
+    public function setFunction($function): void
     {
         $this->function = $function;
     }
 
-    public function hasFunction() :bool
+    public function hasFunction(): bool
     {
         return isset($this->function) && !empty($this->function);
     }
 
-    public function getFunction() :?string
+    public function getFunction(): ?string
     {
         return $this->function;
     }
-    
-    public function hasDeclaringClass() :bool
+
+    public function hasDeclaringClass(): bool
     {
         return isset($this->declaring_class);
     }
@@ -259,7 +259,7 @@ class TraceObject
      * 
      * @return void
      */
-    public function setDeclaringClass(ReflectionClass $declaring_class) :void
+    public function setDeclaringClass(ReflectionClass $declaring_class): void
     {
         $this->declaring_class = $declaring_class;
     }
@@ -269,18 +269,24 @@ class TraceObject
      * 
      * @return string
      */
-    public function getDeclaringClass() :?string
+    public function getDeclaringClass(): ?string
     {
         return $this->declaring_class;
     }
 
-    private function parseClass() :void
+    /**
+     * Parse class of reflection
+     * 
+     * @return void
+     */
+    private function parseClass(): void
     {
         $reflectionClass = new ReflectionClass($this->class);
         $shortName = $reflectionClass->getShortName();
 
         $this->setShortName($shortName);
-        $this->setText(sprintf("%s%s%s()", $this->getShortName() ?? "", $this->getTYpe(), $this->getFunction()));
+        $defaultText = sprintf("%s%s%s", $this->getShortName() ?? "", $this->getType(), $this->getFunction());
+        $this->setText(sprintf("%s()", $defaultText));
 
         $methods = $reflectionClass->getMethods();
         if (!$this->isMethodExist($methods)) {
@@ -303,17 +309,20 @@ class TraceObject
         $arguments = [];
         foreach ($objectArguments as $argument) {
             $this->arguments[] = $argument;
-            
+
             if (!$argument->hasArguments()) {
                 continue;
             }
 
             $arguments[] = $argument->getArguments();
         }
-        $arguments = $this->argumentToString($arguments);
 
+        $arguments = $this->argumentToString($arguments) ?? "";
         $modifier = self::getModifierString($method);
-        $this->setText(sprintf("%s %s%s%s(%s)" . ($this->hasReturnType() ? " : %s" : ""), $modifier, $this->getShortName(), $this->getType(), $this->getFunction(), $arguments ?? "", $this->getReturnType() ?? ""));
+        $returnType = $this->getReturnType() ?? "";
+        $returnTypeFormat = ($this->hasReturnType() ? " : %s" : "");
+
+        $this->setText(sprintf(("%s %s(%s)" . $returnTypeFormat), $modifier, $defaultText, $arguments, $returnType));
         $this->parseMethodComment($method);
 
         $annotations = [];
@@ -344,7 +353,7 @@ class TraceObject
         $this->comments = $comments;
     }
 
-    private function isMethodExist(array $methods) :bool
+    private function isMethodExist(array $methods): bool
     {
         $existMethods = array_filter($methods, function ($method) {
             return $method->name == $this->getFunction();
@@ -353,7 +362,7 @@ class TraceObject
         return !empty($existMethods);
     }
 
-    private function parseCode() :void
+    private function parseCode(): void
     {
         if (!$this->hasFile()) {
             return;
@@ -363,7 +372,7 @@ class TraceObject
         $endLine = (int)($startLine + 15);
 
         $readedContent = FileFunctions::read($this->file);
-        
+
         $codes = explode("\r\n", htmlspecialchars($readedContent));
         if (isset($codes[$this->line - 1])) {
             $codes[$this->line - 1] = "<a class='highlight'>{$codes[$this->line - 1]}</a>";
@@ -378,7 +387,7 @@ class TraceObject
     /**
      * @return TraceArgumentObject[]
      */
-    private function parseMethodArguments(ReflectionMethod $method) :array
+    private function parseMethodArguments(ReflectionMethod $method): array
     {
         $returnArguments = [];
         $parameters = $method->getParameters();
@@ -442,7 +451,7 @@ class TraceObject
      * 
      * @return array
      */
-    private function parseArgument(array|object|string|null $arguments) :array
+    private function parseArgument(array|object|string|null $arguments): array
     {
         $parsedArguments = [];
 
@@ -563,5 +572,4 @@ class TraceObject
 
         return $arguments;
     }
-
 }

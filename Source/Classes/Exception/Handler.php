@@ -23,7 +23,7 @@ class Handler
 		return set_error_handler($callback, $error_level);
 	}
 
-	public static function registerShutdownFunction($callback, ...$args) :void
+	public static function registerShutdownFunction($callback, ...$args): void
 	{
 		register_shutdown_function($callback, ...$args);
 	}

@@ -13,7 +13,7 @@ class ErrorHandler
 {
     public static function register()
     {
-        $handler = new Static();
+        $handler = new static();
 
         ExceptionHandler::setExceptionHandler(array($handler, 'handleException'));
         ExceptionHandler::setErrorHandler(array($handler, 'handleError'));
@@ -68,7 +68,7 @@ class ErrorHandler
         ];
 
         //echo 0 ?!("1"?! ( ""?""(""):!""?!"1"??"2":"C"?!"":""?""??""?!""??"2":"C"??"2":"C"??"2") :"C"??"2"):"C";
-        
+
         //echo 0 ?!0xFF??0xCF:0x89;
 
         //echo (0 ?!(0?!(((99)??0??99??0)):99):'CC');
@@ -76,5 +76,4 @@ class ErrorHandler
 
         echo $this->compile(__DIR__ . '/../../Template/Exception.php', $arguments);
     }
-
 }

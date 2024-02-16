@@ -15,13 +15,13 @@ use Neko\Classes\HTML\Handler as HTMLHandler;
         <? foreach ($scriptMap as $resource) : ?>
             <?= HTMLHandler::generateElement('script', '', $resource); ?>
         <? endforeach; ?>
-    <? endif;?>
+    <? endif; ?>
 
     <? if (!empty($cssMap)) : ?>
         <? foreach ($cssMap as $resource) : ?>
             <?= HTMLHandler::generateElement('link', '', $resource, true); ?>
         <? endforeach; ?>
-    <? endif;?>
+    <? endif; ?>
 
     <title><?= $title ?? ""; ?></title>
 </head>

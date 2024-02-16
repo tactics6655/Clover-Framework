@@ -242,7 +242,7 @@ class StringObject extends BaseObject
 
         return $this;
     }
-    
+
     public function replaceCenter($string)
     {
         $length = ceil(strlen($this->raw_data) / 2) - ceil(strlen($string) / 2);
@@ -512,7 +512,7 @@ class StringObject extends BaseObject
         if (PHP_VERSION_ID < 80300) {
             return false;
         }
-        
+
         $this->raw_data = str_increment($this->raw_data);
 
         return $this;

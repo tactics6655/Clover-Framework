@@ -23,5 +23,4 @@ class DoubleyLinkedList extends SplDoublyLinkedList
     {
         self::$stock[] = $item;
     }
-
 }

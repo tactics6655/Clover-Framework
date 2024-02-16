@@ -13,7 +13,7 @@ use Neko\Classes\Event\Dispatcher as EventDispatcher;
 class CliKernel
 {
     private Container $container;
-    
+
     public function __construct(Container $container)
     {
         $this->container = $container;

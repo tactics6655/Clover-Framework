@@ -25,7 +25,7 @@ class ArrayObject extends BaseObject
     {
         $this->raw_data[$key] = $item;
     }
-    
+
     public function add($item)
     {
         $this->raw_data[] = $item;
@@ -118,11 +118,11 @@ class ArrayObject extends BaseObject
         return $this;
     }
 
-	/**
-	 * Sort an array using a case insensitive "natural order" algorithm
-	 * 
-	 * @return ArrayObject
-	 */
+    /**
+     * Sort an array using a case insensitive "natural order" algorithm
+     * 
+     * @return ArrayObject
+     */
     public function sortByCaseInsensitiveNaturalOrderAlgorithm()
     {
         natcasesort($this->raw_data);
@@ -150,11 +150,11 @@ class ArrayObject extends BaseObject
         return $this;
     }
 
-	/**
-	 * Sort an array using a "natural order" algorithm
-	 * 
-	 * @return ArrayObject
-	 */
+    /**
+     * Sort an array using a "natural order" algorithm
+     * 
+     * @return ArrayObject
+     */
     public function sortByNaturalOrderAlgorithm()
     {
         natsort($this->raw_data);
@@ -162,18 +162,18 @@ class ArrayObject extends BaseObject
         return $this;
     }
 
-	/**
-	 * Sort an array by key in descending order
-	 * 
-	 * @return ArrayObject
-	 */
+    /**
+     * Sort an array by key in descending order
+     * 
+     * @return ArrayObject
+     */
     public function sortByKeyInReverseOrder()
     {
         krsort($this->raw_data);
 
         return $this;
     }
-    
+
     /**
      * Sort an array by key
      * 
@@ -186,35 +186,35 @@ class ArrayObject extends BaseObject
         return $this;
     }
 
-	/**
-	 * Get the last key of the given array without affecting the internal array pointer
-	 * 
-	 * @return int|string|null
-	 */
-	public function getLastKey()
-	{
-		return array_key_last($this->raw_data);
-	}
+    /**
+     * Get the last key of the given array without affecting the internal array pointer
+     * 
+     * @return int|string|null
+     */
+    public function getLastKey()
+    {
+        return array_key_last($this->raw_data);
+    }
 
-	/**
-	 * Get the first key of the given array without affecting the internal array pointer.
-	 * 
-	 * @return int|string|null
-	 */
-	public function getFirstKey()
-	{
-		return array_key_first($this->raw_data);
-	}
+    /**
+     * Get the first key of the given array without affecting the internal array pointer.
+     * 
+     * @return int|string|null
+     */
+    public function getFirstKey()
+    {
+        return array_key_first($this->raw_data);
+    }
 
-	/**
-	 * Fetch a key from an array
-	 * 
-	 * @return int|string|null
-	 */
-	public function fetchKey()
-	{
-		return key($this->raw_data);
-	}
+    /**
+     * Fetch a key from an array
+     * 
+     * @return int|string|null
+     */
+    public function fetchKey()
+    {
+        return key($this->raw_data);
+    }
 
     public function getMaxDepth()
     {
@@ -245,25 +245,25 @@ class ArrayObject extends BaseObject
         return $array instanceof Traversable;
     }
 
-	/**
-	 * Checks if the given key or index exists in the array
-	 * 
-	 * @return bool
-	 */
+    /**
+     * Checks if the given key or index exists in the array
+     * 
+     * @return bool
+     */
     public function isKeyExists($key)
     {
         return array_key_exists($this->raw_data, $key);
     }
 
-	/**
-	 * Searches the array for a given value and returns the first corresponding key if successful
-	 * 
-	 * @return bool|int|string
-	 */
-	public function getKeyByValue(string $key)
-	{
-		return array_search($key, (array)($this->raw_data));
-	}
+    /**
+     * Searches the array for a given value and returns the first corresponding key if successful
+     * 
+     * @return bool|int|string
+     */
+    public function getKeyByValue(string $key)
+    {
+        return array_search($key, (array)($this->raw_data));
+    }
 
     public function __toString()
     {

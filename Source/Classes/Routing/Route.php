@@ -13,6 +13,7 @@ use Neko\Classes\Routing\QueueableRequestHandler;
 use Neko\Classes\Routing\StackableRequestHandler;
 
 use Closure;
+
 class Route
 {
     private Closure | string | array $callback;

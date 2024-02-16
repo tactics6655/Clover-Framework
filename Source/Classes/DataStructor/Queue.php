@@ -24,5 +24,4 @@ class Queue extends DoubleyLinkedList
     {
         return parent::$stock->dequeue();
     }
-
 }

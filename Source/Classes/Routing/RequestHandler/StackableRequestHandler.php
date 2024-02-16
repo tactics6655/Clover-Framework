@@ -26,7 +26,7 @@ class StackableRequestHandler extends Stack
             parent::$stock[] = $closure;
         }
     }
-    
+
     /**
      * Call a top callback of last node
      */
@@ -36,5 +36,4 @@ class StackableRequestHandler extends Stack
 
         return $top();
     }
-
 }

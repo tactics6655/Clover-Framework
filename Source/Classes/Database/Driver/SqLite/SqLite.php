@@ -27,7 +27,8 @@ class SqLite
         return $this->connection->lastErrorMsg();
     }
 
-    public function fetchRows($result, Closure $closure) {
+    public function fetchRows($result, Closure $closure)
+    {
         while ($row = $this->fetchArray($result)) {
             $closure($row);
         }
