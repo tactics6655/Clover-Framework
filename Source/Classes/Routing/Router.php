@@ -18,6 +18,8 @@ use Neko\Implement\EventDispatcherInterface;
 
 use Neko\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
 
+use Closure;
+
 class Router
 {
 	/** @var Container $container */
@@ -25,6 +27,8 @@ class Router
 
 	/** @var RouteObject[] $routes */
 	private array $routes = [];
+
+	private string|null|Closure $notFoundHandler = null;
 
 	/** @var Middleware[] $middlewares */
 	private array $middlewares;
@@ -64,6 +68,11 @@ class Router
 		return $this;
 	}
 
+    public function setNotFoundHandler(string|null|Closure $handler)
+    {
+        $this->notFoundHandler = $handler;
+    }
+
 	/**
 	 * Set a container
 	 * 
@@ -89,13 +98,16 @@ class Router
 	 * @param string $pattern
 	 * @param mixed $callback
 	 */
-	private function set(string $method, string $pattern, mixed $callback)
+	private function set(string $method, string $pattern, mixed $callback, string $host = "*", string $contentType = "*")
 	{
 		$pattern = $this->addPrefix($pattern);
 
-		$this->addRoute((string)$method, $pattern, $callback);
+		$this->addRoute((string)$method, $pattern, $callback, [], $host, $contentType);
 	}
 
+	/**
+	 * Add group route
+	 */
 	public function group($pattern, $callback)
 	{
 		$this->prependPrefix = $pattern;
@@ -109,6 +121,9 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Add route for Any-Method
+	 */
 	public function on(string $method, $pattern, $callback)
 	{
 		$this->set($method, $pattern, $callback);
@@ -116,6 +131,9 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Add route for GET-Method
+	 */
 	public function get($pattern, $callback)
 	{
 		$this->set(HTTPRequestMethod::GET, $pattern, $callback);
@@ -123,6 +141,9 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Add route for POST-Method
+	 */
 	public function post($pattern, $callback)
 	{
 		$this->set(HTTPRequestMethod::POST, $pattern, $callback);
@@ -130,9 +151,15 @@ class Router
 		return $this;
 	}
 
-	public function fromDirectory($path)
+	/**
+	 * Parse annotation from file of class base route in directories
+	 * 
+	 * @param string $path
+	 */
+	public function fromDirectory(string $path)
 	{
 		$fileList = DirectoryHandler::getList($path, 'file', true, true);
+
 		if (!$fileList) {
 			return false;
 		}
@@ -144,9 +171,14 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Parse annotation from file of class base route
+	 * 
+	 * @param string $path
+	 */
 	public function fromFile(string $path)
 	{
-		$classNames = FileFunctions::getClassName($path);
+		$classNames = FileFunctions::getClassNames($path);
 
 		/** @var ?RouteAnnotation[] $annotationList */
 		$annotationList = [];
@@ -158,27 +190,44 @@ class Router
 
 		/** @var RouteAnnotation $annotation */
 		foreach ($annotationList as $annotation) {
+			$host = $annotation->host ?? "*";
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
 			$middleware = $annotation->middleware ?? "";
+			$contentType = $annotation->contentType ?? "*";
+			$notFoundHandler = $annotation->notFoundHandler;
 			$holder = $annotation->holder ?? [];
 			$callback = join('::', $holder);
 
-			$this->addRoute($method, $pattern, $callback, $middleware);
+			if ($notFoundHandler != null) {
+				$this->setNotFoundHandler($notFoundHandler);
+			}
+
+			$this->addRoute(method: $method, pattern: $pattern, callback: $callback, middleware: $middleware, host: $host, contentType: $contentType);
 		}
 
 		return $this;
 	}
 
-	private function addRoute($method, $pattern, $callback, $middleware = [])
+	/**
+	 * Add route when route match
+	 */
+	private function addRoute($method, $pattern, $callback, $middleware = [], $host = "*", $contentType = "*")
 	{
 		if (!isset($this->routes[$method])) {
 			$this->routes[$method] = [];
 		}
 
-		$this->routes[$method][] = new RouteObject($pattern, $callback, $middleware);
+		$routeObject = new RouteObject($pattern, $callback, $middleware);
+		$routeObject->setHost($host);
+		$routeObject->setContentType($contentType);
+
+		$this->routes[$method][] = $routeObject;
 	}
 
+	/**
+	 * Add route for DELETE-Method
+	 */
 	public function delete($pattern, $callback)
 	{
 		$this->set(HTTPRequestMethod::DELETE, $pattern, $callback);
@@ -186,6 +235,9 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Add route for PUT-Method
+	 */
 	public function put($pattern, $callback)
 	{
 		$this->set(HTTPRequestMethod::PUT, $pattern, $callback);
@@ -193,6 +245,9 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Add route for OPTIONS-Method
+	 */
 	public function options($pattern, $callback)
 	{
 		$this->set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
@@ -200,6 +255,9 @@ class Router
 		return $this;
 	}
 
+	/**
+	 * Add route for PATCH-Method
+	 */
 	public function patch($pattern, $callback)
 	{
 		$this->set(HTTPRequestMethod::PATCH, $pattern, $callback);
@@ -240,32 +298,55 @@ class Router
 	{
 		$this->method = HTTPRequest::getMethod();
 
+		/** When not contain method from added routes */
 		if (!$this->has($this->method)) {
 			return false;
 		}
 
 		$routes = $this->getRoute($this->method);
 		$urlPathSegments = HTTPRequest::getUrlPathSegments();
+		$host = HTTPRequest::getHttpHost();
+		$contentType = HTTPRequest::getContentType();
 
 		/** @var Route $route */
 		foreach ($routes as $route) {
-			$match = $route->match($urlPathSegments);
+			$match = $route->match($urlPathSegments, $host, $contentType);
 
 			if (!$match) {
 				continue;
 			}
 
+			/** Pass middlewares when parent middelware are exists */
 			if (isset($this->middlewares)) {
 				$route->setMiddlewares($this->middlewares);
 			}
 
+			/** Pass container when parent container is exists */
 			if (isset($this->container)) {
 				$route->setContainer($this->container);
 			}
 
+			/** Handle an routes */
 			return $route->handle();
 		}
 
+		/** Fire not found handler */
+		if ($this->notFoundHandler != null) {
+			$callback = $this->notFoundHandler;
+	
+			if (ReflectionHandler::isStaticMethodString($callback)) {
+				[$class, $method] = explode('::', $callback);
+			}
+	
+			if (is_array($callback)) {
+				[$class, $method] = $callback;
+			}
+	
+			$executor = new RouteExecutor($class, $method, $callback, [], $this->container);
+			return $executor->__invoke([]);
+		}
+
+		/** When not found matched route */
 		return false;
 	}
 }

@@ -30,6 +30,15 @@ enum PlayState {
     WAITING = 'waiting'
 }
 
+enum MimeTypes {
+    MP3 = 'audio/mpeg',
+    WAV = 'audio/wav',
+    OGG = 'audio/ogg',
+    WEBM = 'audio/webm',
+    MP4 = 'video/mp4',
+    MPEG = 'video/mpeg'
+}
+
 export default class MediaPlayer implements MediaPlayerInterface {
 
     private mediaType: any;
@@ -38,7 +47,7 @@ export default class MediaPlayer implements MediaPlayerInterface {
 
     constructor(mediaContext: any) {
         this.mediaContext = typeof mediaContext === 'string' ? document.querySelector(mediaContext) : mediaContext;
-        this.mediaType = this.mediaContext.getAttribute('mime-type');
+        this.mediaType = this.mediaContext.getAttribute('mime-type') ?? MimeTypes.MP4;
 
         this.events = [];
     }

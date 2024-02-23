@@ -20,8 +20,8 @@ class Dispatcher implements EventDispatcherInterface
 	 */
 	public function dispatch(object $event, string $eventName = null)
 	{
-		if (\is_object($event)) {
-			$eventName = $eventName ?? \get_class($event);
+		if (is_object($event)) {
+			$eventName = $eventName ?? get_class($event);
 		}
 
 		if (!$eventName) {

@@ -15,9 +15,16 @@ final class Route
 
     public $pattern;
 
-    public function __construct(string $method, string $pattern)
+    public $notFoundHandler;
+
+    public $contentType;
+
+    public $host;
+
+    public function __construct(string $method = "*", string $pattern = "*", string $host = "*")
     {
         $this->method = $method;
         $this->pattern = $pattern;
+        $this->host = $host;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Neko\Classes;
+
 class Maya
 {
 	private static $self   = null;
@@ -44,17 +46,17 @@ class Maya
 			}
 
 			return -1;
-		} else {
-			$check_rule = $rule;
+		} 
+		
+		$check_rule = $rule;
 
-			if ($mode == 'equal') {
-				if (substr(substr($text, $this->textStartIndex), 0, strlen($check_rule)) == $check_rule) {
-					return $start + 1;
-				}
+		if ($mode == 'equal') {
+			if (substr(substr($text, $this->textStartIndex), 0, strlen($check_rule)) == $check_rule) {
+				return $start + 1;
 			}
-
-			return -1;
 		}
+
+		return -1;
 	}
 
 	public function line_execute_match_right($start, $rule, $text, $mode)
@@ -142,17 +144,16 @@ class Maya
 			$self->textStartIndex = $start;
 
 			return strlen($rule) + 1;
-		} else {
-			$pattern_pos = strpos($text, $rule, $start);
+		} 
 
-			if ($pattern_pos !== false) {
-				return $self->line_pass($pattern_pos + 1, $rule, $text);
-			} else {
-				$self->textStartIndex = $start;
+		$pattern_pos = strpos($text, $rule, $start);
 
-				return $passage == 0 ? strlen($rule) + 1 : $passage + 1;
-			}
-		}
+		if ($pattern_pos !== false) {
+			return $self->line_pass($pattern_pos + 1, $rule, $text);
+		} 
+
+		$self->textStartIndex = $start;
+		return $passage == 0 ? strlen($rule) + 1 : $passage + 1;
 	}
 
 	public function line_add($start, $rule)
@@ -167,27 +168,28 @@ class Maya
 		$self        = self::getself();
 		$pattern_pos = strpos($rule, $pattern);
 		$escape_pos  = substr($rule, $pattern_pos + 1, 1);
-		if ($pattern_pos !== false) {
-			if ($escape_pos === '^') {
-				$self->line_execute($pattern_pos, substr($rule, $pattern_pos), $pattern, $text);
-			} else {
-				switch ($pattern):
-					case '+':
-						return $self->line_add($pattern_pos, substr($rule, $start, $pattern_pos));
-					case '$':
-						return $self->line_execute_match_left($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
-					case '#':
-						return $self->line_execute_match_right($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'like');
-					case '!':
-						return $self->line_execute_match_right($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
-					case '@':
-						return $self->line_pass($pattern_pos, substr($rule, $start, $pattern_pos), $text);
-					default:
-						break;
-				endswitch;
-			}
-		} else {
+
+		if ($pattern_pos === false) {
 			return -1;
+		}
+
+		if ($escape_pos === '^') {
+			$self->line_execute($pattern_pos, substr($rule, $pattern_pos), $pattern, $text);
+		} else {
+			switch ($pattern):
+				case '+':
+					return $self->line_add($pattern_pos, substr($rule, $start, $pattern_pos));
+				case '$':
+					return $self->line_execute_match_left($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
+				case '#':
+					return $self->line_execute_match_right($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'like');
+				case '!':
+					return $self->line_execute_match_right($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
+				case '@':
+					return $self->line_pass($pattern_pos, substr($rule, $start, $pattern_pos), $text);
+				default:
+					break;
+			endswitch;
 		}
 	}
 
@@ -211,17 +213,19 @@ class Maya
 			return;
 		}
 
-		$i = 0;
-		for ($i; $i < $rule_len; $i++) {
+		for ($i = 0; $i < $rule_len; $i++) {
 			$pattern_pass = substr($rule, $i, 1);
-			if (in_array($pattern_pass, $match_rule_init)) {
-				$self_position = $self->line_execute(0, substr($rule, $i + 1), $pattern_pass, $text);
-				if ($self_position == -1) {
-					return false;
-				}
 
-				$i = $i + $self_position;
+			if (!in_array($pattern_pass, $match_rule_init)) {
+				continue;
 			}
+
+			$self_position = $self->line_execute(0, substr($rule, $i + 1), $pattern_pass, $text);
+			if ($self_position == -1) {
+				return false;
+			}
+
+			$i = $i + $self_position;
 		}
 
 		return true;

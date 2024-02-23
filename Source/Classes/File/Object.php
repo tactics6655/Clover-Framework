@@ -14,7 +14,8 @@ use Neko\Message\FileHandler\FileHandlerMessage;
 
 class FileObject implements FileObjectInterface
 {
-	private $writeHandler;
+	private $writtenContentLength;
+
 	private $fileHandler;
 
 	private $readedContent;
@@ -271,10 +272,10 @@ class FileObject implements FileObjectInterface
 		if ($isLarge) {
 			$pieces = str_split($content, $bufferSize ? $bufferSize : (1024 * 4));
 			foreach ($pieces as $piece) {
-				$this->writeHandler += fwrite($this->fileHandler, $piece, strlen($piece));
+				$this->writtenContentLength += fwrite($this->fileHandler, $piece, strlen($piece));
 			}
 		} else {
-			$this->writeHandler = fwrite($this->fileHandler, $content);
+			$this->writtenContentLength = fwrite($this->fileHandler, $content);
 		}
 
 		return true;
@@ -353,11 +354,11 @@ class FileObject implements FileObjectInterface
 
 	public function successToWriteContent(): bool
 	{
-		if (!getType($this->writeHandler) === 'integer') {
+		if (!getType($this->writtenContentLength) === 'integer') {
 			return false;
 		}
 
-		$isInvalidSize = ($this->writeHandler !== (int)$this->writeContentLength);
+		$isInvalidSize = ($this->writtenContentLength !== (int)$this->writeContentLength);
 
 		if ($this->mode === 'w' && $isInvalidSize) {
 			return false;

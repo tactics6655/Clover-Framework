@@ -38,6 +38,11 @@ class Handler
         return self::getMethod(static::class, '__construct');
     }
 
+    public static function isStaticMethodString($callback)
+    {
+        return !is_callable($callback) && is_string($callback) && !empty($callback) && strpos($callback, '::') > 0;
+    }
+
     /**
      * Checks if the class method exists
      */
@@ -464,7 +469,14 @@ class Handler
         throw new ArgumentEmptyException(join("\r\n", $messages));
     }
 
-    public static function getModifierString(ReflectionMethod $method)
+    /**
+     * Convert method modifiers to string
+     * 
+     * @param ReflectionMethod $method
+     * 
+     * @return string
+     */
+    public static function getModifierString(ReflectionMethod $method): string
     {
         $modifier = $method->getModifiers();
 
@@ -481,9 +493,9 @@ class Handler
                 return 'protected';
             case ReflectionMethod::IS_STATIC:
                 return 'static';
+            default:
+                return 'unknown';
         }
-
-        return '';
     }
 
     /**

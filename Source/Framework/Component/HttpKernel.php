@@ -52,7 +52,7 @@ class HttpKernel
         }
 
         if (!$response instanceof Response) {
-            throw new \Exception('Response is must be type of response');
+            throw new \Exception("Response is must be type of response, response data is '{$response}'");
         }
 
         if ($response->getType() == 'html') {

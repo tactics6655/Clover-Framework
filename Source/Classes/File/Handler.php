@@ -378,7 +378,7 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::reverseContent($filePath);
 	}
 
-	public static function getBasename(string $fileName, $extension = null): string
+	public static function getBasename(string $fileName, $extension = ""): string
 	{
 		return FileFunctions::getBasename($fileName, $extension);
 	}

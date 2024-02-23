@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace Neko\Classes\Crypt;
 
+use OpenSSLCertificateSigningRequest;
+
 class OpenSSL
 {
 
+    /**
+     * Check that openssl extension is loaded
+     * 
+     * @return bool
+     */
     public static function isExtensionLoaded()
     {
         return extension_loaded('openssl');
@@ -14,14 +21,24 @@ class OpenSSL
 
     /**
      * Encrypts data
+     * 
+     * @param string $data
+     * @param string $algorithm
+     * @param string $passphrase
+     * @param int $options
+     * @param string $initializationVector
+     * 
+     * @return bool|string
      */
-    public static function encrypt($data, $algorithm, $passphrase, $options = OPENSSL_RAW_DATA, $initializationVector = "")
+    public static function encrypt(string $data, string $algorithm, string $passphrase, int $options = OPENSSL_RAW_DATA, string $initializationVector = "")
     {
         return openssl_encrypt($data, $algorithm, $passphrase, $options, $initializationVector);
     }
 
     /**
      * Retrieve the available certificate locations
+     * 
+     * @return array
      */
     public static function getCertificateLocation()
     {
@@ -30,14 +47,23 @@ class OpenSSL
 
     /**
      * Returns the subject of a CSR
+     * 
+     * @param OpenSSLCertificateSigningRequest|string $csr
+     * @param bool|null $short_names
+     * 
+     * @return array|bool
      */
-    public static function getCertificateSigningRequestSubject(\OpenSSLCertificateSigningRequest|string $csr, bool|null $short_names = true)
+    public static function getCertificateSigningRequestSubject(OpenSSLCertificateSigningRequest|string $csr, bool|null $short_names = true)
     {
         return openssl_csr_get_subject($csr, $short_names);
     }
 
     /**
      * Gets available digest methods
+     * 
+     * @param bool|null $aliases
+     * 
+     * @return array
      */
     public static function getDigestMethods(bool|null $aliases = false)
     {
@@ -46,16 +72,28 @@ class OpenSSL
 
     /**
      * Decrypts data
+     * 
+     * @param string $data
+     * @param string $algorithm
+     * @param string $passphrase
+     * @param int $options
+     * @param string $initializationVector
+     * 
+     * @return bool|string
      */
-    public static function decrypt($data, $algorithm, $passphrase, $options = OPENSSL_RAW_DATA, $initializationVector = "")
+    public static function decrypt(string $data, string $algorithm, string $passphrase, int $options = OPENSSL_RAW_DATA, string $initializationVector = "")
     {
         return openssl_decrypt($data, $algorithm, $passphrase, $options, $initializationVector);
     }
 
     /**
      * Gets the cipher key length.
+     * 
+     * @param string $algorithm
+     * 
+     * @return bool|int
      */
-    public static function getCipherKeyLength($algorithm)
+    public static function getCipherKeyLength(string $algorithm)
     {
         return openssl_cipher_key_length($algorithm);
     }

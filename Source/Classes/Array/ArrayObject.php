@@ -12,6 +12,8 @@ class ArrayObject
 	/**
 	 * Return all the keys or a subset of the keys of an array
 	 * 
+	 * @param array $array
+	 * 
 	 * @return array
 	 */
 	public static function getKeys(array $array)
@@ -21,6 +23,8 @@ class ArrayObject
 
 	/**
 	 * Get the last key of the given array without affecting the internal array pointer
+	 * 
+	 * @param array $array
 	 * 
 	 * @return int|string|null
 	 */
@@ -32,6 +36,8 @@ class ArrayObject
 	/**
 	 * Get the first key of the given array without affecting the internal array pointer.
 	 * 
+	 * @param array $array
+	 * 
 	 * @return int|string|null
 	 */
 	public static function getFirstKey(array $array)
@@ -41,6 +47,8 @@ class ArrayObject
 
 	/**
 	 * Return all the values of an array
+	 * 
+	 * @param array $array
 	 * 
 	 * @return array
 	 */
@@ -52,6 +60,8 @@ class ArrayObject
 	/**
 	 * Shuffle an array
 	 * 
+	 * @param array $array
+	 * 
 	 * @return bool
 	 */
 	public static function shuffle(array $array)
@@ -61,6 +71,8 @@ class ArrayObject
 
 	/**
 	 * Sort an array using a case insensitive "natural order" algorithm
+	 * 
+	 * @param array $array
 	 * 
 	 * @return bool
 	 */
@@ -72,6 +84,8 @@ class ArrayObject
 	/**
 	 * Sort an array using a "natural order" algorithm
 	 * 
+	 * @param array $array
+	 * 
 	 * @return bool
 	 */
 	public static function sortByNaturalOrderAlgorithm(array $array)
@@ -82,6 +96,8 @@ class ArrayObject
 	/**
 	 * Sort an array by key in descending order
 	 * 
+	 * @param array $array
+	 * 
 	 * @return bool
 	 */
 	public static function sortByKeyInDescendingOrder(array $array)
@@ -91,6 +107,8 @@ class ArrayObject
 
 	/**
 	 * Sort an array by key in ascending order
+	 * 
+	 * @param array $array
 	 * 
 	 * @return bool
 	 */
@@ -112,6 +130,8 @@ class ArrayObject
 	/**
 	 * Fetch a key from an array
 	 * 
+	 * @param array $array
+	 * 
 	 * @return int|string|null
 	 */
 	public static function fetchKey(array $array)
@@ -122,6 +142,8 @@ class ArrayObject
 	/**
 	 * Checks if the given key or index exists in the array
 	 * 
+	 * @param array $array
+	 * 
 	 * @return bool
 	 */
 	public static function isKeyExists(array $array, $key)
@@ -131,6 +153,8 @@ class ArrayObject
 
 	/**
 	 * Searches the array for a given value and returns the first corresponding key if successful
+	 * 
+	 * @param array $array
 	 * 
 	 * @return bool|int|string
 	 */

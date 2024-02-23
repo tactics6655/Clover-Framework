@@ -10,6 +10,12 @@ enum RecorderEvent {
     ON_DETECT = 'ondetect'
 }
 
+enum ErrorMessages {
+    NOT_IMPLEMENTED_API = 'getUserMedia is not implemented in this browser',
+    NOT_INITIALIED = 'Media recorder is not initialized',
+    NOT_STARTED = 'Cannot start MediaRecorder when already recording'
+}
+
 enum RecordAction {
     STOP = 'stop',
     RECORD = 'record',
@@ -63,10 +69,10 @@ interface AudioRecorderInterface {
     removeListener(event: string, callback: any) :boolean;
     addListener(event: string, callback: any) :void;
     stopTracks() :void;
-    getTrack();
+    getTrack() :MediaStreamTrack[];
     addEvents() :void;
     start() :void;
-    getBlob(type): Blob;
+    getBlob(type: MimeTypes): Blob;
     pause() :void;
     resume() :void;
     stop() :void;
@@ -88,9 +94,11 @@ export default class AudioRecorder implements AudioRecorderInterface {
     private requestAnimationFrame: any;
     private cancelAnimationFrame: any;
     private use_autocorrelation: boolean;
-    private stream: any;
+    private stream: MediaStream;
+    private bps: number;
 
-    constructor() {
+    constructor(bps = 12800) {
+        this.bps = bps;
         this.setCompatibility();
         
         this.state = RecordState.INACTIVE;
@@ -277,7 +285,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
                 var getUserMedia = (navigator as any).webkitGetUserMedia || (navigator as any).mozGetUserMedia;
         
                 if (!getUserMedia) {
-                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                    return Promise.reject(new Error(ErrorMessages.NOT_IMPLEMENTED_API));
                 }
                 
                 return new Promise(function(resolve, reject) {
@@ -386,7 +394,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
 
     private getOptions(): MediaRecorderOptions {
         return {
-            audioBitsPerSecond: 128000
+            audioBitsPerSecond: this.bps
         }
     }
 
@@ -452,7 +460,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
         });
     }
 
-    public getTrack() {
+    public getTrack() :MediaStreamTrack[] {
         return this.stream.getTracks();
     }
 
@@ -545,7 +553,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
 
     public start() :void {
         if (this.mediaRecorder == null) {
-            throw new Error('Media recorder is not initialized');
+            throw new Error(ErrorMessages.NOT_INITIALIED);
         }
 
         if (!this.isRecorderPresents()) {
@@ -553,7 +561,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
         }
 
         if (this.isRecording()) {
-            throw new Error('Cannot start MediaRecorder when already recording');
+            throw new Error(ErrorMessages.NOT_STARTED);
         }
 
         if (!this.isInactive()) {
@@ -570,7 +578,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
 
     public pause() :void {
         if (this.mediaRecorder == null) {
-            throw new Error('Media recorder is not initialized');
+            throw new Error(ErrorMessages.NOT_INITIALIED);
         }
 
         if (!this.isRecorderPresents()) {
@@ -587,7 +595,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
 
     public resume() :void {
         if (this.mediaRecorder == null) {
-            throw new Error('Media recorder is not initialized');
+            throw new Error(ErrorMessages.NOT_INITIALIED);
         }
 
         if (!this.isRecorderPresents()) {
@@ -604,7 +612,7 @@ export default class AudioRecorder implements AudioRecorderInterface {
 
     public stop() :void {
         if (this.mediaRecorder == null) {
-            throw new Error('Media recorder is not initialized');
+            throw new Error(ErrorMessages.NOT_INITIALIED);
         }
 
         if (!this.isRecorderPresents()) {

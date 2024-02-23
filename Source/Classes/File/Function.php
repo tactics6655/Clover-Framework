@@ -48,7 +48,7 @@ class Functions
 		return true;
 	}
 
-	public static function getClassName($filePath)
+	public static function getClassNames($filePath)
 	{
 		$declared = get_declared_classes();
 
@@ -413,9 +413,9 @@ class Functions
 	 *
 	 * @return string
 	 */
-	public static function getBasename(string $fileName, $extension = null): string
+	public static function getBasename(string $fileName, $extension = ""): string
 	{
-		return basename($fileName, $extension) . PHP_EOL;
+		return basename($fileName, $extension);
 	}
 
 	/**

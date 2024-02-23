@@ -90,7 +90,7 @@ return [
             'я' => 'ja'
         )
     ),
-    'INDO' => array(
+    'INDONESIA' => array(
         'NUMBER' => array(
             '०' => 0,
             '१ ' => 1,

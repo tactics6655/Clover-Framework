@@ -82,7 +82,7 @@ class Runtime
         OS::setDefaultDateTimeZone($this->options[Environment::TIMEZONE_ID]);
         OS::setDisplayStatupErrors($this->options[Environment::DISPLAY_STARTUP_ERRORS]);
     }
-
+    
     protected function setDefaultOptions()
     {
         $this->setOption(Environment::ERROR_REPORTING_LEVEL, E_ALL & ~E_NOTICE);
@@ -107,4 +107,10 @@ class Runtime
         $this->setEnvironment([Environment::SERVER, Environment::SOFTWARE], OS::getMainServerSoftware());
         $this->setEnvironment([Environment::SERVER, Environment::HOME_PATH], OS::getHomePath());
     }
+    
+    public function serialize()
+    {
+        return serialize(array($this->environment));
+    }
+
 }

@@ -69,11 +69,16 @@ class Handler
 				$response = UploadedFileErrorMessage::UPLOAD_ERR_EXTENSION;
 				break;
 			default:
-				$response = 'Unknown error';
+				$response = UploadedFileErrorMessage::UPLOAD_ERR_UNKNOWN;
 				break;
 		}
 
 		return $response;
+	}
+
+	public static function isEmpty()
+	{
+		return empty($_FILES);
 	}
 
 	public static function hasError($name)
@@ -85,6 +90,9 @@ class Handler
 		return true;
 	}
 
+	/**
+	 * Tells whether the file was uploaded via HTTP POST
+	 */
 	public static function isTempUploaded($name)
 	{
 		return is_uploaded_file($_FILES[$name][UploadedFile::TEMPORARY_NAME]);

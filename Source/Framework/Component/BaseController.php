@@ -8,6 +8,7 @@ use Neko\Classes\DependencyInjection\Container;
 use Neko\Classes\ContentType as ContentType;
 use Neko\Classes\Data\JSONHandler;
 use Neko\Classes\Header;
+use \Neko\Framework\Component\Resource;
 
 class BaseController
 {
@@ -17,22 +18,22 @@ class BaseController
         $this->container = $container;
     }
 
-    public function response($body, $resource = array())
+    public function response(mixed $body, $resource = array())
     {
         return new Response($body, $resource);
     }
 
-    public function addCssFileToHead($filename)
+    public function addCssFileToHead(string $filename)
     {
-        /** @var \Neko\Framework\Component\Resource $resource */
+        /** @var Resource $resource */
         $resource = $this->container->get('Resource');
 
         $resource->addGenericCssFile($filename);
     }
 
-    public function addJsFileToHead($filename)
+    public function addJsFileToHead(string $filename)
     {
-        /** @var \Neko\Framework\Component\Resource $resource */
+        /** @var Resource $resource */
         $resource = $this->container->get('Resource');
 
         $resource->addGenericJavascriptFile($filename);
@@ -40,10 +41,12 @@ class BaseController
 
     /**
      * Set a title in browser
+     * 
+     * @param string $title
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
-        /** @var \Neko\Framework\Component\Resource $resource */
+        /** @var Resource $resource */
         $resource = $this->container->get('Resource');
 
         $resource->setTitle($title);
@@ -54,7 +57,15 @@ class BaseController
         Header::responseRedirectLocation($location);
     }
 
-    public function responseJson($json, $resource = array())
+    /**
+     * Response json data
+     * 
+     * @param array $json
+     * @param array $resource
+     * 
+     * @return bool|Response
+     */
+    public function responseJson(array $json, array $resource = [])
     {
         $encoded = JSONHandler::encode($json);
 
@@ -67,16 +78,16 @@ class BaseController
 
     public function render(string $template, array $data = [])
     {
-        /** @var \Neko\Framework\Component\Resource $resource */
+        /** @var Resource $resource */
         $resource = $this->container->get('Resource');
 
-        $resources = $resource->extract();
+        $extractedRecources = $resource->extract();
 
-        /** @var \Neko\Framework\Component\Renderer $renderer */
+        /** @var Renderer $renderer */
         $renderer = $this->container->get('Renderer');
 
-        $render = $renderer->render(__ROOT__ . $template, $data);
+        $renderedContent = $renderer->render(__ROOT__ . $template, $data);
 
-        return $this->response($render, $resources);
+        return $this->response($renderedContent, $extractedRecources);
     }
 }

@@ -19,4 +19,6 @@ abstract class UploadedFileErrorMessage
     const UPLOAD_ERR_CANT_WRITE     = 'Failed to write file to disk. Introduced in PHP 5.1.0.';
 
     const UPLOAD_ERR_EXTENSION      = 'File upload stopped by extension. Introduced in PHP 5.2.0.';
+
+    const UPLOAD_ERR_UNKNOWN      = 'File upload stopped by extension. Introduced in PHP 5.2.0.';
 }

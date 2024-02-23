@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Neko\Classes\Debug;
 
+use Neko\Classes\Reflection\Handler as ReflectionHandler;
 use Neko\Classes\File\Functions as FileFunctions;
 
 use ReflectionClass;
@@ -36,6 +37,12 @@ class TraceObject
 
     /** @var string[] $comments */
     protected ?array $comments = null;
+
+    /** @var string[] $interfaces */
+    protected ?array $interfaces = null;
+
+    /** @var string[] $traits */
+    protected ?array $traits = null;
 
     protected ?string $text = null;
 
@@ -217,6 +224,11 @@ class TraceObject
         return join("\r\n", $this->comments);
     }
 
+    /**
+     * Check that if parsed annotation is exists
+     *
+     * @return bool
+     */
     public function hasAnnotation(): bool
     {
         return isset($this->annotation) && !empty($this->annotation);
@@ -232,11 +244,19 @@ class TraceObject
         return $this->annotation;
     }
 
+    /**
+     * Set function argument into this class object
+     */
     public function setFunction($function): void
     {
         $this->function = $function;
     }
 
+    /**
+     * Check that function is exists
+     * 
+     * @return bool
+     */
     public function hasFunction(): bool
     {
         return isset($this->function) && !empty($this->function);
@@ -288,12 +308,39 @@ class TraceObject
         $defaultText = sprintf("%s%s%s", $this->getShortName() ?? "", $this->getType(), $this->getFunction());
         $this->setText(sprintf("%s()", $defaultText));
 
+        // Trait
+        $traits = $reflectionClass->getTraits();
+        foreach ($traits as $trait) {
+            if (!$trait->isTrait()) {
+                continue;
+            }
+
+            $traitName = $trait->getName();
+
+            if ($this->traits == null) {
+                $this->traits = [];
+            }
+
+            $this->traits[] = $traitName;
+        }
+
+        // Interface
+        $interfaces = $reflectionClass->getInterfaces();
+        foreach ($interfaces as $interface) {
+            $interfaceName = $interface->getName();
+
+            if ($this->interfaces == null) {
+                $this->interfaces = [];
+            }
+
+            $this->interfaces[] = $interfaceName;
+        }
+
+        // Methods
         $methods = $reflectionClass->getMethods();
         if (!$this->isMethodExist($methods)) {
             return;
         }
-
-        $this->parseCode();
 
         $objectArguments = [];
         $method = $reflectionClass->getMethod($this->getFunction());
@@ -301,11 +348,15 @@ class TraceObject
             $objectArguments = $this->parseMethodArguments($method);
         }
 
+        $this->parseCode();
+
+        // Return Type
         if ($method->hasReturnType()) {
             $returnType = $method->getReturnType();
             $this->setReturnType($returnType);
         }
 
+        // Arguments
         $arguments = [];
         foreach ($objectArguments as $argument) {
             $this->arguments[] = $argument;
@@ -318,13 +369,14 @@ class TraceObject
         }
 
         $arguments = $this->argumentToString($arguments) ?? "";
-        $modifier = self::getModifierString($method);
+        $modifier = ReflectionHandler::getModifierString($method);
         $returnType = $this->getReturnType() ?? "";
         $returnTypeFormat = ($this->hasReturnType() ? " : %s" : "");
 
         $this->setText(sprintf(("%s %s(%s)" . $returnTypeFormat), $modifier, $defaultText, $arguments, $returnType));
         $this->parseMethodComment($method);
 
+        // Annotations
         $annotations = [];
         $this->setDeclaringClass($method->getDeclaringClass());
         /** @var ReflectionAttribute[] $attributes */
@@ -385,6 +437,8 @@ class TraceObject
     }
 
     /**
+     * Parse arguments of method
+     * 
      * @return TraceArgumentObject[]
      */
     private function parseMethodArguments(ReflectionMethod $method): array
@@ -421,14 +475,17 @@ class TraceObject
             $traceArgumentObject->setPassedByReference($parameter->isPassedByReference());
             $values[] = $name;
 
+            // When default value is available and arguments is empty
             if ($parameter->isDefaultValueAvailable() && !isset($this->args)) {
                 $isArgumentExist = true;
 
                 $defaultValue = $parameter->getDefaultValue();
                 $traceArgumentObject->setDefaultValue($defaultValue);
                 $values[] = $defaultValue;
+                // When arguments is defined
             } else if (isset($this->args)) {
                 $arguments = $this->args[$key] ?? null;
+
                 if ($arguments) {
                     $isArgumentExist = true;
                     $parsedArguments = $this->parseArgument($arguments);
@@ -447,6 +504,8 @@ class TraceObject
     }
 
     /**
+     * Parse arguments
+     * 
      * @param array|object|string|null $arguments
      * 
      * @return array
@@ -456,6 +515,7 @@ class TraceObject
         $parsedArguments = [];
 
         $map = is_array($arguments) ? $arguments : [$arguments];
+
         foreach ($map as $argument) {
             if (is_string($argument)) {
                 $parsedArguments[] = empty($argument) ? "null" : "'{$argument}'";
@@ -485,35 +545,6 @@ class TraceObject
         }, $parsedArguments);
 
         return $parsedArguments;
-    }
-
-    /**
-     * Convert method modifiers to string
-     * 
-     * @param ReflectionMethod $method
-     * 
-     * @return string
-     */
-    public static function getModifierString(ReflectionMethod $method)
-    {
-        $modifier = $method->getModifiers();
-
-        switch ($modifier) {
-            case ReflectionMethod::IS_FINAL:
-                return 'final';
-            case ReflectionMethod::IS_PRIVATE:
-                return 'private';
-            case ReflectionMethod::IS_PUBLIC:
-                return 'public';
-            case ReflectionMethod::IS_ABSTRACT:
-                return 'abstract';
-            case ReflectionMethod::IS_PROTECTED:
-                return 'protected';
-            case ReflectionMethod::IS_STATIC:
-                return 'static';
-        }
-
-        return '';
     }
 
     /**

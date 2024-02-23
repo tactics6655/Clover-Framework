@@ -13,6 +13,13 @@ class EventDispatcherTest extends TestCase
 	public function setUp(): void
 	{
 		$this->factory = new Neko\Classes\File\Handler();
+
+		$this->factory->write(__DIR__."/testFile.txt", "testSuccess");
+	}
+
+	protected function tearDown(): void
+    {
+		$this->factory->delete(__DIR__."/testFile.txt");
 	}
 
 	public function testFileCount()
