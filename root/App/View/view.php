@@ -1,5 +1,5 @@
 <div id="form">
-    <form action="./" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="./" method="post" enctype="multipart/form-data">
         <input name="file" type="file" id="file"/>
         
         <input type="submit" value="Submit"/>

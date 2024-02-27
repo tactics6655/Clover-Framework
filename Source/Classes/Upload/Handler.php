@@ -83,11 +83,7 @@ class Handler
 
 	public static function hasError($name)
 	{
-		if (self::getFileError($name) === UPLOAD_ERR_OK) {
-			return false;
-		}
-
-		return true;
+		return (self::getFileError($name) !== UPLOAD_ERR_OK);
 	}
 
 	/**
@@ -111,6 +107,11 @@ class Handler
 	public static function getFileType($name)
 	{
 		return self::get($name, UploadedFile::TYPE);
+	}
+
+	public static function inExtension($name, $extensions)
+	{
+		return (in_array(self::getExtension($name), $extensions));
 	}
 
 	public static function getExtension($name)

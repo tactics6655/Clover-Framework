@@ -2,6 +2,7 @@
 
 namespace Neko\Annotation;
 
+use Neko\Enumeration\ContentType as ContentTypeEnum;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
@@ -9,8 +10,8 @@ final class ContentType
 {
     public $value;
 
-    public function __construct(string $value)
+    public function __construct(ContentTypeEnum $value)
     {
-        $this->value = $value;
+        $this->value = $value->value;
     }
 }

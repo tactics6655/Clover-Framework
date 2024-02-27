@@ -9,6 +9,8 @@ use Neko\Classes\Reflection\Handler as ReflectionHandler;
 use Neko\Classes\Data\Multibyte as Multibyte;
 use Neko\Enumeration\Encoding;
 
+use function mb_strcut;
+
 #[\AllowDynamicProperties]
 class StringObject extends BaseObject
 {
@@ -172,8 +174,12 @@ class StringObject extends BaseObject
      */
     public function substring(int $start, int|null $length = null): StringObject
     {
-        $this->raw_data = StringHandler::substring($this->raw_data, $start, $length);
-
+        if (extension_loaded('mbstring')) {
+            $this->raw_data = mb_strcut($this->raw_data, $start, $length);
+        } else {
+            $this->raw_data = StringHandler::substring($this->raw_data, $start, $length);
+        }
+        
         return $this;
     }
 

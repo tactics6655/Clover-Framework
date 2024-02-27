@@ -3,5 +3,6 @@
     <services>
         <service key="Renderer" class="Neko\Framework\Component\Renderer"/>
         <service key="Resource" class="Neko\Framework\Component\Resource"/>
+        <service key="Logger" class="Neko\Classes\Logging\Logger"/>
     </services>
 </container>

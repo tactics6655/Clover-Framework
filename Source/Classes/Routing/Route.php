@@ -222,13 +222,7 @@ class Route
     {
         $callback = $this->getCallback();
 
-        if (ReflectionHandler::isStaticMethodString($callback)) {
-            [$class, $method] = explode('::', $callback);
-        }
-
-        if (is_array($callback)) {
-            [$class, $method] = $callback;
-        }
+        [$class, $method] = ReflectionHandler::getCallMethodFromString($callback);
 
         return new RouteExecutor($class, $method, $callback, $this->arguments, $this->container);
     }
@@ -306,7 +300,7 @@ class Route
 
         $separatedSegments = $this->getPattern()->trim('/')->split('/');
 
-        $count = $separatedSegments->length()->toInteger();
+        $count = $separatedSegments->size()->toInteger();
 
         if ($count <= 0) {
             return false;

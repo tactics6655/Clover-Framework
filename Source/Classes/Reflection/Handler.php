@@ -38,9 +38,75 @@ class Handler
         return self::getMethod(static::class, '__construct');
     }
 
-    public static function isStaticMethodString($callback)
+    public static function getMatchedNameSpacesFromDeclaredClasses($class)
     {
-        return !is_callable($callback) && is_string($callback) && !empty($callback) && strpos($callback, '::') > 0;
+        return array_filter(get_declared_classes(), function ($classes) use ($class) {
+            $split = explode("\\", $classes);
+            return $split[count($split) - 1] === $class;
+        });
+    }
+
+    public static function getCallMethodFromString($callback): array
+    {
+        if (self::isStaticMethodString($callback)) {
+            [$class, $method] = explode('::', $callback);
+        } else if (is_array($callback)) {
+            [$class, $method] = $callback;
+        }
+
+        if (count(explode("\\", $class)) == 1) {
+            $matchNamespace = self::getMatchedNameSpacesFromDeclaredClasses($class);
+
+            if (count($matchNamespace) === 1) {
+                $class = array_pop($matchNamespace);
+            }
+        }
+
+        return [$class, $method];
+    }
+
+    public function toString(Reflector $reflector): ?string
+    {
+        if ($reflector instanceof ReflectionClass) {
+            return $reflector->name;
+        }
+
+        if ($reflector instanceof ReflectionMethod) {
+            return sprintf("%s::%s()", $reflector->getDeclaringClass()->name, $reflector->name);
+        }
+
+        if ($reflector instanceof ReflectionFunction) {
+            return sprintf("%s()", $reflector->name);
+        }
+
+        if ($reflector instanceof ReflectionProperty) {
+            return self::getPropertyDeclaringClass($reflector)->name . '::$' . $reflector->name;
+        }
+
+        if ($reflector instanceof ReflectionParameter) {
+            return sprintf("$%s in %s", $reflector->name, self::toString($reflector->getDeclaringFunction()));
+        }
+
+        return null;
+    }
+
+    public static function getPropertyDeclaringClass(ReflectionProperty $property): ReflectionClass
+    {
+        $name = $property->name;
+        $declaringClass = $property->getDeclaringClass();
+
+        foreach ($declaringClass->getTraits() as $trait) {
+            if ($trait->hasProperty($name) && $trait->getProperty($name)->getDocComment() === $property->getDocComment()) {
+                return self::getPropertyDeclaringClass($trait->getProperty($name));
+            }
+        }
+
+        return $declaringClass;
+    }
+
+    public static function isStaticMethodString($method)
+    {
+        return !is_callable($method) && is_string($method) && !empty($method) && strpos($method, '::') > 0 && str_contains($method, '::');
     }
 
     /**

@@ -6,14 +6,13 @@ use Neko\Annotation\NotFound;
 use Neko\Annotation\ContentType;
 use Neko\Annotation\Route;
 use Neko\Annotation\Prefix;
+use Neko\Classes\Data\ArrayObject;
 use Neko\Framework\Component\BaseController;
 use Neko\Classes\Upload\Handler as UploadHandler;
 use Neko\Enumeration\ContentType as ContentTypeEnum;
-use Neko\Classes\Maya;
-
 
 #[Prefix('/')]
-#[NotFound('App\Controller\IndexController::notFound')]
+#[NotFound('IndexController::notFound')]
 class IndexController extends BaseController
 {
 
@@ -30,11 +29,11 @@ class IndexController extends BaseController
 
     #[Route(method: 'GET', pattern: '/')]
     public function index()
-    {test
+    {
         return $this->render('/App/View/view.php');
     }
 
-    #[ContentType(ContentTypeEnum::MULTIPART_FORM_DATA->value)]
+    #[ContentType(ContentTypeEnum::MULTIPART_FORM_DATA)]
     #[Route(method: 'POST', pattern: '/')]
     public function upload_index(UploadHandler $uploadFile)
     {
@@ -52,7 +51,7 @@ class IndexController extends BaseController
             return $this->responseJson(['message' => 'Upload file does not found']);
         }
 
-        if (!in_array($uploadFile->getExtension($fileContextName), ['exe', 'jpg'])) {
+        if (!$uploadFile->inExtension($fileContextName, ['exe', 'jpg'])) {
             return $this->responseJson(['message' => 'Extension of file is not allowed']);
         }
 

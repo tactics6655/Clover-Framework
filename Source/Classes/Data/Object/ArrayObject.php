@@ -293,7 +293,7 @@ class ArrayObject extends BaseObject
     /**
      * Counts all elements in an array
      */
-    public function length()
+    public function size()
     {
         return new IntegerObject(count($this->raw_data));
     }

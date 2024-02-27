@@ -20,7 +20,7 @@ class HTMLObject extends StringObject
         $this->handler = new HTMLHandler();
     }
 
-    public function length()
+    public function length(): int
     {
         return parent::length();
     }

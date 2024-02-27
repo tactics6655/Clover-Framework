@@ -138,14 +138,30 @@ class Mapper
         return $this->options;
     }
 
+    public function boot()
+    {
+        $this->container->get("Logger")->information("Application is booting...");
+    }
+
+    public function terminate()
+    {
+        $this->container->get("Logger")->information("Application is terminated...");
+    }
+
     public function matchRunner()
     {
         $this->setContainer();
 
+        $this->boot();
+
         if ($this->isCommentLineInterface()) {
             return new CliKernel($this->container);
-        } else {
-            return new HttpKernel($this->eventDispatcher, $this->container, $this->getEnvironment(), $this->getOptions());
         }
+
+        $response = new HttpKernel($this->eventDispatcher, $this->container, $this->getEnvironment(), $this->getOptions());
+
+        $this->terminate();
+
+        return $response;
     }
 }

@@ -486,7 +486,7 @@ class TraceObject
             } else if (isset($this->args)) {
                 $arguments = $this->args[$key] ?? null;
 
-                if ($arguments) {
+                if (is_array($arguments) || is_object($arguments) || is_object($arguments)) {
                     $isArgumentExist = true;
                     $parsedArguments = $this->parseArgument($arguments);
                     $joinArgument = join(', ', $parsedArguments);

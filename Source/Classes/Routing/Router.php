@@ -334,14 +334,8 @@ class Router
 		if ($this->notFoundHandler != null) {
 			$callback = $this->notFoundHandler;
 	
-			if (ReflectionHandler::isStaticMethodString($callback)) {
-				[$class, $method] = explode('::', $callback);
-			}
-	
-			if (is_array($callback)) {
-				[$class, $method] = $callback;
-			}
-	
+			[$class, $method] = ReflectionHandler::getCallMethodFromString($callback);
+
 			$executor = new RouteExecutor($class, $method, $callback, [], $this->container);
 			return $executor->__invoke([]);
 		}

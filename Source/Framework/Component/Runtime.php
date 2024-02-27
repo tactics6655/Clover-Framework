@@ -12,6 +12,7 @@ use Neko\Classes\Debug\ErrorHandler;
 
 class Runtime
 {
+
     protected $options;
 
     protected $environment;
