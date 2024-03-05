@@ -1,10 +1,10 @@
 <?php
 
-namespace Neko\Classes\XMPP;
+namespace Clover\Classes\XMPP;
 
-use Neko\Classes\HTML\Handler as HTMLHandler;
+use Clover\Classes\HTML\Handler as HTMLHandler;
 
-use Neko\Classes\ClientURL;
+use Clover\Classes\ClientURL;
 
 class Bosh
 {

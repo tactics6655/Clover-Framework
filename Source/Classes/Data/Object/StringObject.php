@@ -1,13 +1,13 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Classes\Data\StringHandler as StringHandler;
-use Neko\Classes\Data\ArrayObject as ArrayObject;
-use Neko\Classes\Data\BaseObject as BaseObject;
-use Neko\Classes\Reflection\Handler as ReflectionHandler;
-use Neko\Classes\Data\Multibyte as Multibyte;
-use Neko\Enumeration\Encoding;
+use Clover\Classes\Data\StringHandler as StringHandler;
+use Clover\Classes\Data\ArrayObject as ArrayObject;
+use Clover\Classes\Data\BaseObject as BaseObject;
+use Clover\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Classes\Data\Multibyte as Multibyte;
+use Clover\Enumeration\Encoding;
 
 use function mb_strcut;
 
@@ -25,6 +25,17 @@ class StringObject extends BaseObject
     public function __toString()
     {
         return $this->raw_data;
+    }
+
+    public function getHexDecimal()
+    {
+        preg_match('/^0x[0-9a-f_]++$/i', $this->raw_data, $matches);
+
+        if (isset($matches)) {
+            $this->raw_data = $matches[0];
+        }
+
+        return $this;
     }
 
     public function getEncoding(): StringObject
@@ -179,7 +190,7 @@ class StringObject extends BaseObject
         } else {
             $this->raw_data = StringHandler::substring($this->raw_data, $start, $length);
         }
-        
+
         return $this;
     }
 

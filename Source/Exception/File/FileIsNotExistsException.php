@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Exception\FileHandler;
+namespace Clover\Exception\FileHandler;
 
-use Neko\Exception\FileHandler\IOException;
+use Clover\Exception\FileHandler\IOException;
 
 class FileIsNotExistsException extends IOException
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Database\Driver;
+namespace Clover\Classes\Database\Driver;
 
 use PDO;
 

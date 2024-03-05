@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Framework\Component;
+namespace Clover\Framework\Component;
 
-use Neko\Classes\File\Functions as FileFunction;
+use Clover\Classes\File\Functions as FileFunction;
 
 class Renderer
 {

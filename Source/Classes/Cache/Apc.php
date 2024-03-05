@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
 use function apc_clear_cache;
 

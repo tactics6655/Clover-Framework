@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\DependencyInjection;
+namespace Clover\Classes\DependencyInjection;
 
 class Container
 {
@@ -14,6 +14,17 @@ class Container
     public function has($identifier)
     {
         return isset($this->container[$identifier]);
+    }
+
+    public function getByType($type)
+    {
+        foreach ($this->container as $container) {
+            if (get_class($container) === $type) {
+                return $container;
+            }
+        }
+
+        return false;
     }
 
     public function get($identifier)

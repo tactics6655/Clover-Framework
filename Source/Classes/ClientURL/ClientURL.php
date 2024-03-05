@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
-use Neko\Classes\Data as DataObject;
-use Neko\Classes\ClientURLOption as ClientURLOption;
-use Neko\Classes\ClientURLLastTransferInformation as ClientURLLastTransferInformation;
-use Neko\Classes\Data\StringObject as StringObject;
-use Neko\Implement\ClientURLInterface;
+use Clover\Classes\Data as DataObject;
+use Clover\Classes\ClientURLOption as ClientURLOption;
+use Clover\Classes\ClientURLLastTransferInformation as ClientURLLastTransferInformation;
+use Clover\Classes\Data\StringObject as StringObject;
+use Clover\Implement\ClientURLInterface;
 
 use CurlHandle;
 use resource;
@@ -18,16 +18,16 @@ class ClientURL implements ClientURLInterface
 
 	private static $session;
 
-	/** @var \Neko\Classes\ClientURLOption */
+	/** @var Clover\Classes\ClientURLOption */
 	public ClientURLOption $option;
 
-	/** @var \Neko\Classes\ClientURLLastTransferInformation */
+	/** @var Clover\Classes\ClientURLLastTransferInformation */
 	public ClientURLLastTransferInformation $information;
 
 	public function __construct(bool $useLocalMethod = true, string $url = '')
 	{
-		if (!extension_loaded('curl')) {
-			throw new \ErrorException('The CURL library is NOT loaded');
+		if (!$this->isSupported()) {
+			throw new \ErrorException('The CURL library is not loaded');
 		}
 
 		self::$session = $this->getSession();
@@ -36,6 +36,11 @@ class ClientURL implements ClientURLInterface
 			$this->option      = new ClientURLOption(self::$session);
 			$this->information = new ClientURLLastTransferInformation(self::$session);
 		}
+	}
+
+	public function isSupported()
+	{
+		return extension_loaded('curl');
 	}
 
 	public function getSession(): ?ClientURL

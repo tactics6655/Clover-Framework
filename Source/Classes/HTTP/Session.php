@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\HTTP;
+namespace Clover\Classes\HTTP;
 
 class Session
 {

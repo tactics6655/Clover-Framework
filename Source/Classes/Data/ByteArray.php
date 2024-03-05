@@ -1,6 +1,6 @@
 <?php
 
-use Neko\Classes\Data as Data;
+use Clover\Classes\Data as Data;
 
 class ByteArray extends Data
 {

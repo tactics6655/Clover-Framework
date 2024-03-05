@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Header;
+namespace Clover\Classes\Header;
 
-use \Neko\Classes\Header as Header;
-use \Neko\Enumeration\Encoding as Encoding;
-use Neko\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
+use Clover\Classes\Header as Header;
+use Clover\Enumeration\Encoding as Encoding;
+use Clover\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
 
 class File extends Header
 {

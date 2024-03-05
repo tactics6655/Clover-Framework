@@ -1,15 +1,15 @@
 <?php
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
-use Neko\Classes\Data\StringObject as StringObject;
-use Neko\Classes\Data\IntegerObject as IntegerObject;
-use Neko\Classes\Data\BooleanObject as BooleanObject;
-use Neko\Classes\Data\DoubleObject as DoubleObject;
-use Neko\Classes\Data\ArrayObject as ArrayObject;
-use Neko\Classes\Data\ResourceObject as ResourceObject;
-use Neko\Classes\Data\NullObject as NullObject;
-use Neko\Classes\Data\Identifier as Identifier;
+use Clover\Classes\Data\StringObject as StringObject;
+use Clover\Classes\Data\IntegerObject as IntegerObject;
+use Clover\Classes\Data\BooleanObject as BooleanObject;
+use Clover\Classes\Data\DoubleObject as DoubleObject;
+use Clover\Classes\Data\ArrayObject as ArrayObject;
+use Clover\Classes\Data\ResourceObject as ResourceObject;
+use Clover\Classes\Data\NullObject as NullObject;
+use Clover\Classes\Data\Identifier as Identifier;
 
 class Data
 {

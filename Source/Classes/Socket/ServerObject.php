@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Socket;
+namespace Clover\Classes\Socket;
 
 class ServerObject
 {

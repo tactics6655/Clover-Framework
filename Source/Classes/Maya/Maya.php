@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
 class Maya
 {
@@ -46,8 +46,8 @@ class Maya
 			}
 
 			return -1;
-		} 
-		
+		}
+
 		$check_rule = $rule;
 
 		if ($mode == 'equal') {
@@ -144,13 +144,13 @@ class Maya
 			$self->textStartIndex = $start;
 
 			return strlen($rule) + 1;
-		} 
+		}
 
 		$pattern_pos = strpos($text, $rule, $start);
 
 		if ($pattern_pos !== false) {
 			return $self->line_pass($pattern_pos + 1, $rule, $text);
-		} 
+		}
 
 		$self->textStartIndex = $start;
 		return $passage == 0 ? strlen($rule) + 1 : $passage + 1;

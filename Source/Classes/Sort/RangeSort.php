@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Sort;
+namespace Clover\Classes\Sort;
 
 class RangeSort
 {

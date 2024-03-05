@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Date;
+namespace Clover\Classes\Date;
 
 use \DateTime;
 use \DateTimeZone;

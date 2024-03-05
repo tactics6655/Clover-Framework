@@ -1,14 +1,14 @@
 <?php
 
-namespace Neko\Framework\Component;
+namespace Clover\Framework\Component;
 
-use Neko\Framework\Component\Response;
+use Clover\Framework\Component\Response;
+use Clover\Framework\Component\Resource;
 
-use Neko\Classes\DependencyInjection\Container;
-use Neko\Classes\ContentType as ContentType;
-use Neko\Classes\Data\JSONHandler;
-use Neko\Classes\Header;
-use \Neko\Framework\Component\Resource;
+use Clover\Classes\DependencyInjection\Container;
+use Clover\Classes\ContentType as ContentType;
+use Clover\Classes\Data\JSONHandler;
+use Clover\Classes\Header;
 
 class BaseController
 {

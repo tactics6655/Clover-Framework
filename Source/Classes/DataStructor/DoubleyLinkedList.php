@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\DataStructor;
+namespace Clover\Classes\DataStructor;
 
 use SplDoublyLinkedList;
 use SplQueue;

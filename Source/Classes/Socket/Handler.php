@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Socket;
+namespace Clover\Classes\Socket;
 
-use Neko\Implement\SocketHandlerInterface;
+use Clover\Implement\SocketHandlerInterface;
 
 class Handler implements SocketHandlerInterface
 {

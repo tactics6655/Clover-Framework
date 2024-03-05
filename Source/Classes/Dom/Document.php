@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Dom;
+namespace Clover\Classes\Dom;
 
 use DomDocument;
 

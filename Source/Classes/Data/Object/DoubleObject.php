@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Classes\Data\BaseObject as BaseObject;
+use Clover\Classes\Data\BaseObject as BaseObject;
 
 #[\AllowDynamicProperties]
 

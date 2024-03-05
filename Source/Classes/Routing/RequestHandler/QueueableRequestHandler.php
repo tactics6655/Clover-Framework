@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Routing;
+namespace Clover\Classes\Routing;
 
-use Neko\Classes\DataStructor\Queue;
-use Neko\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Classes\DataStructor\Queue;
+use Clover\Classes\Reflection\Handler as ReflectionHandler;
 
 class QueueableRequestHandler extends Queue
 {
@@ -18,7 +18,7 @@ class QueueableRequestHandler extends Queue
                 if (!empty($middleware) && is_string($middleware)) {
                     $instance = ReflectionHandler::getNewInstance($middleware);
 
-                    return ReflectionHandler::invoke($instance, [$next], $container, 'handle');
+                    return ReflectionHandler::invoke($instance, 'handle', [$next], $container);
                 }
 
                 return ReflectionHandler::callMethod($middleware, $next);

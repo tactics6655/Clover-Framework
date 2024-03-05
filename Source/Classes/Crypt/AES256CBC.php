@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Crypt;
+namespace Clover\Classes\Crypt;
 
-use Neko\Classes\Crypt\OpenSSL;
+use Clover\Classes\Crypt\OpenSSL;
 use Exception;
 
 class AES256CBC extends OpenSSLCipher

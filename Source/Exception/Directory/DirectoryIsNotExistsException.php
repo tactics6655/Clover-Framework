@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Exception\DirectoryHandler;
+namespace Clover\Exception\DirectoryHandler;
 
-use Neko\Exception\FileHandler\IOException;
+use Clover\Exception\FileHandler\IOException;
 
 class DirectoryIsNotExistsException extends IOException
 {

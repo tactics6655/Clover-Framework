@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Classes\Data\HTMLHandler as HTMLHandler;
+use Clover\Classes\Data\HTMLHandler as HTMLHandler;
 
 #[\AllowDynamicProperties]
 class HTMLObject extends StringObject

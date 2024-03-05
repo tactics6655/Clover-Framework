@@ -1,9 +1,9 @@
 <?php
 
-namespace Neko\Classes\Web;
+namespace Clover\Classes\Web;
 
-use Neko\Classes\Web\InternetProtocol as InternetProtocol;
-use Neko\Classes\HTTP\Request as RequestHandler;
+use Clover\Classes\Web\InternetProtocol as InternetProtocol;
+use Clover\Classes\HTTP\Request as RequestHandler;
 
 class TheOnionRouting
 {

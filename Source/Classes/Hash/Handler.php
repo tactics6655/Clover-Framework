@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Hash;
+namespace Clover\Classes\Hash;
 
 class Handler
 {
@@ -11,7 +11,7 @@ class Handler
         $this->algorithm = $algorithm;
     }
 
-    public function passwordHash(string $password, string|int|null $algo, array $options = [])
+    public function passwordHash(#[\SensitiveParameter] string $password, string|int|null $algo, array $options = [])
     {
         return password_hash($password, $algo, $options);
     }

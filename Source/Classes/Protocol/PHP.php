@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Protocol;
+namespace Clover\Classes\Protocol;
 
-use Neko\Enumeration\PHPProtocol;
+use Clover\Enumeration\PHPProtocol;
 
 class PHP
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Classes\Data as Data;
+use Clover\Classes\Data as Data;
 
 class Identifier extends Data
 {

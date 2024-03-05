@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Exception;
+namespace Clover\Exception;
 
 use Exception;
 

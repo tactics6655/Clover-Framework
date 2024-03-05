@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\HTTP\Router;
+namespace Clover\Classes\HTTP\Router;
 
 class Middleware
 {

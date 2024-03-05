@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Event;
+namespace Clover\Classes\Event;
 
 class Instance
 {

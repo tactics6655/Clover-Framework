@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Annotation;
+namespace Clover\Annotation;
 
 use Attribute;
 

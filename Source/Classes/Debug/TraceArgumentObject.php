@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Debug;
+namespace Clover\Classes\Debug;
 
 class TraceArgumentObject
 {
@@ -14,10 +14,24 @@ class TraceArgumentObject
 
     private $defaultValue;
 
+    private $variadic = false;
+
+    private array $sensitiveAttributes = [];
+
     private array $arguments = [];
 
     public function __construct()
     {
+    }
+
+    public function setVariadic($variadic)
+    {
+        $this->variadic = $variadic;
+    }
+
+    public function setSensitiveAttributes($sensitiveAttributes)
+    {
+        $this->sensitiveAttributes = $sensitiveAttributes;
     }
 
     public function setType($type)

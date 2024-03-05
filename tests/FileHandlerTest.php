@@ -2,18 +2,18 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Neko\Classes\File\Handler as FileHandler;
-use Neko\Classes\File\Object as FileObject;
+use Clover\Classes\File\Handler as FileHandler;
+use Clover\Classes\File\Object as FileObject;
 
 class FileHandlerTest extends TestCase
 {
 
-	/** @var Neko\Classes\File\Handler $factory */
+	/** @var Clover\Classes\File\Handler $factory */
 	protected $factory;
 
 	public function setUp(): void
 	{
-		$this->factory = new Neko\Classes\File\Handler();
+		$this->factory = new Clover\Classes\File\Handler();
 
 		$this->factory->write(__DIR__."/testFile.txt", "testSuccess");
 	}

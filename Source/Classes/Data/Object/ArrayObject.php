@@ -1,10 +1,10 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Classes\Data\BaseObject as BaseObject;
-use Neko\Classes\Data\IntegerObject as IntegerObject;
-use Neko\Classes\Data\BooleanObject as BooleanObject;
+use Clover\Classes\Data\BaseObject as BaseObject;
+use Clover\Classes\Data\IntegerObject as IntegerObject;
+use Clover\Classes\Data\BooleanObject as BooleanObject;
 
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Format;
+namespace Clover\Classes\Format;
 
 class MultiPurposeInternetMailExtensions
 {

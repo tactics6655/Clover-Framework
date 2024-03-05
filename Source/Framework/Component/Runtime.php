@@ -1,14 +1,14 @@
 <?php
 
-namespace Neko\Framework\Component;
+namespace Clover\Framework\Component;
 
-use Neko\Framework\Component\Mapper;
-use Neko\Framework\Enumeration\Environment;
+use Clover\Framework\Component\Mapper;
+use Clover\Framework\Enumeration\Environment;
 
-use Neko\Classes\OperationSystem as OS;
-use Neko\Classes\ArrayObject;
-use Neko\Classes\HTTP\Request as Request;
-use Neko\Classes\Debug\ErrorHandler;
+use Clover\Classes\OperationSystem as OS;
+use Clover\Classes\ArrayObject;
+use Clover\Classes\HTTP\Request as Request;
+use Clover\Classes\Debug\ErrorHandler;
 
 class Runtime
 {
@@ -83,7 +83,7 @@ class Runtime
         OS::setDefaultDateTimeZone($this->options[Environment::TIMEZONE_ID]);
         OS::setDisplayStatupErrors($this->options[Environment::DISPLAY_STARTUP_ERRORS]);
     }
-    
+
     protected function setDefaultOptions()
     {
         $this->setOption(Environment::ERROR_REPORTING_LEVEL, E_ALL & ~E_NOTICE);
@@ -108,10 +108,9 @@ class Runtime
         $this->setEnvironment([Environment::SERVER, Environment::SOFTWARE], OS::getMainServerSoftware());
         $this->setEnvironment([Environment::SERVER, Environment::HOME_PATH], OS::getHomePath());
     }
-    
+
     public function serialize()
     {
         return serialize(array($this->environment));
     }
-
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Validation;
+namespace Clover\Validation;
 
-use Neko\Validation\PHPValidation;
+use Clover\Validation\PHPValidation;
 
 class FileValidation
 {

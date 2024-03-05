@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\DataStructor;
+namespace Clover\Classes\DataStructor;
 
-use Neko\Classes\DataStructor\DoubleyLinkedList;
+use Clover\Classes\DataStructor\DoubleyLinkedList;
 
 use SplQueue;
 

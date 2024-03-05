@@ -10,7 +10,7 @@
         </div>
 
         <div id="trace">
-            <? /** @var Neko\Classes\Debug\TraceObject $trace */ ?>
+            <? /** @var Clover\Classes\Debug\TraceObject $trace */ ?>
             <? foreach ($traces as $trace) : ?>
                 <div class="item">
                     <div class="short_wrap">

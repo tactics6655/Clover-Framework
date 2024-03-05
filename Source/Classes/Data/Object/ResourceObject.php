@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
 #[\AllowDynamicProperties]
 class ResourceObject

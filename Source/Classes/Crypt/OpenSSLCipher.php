@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Crypt;
+namespace Clover\Classes\Crypt;
 
 use Exception;
 

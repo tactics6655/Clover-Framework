@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Neko\Classes\HTTP\Request as HTTPRequest;
+use Clover\Classes\HTTP\Request as HTTPRequest;
 
 class HTTPRequestTest extends TestCase
 {

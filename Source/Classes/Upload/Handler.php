@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Upload;
+namespace Clover\Classes\Upload;
 
-use Neko\Classes\File\Handler as FileHandler;
+use Clover\Classes\File\Handler as FileHandler;
 
-use Neko\Enumeration\UploadedFile;
-use Neko\Enumeration\UploadedFileErrorMessage;
+use Clover\Enumeration\UploadedFile;
+use Clover\Enumeration\UploadedFileErrorMessage;
 
 class Handler
 {

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Debug;
+namespace Clover\Classes\Debug;
 
-use Neko\Classes\Reflection\Handler as ReflectionHandler;
-use Neko\Classes\File\Functions as FileFunctions;
+use Clover\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Classes\File\Functions as FileFunctions;
+use Clover\Classes\Linker\IDELink;
+use Clover\Enumeration\IDE;
 
 use ReflectionClass;
 use ReflectionParameter;
@@ -53,6 +55,8 @@ class TraceObject
 
     protected ?string $annotation = null;
 
+    protected ?string $ideLink = null;
+
     protected ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $return_type = null;
 
     public function __construct(array $trace)
@@ -64,9 +68,18 @@ class TraceObject
         $this->line = $trace['line'] ?? null;
         $this->args = $trace['args'] ?? null;
 
+        if ($this->hasFile()) {
+            $this->ideLink = (new IDELink(IDE::VISUAL_STUIO_CODE))->generate($this->file, $this->line);
+        }
+
         if ($this->hasFunction()) {
             $this->parseClass();
         }
+    }
+
+    public function getIDELink()
+    {
+        return $this->ideLink;
     }
 
     public function hasArguments(): bool
@@ -369,7 +382,7 @@ class TraceObject
         }
 
         $arguments = $this->argumentToString($arguments) ?? "";
-        $modifier = ReflectionHandler::getModifierString($method);
+        $modifier = ReflectionHandler::getMethodModifierString($method);
         $returnType = $this->getReturnType() ?? "";
         $returnTypeFormat = ($this->hasReturnType() ? " : %s" : "");
 
@@ -474,6 +487,16 @@ class TraceObject
             $traceArgumentObject->setName($name);
             $traceArgumentObject->setPassedByReference($parameter->isPassedByReference());
             $values[] = $name;
+
+            $sensitiveAttributes = $parameter->getAttributes(\SensitiveParameter::class);
+            if ($sensitiveAttributes) {
+                $traceArgumentObject->setSensitiveAttributes($sensitiveAttributes);
+            }
+
+            $isVariadic = $parameter->isVariadic();
+            if ($isVariadic) {
+                $traceArgumentObject->setVariadic($isVariadic);
+            }
 
             // When default value is available and arguments is empty
             if ($parameter->isDefaultValueAvailable() && !isset($this->args)) {

@@ -2,7 +2,7 @@
 
 class ClientURLErrorResponse
 {
-	private $curl_errno = [
+	private $curlErrorMessages = [
 		1  => 'CURLE_UNSUPPORTED_PROTOCOL',
 		2  => 'CURLE_FAILED_INIT',
 		3  => 'CURLE_URL_MALFORMAT',
@@ -69,4 +69,9 @@ class ClientURLErrorResponse
 		64 => 'CURLE_FTP_SSL_FAILED',
 		79 => 'CURLE_SSH'
 	];
+
+	public function getErrorMessageFromCode(int $code)
+	{
+		return $this->curlErrorMessages[$code] ?? null;
+	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Hash;
+namespace Clover\Classes\Hash;
 
 class MD5 extends Handler
 {

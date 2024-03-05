@@ -1,6 +1,6 @@
 <?php
 
-use Neko\Enumeration\PHPINI;
+use Clover\Enumeration\PHPINI;
 
 class INIConfiguration
 {

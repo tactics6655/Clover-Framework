@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\File;
+namespace Clover\Classes\File;
 
-use Neko\Classes\File\Handler as FileHandler;
-use Neko\Classes\Directory\Handler as DirectoryHandler;
+use Clover\Classes\File\Handler as FileHandler;
+use Clover\Classes\Directory\Handler as DirectoryHandler;
 
-use Neko\Implement\FileObjectInterface;
-use Neko\Exception\FileHandler\FileIsNotExistsException;
-use Neko\Exception\FileHandler\TargetIsNotFileException;
-use Neko\Message\FileHandler\FileHandlerMessage;
+use Clover\Implement\FileObjectInterface;
+use Clover\Exception\FileHandler\FileIsNotExistsException;
+use Clover\Exception\FileHandler\TargetIsNotFileException;
+use Clover\Message\FileHandler\FileHandlerMessage;
 
 class FileObject implements FileObjectInterface
 {

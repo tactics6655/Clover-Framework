@@ -1,6 +1,6 @@
 <?php
 
-use Neko\Classes\HTML\Handler as HTMLHandler;
+use Clover\Classes\HTML\Handler as HTMLHandler;
 ?>
 
 <!DOCTYPE html>

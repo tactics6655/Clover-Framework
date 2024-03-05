@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Framework\Enumeration;
+namespace Clover\Framework\Enumeration;
 
 abstract class Environment
 {

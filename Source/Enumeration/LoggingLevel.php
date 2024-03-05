@@ -1,15 +1,16 @@
 <?php
 
-namespace Neko\Enumeration;
+namespace Clover\Enumeration;
 
-enum LoggingLevel: string {
+enum LoggingLevel: string
+{
 
     case INFORMATION = "information";
 
     case ERROR = "error";
-    
+
     case ASSERT = "assert";
-    
+
     case VERBOSE = "verbose";
 
     case WARNING = "warning";

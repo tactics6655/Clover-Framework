@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Exception\FileHandler\MemoryAllocatedException;
-use Neko\Validation\PHPValidation;
-use Neko\Classes\OperationSystem;
-use Neko\Enumeration\Encoding;
+use Clover\Exception\FileHandler\MemoryAllocatedException;
+use Clover\Validation\PHPValidation;
+use Clover\Classes\OperationSystem;
+use Clover\Enumeration\Encoding;
 
 class StringHandler
 {
@@ -258,6 +258,11 @@ class StringHandler
 			$name = str_replace('◆', '◇', $name);
 		}
 		return $name;
+	}
+
+	public static function isValidPhpVariableName($name)
+	{
+		return (bool) preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $name, $matches);
 	}
 
 	public static function getMd5Uniqid($length = 20, $prefix = '')

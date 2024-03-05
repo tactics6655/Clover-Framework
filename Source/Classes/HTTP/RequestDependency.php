@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\HTTP;
+namespace Clover\Classes\HTTP;
 
-use Neko\Enumeration\HTTPRequestMethod;
-use Neko\Classes\HTTP\Request as RequestHandler;
-use Neko\Classes\HTTP\Request as HTTPRequest;
+use Clover\Enumeration\HTTPRequestMethod;
+use Clover\Classes\HTTP\Request as RequestHandler;
+use Clover\Classes\HTTP\Request as HTTPRequest;
 
 class RequestDependency
 {

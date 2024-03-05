@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Compression;
+namespace Clover\Classes\Compression;
 
-use Neko\Enumeration\FileMode;
+use Clover\Enumeration\FileMode;
 
 class Zip
 {

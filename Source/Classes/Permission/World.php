@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Classes\Permission;
+namespace Clover\Classes\Permission;
 
-use Neko\Classes\Permission;
+use Clover\Classes\Permission;
 
 class World extends Permission
 {

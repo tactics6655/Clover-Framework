@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Logging;
+namespace Clover\Classes\Logging;
 
-use Neko\Classes\File\Handler as FileHandler;
+use Clover\Classes\File\Handler as FileHandler;
 
-use Neko\Enumeration\LoggingLevel;
+use Clover\Enumeration\LoggingLevel;
 
 use DateTimeZone;
 use DateTimeImmutable;
@@ -20,7 +20,7 @@ class Logger
     public function __construct(?DateTimeZone $timezone = null)
     {
         $this->timezone = $timezone ?? new DateTimeZone(date_default_timezone_get());
-        $this->fileLocation = __ROOT__."/application.log";
+        $this->fileLocation = __ROOT__ . "/application.log";
     }
 
     public function write(LoggingLevel $loggingLevel, string $content, ?string $namespace = null)

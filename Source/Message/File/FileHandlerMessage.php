@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Message\FileHandler;
+namespace Clover\Message\FileHandler;
 
 class FileHandlerMessage
 {

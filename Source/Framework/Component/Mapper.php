@@ -1,16 +1,16 @@
 <?php
 
-namespace Neko\Framework\Component;
+namespace Clover\Framework\Component;
 
-use Neko\Framework\Component\Renderer;
-use Neko\Framework\Component\Resource;
+use Clover\Framework\Component\Renderer;
+use Clover\Framework\Component\Resource;
 
-use Neko\Classes\HTTP\Request as HTTPRequest;
-use Neko\Classes\OperationSystem as OperationSystem;
-use Neko\Classes\DependencyInjection\Container;
-use Neko\Classes\Event\Dispatcher as EventDispatcher;
-use Neko\Classes\XML\SimpleXML;
-use Neko\Classes\File\Functions as FileFunction;
+use Clover\Classes\HTTP\Request as HTTPRequest;
+use Clover\Classes\OperationSystem as OperationSystem;
+use Clover\Classes\DependencyInjection\Container;
+use Clover\Classes\Event\Dispatcher as EventDispatcher;
+use Clover\Classes\XML\SimpleXML;
+use Clover\Classes\File\Functions as FileFunction;
 
 class Mapper
 {
@@ -140,12 +140,10 @@ class Mapper
 
     public function boot()
     {
-        $this->container->get("Logger")->information("Application is booting...");
     }
 
     public function terminate()
     {
-        $this->container->get("Logger")->information("Application is terminated...");
     }
 
     public function matchRunner()

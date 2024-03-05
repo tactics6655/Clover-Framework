@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Plugin;
+namespace Clover\Plugin;
 
-use Neko\Classes\ClientURL;
+use Clover\Classes\ClientURL;
 
 class FFmpeg
 {

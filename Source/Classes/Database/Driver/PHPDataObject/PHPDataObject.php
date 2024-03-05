@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Database\Driver;
+namespace Clover\Classes\Database\Driver;
 
 use PDO;
 use Exception;

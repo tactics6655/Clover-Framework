@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <container>
     <services>
-        <service key="Renderer" class="Neko\Framework\Component\Renderer"/>
-        <service key="Resource" class="Neko\Framework\Component\Resource"/>
-        <service key="Logger" class="Neko\Classes\Logging\Logger"/>
+        <service key="Renderer" class="Clover\Framework\Component\Renderer"/>
+        <service key="Resource" class="Clover\Framework\Component\Resource"/>
+        <service key="Logger" class="Clover\Classes\Logging\Logger"/>
     </services>
 </container>

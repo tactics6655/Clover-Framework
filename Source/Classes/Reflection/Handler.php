@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Reflection;
+namespace Clover\Classes\Reflection;
 
-use Neko\Classes\File\Functions as FileFunctions;
+use Clover\Classes\File\Functions as FileFunctions;
+use Clover\Classes\Debug\TraceObject;
+use Clover\Classes\DependencyInjection\Container;
 
-use Neko\Exception\Argument\ArgumentEmptyException;
-
-use Neko\Classes\Debug\TraceObject;
+use Clover\Exception\Argument\ArgumentEmptyException;
 
 use stdClass;
 use Closure;
@@ -25,9 +25,104 @@ use ReflectionParameter;
 use ReflectionProperty;
 use ReflectionType;
 use ReflectionObject;
+use SensitiveParameter;
+use __PHP_Incomplete_Class;
+use ArrayIterator;
+use Throwable;
 
 class Handler
 {
+
+    private static $magicMethods = ['construct', 'call', 'callStatic', 'toString', 'invoke', 'set_state', 'set', 'isset', 'unset', 'clone', 'serialize', 'unserialize', 'sleep', 'wakeup', 'destruct', 'get'];
+
+    private static $scalarTypes = ['bool', 'int', 'float', 'string'];
+
+    private static $valueTypes = ['true', 'false'];
+
+    private static $relativeClassTypes = ['self', 'parent', 'static'];
+
+    private static $builtInTypes = ['true', 'false', 'bool', 'int', 'float', 'string', 'null', 'array', 'object', 'resource', 'never', 'void'];
+
+    private static $atomicTypes = ['true', 'false', 'bool', 'int', 'float', 'string', 'null', 'array', 'object', 'resource', 'never', 'void', 'self', 'parent', 'static'];
+
+    public static function isRelativeClassType($type)
+    {
+        return isset(self::$relativeClassTypes[$type]);
+    }
+
+    public static function isScalarType($type)
+    {
+        return isset(self::$scalarTypes[$type]);
+    }
+
+    public static function isValueType($type)
+    {
+        return isset(self::$valueTypes[$type]);
+    }
+
+    public static function isAtomicTypes($type)
+    {
+        return isset(self::$atomicTypes[$type]);
+    }
+
+    public static function isBuiltInTypes($type)
+    {
+        return isset(self::$builtInTypes[$type]);
+    }
+
+    public static function getClassPropertieNames(string $class): array
+    {
+        $reflectionClass = new ReflectionClass($class);
+        $properties = $reflectionClass->getProperties();
+        $names = [];
+
+        foreach ($properties as $property) {
+            $names[] = $property->getName();
+        }
+
+        return $names;
+    }
+
+    public static function hasAttribute(string $class, string $attributeName): bool
+    {
+        $reflectionClass = new ReflectionClass($class);
+
+        foreach ($reflectionClass->getAttributes($attributeName) as $attribute) {
+            if ($attribute->getName() === $attributeName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function isIncompleteClass(mixed $class)
+    {
+        return ($class instanceof __PHP_Incomplete_Class);
+    }
+
+    public static function getAvailableMagicMethodsInParentClass(object|string $objectOrClass)
+    {
+        $methods = [];
+        $parent = get_parent_class($objectOrClass);
+
+        foreach (self::$magicMethods as $method) {
+            $methodName = sprintf("__%s", $method);
+
+            if (!$parent || !method_exists($parent, $methodName)) {
+                continue;
+            }
+
+            $reflectionMethod = new ReflectionMethod($parent, $methodName);
+            if ($reflectionMethod->isAbstract() || $reflectionMethod->isPrivate()) {
+                continue;
+            }
+
+            $methods = $methodName;
+        }
+
+        return $methods;
+    }
 
     public static function getStaticClassConstructor()
     {
@@ -38,9 +133,42 @@ class Handler
         return self::getMethod(static::class, '__construct');
     }
 
-    public static function getMatchedNameSpacesFromDeclaredClasses($class)
+    public static function isCloneableClass(ReflectionClass $reflectionClass): bool
     {
-        return array_filter(get_declared_classes(), function ($classes) use ($class) {
+        return $reflectionClass->isCloneable() && !$reflectionClass->hasMethod('__clone') && !$reflectionClass->isSubclassOf(ArrayIterator::class);
+    }
+
+    public static function hasInternalAncestors(ReflectionClass $reflectionClass): bool
+    {
+        do {
+            if ($reflectionClass->isInternal()) {
+                return true;
+            }
+
+            $reflectionClass = $reflectionClass->getParentClass();
+        } while ($reflectionClass);
+
+        return false;
+    }
+
+    public static function getDeclaredTraits(): array
+    {
+        return get_declared_traits();
+    }
+
+    public static function getDeclaredClasses(): array
+    {
+        return get_declared_classes();
+    }
+
+    public static function getDeclaredFunctions(): array
+    {
+        return get_defined_functions();
+    }
+
+    public static function getMatchedNameSpacesFromDeclaredClasses(string $class): array
+    {
+        return array_filter(self::getDeclaredClasses(), function ($classes) use ($class) {
             $split = explode("\\", $classes);
             return $split[count($split) - 1] === $class;
         });
@@ -96,7 +224,7 @@ class Handler
         $declaringClass = $property->getDeclaringClass();
 
         foreach ($declaringClass->getTraits() as $trait) {
-            if ($trait->hasProperty($name) && $trait->getProperty($name)->getDocComment() === $property->getDocComment()) {
+            if (trait_exists($trait->getName()) && $trait->hasProperty($name) && $trait->getProperty($name)->getDocComment() === $property->getDocComment()) {
                 return self::getPropertyDeclaringClass($trait->getProperty($name));
             }
         }
@@ -132,6 +260,11 @@ class Handler
     public static function getClassMethods(ReflectionClass $class): array
     {
         return $class->getMethods();
+    }
+
+    public static function isInterfaceExists($interface, $autoload = false)
+    {
+        return interface_exists($interface, $autoload);
     }
 
     /**
@@ -281,7 +414,7 @@ class Handler
      * 
      * @param ReflectionClass $reflection
      * 
-     * @return array
+     * @return ReflectionParameter[]
      */
     public static function getParameters(ReflectionClass $reflection)
     {
@@ -331,16 +464,25 @@ class Handler
         $dependencies = [];
 
         foreach ($parameters as $parameter) {
+            /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
             $type = $parameter->getType();
 
-            if ($type && self::isNamedType($type)) {
-                $name = $parameter->getClass()->newInstance();
-                array_push($dependencies, $name);
-            } else {
-                if (!$parameter->isOptional()) {
-                    throw new Exception("Can not resolve parameters");
-                }
+            if (!$type || !self::isNamedType($type)) {
+                continue;
             }
+
+            if ($parameter->isOptional()) {
+                continue;
+            }
+
+            if (80100 <= PHP_VERSION_ID) {
+                $name = new ReflectionClass($type->getName());
+            } else if (80000 > PHP_VERSION_ID) {
+                $name = $parameter->getClass()->newInstance();
+            }
+
+            $dependencies[] = $name;
+            continue;
         }
 
         return $reflection->newInstance(...$dependencies);
@@ -470,7 +612,14 @@ class Handler
         return $traceObjects;
     }
 
-    public static function getNewInstance($class): object|bool
+    /**
+     * Get a new instance of class
+     * 
+     * @param string $class
+     * 
+     * @return object|bool
+     */
+    public static function getNewInstance(string $class): object|bool
     {
         if (!class_exists($class)) {
             return false;
@@ -481,8 +630,14 @@ class Handler
 
     /**
      * Throw argument empty errors
+     * 
+     * @param object|string $self
+     * @param string $function
+     * @param array $defineValues
+     * 
+     * @return void|bool
      */
-    public static function throwEmptyParameterError($self, $function, $defineValues)
+    public static function throwEmptyParameterError(object|string $self, string $function, array $defineValues)
     {
         $class = self::getClass($self);
 
@@ -536,13 +691,52 @@ class Handler
     }
 
     /**
+     * Gets an attributes of sensitive parameter
+     * 
+     * @param ReflectionParameter $param
+     * 
+     * @return array
+     */
+    public static function getSensitiveParameterAttributes(ReflectionParameter $param): array
+    {
+        return $param->getAttributes(SensitiveParameter::class);
+    }
+
+    /**
+     * Convert class modifiers to string
+     * 
+     * @param ReflectionClass $class
+     * 
+     * @return string
+     */
+    public static function getClassModifierString(ReflectionClass $class): string
+    {
+        $modifier = $class->getModifiers();
+
+        switch ($modifier) {
+            case ReflectionProperty::IS_READONLY:
+                return 'readonly';
+            case ReflectionProperty::IS_PRIVATE:
+                return 'private';
+            case ReflectionProperty::IS_PUBLIC:
+                return 'public';
+            case ReflectionProperty::IS_PROTECTED:
+                return 'protected';
+            case ReflectionProperty::IS_STATIC:
+                return 'static';
+            default:
+                return 'unknown';
+        }
+    }
+
+    /**
      * Convert method modifiers to string
      * 
      * @param ReflectionMethod $method
      * 
      * @return string
      */
-    public static function getModifierString(ReflectionMethod $method): string
+    public static function getMethodModifierString(ReflectionMethod $method): string
     {
         $modifier = $method->getModifiers();
 
@@ -565,19 +759,17 @@ class Handler
     }
 
     /**
-     * Invokes function
+     * Gets an dependencies of method
      * 
-     * @param object|string|null $class
-     * @param array $passParameters = []
-     * @param ?Closure|string $method = null
+     * @param ReflectionFunction|ReflectionMethod $reflection
+     * @param null|Container|array $definedDependencies
      * 
-     * @return mixed
+     * @return array
      */
-    public static function invoke(object|string|null $class, array $passParameters = [], $arguments = [], null|callable|string $method = null): mixed
+    public static function getDependencies(ReflectionFunction|ReflectionMethod $reflection, null|Container|array $definedDependencies = null): array
     {
         $dependencies = [];
 
-        $reflection = $method == null ? self::getFunction($class) : self::getMethod($class, $method);
         /** @var ReflectionParameter[] $parameters */
         $parameters = self::getMethodParameters($reflection);
 
@@ -589,8 +781,20 @@ class Handler
                 continue;
             }
 
-            if (80100 <= PHP_VERSION_ID && self::isNamedType($type)) {
-                $reflectionClass = new ReflectionClass($type->getName());
+            $name = $type->getName();
+
+            if ($definedDependencies instanceof Container && $dependency = $definedDependencies->getByType($name)) {
+                $dependencies[] = $dependency;
+
+                continue;
+            }
+
+            if (!class_exists($name)) {
+                continue;
+            }
+
+            if (80100 <= PHP_VERSION_ID) {
+                $reflectionClass = new ReflectionClass($name);
             } else if (80000 > PHP_VERSION_ID) {
                 $reflectionClass = $parameter->getClass();
             }
@@ -603,23 +807,38 @@ class Handler
             $dependencies[] = $instance;
         }
 
-        $instanceClass = $class;
+        return $dependencies;
+    }
 
-        if (!is_object($class)) {
-            $instanceClass = self::getClassReflection($class);
+    /**
+     * Invokes function
+     * 
+     * @param object|string|null $instance
+     * @param ?Closure|string $method = null
+     * @param array $passParameters = []
+     * 
+     * @return mixed
+     */
+    public static function invoke(object|string|null $instance, null|callable|string $method = null, array $passParameters = [], Container|array $arguments = []): mixed
+    {
+        $reflection = $method == null ? self::getFunction($instance) : self::getMethod($instance, $method);
+        $dependencies = self::getDependencies($reflection, $arguments);
+
+        if (!is_object($instance) && is_string($instance)) {
+            $newInstance = self::getClassReflection($instance);
         }
 
         if (isset($arguments) && !empty($arguments)) {
-            $class = new ReflectionClass($instanceClass);
-            $instance = $class->newInstance($arguments);
+            $instance = new ReflectionClass($newInstance ?? $instance);
+            $newInstance = $instance->newInstance($arguments);
 
-            if (!$class->isInstance($instance)) {
+            if (!$instance->isInstance($newInstance)) {
                 return false;
             }
 
-            return $reflection->invoke($instance, ...array_merge($dependencies, $passParameters));
+            $dependencies = [...$dependencies, ...array_filter($passParameters)];
         }
 
-        return $reflection->invoke($instanceClass, ...$dependencies);
+        return $reflection->invoke($newInstance, ...$dependencies);
     }
 }

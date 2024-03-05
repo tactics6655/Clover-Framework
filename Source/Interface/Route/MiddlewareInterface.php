@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Implement;
+namespace Clover\Implement;
 
-use Neko\Implement\RequestInterface;
+use Clover\Implement\RequestInterface;
 
 interface MiddlewareInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Annotation;
+namespace Clover\Annotation;
 
-use Neko\Enumeration\ContentType as ContentTypeEnum;
+use Clover\Enumeration\ContentType as ContentTypeEnum;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]

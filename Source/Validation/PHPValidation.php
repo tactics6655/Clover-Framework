@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Validation;
+namespace Clover\Validation;
 
-use Neko\Classes\OperationSystem;
+use Clover\Classes\OperationSystem;
 
 class PHPValidation
 {

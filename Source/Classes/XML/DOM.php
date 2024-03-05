@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\XML;
+namespace Clover\Classes\XML;
 
 use DOMDocument;
 

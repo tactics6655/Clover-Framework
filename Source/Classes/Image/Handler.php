@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Image;
+namespace Clover\Classes\Image;
 
-use Neko\Implement\ImageHandlerInterface;
+use Clover\Implement\ImageHandlerInterface;
 
-use Neko\Enumeration\Orientation;
-use Neko\Enumeration\ImageFilter;
-use Neko\Enumeration\ExifFileHeader;
-use Neko\Enumeration\MIME;
+use Clover\Enumeration\Orientation;
+use Clover\Enumeration\ImageFilter;
+use Clover\Enumeration\ExifFileHeader;
+use Clover\Enumeration\MIME;
 
-use Neko\Exception\Functions\FunctionIsNotExistsException;
+use Clover\Exception\Functions\FunctionIsNotExistsException;
 
-use Neko\Classes\Header\File as FileHeader;
+use Clover\Classes\Header\File as FileHeader;
 
 use function getimagesizefromstring;
 use GdImage;

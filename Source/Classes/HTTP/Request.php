@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\HTTP;
+namespace Clover\Classes\HTTP;
 
-use Neko\Implement\RequestInterface;
-use Neko\Classes\Data\URLObject as URLObject;
-use Neko\Classes\Data\StringObject as StringObject;
-use Neko\Enumeration\HTTPRequestMethod;
-use Neko\Enumeration\ServerIndices;
+use Clover\Implement\RequestInterface;
+use Clover\Classes\Data\URLObject as URLObject;
+use Clover\Classes\Data\StringObject as StringObject;
+use Clover\Enumeration\HTTPRequestMethod;
+use Clover\Enumeration\ServerIndices;
 
 use litespeed_finish_request;
 

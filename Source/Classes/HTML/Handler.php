@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\HTML;
+namespace Clover\Classes\HTML;
 
 class Handler
 {

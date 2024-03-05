@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Implement;
+namespace Clover\Implement;
 
 interface FileObjectInterface
 {

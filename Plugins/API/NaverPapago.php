@@ -1,9 +1,9 @@
 <?php
 
-namespace Neko\Plugin;
+namespace Clover\Plugin;
 
-use Neko\Classes\ClientURL;
-use Neko\Classes\Data\JSONHandler;
+use Clover\Classes\ClientURL;
+use Clover\Classes\Data\JSONHandler;
 
 class NaverPapago
 {

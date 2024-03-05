@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
 class Tokenizer
 {

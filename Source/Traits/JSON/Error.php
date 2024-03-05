@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Trait\Json;
+namespace Clover\Trait\Json;
 
-use Neko\Enumeration\JsonErrorMessage;
+use Clover\Enumeration\JsonErrorMessage;
 
 trait JSONError
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Debug;
+namespace Clover\Classes\Debug;
 
 use Exception;
-use Neko\Classes\Exception\Handler as ExceptionHandler;
-use Neko\Classes\File\Functions as FileFunction;
-use Neko\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Classes\Exception\Handler as ExceptionHandler;
+use Clover\Classes\File\Functions as FileFunction;
+use Clover\Classes\Reflection\Handler as ReflectionHandler;
 
 class ErrorHandler
 {

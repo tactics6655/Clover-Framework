@@ -1,8 +1,9 @@
 <?php
 
-namespace Neko\Enumeration;
+namespace Clover\Enumeration;
 
-enum HTML5Entity: string {
+enum HTML5Entity: string
+{
     case AACUTE = 'Á';
     case AACUT = 'Á';
     case AACUTE = 'á';

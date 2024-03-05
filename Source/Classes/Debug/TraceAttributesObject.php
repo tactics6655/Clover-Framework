@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Debug;
+namespace Clover\Classes\Debug;
 
 class TraceAttributeObject
 {

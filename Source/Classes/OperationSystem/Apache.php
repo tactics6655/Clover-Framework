@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\OperationSystem;
+namespace Clover\Classes\OperationSystem;
 
 class Apache
 {

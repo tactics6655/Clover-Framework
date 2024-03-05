@@ -1,10 +1,10 @@
 <?php
 
-namespace Neko\Classes\Hash;
+namespace Clover\Classes\Hash;
 
 class SHA512
 {
-	public function encrypt($string, $useBase64 = true)
+	public function encrypt(#[\SensitiveParameter] $string, $useBase64 = true)
 	{
 		$hashed = hash('sha512', $string, true);
 

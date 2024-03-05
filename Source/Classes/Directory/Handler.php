@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Directory;
+namespace Clover\Classes\Directory;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FilesystemIterator;
-use Neko\Implement\DirectoryHandlerInterface;
-use Neko\Implement\FileHandlerInterface;
-use Neko\Exception\DirectoryHandler\DirectoryIsNotExistsException as DirectoryIsNotExistsException;
-use Neko\Classes\File\Handler as FileHandler;
+use Clover\Implement\DirectoryHandlerInterface;
+use Clover\Implement\FileHandlerInterface;
+use Clover\Exception\DirectoryHandler\DirectoryIsNotExistsException as DirectoryIsNotExistsException;
+use Clover\Classes\File\Handler as FileHandler;
 
 class Handler implements DirectoryHandlerInterface
 {

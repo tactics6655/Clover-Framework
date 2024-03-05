@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Web;
+namespace Clover\Classes\Web;
 
 use function gethostbyname;
 use function gethostbyaddr;

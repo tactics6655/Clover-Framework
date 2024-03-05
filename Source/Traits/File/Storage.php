@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Trait\File;
+namespace Clover\Trait\File;
 
 trait Storage
 {

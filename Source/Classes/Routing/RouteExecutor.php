@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Routing;
+namespace Clover\Classes\Routing;
 
-use Neko\Classes\Reflection\Handler as ReflectionHandler;
-use Neko\Classes\DependencyInjection\Container;
+use Clover\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Classes\DependencyInjection\Container;
 
 use Closure;
 
@@ -55,7 +55,7 @@ class RouteExecutor
         }
 
         if (is_object($callback)) {
-            return ReflectionHandler::invoke($callback, ($arguments), $container, $method);
+            return ReflectionHandler::invoke($callback, $method, ($arguments), $container);
         }
 
         return false;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Exception\FileHandler;
+namespace Clover\Exception\FileHandler;
 
 class MemoryException extends \RuntimeException
 {

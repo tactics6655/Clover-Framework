@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Exception\Functions;
+namespace Clover\Exception\Functions;
 
 class FunctionIsNotExistsException extends \RuntimeException
 {

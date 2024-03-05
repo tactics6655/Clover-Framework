@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Pagination;
+namespace Clover\Classes\Pagination;
 
 class Dynamic
 {

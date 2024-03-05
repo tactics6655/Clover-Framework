@@ -2,7 +2,7 @@
 
 include('./vendor/autoload.php');
 
-use Neko\Classes\ClientURL as ClientURL;
+use Clover\Classes\ClientURL as ClientURL;
 
 class Rapidgator
 {

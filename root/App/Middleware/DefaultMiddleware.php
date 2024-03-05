@@ -2,7 +2,7 @@
 
 namespace App\Middleware;
 
-use Neko\Framework\Component\Middleware;
+use Clover\Framework\Component\Middleware;
 
 class ModuleMiddleware
 {

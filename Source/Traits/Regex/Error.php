@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Traits\Regex;
+namespace Clover\Traits\Regex;
 
 use function preg_last_error_constant;
 

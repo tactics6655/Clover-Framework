@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Regex;
+namespace Clover\Classes\Regex;
 
 class Executor
 {

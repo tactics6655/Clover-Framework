@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Interpreter;
+namespace Clover\Interpreter;
 
 class SegmeticAnalyser
 {

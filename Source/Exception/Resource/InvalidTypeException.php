@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Exception\ResourceHandler;
+namespace Clover\Exception\ResourceHandler;
 
-use Neko\Exception\FileHandler\IOException;
+use Clover\Exception\FileHandler\IOException;
 
 class InvalidTypeException extends IOException
 {

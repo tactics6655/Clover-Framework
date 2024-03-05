@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Enumeration;
+namespace Clover\Enumeration;
 
 abstract class CharacterSet
 {

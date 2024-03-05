@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Framework\Component;
+namespace Clover\Framework\Component;
 
-use Neko\Classes\Header;
+use Clover\Classes\Header;
 
 class Response
 {

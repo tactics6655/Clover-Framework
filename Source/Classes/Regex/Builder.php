@@ -1,9 +1,9 @@
 <?php
 
-namespace Neko\Classes\Regex;
+namespace Clover\Classes\Regex;
 
-use Neko\Classes\Regex\Expression as RegexExpression;
-use Neko\Traits\Regex\Error;
+use Clover\Classes\Regex\Expression as RegexExpression;
+use Clover\Traits\Regex\Error;
 
 class Builder
 {

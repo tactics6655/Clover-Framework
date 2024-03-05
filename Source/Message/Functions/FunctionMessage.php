@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Message\Functions;
+namespace Clover\Message\Functions;
 
 class FunctionMessage
 {

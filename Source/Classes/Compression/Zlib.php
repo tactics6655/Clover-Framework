@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Compression;
+namespace Clover\Classes\Compression;
 
 class Zlib
 {

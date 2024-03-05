@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Exception\MemoryAllocatedException;
+use Clover\Exception\MemoryAllocatedException;
 
-use Neko\Classes\Data\StringHandler;
+use Clover\Classes\Data\StringHandler;
 
 class HTMLHandler extends StringHandler
 {

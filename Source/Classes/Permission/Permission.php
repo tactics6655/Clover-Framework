@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
-use Neko\Classes\Permission\Group as Group;
-use Neko\Classes\Permission\Owner as Owner;
-use Neko\Classes\Permission\World as World;
+use Clover\Classes\Permission\Group as Group;
+use Clover\Classes\Permission\Owner as Owner;
+use Clover\Classes\Permission\World as World;
 
 class Permission
 {

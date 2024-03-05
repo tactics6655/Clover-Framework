@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Classes\Regex;
+namespace Clover\Classes\Regex;
 
-use Neko\Traits\Regex\Error;
+use Clover\Traits\Regex\Error;
 
 class StringResult
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
-use Neko\Classes\Regex\StringResult as StringResult;
-use Neko\Classes\Regex\ArrayResult as ArrayResult;
-use Neko\Classes\Regex\Executor as Executor;
+use Clover\Classes\Regex\StringResult as StringResult;
+use Clover\Classes\Regex\ArrayResult as ArrayResult;
+use Clover\Classes\Regex\Executor as Executor;
 
 class Regex
 {

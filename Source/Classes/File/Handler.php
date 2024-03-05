@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\File;
+namespace Clover\Classes\File;
 
-use Neko\Enumeration\FileMode;
-use Neko\Enumeration\FileSizeUnit;
+use Clover\Enumeration\FileMode;
+use Clover\Enumeration\FileSizeUnit;
 
 // Classes
 
-use Neko\Classes\FileSystem\Handler as FileSystemHandler;
-use Neko\Classes\Directory\Handler as DirectoryHandler;
+use Clover\Classes\FileSystem\Handler as FileSystemHandler;
+use Clover\Classes\Directory\Handler as DirectoryHandler;
 
 // Implements
 
-use Neko\Implement\FileHandlerInterface as FileHandlerInterface;
-use Neko\Implement\DirectoryHandlerInterface as DirectoryHandlerInterface;
+use Clover\Implement\FileHandlerInterface as FileHandlerInterface;
+use Clover\Implement\DirectoryHandlerInterface as DirectoryHandlerInterface;
 
 // Message
 
-use Neko\Classes\File\Functions as FileFunctions;
+use Clover\Classes\File\Functions as FileFunctions;
 
 use RecursiveDirectoryIterator;
 

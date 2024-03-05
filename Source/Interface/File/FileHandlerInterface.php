@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Implement;
+namespace Clover\Implement;
 
-use Neko\Enumeration\FileMode;
+use Clover\Enumeration\FileMode;
 
 interface FileHandlerInterface
 {

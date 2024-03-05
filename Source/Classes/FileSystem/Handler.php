@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\FileSystem;
+namespace Clover\Classes\FileSystem;
 
-use Neko\Implement\FileSystemInterface as FileSystemInterface;
+use Clover\Implement\FileSystemInterface as FileSystemInterface;
 
 class Handler implements FileSystemInterface
 {
@@ -29,6 +29,11 @@ class Handler implements FileSystemInterface
 		return false;
 	}
 
+	/**
+	 * Gives information about a file
+	 * 
+	 * @return array{dev:int, ino:int, mode:int, nlink:int, uid:int, gid:int, rdev:int, size:int, atime:int, mtime:int, ctime:int, blksize:int, blocks:int}|false
+	 */
 	public static function getStat($filePath): array
 	{
 		$return = stat($filePath);

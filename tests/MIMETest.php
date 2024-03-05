@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use Neko\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
+use Clover\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
 
 class MIMETest extends TestCase
 {

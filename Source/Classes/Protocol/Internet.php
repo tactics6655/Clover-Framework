@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Protocol;
+namespace Clover\Classes\Protocol;
 
 class Internet
 {

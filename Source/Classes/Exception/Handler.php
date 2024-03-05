@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Exception;
+namespace Clover\Classes\Exception;
 
 class Handler
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\Event;
+namespace Clover\Classes\Event;
 
-use Neko\Implement\EventDispatcherInterface;
+use Clover\Implement\EventDispatcherInterface;
 
-use Neko\Classes\Event\Instance as EventInstance;
+use Clover\Classes\Event\Instance as EventInstance;
 
 class Dispatcher implements EventDispatcherInterface
 {

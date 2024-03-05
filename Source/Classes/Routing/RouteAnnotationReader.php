@@ -1,13 +1,13 @@
 <?php
 
-namespace Neko\Classes\Routing;
+namespace Clover\Classes\Routing;
 
-use Neko\Annotation\ContentType;
-use Neko\Classes\Reflection\Handler as ReflectionHandler;
-use Neko\Annotation\Route;
-use Neko\Annotation\Prefix;
-use Neko\Annotation\Middleware;
-use Neko\Annotation\NotFound;
+use Clover\Annotation\ContentType;
+use Clover\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Annotation\Route;
+use Clover\Annotation\Prefix;
+use Clover\Annotation\Middleware;
+use Clover\Annotation\NotFound;
 
 use ReflectionMethod;
 use ReflectionClass;

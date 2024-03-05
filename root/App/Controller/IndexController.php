@@ -2,17 +2,19 @@
 
 namespace App\Controller;
 
-use Neko\Annotation\NotFound;
-use Neko\Annotation\ContentType;
-use Neko\Annotation\Route;
-use Neko\Annotation\Prefix;
-use Neko\Classes\Data\ArrayObject;
-use Neko\Framework\Component\BaseController;
-use Neko\Classes\Upload\Handler as UploadHandler;
-use Neko\Enumeration\ContentType as ContentTypeEnum;
+use FVP;
+use App\Middleware\ModuleMiddleware;
+use Clover\Annotation;
+use Clover\Classes\Data\ArrayObject;
+use Clover\Classes\HTTP\Request;
+use Clover\Framework\Component\BaseController;
+use Clover\Classes\File\Functions as FileFunctions;
+use Clover\Classes\Upload\Handler as UploadHandler;
+use Clover\Framework\Component\Renderer;
+use Clover\Enumeration;
 
-#[Prefix('/')]
-#[NotFound('IndexController::notFound')]
+#[Annotation\Prefix('/')]
+#[Annotation\NotFound('IndexController::notFound')]
 class IndexController extends BaseController
 {
 
@@ -21,20 +23,26 @@ class IndexController extends BaseController
         return $this->response('404 Error');
     }
 
-    #[Route(method: 'GET', pattern: '/{test}:(alphabet)/{test2}:(number)')]
+    #[Annotation\Route(method: 'GET', pattern: '/{test}:(alphabet)/{test2}:(number)')]
     public function test(UploadHandler $handler)
     {
         return $this->render('/App/View/view.php');
     }
 
-    #[Route(method: 'GET', pattern: '/')]
-    public function index()
+    #[Annotation\Route(method: 'GET', pattern: '/')]
+    #[Annotation\Middleware(ModuleMiddleware::class)]
+    public function index(Request $request, Renderer $renderer)
     {
+        $readed = FileFunctions::read(__ROOT__."/App/File/sakura.txt");
+
+        $fvpParser = new FVP\FVPParser($readed);
+        $fvpParser->parse();
+
         return $this->render('/App/View/view.php');
     }
 
-    #[ContentType(ContentTypeEnum::MULTIPART_FORM_DATA)]
-    #[Route(method: 'POST', pattern: '/')]
+    #[Annotation\ContentType(Enumeration\ContentType::MULTIPART_FORM_DATA)]
+    #[Annotation\Route(method: 'POST', pattern: '/')]
     public function upload_index(UploadHandler $uploadFile)
     {
         $fileContextName = "file";

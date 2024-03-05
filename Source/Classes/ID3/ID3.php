@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
 class ID3
 {

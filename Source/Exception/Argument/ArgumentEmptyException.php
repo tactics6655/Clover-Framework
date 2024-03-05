@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Exception\Argument;
+namespace Clover\Exception\Argument;
 
-use Neko\Exception\FileHandler\IOException;
+use Clover\Exception\FileHandler\IOException;
 
 class ArgumentEmptyException extends IOException
 {

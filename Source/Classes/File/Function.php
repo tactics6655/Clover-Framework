@@ -2,29 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes\File;
+namespace Clover\Classes\File;
 
-use Neko\Enumeration\FileMode;
-use Neko\Enumeration\FileSizeUnit;
-use Neko\Enumeration\LockMode;
+use Clover\Enumeration\FileMode;
+use Clover\Enumeration\FileSizeUnit;
+use Clover\Enumeration\LockMode;
 
-use Neko\Classes\FileSystem\Handler as FileSystemHandler;
-use Neko\Classes\Protocol\PHP as PHPProtocol;
+use Clover\Classes\FileSystem\Handler as FileSystemHandler;
+use Clover\Classes\Protocol\PHP as PHPProtocol;
 
-use Neko\Exception\StupidIdeaException as StupidIdeaException;
-use Neko\Exception\FileHandler\FileIsNotExistsException as FileIsNotExistsException;
-use Neko\Exception\FileHandler\TargetIsNotFileException as TargetIsNotFileException;
-use Neko\Exception\FileHandler\InvalidFileHandler as InvalidFileHandler;
-use Neko\Exception\ResourceHandler\InvalidTypeException as InvalidTypeException;
-use Neko\Exception\Functions\FunctionIsNotExistsException as FunctionIsNotExistsException;
+use Clover\Exception\StupidIdeaException as StupidIdeaException;
+use Clover\Exception\FileHandler\FileIsNotExistsException as FileIsNotExistsException;
+use Clover\Exception\FileHandler\TargetIsNotFileException as TargetIsNotFileException;
+use Clover\Exception\FileHandler\InvalidFileHandler as InvalidFileHandler;
+use Clover\Exception\ResourceHandler\InvalidTypeException as InvalidTypeException;
+use Clover\Exception\Functions\FunctionIsNotExistsException as FunctionIsNotExistsException;
 
-use Neko\Validation\FileValidation as FileValidation;
+use Clover\Validation\FileValidation as FileValidation;
 
-use Neko\Message\FileHandler\FileHandlerMessage as FileHandlerMessage;
-use Neko\Message\Functions\FunctionMessage as FunctionMessage;
+use Clover\Message\FileHandler\FileHandlerMessage as FileHandlerMessage;
+use Clover\Message\Functions\FunctionMessage as FunctionMessage;
 
 use RecursiveDirectoryIterator;
-
 use function clearstatcache;
 use function fileatime;
 use function filetype;
@@ -38,6 +37,11 @@ use function rename;
 class Functions
 {
 	private static $lastError;
+
+	public static function isLocalStream($stream)
+	{
+		return stream_is_local($stream) || 0 === stripos($stream, 'file://');
+	}
 
 	public static function isAllowedCharacter($character)
 	{

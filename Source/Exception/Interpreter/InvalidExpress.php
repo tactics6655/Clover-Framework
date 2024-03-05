@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Exception\Interpreter;
+namespace Clover\Exception\Interpreter;
 
 class InvalidExpress extends InvalidExpressException
 {

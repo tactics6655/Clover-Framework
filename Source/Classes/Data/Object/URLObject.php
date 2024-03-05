@@ -1,8 +1,8 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
-use Neko\Classes\Data\StringObject as StringObject;
+use Clover\Classes\Data\StringObject as StringObject;
 
 #[\AllowDynamicProperties]
 class URLObject extends StringObject

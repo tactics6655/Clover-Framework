@@ -1,9 +1,9 @@
 <?php
 
-namespace Neko\Plugin;
+namespace Clover\Plugin;
 
-use Neko\Classes\ClientURL;
-use Neko\Classes\Data\StringHandler;
+use Clover\Classes\ClientURL;
+use Clover\Classes\Data\StringHandler;
 
 class FirebaseCloudMessagingV1
 {

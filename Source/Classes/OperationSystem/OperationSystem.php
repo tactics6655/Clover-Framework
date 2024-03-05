@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Neko\Classes;
+namespace Clover\Classes;
 
 class OperationSystem
 {
@@ -17,6 +17,16 @@ class OperationSystem
 	public static function setMaximumExecutionTimeLimit(int $seconds)
 	{
 		return set_time_limit($seconds);
+	}
+
+	public static function getLoadedINIFiles()
+	{
+		return php_ini_loaded_file();
+	}
+
+	public static function getScannedINIFiles()
+	{
+		return php_ini_scanned_files();
 	}
 
 	public static function clearLibxmlErrors()

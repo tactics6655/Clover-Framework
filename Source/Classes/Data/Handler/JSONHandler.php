@@ -1,6 +1,6 @@
 <?php
 
-namespace Neko\Classes\Data;
+namespace Clover\Classes\Data;
 
 class JSONHandler
 {
@@ -13,8 +13,8 @@ class JSONHandler
 	public static function encode($string, ?int $flags = null)
 	{
 		if (null === $flags) {
-            $flags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR;
-        }
+			$flags = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION | JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR;
+		}
 
 		return json_encode($string, $flags);
 	}
