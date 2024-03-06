@@ -21,6 +21,11 @@ class Multibyte
         return mb_convert_encoding($string, $to_encoding, $from_encoding);
     }
 
+    public static function encodingToDetectEncoding(string $string, $encoding = 'UTF-8')
+    {
+        return mb_convert_encoding($string, mb_detect_encoding($string), $encoding);
+    }
+
     /**
      * Detect character encoding
      */

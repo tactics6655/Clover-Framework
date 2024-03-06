@@ -364,13 +364,15 @@ class FileObject implements FileObjectInterface
 			return false;
 		}
 
+		if (!$this->temporaryPath) {
+			return true;
+		}
+
 		$isCorrectSize = ($this->fileHandlerClass->getSize($this->temporaryPath) !== (int)$this->writeContentLength);
 
 		if ($this->mode === 'a' && $isCorrectSize) {
 			return false;
 		}
-
-		return true;
 	}
 
 	public function getFilePath(): string

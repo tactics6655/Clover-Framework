@@ -2,7 +2,16 @@
 
 namespace FVP;
 
+use SplStack;
+use SplDoublyLinkedList;
+
+use Clover\Classes\File\Functions as FileFunctions;
+
 class FVPParser {
+
+    private $entry_point = [];
+
+    private $stack;
 
     private $text;
 
@@ -19,7 +28,8 @@ class FVPParser {
     {
         $entryPoint = null;
 
-        for ($i = 0; $i < count($this->split); $i++) {
+        $count = count($this->split);
+        for ($i = 0; $i < $count; $i++) {
             $text = $this->split[$i];
             if (str_starts_with($text, 'ENTRYPOINT')) {
                 preg_match("/^ENTRYPOINT \= ([a-z0-9_]++)/i", $text, $matched);
@@ -33,8 +43,10 @@ class FVPParser {
 
     private function getEntryPointIndex($entryPoint)
     {
-        $startIndex = 0;
-        for ($i = 0; $i < count($this->split); $i++) {
+        $startIndex = -1;
+        $count = count($this->split);
+
+        for ($i = 0; $i < $count; $i++) {
             $text = $this->split[$i];
 
             if ($text == $entryPoint.":") {
@@ -47,25 +59,11 @@ class FVPParser {
 
     private function getTextMatchedIndex($find)
     {
-        $startIndex = -1;
-
-        for ($i = 0; $i < count($this->split); $i++) {
-            $text = $this->split[$i];
-
-            if ($text == $find) {
-                $startIndex = $i + 1;
-            }
-        }
-
-        return $startIndex;
+        return $this->entry_point[$find];
     }
 
-    private function parseUntil(int $startIndex, ?string $prevMethod = null, int $stackIndex = 0)
+    private function parseUntil(int $startIndex)
     {
-        if ($stackIndex > 0) {
-            return;
-        }
-
         while ($startIndex > 0 && str_starts_with($this->split[$startIndex], "\t")) {
             $startIndex++;
 
@@ -76,54 +74,72 @@ class FVPParser {
                 
                 $targetFunction = trim($matched[1]);
 
-                echo "[jmpcond] ".$prevMethod.">".$stackIndex."::".$targetFunction."<br/>";
+                $this->stack->push($startIndex);
 
-                if ($prevMethod != $targetFunction) {
-                    $callIndex = $this->getTextMatchedIndex($targetFunction.":");
-                    $this->parseUntil($callIndex, $targetFunction, $stackIndex++);
-                }
-
+                $startIndex = $this->getTextMatchedIndex($targetFunction.":");
+                
+                continue;
             } else if (str_starts_with($text, "\tjmp")) {
                 preg_match("/^\tjmp ([A-Z0-9_]++)/i", $text, $matched);
                 
                 $targetFunction = trim($matched[1]);
 
-                //echo "[jmp] ".$prevMethod.">".$stackIndex."::".$targetFunction."<br/>";
-
                 $startIndex = $this->getTextMatchedIndex($targetFunction.":");
-            }
-
-            if (str_starts_with($text, "\tpushstring")) {
+                
+                continue;
+            } else if (str_starts_with($text, "\tpushstring")) {
                 preg_match("/^\tpushstring (.*)/i", $text, $matched);
                 $saying = trim($matched[1]);
-                $this->saying[] = mb_convert_encoding($saying, mb_detect_encoding($saying), 'EUC-KR');
-            }
+                $saying = mb_convert_encoding($saying, mb_detect_encoding($saying), 'EUC-KR');
 
-            if (str_starts_with($text, "\tcall")) {
+                FileFunctions::appendContent(__ROOT__."/scenario.txt", "\r\n".$saying);
+            } else if (str_starts_with($text, "\tcall")) {
                 preg_match("/^\tcall([a-zA-Z0-9 _]++)/i", $text, $matched);
                 $callFunction = trim($matched[1]);
 
-                
-                if ($prevMethod != $callFunction) {
-                    $callIndex = $this->getTextMatchedIndex($callFunction.":");
+                $this->stack->push($startIndex);
 
-                    echo "[call] ".$prevMethod.">".$stackIndex."::".$callFunction."<br/>";
+                $startIndex = $this->getTextMatchedIndex($callFunction.":");
 
-                    $this->parseUntil($callIndex, $callFunction, $stackIndex++);
-                }
+                continue;
+            }
+        }
+
+        if (!$this->stack->isEmpty()) {
+            $targetIndex = $this->stack->shift();
+           
+            $this->parseUntil($targetIndex);
+        }
+    }
+    private function setEntyPoint()
+    {
+        $count = count($this->split);
+        for ($i = 0; $i < $count; $i++) {
+            $text = $this->split[$i];
+
+            if (preg_match("/^([A-Za-z0-9_]{1,}):$/", $text, $matches)) {
+                $this->entry_point[$matches[0]] = $i;
             }
         }
     }
 
     public function parse()
     {
-        //set_time_limit(60);
+        set_time_limit(-1);
+
+        $this->stack = new SplStack();
+        $this->stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
+
         $entryPoint = $this->getEntryPoint();
+        $entryPoint = "_F5441_x4C_"; //_F5440_xFA_, _F5441_x4C_
         $startIndex = $this->getEntryPointIndex($entryPoint);
 
-        $this->parseUntil($startIndex);
+        $this->setEntyPoint();
 
-        var_dump($this->saying);
+        FileFunctions::write(__ROOT__."/scenario.txt", '');
+        //FileFunctions::write(__ROOT__."/stack.txt", '');
+
+        $this->parseUntil($startIndex);
     }
 
 }

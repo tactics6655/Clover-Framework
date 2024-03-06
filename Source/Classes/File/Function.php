@@ -117,7 +117,7 @@ class Functions
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
-		$fileObject = new FileObject($filePath, true, $mode);
+		$fileObject = new FileObject($filePath, false, $mode);
 		$fileObject->startHandle();
 
 		if (!$fileObject->successToStartHandle()) {
