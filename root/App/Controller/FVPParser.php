@@ -13,6 +13,8 @@ class FVPParser {
 
     private $stack;
 
+    private $stack_method;
+
     private $text;
 
     private array $split;
@@ -59,33 +61,40 @@ class FVPParser {
 
     private function getTextMatchedIndex($find)
     {
-        return $this->entry_point[$find];
+        FileFunctions::appendContent(__ROOT__."/command.txt", "\r\n>>".$find);
+
+        $point = $this->entry_point[$find];
+
+        return $point + 1;
     }
 
     private function parseUntil(int $startIndex)
     {
         while ($startIndex > 0 && str_starts_with($this->split[$startIndex], "\t")) {
-            $startIndex++;
-
             $text = $this->split[$startIndex];
+
+            FileFunctions::appendContent(__ROOT__."/command.txt", "\r\n".$text);
 
             if (str_starts_with($text, "\tjmpcond")) {
                 preg_match("/^\tjmpcond ([A-Z0-9_]++)/i", $text, $matched);
                 
-                $targetFunction = trim($matched[1]);
+                $callFunction = trim($matched[1]);
 
                 $this->stack->push($startIndex);
+                $this->stack_method->push($callFunction);
 
-                $startIndex = $this->getTextMatchedIndex($targetFunction.":");
+                $startIndex = $this->getTextMatchedIndex($callFunction.":");
                 
+                FileFunctions::appendContent(__ROOT__."/stack.txt", "\r\n".$callFunction);
                 continue;
             } else if (str_starts_with($text, "\tjmp")) {
                 preg_match("/^\tjmp ([A-Z0-9_]++)/i", $text, $matched);
                 
-                $targetFunction = trim($matched[1]);
+                $callFunction = trim($matched[1]);
 
-                $startIndex = $this->getTextMatchedIndex($targetFunction.":");
+                $startIndex = $this->getTextMatchedIndex($callFunction.":");
                 
+                FileFunctions::appendContent(__ROOT__."/stack.txt", "\r\n".$callFunction);
                 continue;
             } else if (str_starts_with($text, "\tpushstring")) {
                 preg_match("/^\tpushstring (.*)/i", $text, $matched);
@@ -98,17 +107,24 @@ class FVPParser {
                 $callFunction = trim($matched[1]);
 
                 $this->stack->push($startIndex);
+                $this->stack_method->push($callFunction);
 
                 $startIndex = $this->getTextMatchedIndex($callFunction.":");
 
+                FileFunctions::appendContent(__ROOT__."/stack.txt", "\r\n".$callFunction);
                 continue;
             }
+
+            $startIndex++;
         }
 
         if (!$this->stack->isEmpty()) {
+            $prevMethod = $this->stack_method->shift();
             $targetIndex = $this->stack->shift();
-           
-            $this->parseUntil($targetIndex);
+            
+            FileFunctions::appendContent(__ROOT__."/command.txt", "\r\n<<Restore from jump(".$this->stack->count().") : ".$prevMethod);
+
+            $this->parseUntil($targetIndex + 1);
         }
     }
     private function setEntyPoint()
@@ -130,14 +146,17 @@ class FVPParser {
         $this->stack = new SplStack();
         $this->stack->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
 
+        $this->stack_method = new SplStack();
+        $this->stack_method->setIteratorMode(SplDoublyLinkedList::IT_MODE_LIFO | SplDoublyLinkedList::IT_MODE_KEEP);
+
         $entryPoint = $this->getEntryPoint();
-        $entryPoint = "_F5441_x4C_"; //_F5440_xFA_, _F5441_x4C_
+        //$entryPoint = "_F5440_xFA_"; //_F5440_xFA_, _F5441_x4C_
         $startIndex = $this->getEntryPointIndex($entryPoint);
 
         $this->setEntyPoint();
 
         FileFunctions::write(__ROOT__."/scenario.txt", '');
-        //FileFunctions::write(__ROOT__."/stack.txt", '');
+        FileFunctions::write(__ROOT__."/stack.txt", '');
 
         $this->parseUntil($startIndex);
     }
