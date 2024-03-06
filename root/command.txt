@@ -3531,3 +3531,88 @@
 	popglobal 1601
 	pushstack -3
 	popglobal 3406
+	pushstack 0
+	popglobal 1602
+	jmp _F5142_xB5F_
+>>_F5142_xB5F_:
+	ret
+	ret
+<<Restore from jump(85) : _F5142_x80D_
+	pushstack -7
+	popglobal 1603
+	pushstack -6
+	popglobal 1604
+	pushstack -5
+	popglobal 1605
+	pushstack -4
+	popglobal 1606
+	pushstack -3
+	popglobal 3412
+	pushstack 0
+	popglobal 1607
+	jmp _F5142_xB5F_
+>>_F5142_xB5F_:
+	ret
+	ret
+<<Restore from jump(84) : _F5142_x83A_
+	pushstack -7
+	popglobal 1608
+	pushstack -6
+	popglobal 1609
+	pushstack -5
+	popglobal 1610
+	pushstack -4
+	popglobal 1611
+	pushstack -3
+	popglobal 3418
+	pushstack 0
+	popglobal 1612
+	jmp _F5142_xB5F_
+>>_F5142_xB5F_:
+	ret
+	ret
+<<Restore from jump(83) : _F5142_x867_
+	pushstack -7
+	popglobal 1613
+	pushstack -6
+	popglobal 1614
+	pushstack -5
+	popglobal 1615
+	pushstack -4
+	popglobal 1616
+	pushstack -3
+	popglobal 3424
+	pushstack 0
+	popglobal 1617
+	jmp _F5142_xB5F_
+>>_F5142_xB5F_:
+	ret
+	ret
+<<Restore from jump(82) : _F5142_x894_
+	pushstack -7
+	popglobal 1618
+	pushstack -6
+	popglobal 1619
+	pushstack -5
+	popglobal 1620
+	pushstack -4
+	popglobal 1621
+	pushstack -3
+	popglobal 3430
+	pushstack 0
+	popglobal 1622
+	jmp _F5142_xB5F_
+>>_F5142_xB5F_:
+	ret
+	ret
+<<Restore from jump(81) : _F5142_x8C1_
+	pushstack -7
+	popglobal 1623
+	pushstack -6
+	popglobal 1624
+	pushstack -5
+	popglobal 1625
+	pushstack -4
+	popglobal 1626
+	pushstack -3
+	popglobal 3436
