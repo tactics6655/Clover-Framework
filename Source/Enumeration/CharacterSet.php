@@ -53,7 +53,7 @@ abstract class CharacterSet
     /**
      * Traditional Chinese
      */
-    const BIG5-HKSCS = 'BIG5-HKSCS';
+    const BIG5_HKSCS = 'BIG5-HKSCS';
 
     /**
      * Japanese
@@ -78,7 +78,7 @@ abstract class CharacterSet
     /**
      * Cyrillic
      */
-    const KOI8_T = 'KOI8-RU';
+    const KOI8_RU = 'KOI8-RU';
 
     /**
      * Tajik

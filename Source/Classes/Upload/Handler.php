@@ -145,10 +145,6 @@ class Handler
 
 	public static function isExists($name = UploadedFile::TEMPORARY_NAME)
 	{
-		if (self::get($name) === null) {
-			return false;
-		}
-
-		return true;
+		return self::get($name) !== null;
 	}
 }

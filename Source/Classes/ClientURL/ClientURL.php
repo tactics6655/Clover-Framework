@@ -18,10 +18,10 @@ class ClientURL implements ClientURLInterface
 
 	private static $session;
 
-	/** @var Clover\Classes\ClientURLOption */
+	/** @var \Clover\Classes\ClientURLOption */
 	public ClientURLOption $option;
 
-	/** @var Clover\Classes\ClientURLLastTransferInformation */
+	/** @var \Clover\Classes\ClientURLLastTransferInformation */
 	public ClientURLLastTransferInformation $information;
 
 	public function __construct(bool $useLocalMethod = true, string $url = '')
@@ -43,7 +43,7 @@ class ClientURL implements ClientURLInterface
 		return extension_loaded('curl');
 	}
 
-	public function getSession(): ?ClientURL
+	public function getSession()
 	{
 		if (self::$session == null) {
 			self::$session = $this->initialize();
@@ -100,6 +100,11 @@ class ClientURL implements ClientURLInterface
 	public function close(): void
 	{
 		curl_close(self::$session);
+	}
+
+	public function getOptions(): array
+	{
+		return $this->option::$curl_options;
 	}
 
 	public function getHeaderOptions(): array

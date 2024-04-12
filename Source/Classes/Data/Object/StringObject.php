@@ -263,6 +263,11 @@ class StringObject extends BaseObject
         return $this;
     }
 
+    public function print()
+    {
+        echo $this->raw_data;
+    }
+
     /**
      * Replaces all both side strings
      * 

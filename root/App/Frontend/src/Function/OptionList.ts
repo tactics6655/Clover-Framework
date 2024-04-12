@@ -23,7 +23,7 @@ var A;
 				(document.getElementById(target) as any).options.length;
 		},
 		
-		addItme: function (target, value, html) {
+		addItem: function (target, value, html) {
 			var opt = document.createElement('option');
 			opt.value = value;
 			opt.innerHTML = html;

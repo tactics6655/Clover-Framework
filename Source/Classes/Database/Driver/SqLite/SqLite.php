@@ -53,4 +53,9 @@ class SqLite
     {
         return $this->connection->exec("INSERT INTO 'Person' ('Name') VALUES ('bskyvision');");
     }
+
+    public function close()
+    {
+        return $this->connection->close();
+    }
 }

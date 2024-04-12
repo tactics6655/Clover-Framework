@@ -9,8 +9,9 @@ use Clover\Classes\Data\URLObject as URLObject;
 use Clover\Classes\Data\StringObject as StringObject;
 use Clover\Enumeration\HTTPRequestMethod;
 use Clover\Enumeration\ServerIndices;
+use Clover\Enumeration\HTTPStatusCode;
 
-use litespeed_finish_request;
+use function litespeed_finish_request;
 
 class Request implements RequestInterface
 {
@@ -110,7 +111,7 @@ class Request implements RequestInterface
 	public static function flushLightSpeedResponseData()
 	{
 		if (function_exists('litespeed_finish_request')) {
-			\litespeed_finish_request();
+			litespeed_finish_request();
 		}
 	}
 
@@ -335,6 +336,9 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::HTTP_CONNECTION) ?? "";
 	}
 
+	/**
+	 * The port on the server machine being used by the web server for communication
+	 */
 	public static function getPort(): string
 	{
 		return self::getServerArguments(ServerIndices::SERVER_PORT);
@@ -355,6 +359,9 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::HTTP_CONTENT_TYPE);
 	}
 
+	/**
+	 * Name and revision of the information protocol via which the page was requested
+	 */
 	public static function getServerProtocol()
 	{
 		return self::getServerArguments(ServerIndices::SERVER_PROTOCOL);
@@ -392,6 +399,9 @@ class Request implements RequestInterface
 		return self::getServerArguments(ServerIndices::HTTP_USER_AGENT) ?? "";
 	}
 
+	/**
+	 * Which request method was used to access the page
+	 */
 	public static function getMethod()
 	{
 		return self::getServerArguments(ServerIndices::REQUEST_METHOD);
@@ -490,8 +500,10 @@ class Request implements RequestInterface
 		return new URLObject($remoteAddress);
 	}
 
-	public static function parseAcceptLanguage($field)
+	public static function parseAcceptLanguage(?string $field = null)
 	{
+		$field = $field ?? self::getAcceptLanguage();
+
 		$fields = explode(",", $field ?? "");
 
 		return array_reduce($fields, function ($res, $el) {
@@ -577,6 +589,7 @@ class Request implements RequestInterface
 
 		if (self::isGetMethod()) {
 			$string = isset($_GET[$parameter]) ? $_GET[$parameter] : null;
+			$string = new StringObject($string);
 		}
 
 		return $string;
@@ -599,8 +612,8 @@ class Request implements RequestInterface
 
 	public static function getExtractedQueryParameters()
 	{
-		if (self::getMethod() === HTTPRequestMethod::GET) {
-			$extracted = array();
+		if (self::isGetMethod()) {
+			$extracted = [];
 
 			foreach ($_GET as $key => $val) {
 				$extracted[$key] = $val;
@@ -789,5 +802,45 @@ class Request implements RequestInterface
 		$url     = $_SERVER['SCRIPT_URL'];
 
 		return strpos($referer, $url) === 0;
+	}
+
+	public function __toArray()
+	{
+		return [
+			'hasReferer' => self::hasReferer(),
+			'isConnectionKeepAlive' => self::isConnectionKeepAlive(),
+			'isCrawler' => self::isCrawler(),
+			'getCrawlerUserAgent' => self::getCrawlerUserAgent(),
+			'isMobile' => self::isMobile(),
+			'getRequestURL' => self::getRequestURL()->__toString(),
+			'getRequestUri' => self::getRequestUri()->__toString(),
+			'getExtractedQueryParameters' => self::getExtractedQueryParameters(),
+			'getAcceptLanguage' => self::getAcceptLanguage(),
+			'parseAcceptLanguage' => self::parseAcceptLanguage(),
+			'getRemoteIPAddress' => self::getRemoteIPAddress()->__toString(),
+			'getQueryString' => self::getQueryString()->__toString(),
+			'getFullUri' => self::getFullUri()->__toString(),
+			'getClientIP' => self::getClientIP(),
+			'getCloudFlareProxyIP' => self::getCloudFlareProxyIP(),
+			'getHTTPXForwardedFor' => self::getHTTPXForwardedFor(),
+			'isAjax' => self::isAjax(),
+			'getDocumentUrl' => self::getDocumentUrl(),
+			'getAcceptEncoding' => self::getAcceptEncoding(),
+			'getUserAgent' => self::getUserAgent(),
+			'getServerProtocol' => self::getServerProtocol(),
+			'getPort' => self::getPort(),
+			'getAbsolutePathOfDocumentRoot' => self::getAbsolutePathOfDocumentRoot(),
+			'getServerSoftwareName' => self::getServerSoftwareName(),
+			'getHttpHost' => self::getHttpHost(),
+			'getURI' => self::getURI(),
+			'getProtocol' => self::getProtocol(),
+			'getScheme' => self::getScheme(),
+			'getUrlPath' => self::getUrlPath(),
+			'getUrlPathSegments' => self::getUrlPathSegments(),
+			'fetchAllResponseHeaders' => self::fetchAllResponseHeaders(),
+			'isHttpsProtocol' => self::isHttpsProtocol(),
+			'isSecure' => self::isSecure(),
+			'getBrowserInformation' => self::getBrowserInformation()
+		];
 	}
 }

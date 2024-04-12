@@ -57,6 +57,10 @@ declare global {
         webkitRequestFullscreen?: () => Promise<void>;
     }
     interface Window {
+        getUserMedia: any;
+        webkitGetUserMedia: any;
+        mozGetUserMedia: any;
+        msGetUserMedia: any;
         speechRecognition: any;
         ga: any;
         jQuery: any;
@@ -124,6 +128,151 @@ declare global {
         globalAlpha: any;
     }
 }
+
+import NotificationService from "./src/Component/NotificationService";
+import WebCam from "./src/Component/WebCam";
+
+var service = new NotificationService();
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (!service.isSupported()) {
+        console.log("Service is not supported");
+        return;
+    }
+    
+    if (!service.isPermissionGranted()) {
+        service.requestPermission();
+    }
+
+    service.notify('test', 'test', '', 'test', {});
+
+});
+
+/*declare const ActiveXObject;
+declare global {
+    interface console {
+        err: any;
+    }
+    interface Date {
+        toGMTString: any;
+    }
+    interface HTMLElement {
+        mozRequestPointerLock: any;
+        getContext: any;
+        type: any;
+    }
+    interface Navigator {
+        connection: any;
+        mozConnection: any;
+        msVibrate: any;
+        mozVibrate: any;
+        webkitVibrate: any;
+        getBattery: any;
+        mozNotification: any;
+        requestWakeLock: any;
+        mozPower: any;
+        mozFMRadio: any;
+        webkitGetUserMedia: any;
+        getUserMedia: any;
+        msGetUserMedia: any;
+        mozGetUserMedia: any;
+        webkitGetGamepads: any;
+    }
+    interface Document {
+        getAttribute: any;
+        webkitHidden: any;
+        msHidden: any;
+        onmousewheel: any;
+        selection: any;
+        createEventObject: any;
+        mozPointerLockElement: any;
+        mozExitPointerLock: any;
+        documentMode?: any;
+        msFullscreenElement: any;
+        mozCancelFullScreen: () => void;
+        webkitExitFullscreen: () => void;
+        fullscreenElement: () => void;
+        mozFullScreenElement: () => void;
+        webkitFullscreenElement: () => void;
+        webkitCancelFullScreen: any;
+        msExitFullscreen: any;
+        fullScreen: any;
+        webkitIsFullScreen: any;
+        mozFullScreen: any;
+    }
+    interface HTMLElement {
+        msRequestFullscreen?: () => Promise<void>;
+        mozRequestFullscreen?: () => Promise<void>;
+        webkitRequestFullscreen?: () => Promise<void>;
+    }
+    interface Window {
+        speechRecognition: any;
+        ga: any;
+        jQuery: any;
+        dataURLtoBlob: any;
+        webkitAudioContext: any;
+        mozAudioContext: any;
+        msAudioContext: any;
+        DocumentTouch: any;
+        chrome: any;
+        webkitPerformance: any;
+        sidebar: any;
+        language: any;
+        webkitCreateShadowRoot: any;
+        createShadowRoot: any;
+        mozPerformance: any;
+        mozRequestAnimationFrame: any;
+        msPerformance: any;
+        externalHost: any;
+        webkitRequestAnimationFrame: any;
+        msRequestAnimationFrame: any;
+        oRequestAnimationFrame: any;
+        webkitCancelAnimationFrame: any;
+        msCancelAnimationFrame: any;
+        mozCancelAnimationFrame: any;
+        lang: any;
+        MSPointerEvent: any;
+        adsbygoogle: any;
+        MSBlobBuilder: any;
+        BlobBuilder: any;
+        WebKitBlobBuilder: any;
+        MozBlobBuilder: any;
+        webkitRTCPeerConnection: any;
+        mozRTCPeerConnection: any;
+        webkitMediaSource: any;
+        opera: any;
+        ActiveXObject: any;
+        XDomainRequest: any;
+        webkitNotifications: any;
+        mozIndexedDB: () => void;
+        webkitIndexedDB: () => void;
+        msIndexedDB: () => void;
+        webkitIDBTransaction: () => void;
+        msIDBTransaction: () => void;
+        webkitIDBKeyRange: () => void;
+        msIDBKeyRange: () => void;
+        openDatabase: () => void;
+        SpeechRecognition: () => void;
+        webkitSpeechRecognition: () => void;
+        createObjectURL: any;
+        mozURL: any;
+        msURL: any;
+        clipboardData: any;
+        attachEvent: any;
+    }
+    interface Notification {
+        permissionLevel: any;
+    }
+    interface JQueryStatic {
+        browser: any;
+        isReady: any;
+        core: any;
+        log: any;
+    }
+    interface CanvasRenderingContext2D {
+        globalAlpha: any;
+    }
+}*/
 
 //declare let $:any;
 

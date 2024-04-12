@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Clover\Classes;
 
 use Clover\Implement\ClientURLOptionInterface;
-
 use Clover\Classes\Format\MultiPurposeInternetMailExtensions as MIME;
-
 use Clover\Enumeration\HTTPRequestMethod;
 
 use const CURLAUTH_DIGEST;
@@ -38,6 +36,8 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	public static $options = [];
 
+	public static $curl_options = [];
+
 	public function __construct($session)
 	{
 		self::$session = $session;
@@ -50,9 +50,21 @@ class ClientURLOption implements ClientURLOptionInterface
 
 	private function setOption($key, $value)
 	{
+		$constants = get_defined_constants(true);
+		$constants = array_filter($constants['curl'] ?? [], function ($id) use ($key) {
+			return $id == $key;
+		});
+
+		self::$curl_options[array_keys($constants)[0] ?? $key] = $value;
+
 		curl_setopt(self::$session, $key, $value);
 	}
 
+	/**
+	 * {@see \CURLOPT_FRESH_CONNECT}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function disableCache(bool $bool)
 	{
 		$this->setOption(CURLOPT_FRESH_CONNECT, $bool);
@@ -61,9 +73,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Provide the URL to use in the request
+	 * {@see \CURLOPT_URL}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setURL(string $url)
 	{
@@ -72,6 +84,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_FORBID_REUSE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setForbidenReuse(bool $bool = true)
 	{
 		$this->setOption(CURLOPT_FORBID_REUSE, $bool);
@@ -80,9 +97,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Ready to Upload
+	 * {@see \CURLOPT_UPLOAD}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setUploadReady(bool $bool = true)
 	{
@@ -92,9 +109,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Verify the peer's SSL certificate
+	 * {@see \CURLOPT_SSL_VERIFYPEER}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setSSLVerifypeer(bool $bool = true)
 	{
@@ -102,11 +119,83 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
+	
+	/**
+	 * {@see \CURLOPT_SSLKEY}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setSSLKey($key)
+	{
+		$this->setOption(CURLOPT_SSLKEY, $key);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_SSLCERT}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setSSLcertificate($certificate)
+	{
+		$this->setOption(CURLOPT_SSLCERT, $certificate);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_SSL_CIPHER_LIST}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setSSLCipherList($cipherList)
+	{
+		$this->setOption(CURLOPT_SSL_CIPHER_LIST, $cipherList);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_CAPATH}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setCAPath($path)
+	{
+		$this->setOption(CURLOPT_CAPATH, $path);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_CAINFO}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setCAInformation($verifyHost)
+	{
+		$this->setOption(CURLOPT_CAINFO, $verifyHost);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_SSL_VERIFYHOST}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setSSLVerifyHost($verifyHost)
+	{
+		$this->setOption(CURLOPT_SSL_VERIFYHOST, $verifyHost);
+
+		return $this->returnContext();
+	}
 
 	/**
-	 * Set maximum time the request is allowed to take
+	 * {@see \CURLOPT_TIMEOUT}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setTimeout(bool $timeout = true)
 	{
@@ -115,6 +204,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_CRLF}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setCRLF(bool $timeout = true)
 	{
 		$this->setOption(CURLOPT_CRLF, $timeout);
@@ -123,9 +217,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Specify data to POST to server
+	 * {@see \CURLOPT_POSTFIELDS}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setPostField($fields)
 	{
@@ -135,21 +229,33 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Size of POST data pointed to
+	 * {@see \CURLOPT_SSLVERSION}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setSSLVersion(int $version = CURL_SSLVERSION_TLSv1_0)
+	{
+		$this->setOption(CURLOPT_SSLVERSION, $version);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_POSTFIELDSIZE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setPostFieldSize(int $size = 0)
 	{
-		$this->setOption(CURLOPT_POSTFIELDSIZE, $size);
+		$this->setOption(\CURLOPT_POSTFIELDSIZE, $size);
 
 		return $this->returnContext();
 	}
 
 	/**
-	 * Redirects that a HTTP server sends in a 30x response
+	 * {@see \CURLOPT_FOLLOWLOCATION}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setFollowRedirects(bool $bool = true)
 	{
@@ -159,9 +265,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Follow HTTP 3xx redirects
+	 * {@see \CURLOPT_FOLLOWLOCATION}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setFollowLocationHeader(int $size = 0)
 	{
@@ -171,9 +277,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Enable/Disable use of EPSV
+	 * {@see \CURLOPT_FTP_USE_EPSV}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setFTPUseEPSV(int $size = 0)
 	{
@@ -182,6 +288,23 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_LOCALPORT}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setLocalPort(int $port)
+	{
+		$this->setOption(CURLOPT_LOCALPORT, $port);
+
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_INTERFACE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setInterface($interface)
 	{
 		$this->setOption(CURLOPT_INTERFACE, $interface);
@@ -189,6 +312,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_RANGE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setRange($range)
 	{
 		$this->setOption(CURLOPT_RANGE, $range);
@@ -196,6 +324,23 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_NOPROXY}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setNoProxy($noproxy)
+	{
+		$this->setOption(CURLOPT_NOPROXY, $noproxy);
+
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_PROXYAUTH}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProxyAuthentication($authentication)
 	{
 		$this->setOption(CURLOPT_PROXYAUTH, $authentication);
@@ -203,6 +348,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_PROXY}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProxy($proxy)
 	{
 		$this->setOption(CURLOPT_PROXY, $proxy);
@@ -210,6 +360,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_PROXYUSERPWD}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProxyUserPassword($password)
 	{
 		$this->setOption(CURLOPT_PROXYUSERPWD, $password);
@@ -217,6 +372,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_PROXYPORT}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProxyPort($port)
 	{
 		$this->setOption(CURLOPT_PROXYPORT, $port);
@@ -224,6 +384,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_COOKIEFILE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setCookieFile($file)
 	{
 		$this->setOption(CURLOPT_COOKIEFILE, $file);
@@ -231,6 +396,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_BUFFERSIZE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setBufferSize($size)
 	{
 		$this->setOption(CURLOPT_BUFFERSIZE, $size);
@@ -238,6 +408,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_TCP_FASTOPEN}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function enableTCPFastOpen($enable)
 	{
 		$this->setOption(CURLOPT_TCP_FASTOPEN, $enable);
@@ -245,6 +420,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_NOPROGRESS}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setNoProgress($number)
 	{
 		$this->setOption(CURLOPT_NOPROGRESS, $number);
@@ -252,6 +432,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_PROGRESSFUNCTION}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProgressCallback($name)
 	{
 		$this->setOption(CURLOPT_PROGRESSFUNCTION, $name);
@@ -259,6 +444,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_MAXREDIRS}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setMaxRedirects(int $number)
 	{
 		$this->setOption(CURLOPT_MAXREDIRS, $number);
@@ -266,6 +456,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_COOKIEJAR}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setCookieJar(string $jar)
 	{
 		$this->setOption(CURLOPT_COOKIEJAR, $jar);
@@ -273,6 +468,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_PROXYTYPE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProxyType($type)
 	{
 		$this->setOption(CURLOPT_PROXYTYPE, $type);
@@ -280,6 +480,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_TCP_KEEPALIVE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function enableTCPKeepAlive(bool $enable)
 	{
 		$this->setOption(CURLOPT_TCP_KEEPALIVE, $enable);
@@ -287,6 +492,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLINFO_HEADER_OUT}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setHeaderOut(bool $enable)
 	{
 		$this->setOption(CURLINFO_HEADER_OUT, $enable);
@@ -294,6 +504,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_FILE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setFileHandler($filePointer)
 	{
 		$this->setOption(CURLOPT_FILE, $filePointer);
@@ -301,6 +516,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_HTTPPROXYTUNNEL}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setProxyTunnel(bool $bool = true)
 	{
 		$this->setOption(CURLOPT_HTTPPROXYTUNNEL, $bool);
@@ -309,9 +529,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Verbose
+	 * {@see \CURLOPT_VERBOSE}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setVerbose(bool $bool = true)
 	{
@@ -321,9 +541,21 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Enable/Disable Global DNS cache
+	 * {@see \CURLOPT_HEADEROPT}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setHeaderOption(int $option = CURLHEADER_SEPARATE)
+	{
+		$this->setOption(CURLOPT_HEADEROPT, $option);
+
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_DNS_USE_GLOBAL_CACHE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setDnsUseGlobalCache(bool $bool = true)
 	{
@@ -333,9 +565,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Set HTTP user-agent header
+	 * {@see \CURLOPT_USERAGENT}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setUserAgent($userAgent = '')
 	{
@@ -344,6 +576,11 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_ENCODING}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setAcceptEncoding($encoding = '')
 	{
 		$this->setOption(CURLOPT_ENCODING, $encoding);
@@ -352,9 +589,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Set contents of HTTP Cookie header
+	 * {@see \CURLOPT_COOKIE}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setCookieHeader($cookieData = '')
 	{
@@ -364,9 +601,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Start a new cookie session
+	 * {@see \CURLOPT_COOKIESESSION}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function useCookieSession(bool $bool = true)
 	{
@@ -376,9 +613,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Maximum connection cache size
+	 * {@see \CURLOPT_MAXCONNECTS}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setMaximumConnectionCount(bool $maximumConnection = true)
 	{
@@ -388,9 +625,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Automatically update the referer header
+	 * {@see \CURLOPT_AUTOREFERER}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setAutoReferer(bool $bool = true)
 	{
@@ -400,9 +637,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Do the download request without getting the body
+	 * {@see \CURLOPT_NOBODY}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setBodyEmpty(bool $bool = true)
 	{
@@ -423,9 +660,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Timeout for the connect phase
+	 * {@see \CURLOPT_CONNECTTIMEOUT_MS}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setConnectionTimeoutMilliseconds(bool $timeout = true)
 	{
@@ -441,13 +678,59 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_TRANSFERTEXT}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setTransferText(bool $bool = true)
 	{
 		$this->setOption(CURLOPT_TRANSFERTEXT, $bool);
 
 		return $this->returnContext();
 	}
+	
+	/**
+	 * {@see \CURLOPT_TCP_NODELAY}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setTcpNodelay(bool $nodelay = true)
+	{
+		$this->setOption(CURLOPT_TCP_NODELAY, $nodelay);
 
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_REDIR_PROTOCOLS}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setRedisProtocol(int $protocol = CURLPROTO_HTTP)
+	{
+		$this->setOption(CURLOPT_REDIR_PROTOCOLS, $protocol);
+
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_PROTOCOLS}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setProtocol(int $protocol = CURLPROTO_HTTP)
+	{
+		$this->setOption(CURLOPT_PROTOCOLS, $protocol);
+
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_BINARYTRANSFER}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setBinaryTransfer(bool $bool = true)
 	{
 		$this->setOption(CURLOPT_BINARYTRANSFER, $bool);
@@ -463,9 +746,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Rate limit data upload speed
+	 * {@see \CURLOPT_MAX_SEND_SPEED_LARGE}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setMaximumSendSpeed(int $bytePerSeconds = 1000)
 	{
@@ -482,17 +765,77 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Rate limit data download speed
+	 * {@see \CURLOPT_MAX_RECV_SPEED_LARGE}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setMaximumReceiveSpeed(int $bytePerSeconds = 1000)
 	{
 		$this->setOption(CURLOPT_MAX_RECV_SPEED_LARGE, $bytePerSeconds);
 
 		return $this->returnContext();
+	}	
+	
+	/**
+	 * {@see \CURLOPT_USERPWD}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setUserPassword($password)
+	{
+		$this->setOption(CURLOPT_USERPWD, $password);
+
+		return $this->returnContext();
 	}
 
+	/**
+	 * {@see \CURLOPT_RESOLVE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setResolve($resolve)
+	{
+		$this->setOption(CURLOPT_RESOLVE, $resolve);
+
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_READFUNCTION}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setReadFunction(\Closure $function)
+	{
+		$this->setOption(CURLOPT_READFUNCTION, $function);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_INFILESIZE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setInFileSize(int $size)
+	{
+		$this->setOption(CURLOPT_INFILESIZE, $size);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_INFILE}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	public function setInFile($file)
+	{
+		$this->setOption(CURLOPT_INFILE, $file);
+
+		return $this->returnContext();
+	}
+	
 	public function setHeader(string $key, string $value, bool $overwrite = false)
 	{
 		$headerData = [$key, $value];
@@ -504,9 +847,9 @@ class ClientURLOption implements ClientURLOptionInterface
 				return implode(': ', $header);
 			}, self::$options);
 
-			$this->setOption(CURLOPT_HTTPHEADER, $headers);
+			$this->setHeaders($headers);
 		} else {
-			$this->setOption(CURLOPT_HTTPHEADER, $headerData);
+			$this->setHeaders($headerData);
 		}
 
 		return $this->returnContext();
@@ -545,9 +888,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Set custom HTTP headers
+	 * {@see \CURLOPT_HTTPHEADER}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setHeaders($headers = [])
 	{
@@ -557,9 +900,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Set remote port number to work with
+	 * {@see \CURLOPT_PORT}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setPort(bool $port = true)
 	{
@@ -569,9 +912,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Request an HTTP POST Method
+	 * {@see \CURLOPT_POST}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setPostMethod(bool $bool = true)
 	{
@@ -581,9 +924,9 @@ class ClientURLOption implements ClientURLOptionInterface
 	}
 
 	/**
-	 * Request an HTTP GET Method
+	 * {@see \CURLOPT_HTTPGET}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setGetMethod(bool $bool = true)
 	{
@@ -670,20 +1013,47 @@ class ClientURLOption implements ClientURLOptionInterface
 		return $this->setHTTPVersion(\CURL_HTTP_VERSION_2_PRIOR_KNOWLEDGE);
 	}
 
-	private function setHTTPVersion($version)
+	/**
+	 * {@see \CURLOPT_HTTP_VERSION}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	private function setHTTPVersion(int $version = CURL_HTTP_VERSION_1_0)
 	{
 		$this->setOption(CURLOPT_HTTP_VERSION, $version);
 
 		return $this->returnContext();
 	}
 
-	private function setAuthentication($authentication)
+	/**
+	 * {@see \CURLOPT_HTTPAUTH}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	private function setAuthentication(int $authentication = CURLAUTH_ANY)
 	{
 		$this->setOption(CURLOPT_HTTPAUTH, $authentication);
 
 		return $this->returnContext();
 	}
+	
+	/**
+	 * {@see \CURLOPT_NOSIGNAL}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
+	private function setNoSignal(bool $noSignal = false)
+	{
+		$this->setOption(CURLOPT_NOSIGNAL, $noSignal);
 
+		return $this->returnContext();
+	}
+
+	/**
+	 * {@see \CURLOPT_CUSTOMREQUEST}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	private function setCustomMethod($method)
 	{
 		$this->setOption(CURLOPT_CUSTOMREQUEST, $method);
@@ -694,7 +1064,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Options Method
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	private function setOptionsMethod()
 	{
@@ -704,7 +1074,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Patch Method
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	private function setPatchMethod()
 	{
@@ -714,7 +1084,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Head Method
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	private function setHeadMethod()
 	{
@@ -724,7 +1094,7 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Put Method
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	private function setPutMethod()
 	{
@@ -734,24 +1104,70 @@ class ClientURLOption implements ClientURLOptionInterface
 	/**
 	 * Request an HTTP Delete Method
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	private function setDeleteMethod()
 	{
 		return $this->setCustomMethod(HTTPRequestMethod::DELETE);
 	}
 
+	/**
+	 * {@see \CURLOPT_RETURNTRANSFER}
+	 *
+	 * @return \Clover\Classes\ClientURLOption
+	 */
 	public function setReturnTransfer(bool $hasResponse = true)
 	{
 		$this->setOption(CURLOPT_RETURNTRANSFER, $hasResponse);
 
 		return $this->returnContext();
 	}
+	
+	/**
+	 * {@see \CURLOPT_TIMEOUT_MS}
+	 */
+	public function setTimeoutMilliseconds(int $milliseconds)
+	{
+		$this->setOption(CURLOPT_TIMEOUT_MS, $milliseconds);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_SHARE}
+	 */
+	public function setShare(string $share)
+	{
+		$this->setOption(CURLOPT_SHARE, $share);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_PINNEDPUBLICKEY}
+	 */
+	public function setPinnedPublicKey(string $key)
+	{
+		$this->setOption(CURLOPT_PINNEDPUBLICKEY, $key);
+
+		return $this->returnContext();
+	}
+	
+	/**
+	 * {@see \CURLOPT_UNIX_SOCKET_PATH}
+	 */
+	public function setUnixSocketPath(string $path)
+	{
+		$this->setOption(CURLOPT_UNIX_SOCKET_PATH, $path);
+
+		return $this->returnContext();
+	}
+	
 
 	/**
-	 * Pass headers to the data stream
+	 * {@see \CURLOPT_HEADER}
 	 *
-	 * @return Clover\Classes\ClientURLOption
+	 * @return \Clover\Classes\ClientURLOption
 	 */
 	public function setReturnHeader(bool $hasResponse = true)
 	{

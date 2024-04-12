@@ -62,8 +62,11 @@
         "forceConsistentCasingInFileNames": true /* 같은 파일에 대한 일관되지 않은 참조를 허용하지 않을 지 여부 */
     },
     "include": [
-        "**/*.ts"
-        /*"index.ts",
+        "index.ts",
+        "src/Component/*.ts"
+        /*
+        "**\/*.ts"
+        "index.ts",
         "src\\config.ts",
         "src\\Function\\Class\\Canvas2D.ts",
         "src\\Function\\Class\\OpenGLObject.ts",

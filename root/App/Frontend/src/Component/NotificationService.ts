@@ -25,6 +25,10 @@ export default class NotificationService {
         }
     }
 
+    public isPermissionGranted() {
+        return this.getPermittedLevel() === 'granted';
+    }
+
     public getPermittedLevel() {
         let permit;
 
@@ -45,7 +49,7 @@ export default class NotificationService {
             return;
         }
 
-        var notificationHandler;
+        var notificationHandler = null;
         var notification = null;
 
         if (window.Notification) {

@@ -151,16 +151,25 @@ class Handler
         return false;
     }
 
+    /**
+     * Returns an array of all declared traits
+     */
     public static function getDeclaredTraits(): array
     {
         return get_declared_traits();
     }
 
+    /**
+     * Returns an array with the name of the defined classes
+     */
     public static function getDeclaredClasses(): array
     {
         return get_declared_classes();
     }
 
+    /**
+     * Returns an array of all defined functions
+     */
     public static function getDeclaredFunctions(): array
     {
         return get_defined_functions();
@@ -358,6 +367,7 @@ class Handler
 
         if (8 === PHP_MAJOR_VERSION) {
             $attributes = $reflector->getAttributes($annotationName);
+
             foreach ($attributes as $attribute) {
                 $result[] = $attribute->newInstance();
             }
@@ -458,11 +468,11 @@ class Handler
      */
     public static function getClassReflection(object|string $class): object
     {
-        $reflection = self::getClass($class);
-        $parameters = self::getParameters($reflection);
-
         $dependencies = [];
 
+        $reflection = self::getClass($class);
+        $parameters = self::getParameters($reflection);
+        
         foreach ($parameters as $parameter) {
             /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
             $type = $parameter->getType();
@@ -476,13 +486,13 @@ class Handler
             }
 
             if (80100 <= PHP_VERSION_ID) {
-                $name = new ReflectionClass($type->getName());
+                $name = $type->getName();
+                $instance = new ReflectionClass($name);
             } else if (80000 > PHP_VERSION_ID) {
-                $name = $parameter->getClass()->newInstance();
+                $instance = $parameter->getClass()->newInstance();
             }
 
-            $dependencies[] = $name;
-            continue;
+            $dependencies[] = $instance;
         }
 
         return $reflection->newInstance(...$dependencies);

@@ -53,7 +53,7 @@ enum MimeTypes {
 
 interface AudioRecorderInterface {
     hasGetUserMedia() :boolean;
-    useAutocorrelation(use: boolean);
+    useAutocorrelation(use: boolean): void;
     clearSpectrum() :void;
     setSpectrum() :void;
     clearRecordChunks() :void;

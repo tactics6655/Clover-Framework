@@ -46,10 +46,15 @@ class Runtime
     {
         $software = $this->environment[Environment::SERVER][Environment::SOFTWARE];
 
-        if ($software == 'nginx') {
-            Request::flushFastCgiResponseData();
-        } else if ($software == 'lightspeed') {
-            Request::flushLightSpeedResponseData();
+        switch (strtolower($software)) {
+            case 'nginx':
+                Request::flushFastCgiResponseData();
+                break;
+            case 'lightspeed':
+                Request::flushLightSpeedResponseData();
+                break;
+            default:
+                flush();
         }
     }
 
