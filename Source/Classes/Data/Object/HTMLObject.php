@@ -8,14 +8,14 @@ use Clover\Classes\Data\HTMLHandler as HTMLHandler;
 class HTMLObject extends StringObject
 {
 
-    protected $raw_data;
+    protected $rawData;
     private $handler;
 
     public function __construct($data)
     {
         parent::__construct($data);
 
-        $this->raw_data = $data;
+        $this->rawData = $data;
 
         $this->handler = new HTMLHandler();
     }
@@ -27,6 +27,6 @@ class HTMLObject extends StringObject
 
     public function unhtmlSpecialChars()
     {
-        return $this->handler->unhtmlSpecialChars($this->raw_data);
+        return $this->handler->unhtmlSpecialChars($this->rawData);
     }
 }

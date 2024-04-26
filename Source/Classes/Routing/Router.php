@@ -49,7 +49,7 @@ class Router
 	 * 
 	 * @return Middleware[]
 	 */
-	public function getMiddlewares()
+	public function getMiddlewares(): array
 	{
 		return $this->middlewares;
 	}
@@ -61,14 +61,14 @@ class Router
 	 * 
 	 * @return Router
 	 */
-	public function setMiddlewares(...$middleware)
+	public function setMiddlewares(...$middleware): self
 	{
 		$this->middlewares = $middleware;
 
 		return $this;
 	}
 
-	public function setNotFoundHandler(string|null|Closure $handler)
+	public function setNotFoundHandler(string|null|Closure $handler): void
 	{
 		$this->notFoundHandler = $handler;
 	}
@@ -78,7 +78,7 @@ class Router
 	 * 
 	 * @param Container $container
 	 */
-	public function setContainer(Container $container)
+	public function setContainer(Container $container): void
 	{
 		$this->container = $container;
 	}
@@ -86,7 +86,7 @@ class Router
 	/**
 	 * Set a pre-append prefix on pattern
 	 */
-	private function addPrefix($pattern)
+	private function addPrefix($pattern): string
 	{
 		return $this->prependPrefix . $pattern;
 	}
@@ -98,7 +98,7 @@ class Router
 	 * @param string $pattern
 	 * @param mixed $callback
 	 */
-	private function set(string $method, string $pattern, mixed $callback, string $host = "*", string $contentType = "*")
+	private function set(string $method, string $pattern, mixed $callback, string $host = "*", string $contentType = "*"): void
 	{
 		$pattern = $this->addPrefix($pattern);
 
@@ -108,7 +108,7 @@ class Router
 	/**
 	 * Add group route
 	 */
-	public function group($pattern, $callback)
+	public function group($pattern, $callback): self
 	{
 		$this->prependPrefix = $pattern;
 
@@ -124,7 +124,7 @@ class Router
 	/**
 	 * Add route for Any-Method
 	 */
-	public function on(string $method, $pattern, $callback)
+	public function on(string $method, $pattern, $callback): self
 	{
 		$this->set($method, $pattern, $callback);
 
@@ -134,7 +134,7 @@ class Router
 	/**
 	 * Add route for GET-Method
 	 */
-	public function get($pattern, $callback)
+	public function get($pattern, $callback): self
 	{
 		$this->set(HTTPRequestMethod::GET, $pattern, $callback);
 
@@ -144,7 +144,7 @@ class Router
 	/**
 	 * Add route for POST-Method
 	 */
-	public function post($pattern, $callback)
+	public function post($pattern, $callback): self
 	{
 		$this->set(HTTPRequestMethod::POST, $pattern, $callback);
 
@@ -156,7 +156,7 @@ class Router
 	 * 
 	 * @param string $path
 	 */
-	public function fromDirectory(string $path)
+	public function fromDirectory(string $path): self
 	{
 		$fileList = DirectoryHandler::getList($path, 'file', true, true);
 
@@ -176,7 +176,7 @@ class Router
 	 * 
 	 * @param string $path
 	 */
-	public function fromFile(string $path)
+	public function fromFile(string $path): self
 	{
 		$classNames = FileFunctions::getClassNames($path);
 
@@ -212,7 +212,7 @@ class Router
 	/**
 	 * Add route when route match
 	 */
-	private function addRoute($method, $pattern, $callback, $middleware = [], $host = "*", $contentType = "*")
+	private function addRoute($method, $pattern, $callback, $middleware = [], $host = "*", $contentType = "*"): void
 	{
 		if (!isset($this->routes[$method])) {
 			$this->routes[$method] = [];
@@ -228,7 +228,7 @@ class Router
 	/**
 	 * Add route for DELETE-Method
 	 */
-	public function delete($pattern, $callback)
+	public function delete($pattern, $callback): self
 	{
 		$this->set(HTTPRequestMethod::DELETE, $pattern, $callback);
 
@@ -238,7 +238,7 @@ class Router
 	/**
 	 * Add route for PUT-Method
 	 */
-	public function put($pattern, $callback)
+	public function put($pattern, $callback): self
 	{
 		$this->set(HTTPRequestMethod::PUT, $pattern, $callback);
 
@@ -248,7 +248,7 @@ class Router
 	/**
 	 * Add route for OPTIONS-Method
 	 */
-	public function options($pattern, $callback)
+	public function options($pattern, $callback): self
 	{
 		$this->set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
 
@@ -258,7 +258,7 @@ class Router
 	/**
 	 * Add route for PATCH-Method
 	 */
-	public function patch($pattern, $callback)
+	public function patch($pattern, $callback): self
 	{
 		$this->set(HTTPRequestMethod::PATCH, $pattern, $callback);
 
@@ -272,7 +272,7 @@ class Router
 	 * 
 	 * @return bool
 	 */
-	private function has(string $method)
+	private function has(string $method): bool
 	{
 		return isset($this->routes[$method]);
 	}
@@ -282,9 +282,9 @@ class Router
 	 * 
 	 * @param string $method
 	 * 
-	 * @return Route
+	 * @return Route|array
 	 */
-	private function getRoute(string $method)
+	private function getRoute(string $method): Route|array
 	{
 		return $this->routes[$method];
 	}
@@ -294,7 +294,7 @@ class Router
 	 * 
 	 * @return mixed
 	 */
-	public function handle()
+	public function handle(): mixed
 	{
 		$this->method = HTTPRequest::getMethod();
 

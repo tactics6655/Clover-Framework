@@ -5,41 +5,122 @@ namespace Clover\Classes\Data;
 use Clover\Classes\Data\BaseObject as BaseObject;
 use Clover\Classes\Data\IntegerObject as IntegerObject;
 use Clover\Classes\Data\BooleanObject as BooleanObject;
-
+use Countable;
+use Iterator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use Traversable;
 
 #[\AllowDynamicProperties]
-class ArrayObject extends BaseObject
+class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countable
 {
 
-    protected $raw_data;
+    protected $rawData;
 
     public function __construct($data = [])
     {
-        $this->raw_data = $data;
+        $this->rawData = $data;
+    }
+
+    public function offsetSet($offset, $value): void
+    {
+        if (is_null($offset)) {
+            $this->rawData[] = $value;
+        } else {
+            $this->rawData[$offset] = $value;
+        }
+    }
+
+    public function current(): mixed
+    {
+        return current($this->rawData);
+    }
+
+    public function count(): int
+    {
+        return count($this->rawData);
+    }
+
+    public function valid(): bool
+    {
+        return key($this->rawData) !== null;
+    }
+
+    public function next(): void
+    {
+        next($this->rawData);
+    }
+
+    public function rewind(): void
+    {
+        reset($this->rawData);
+    }
+
+    public function key(): mixed
+    {
+        return key($this->rawData);
+    }
+
+    public function offsetUnset($offset): void
+    {
+        unset($this->rawData[$offset]);
+    }
+
+    public function offsetGet($offset): mixed
+    {
+        return $this->rawData[$offset] ?? null;
+    }
+
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->rawData[$offset]);
     }
 
     public function addWithKey($key, $item)
     {
-        $this->raw_data[$key] = $item;
+        $this->rawData[$key] = $item;
     }
 
     public function add($item)
     {
-        $this->raw_data[] = $item;
+        $this->rawData[] = $item;
+    }
+
+    /**
+     * Merge two arrays
+     * 
+     * @return ArrayObject
+     */
+    public function merge($b): self
+    {
+        $this->rawData = array_merge($this->rawData, $b->rawData);
+
+        return $this;
+    }
+
+    /**
+     * Merge two arrays and removes duplicate values
+     * 
+     * @return ArrayObject
+     */
+    public function mergeUnique($b): self
+    {
+        $this->rawData = array_unique($this->merge($b)->rawData);
+
+        return $this;
     }
 
     /**
      * Iteratively reduce the array to a single value using a callback function
+     * 
+     * @return ArrayObject
      */
-    public function reduce($method, $initial = null)
+    public function reduce($method, $initial = null): self
     {
-        $data = array_reduce($this->raw_data, $method, $initial);
+        $data = array_reduce($this->rawData, $method, $initial);
 
         if (isset($data)) {
-            $this->raw_data = $data;
+            $this->rawData = $data;
         }
 
         return $this;
@@ -47,13 +128,15 @@ class ArrayObject extends BaseObject
 
     /**
      * Iterates over each value in the array passing them to the callback function
+     * 
+     * @return ArrayObject
      */
-    public function filter($method)
+    public function filter($method): self
     {
-        $data = array_filter($this->raw_data, $method);
+        $data = array_filter($this->rawData, $method);
 
         if (isset($data)) {
-            $this->raw_data = $data;
+            $this->rawData = $data;
         }
 
         return $this;
@@ -61,27 +144,29 @@ class ArrayObject extends BaseObject
 
     /**
      * Applies the callback to the elements of the given arrays
+     * 
+     * @return ArrayObject
      */
-    public function map($method)
+    public function map($method): self
     {
-        $data = array_map($method, $this->raw_data);
+        $data = array_map($method, $this->rawData);
 
         if (isset($data)) {
-            $this->raw_data = $data;
+            $this->rawData = $data;
         }
 
         return $this;
     }
 
-    public function get($key)
+    public function get($key): self|StringObject
     {
-        $data = $this->raw_data[$key];
+        $data = $this->rawData[$key];
 
         if (is_string($data)) {
             return new StringObject($data);
         }
 
-        $this->raw_data = $data;
+        $this->rawData = $data;
 
         return $this;
     }
@@ -91,29 +176,33 @@ class ArrayObject extends BaseObject
      * 
      * @return ArrayObject
      */
-    public function getKeys()
+    public function getKeys(): self
     {
-        $this->raw_data = array_keys($this->raw_data);
+        $this->rawData = array_keys($this->rawData);
 
         return $this;
     }
 
     /**
      * Return all the values of an array
+     * 
+     * @return ArrayObject
      */
-    public function getValues()
+    public function getValues(): self
     {
-        $this->raw_data = array_values($this->raw_data);
+        $this->rawData = array_values($this->rawData);
 
         return $this;
     }
 
     /**
      * Shuffle an array
+     * 
+     * @return ArrayObject
      */
-    public function shuffle()
+    public function shuffle(): self
     {
-        $this->raw_data = shuffle($this->raw_data);
+        $this->rawData = shuffle($this->rawData);
 
         return $this;
     }
@@ -123,29 +212,33 @@ class ArrayObject extends BaseObject
      * 
      * @return ArrayObject
      */
-    public function sortByCaseInsensitiveNaturalOrderAlgorithm()
+    public function sortByCaseInsensitiveNaturalOrderAlgorithm(): self
     {
-        natcasesort($this->raw_data);
+        natcasesort($this->rawData);
 
         return $this;
     }
 
     /**
      * Computes the intersection of arrays with additional index check
+     * 
+     * @return ArrayObject
      */
-    public function computeIntersectionWithIndex(?array $array = [])
+    public function computeIntersectionWithIndex(?array $array = []): self
     {
-        $this->raw_data = array_intersect_assoc($this->raw_data, $array);
+        $this->rawData = array_intersect_assoc($this->rawData, $array);
 
         return $this;
     }
 
     /**
      * Computes the intersection of arrays
+     * 
+     * @return ArrayObject
      */
-    public function computeIntersection(?array $array = [])
+    public function computeIntersection(?array $array = []): self
     {
-        $this->raw_data = array_intersect($this->raw_data, $array);
+        $this->rawData = array_intersect($this->rawData, $array);
 
         return $this;
     }
@@ -155,9 +248,9 @@ class ArrayObject extends BaseObject
      * 
      * @return ArrayObject
      */
-    public function sortByNaturalOrderAlgorithm()
+    public function sortByNaturalOrderAlgorithm(): self
     {
-        natsort($this->raw_data);
+        natsort($this->rawData);
 
         return $this;
     }
@@ -167,9 +260,9 @@ class ArrayObject extends BaseObject
      * 
      * @return ArrayObject
      */
-    public function sortByKeyInReverseOrder()
+    public function sortByKeyInReverseOrder(): self
     {
-        krsort($this->raw_data);
+        krsort($this->rawData);
 
         return $this;
     }
@@ -179,9 +272,9 @@ class ArrayObject extends BaseObject
      * 
      * @return ArrayObject
      */
-    public function sortByKey()
+    public function sortByKey(): self
     {
-        ksort($this->raw_data);
+        ksort($this->rawData);
 
         return $this;
     }
@@ -191,9 +284,9 @@ class ArrayObject extends BaseObject
      * 
      * @return int|string|null
      */
-    public function getLastKey()
+    public function getLastKey(): int|string|null
     {
-        return array_key_last($this->raw_data);
+        return array_key_last($this->rawData);
     }
 
     /**
@@ -201,9 +294,9 @@ class ArrayObject extends BaseObject
      * 
      * @return int|string|null
      */
-    public function getFirstKey()
+    public function getFirstKey(): int|string|null
     {
-        return array_key_first($this->raw_data);
+        return array_key_first($this->rawData);
     }
 
     /**
@@ -211,16 +304,21 @@ class ArrayObject extends BaseObject
      * 
      * @return int|string|null
      */
-    public function fetchKey()
+    public function fetchKey(): int|string|null
     {
-        return key($this->raw_data);
+        return key($this->rawData);
     }
 
-    public function getMaxDepth()
+    /**
+     * Get the maximum depth of array
+     * 
+     * @return int
+     */
+    public function getMaxDepth(): int
     {
         $currentDepth = 0;
         $depth = 0;
-        $arrayReclusive = new RecursiveArrayIterator($this->raw_data);
+        $arrayReclusive = new RecursiveArrayIterator($this->rawData);
         $iteratorReclusive = new RecursiveIteratorIterator($arrayReclusive);
 
         /** @var RecursiveIteratorIterator[RecursiveArrayIterator] $iteratorReclusive */
@@ -230,9 +328,7 @@ class ArrayObject extends BaseObject
             $depth = $currentDepth > $depth ? $currentDepth : $depth;
         }
 
-        $this->raw_data = $depth;
-
-        return new IntegerObject($this->raw_data);
+        return $depth;
     }
 
     /**
@@ -240,9 +336,9 @@ class ArrayObject extends BaseObject
      * 
      * @return bool
      */
-    public function isTraversable($array)
+    public function isTraversable(): bool
     {
-        return $array instanceof Traversable;
+        return $this->rawData instanceof Traversable;
     }
 
     /**
@@ -250,9 +346,9 @@ class ArrayObject extends BaseObject
      * 
      * @return bool
      */
-    public function isKeyExists($key)
+    public function isKeyExists($key): bool
     {
-        return array_key_exists($this->raw_data, $key);
+        return array_key_exists($this->rawData, $key);
     }
 
     /**
@@ -260,41 +356,68 @@ class ArrayObject extends BaseObject
      * 
      * @return bool|int|string
      */
-    public function getKeyByValue(string $key)
+    public function getKeyByValue(string $key): bool|int|string
     {
-        return array_search($key, (array)($this->raw_data));
+        return array_search($key, (array)($this->rawData));
     }
 
     public function __toString()
     {
-        return implode(" ", $this->raw_data);
+        return implode(" ", $this->rawData);
+    }
+
+    /**
+     * Computes the difference of arrays
+     * 
+     * @return ArrayObject
+     */
+    public function computesDifference($array): self
+    {
+        $clone_original = &$this;
+        $clone_target = &$array;
+
+        $this->rawData = array_diff($clone_original->rawData, $clone_target->rawData);
+
+        return $this;
+    }
+
+    public function isEquals($b): bool
+    {
+        return count($this->rawData) == count($b->rawData) &&
+            array_diff($this->rawData, $b->rawData) == array_diff($b->rawData, $this->rawData);
     }
 
     /**
      * Sort an array
+     * 
+     * @return ArrayObject
      */
-    public function sort($flags = SORT_REGULAR)
+    public function sort($flags = SORT_REGULAR): self
     {
-        sort($this->raw_data, $flags);
+        sort($this->rawData, $flags);
 
         return $this;
     }
 
     /**
      * Join array elements with a string
+     * 
+     * @return StringObject
      */
-    public function join($delimiter)
+    public function join($delimiter): StringObject
     {
-        $this->raw_data = implode($delimiter, $this->raw_data);
+        $this->rawData = implode($delimiter, $this->rawData);
 
-        return new StringObject($this->raw_data);
+        return new StringObject($this->rawData);
     }
 
     /**
      * Counts all elements in an array
+     * 
+     * @return int
      */
-    public function size()
+    public function size(): int
     {
-        return new IntegerObject(count($this->raw_data));
+        return count($this->rawData);
     }
 }

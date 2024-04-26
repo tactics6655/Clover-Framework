@@ -56,10 +56,12 @@ class HttpKernel
         }
 
         if ($response->getType() == 'html') {
-            $header = $this->getEssentialBody($response->getResource(), __DIR__ . '/../Template/Header.php');
+            $resources = $response->getResource();
+
+            $header = $this->getEssentialBody($resources, __DIR__ . '/../Template/Header.php');
             $response->preAppendBody($header);
 
-            $footer = $this->getEssentialBody($response->getResource(), __DIR__ . '/../Template/Footer.php');
+            $footer = $this->getEssentialBody($resources, __DIR__ . '/../Template/Footer.php');
             $response->appendBody($footer);
 
             $debuggerInformation = [

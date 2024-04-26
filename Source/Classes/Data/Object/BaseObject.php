@@ -6,16 +6,21 @@ namespace Clover\Classes\Data;
 class BaseObject
 {
 
-    protected $raw_data;
+    protected $rawData;
 
     public function __construct($data)
     {
-        $this->raw_data = $data;
+        $this->rawData = $data;
+    }
+
+    public function getRawData()
+    {
+        return $this->rawData;
     }
 
     public function __toString()
     {
-        return implode(" ", $this->raw_data);
+        return implode(" ", $this->rawData);
     }
 
     public function length()

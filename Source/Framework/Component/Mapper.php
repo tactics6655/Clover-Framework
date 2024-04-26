@@ -124,6 +124,7 @@ class Mapper
         $parser = new SimpleXML();
         $parser->fromFile(dirname(__ROOT__) . "/Source/Framework/Configure/default_services.xml");
         $services = $parser->getChildren('container')->getChildren('services')->getData();
+        
         /** @var \SimpleXMLElement[] $services */
         foreach ($services as $service) {
             $key = $service->attributes()->key->__toString();

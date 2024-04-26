@@ -300,7 +300,7 @@ class Route
 
         $separatedSegments = $this->getPattern()->trim('/')->split('/');
 
-        $count = $separatedSegments->size()->toInteger();
+        $count = $separatedSegments->size();
 
         if ($count <= 0) {
             return false;

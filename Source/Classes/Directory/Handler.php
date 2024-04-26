@@ -435,9 +435,11 @@ class Handler implements DirectoryHandlerInterface
 
 			$filePath = $path . '/' . $file;
 
-			if (strtoupper($type) == 'FILE') {
+			$type = $type == null ? $type : strtoupper($type);
+
+			if ($type == 'FILE') {
 				$passed = is_file($filePath);
-			} else if (strtoupper($type) == 'PATH') {
+			} else if ($type == 'PATH') {
 				$passed = is_dir($filePath);
 			}
 

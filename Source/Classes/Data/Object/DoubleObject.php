@@ -9,15 +9,15 @@ use Clover\Classes\Data\BaseObject as BaseObject;
 class DoubleObject extends BaseObject
 {
 
-    protected $raw_data;
+    protected $rawData;
 
     public function __construct($data)
     {
-        $this->raw_data = $data;
+        $this->rawData = $data;
     }
 
     public function __toString()
     {
-        return (string)$this->raw_data;
+        return (string)$this->rawData;
     }
 }

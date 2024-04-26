@@ -8,11 +8,11 @@ use Clover\Classes\Data\BaseObject as BaseObject;
 class BooleanObject extends BaseObject
 {
 
-    protected $raw_data;
+    protected $rawData;
 
     public function __construct(bool $data)
     {
-        $this->raw_data = $data;
+        $this->rawData = $data;
     }
 
     public function _toString()
@@ -37,6 +37,6 @@ class BooleanObject extends BaseObject
 
     public function __invoke()
     {
-        return $this->raw_data;
+        return $this->rawData;
     }
 }

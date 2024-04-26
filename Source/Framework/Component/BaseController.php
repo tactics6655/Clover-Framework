@@ -18,6 +18,11 @@ class BaseController
         $this->container = $container;
     }
 
+    public function debug($body, $resource = array())
+    {
+        return new Response('<div style="white-space: break-spaces;font-size: 11px;">'.$body.'</div>', $resource);
+    }
+
     public function response(mixed $body, $resource = array())
     {
         return new Response($body, $resource);

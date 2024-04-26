@@ -36,7 +36,7 @@ class RouteExecutor
      * 
      * @return mixed
      */
-    public function __invoke(mixed $next_arguments = [])
+    public function __invoke(mixed $next_arguments = []): mixed
     {
         $class = $this->class;
         $callback = $this->callback;

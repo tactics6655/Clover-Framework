@@ -7,6 +7,7 @@ namespace Clover\Classes\Database\Driver;
 use SQLite3;
 use SQLite3Result;
 use Closure;
+use Clover\Classes\Data\ArrayObject;
 
 class SqLite
 {
@@ -34,9 +35,11 @@ class SqLite
         }
     }
 
-    public function fetchArray(SQLite3Result $result): array|bool
+    public function fetchArray(SQLite3Result $result): array|bool|ArrayObject
     {
-        return $result->fetchArray(SQLITE3_ASSOC);
+        $result = $result->fetchArray(SQLITE3_ASSOC);
+
+        return $result;
     }
 
     public function query($sql): SQLite3Result|bool
@@ -51,7 +54,7 @@ class SqLite
 
     public function execute($sql)
     {
-        return $this->connection->exec("INSERT INTO 'Person' ('Name') VALUES ('bskyvision');");
+        return $this->connection->exec($sql);
     }
 
     public function close()
