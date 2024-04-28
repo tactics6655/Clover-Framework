@@ -73,7 +73,7 @@ class HttpKernel
                 'environment' => $this->environment
             ];
 
-            $response->appendBody(FileFunctions::getInterpretedContent(__DIR__ . '/../Template/Debugger.php', $debuggerInformation));
+            //$response->appendBody(FileFunctions::getInterpretedContent(__DIR__ . '/../Template/Debugger.php', $debuggerInformation));
         }
 
         return $response;

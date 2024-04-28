@@ -8,7 +8,7 @@ class TwitterParser
 {
 
 	private $guestToken;
-	private $token = "AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
+	private $token = "";
 	private $activateUrl;
 	private $videoUrl;
 	private $graphqlUrl = "";
@@ -27,15 +27,15 @@ class TwitterParser
 			'authorization:Bearer ' . $this->token
 		);
 
-		$cURL = new ClientURL();
-		$cURL->option->setURL($this->activateUrl)
+		$clientUrl = new ClientURL();
+		$clientUrl->option->setURL($this->activateUrl)
 			->setPostField(true)
 			->setHeaders($headers)
 			->setReturnTransfer(true)
 			->setAutoReferer(true)
 			->setReturnHeader(false);
 
-		$result = $cURL->execute();
+		$result = $clientUrl->execute();
 		$guestToken = json_decode($result)->guest_token;
 
 		return $guestToken;
@@ -48,7 +48,7 @@ class TwitterParser
 		return $videoUrl;
 	}
 
-	public function getUserTweetsAndReplies($userId, $guestToken)
+	public function getUserTweetsAndReplies($userId, string $guestToken)
 	{
 		$headers = array(
 			'authorization:Bearer ' . $this->token,
@@ -57,15 +57,15 @@ class TwitterParser
 
 		$requestUrl = sprintf($this->graphqlUrl, $userId);
 
-		$cURL = new ClientURL();
-		$cURL->option->setURL($requestUrl)
+		$clientUrl = new ClientURL();
+		$clientUrl->option->setURL($requestUrl)
 			->setPostMethod(false)
 			->setHeaders($headers)
 			->setReturnTransfer(true)
 			->setAutoReferer(true)
 			->setReturnHeader(false);
 
-		$result = $cURL->execute();
+		$result = $clientUrl->execute();
 		return json_decode($result)->data->user->result;
 	}
 }

@@ -24,7 +24,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->rawData[] = $value;
         } else {
             $this->rawData[$offset] = $value;
@@ -89,11 +89,13 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     /**
      * Merge two arrays
      * 
+     * @param ArrayObject $array
+     * 
      * @return ArrayObject
      */
-    public function merge($b): self
+    public function merge($array): self
     {
-        $this->rawData = array_merge($this->rawData, $b->rawData);
+        $this->rawData = array_merge($this->rawData, $array->rawData);
 
         return $this;
     }
@@ -101,11 +103,13 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     /**
      * Merge two arrays and removes duplicate values
      * 
+     * @param ArrayObject $array
+     * 
      * @return ArrayObject
      */
-    public function mergeUnique($b): self
+    public function mergeUnique($array): self
     {
-        $this->rawData = array_unique($this->merge($b)->rawData);
+        $this->rawData = array_unique($this->merge($array)->rawData);
 
         return $this;
     }
@@ -333,7 +337,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     /**
      * Check that array is traversable
-     * 
+     *
      * @return bool
      */
     public function isTraversable(): bool
@@ -343,22 +347,24 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     /**
      * Checks if the given key or index exists in the array
-     * 
+     *
+     * @param bool|float|int|resource|string|null $key
+     *
      * @return bool
      */
-    public function isKeyExists($key): bool
+    public function isKeyExists(mixed $key): bool
     {
-        return array_key_exists($this->rawData, $key);
+        return array_key_exists($key, $this->rawData);
     }
 
     /**
      * Searches the array for a given value and returns the first corresponding key if successful
-     * 
+     *
      * @return bool|int|string
      */
     public function getKeyByValue(string $key): bool|int|string
     {
-        return array_search($key, (array)($this->rawData));
+        return array_search($key, $this->rawData);
     }
 
     public function __toString()
@@ -368,15 +374,17 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     /**
      * Computes the difference of arrays
-     * 
+     *
+     * @param ArrayObject $array
+     *
      * @return ArrayObject
      */
     public function computesDifference($array): self
     {
-        $clone_original = &$this;
-        $clone_target = &$array;
+        $cloneOriginal = &$this;
+        $cloneTarget = &$array;
 
-        $this->rawData = array_diff($clone_original->rawData, $clone_target->rawData);
+        $this->rawData = array_diff($cloneOriginal->rawData, $cloneTarget->rawData);
 
         return $this;
     }
@@ -390,6 +398,8 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     /**
      * Sort an array
      * 
+     * @param int $flags
+     *
      * @return ArrayObject
      */
     public function sort($flags = SORT_REGULAR): self
@@ -401,12 +411,14 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     /**
      * Join array elements with a string
-     * 
+     *
+     * @param array|string $separator
+     *
      * @return StringObject
      */
-    public function join($delimiter): StringObject
+    public function join(array|string $separator): StringObject
     {
-        $this->rawData = implode($delimiter, $this->rawData);
+        $this->rawData = implode($separator, $this->rawData);
 
         return new StringObject($this->rawData);
     }

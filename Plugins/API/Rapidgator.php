@@ -62,10 +62,10 @@ class Rapidgator
 
     public function login($email, $password)
     {
-        $query = http_build_query(array(
+        $query = http_build_query([
             'login' => $email,
             'password' => $password
-        ));
+        ]);
 
         $cURL = new ClientURL();
         $cURL->option->setURL("https://rapidgator.net/api/v2/user/login")
