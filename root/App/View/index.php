@@ -3,7 +3,7 @@
 <div>
     <div id="main_contain">
 
-        <div id="description_text" style="font-size:18px">
+        <div id="description_text" style="font-size:23px">
             <b style="display: contents;padding-bottom: 20px;text-shadow: 1px 1px 5px #000000;">신세계 한방 병원</b></br></br>
             건강, 성실, 정직한 진료로 환자의 건강을 위해 최선을 다하겠습니다.<br/><br/>
             참되고 진실된 마음으로 환자를 제일 먼저 생각하겠습니다
@@ -11,7 +11,7 @@
         <div class="main"></div>
     </div>
 
-    <div style="background-color: #242938;height: 387px;font-family: 'Jeju Myeongjo'">
+    <div style="background-color: #203710;height: 387px;font-family: 'Jeju Myeongjo'">
         <div style="
         width: 1120px;
         display: block;
@@ -58,7 +58,7 @@
             </div>
         </div>
     </div>
-    <div id="introduce_content" style="padding: 100px;text-align:center;font-family: 'Jeju Myeongjo';font-size:15px;line-height:21px;margin-top:50px">
+    <div id="introduce_head">
         <b>〃건강, 성실, 정직한 진료로 환자의 건강을 위해 최선을 다하겠습니다〃</b>
 
         <br/><br/>
@@ -84,7 +84,6 @@
         
         <b style="margin-top: 100px;display: block;">〃양, 한방 (입원) 치료〃</b>
 
-            
         <div style="font-family: 'Jeju Myeongjo';text-align:center;">
             <div id="introduce_content" style="margin-top: 70px;">
                 <div class="build">

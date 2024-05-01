@@ -5,7 +5,7 @@
 <div id="gnb_cover">
     <div class="gnb_area">
 
-        <a href="./"><img class="logo" src="/App/View/logo.png" alt="logo"></a>
+        <a href="/"><img class="logo" src="/App/View/img/logo.png" alt="logo"></a>
 			
 
         <nav class="gnb" id="gnb">
@@ -49,57 +49,57 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#">
+                            <a href="/medical/needle">
                                 약침치료
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/manual_therapy">
                                 도수치료
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/chuna">
                                 추나요법
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/posture_correction">
                                 체형교정
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/eswt">
                                 체외충격파
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/physical">
                                 물리치료
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/exercise">
                                 운동치료
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/cpm">
                                 재활CPM
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/needle">
                                 주사·수액치료
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/needle">
                                 독감예방접종
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/medical/accident">
                                 교통사고후유증치료
                             </a>
                         </li>
@@ -112,43 +112,69 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
+                            <a href="#">
                             두통
+                            </a>
                         </li>
                         <li>
-                            턱관절
+                            <a href="#">
+                                턱관절
+                            </a>
                         </li>
                         <li>
-                            손목터널증후군
+                            <a href="#">
+                                손목터널증후군
+                            </a>
                         </li>
                         <li>
-                            오십견
+                            <a href="#">
+                                오십견
+                            </a>
                         </li>
                         <li>
-                            족저근막염
+                            <a href="#">
+                                족저근막염
+                            </a>
                         </li>
                         <li>
-                            목(허리)디스크
+                            <a href="#">
+                                목(허리)디스크
+                            </a>
                         </li>
                         <li>
-                            만성허리통증
+                            <a href="#">
+                                만성허리통증
+                            </a>
                         </li>
                         <li>
-                            척추관협착증
+                            <a href="#">
+                                척추관협착증
+                            </a>
                         </li>
                         <li>
-                            산재보험치료
+                            <a href="#">
+                                산재보험치료
+                            </a>
                         </li>
                         <li>
-                            수술 후 재활
+                            <a href="#">
+                                수술 후 재활
+                            </a>
                         </li>
                         <li>
-                            근골격계 재활
+                            <a href="#">
+                                근골격계 재활
+                            </a>
                         </li>
                         <li>
-                            안면마비
+                            <a href="#">
+                                안면마비
+                            </a>
                         </li>
                         <li>
-                            비염
+                            <a href="#">
+                                비염
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -159,10 +185,14 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
+                            <a href="#">
                             면역약침요법
+                            </a>
                         </li>
                         <li>
-                            온열치료
+                            <a href="#">
+                                온열치료
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -173,31 +203,49 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
+                            <a href="#">
                             골반염
+                            </a>
                         </li>
                         <li>
-                            산전·후 보약
+                            <a href="#">
+                                산전·후 보약
+                            </a>
                         </li>
                         <li>
-                            다낭성난소증후군
+                            <a href="#">
+                                다낭성난소증후군
+                            </a>
                         </li>
                         <li>
-                            과민(만)성 방광염
+                            <a href="#">
+                                과민(만)성 방광염
+                            </a>
                         </li>
                         <li>
-                            난임(불임)치료
+                            <a href="#">
+                                난임(불임)치료
+                            </a>
                         </li>
                         <li>
-                            생리(통)불순
+                            <a href="#">
+                                생리(통)불순
+                            </a>
                         </li>
                         <li>
-                            갱년기·폐경
+                            <a href="#">
+                                갱년기·폐경
+                            </a>
                         </li>
                         <li>
-                            소화기질환
+                            <a href="#">
+                                소화기질환
+                            </a>
                         </li>
                         <li>
-                            이명
+                            <a href="#">
+                                이명
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -208,13 +256,19 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            산후다이어트
+                            <a href="#">
+                                산후다이어트
+                            </a>
                         </li>
                         <li>
-                            소아다이어트
+                            <a href="#">
+                                소아다이어트
+                            </a>
                         </li>
                         <li>
-                            슬림정
+                            <a href="#">
+                                슬림정
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -225,10 +279,14 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            안면리프팅
+                            <a href="#">
+                                안면리프팅
+                            </a>
                         </li>
                         <li>
-                            성형후 부종
+                            <a href="#">
+                                성형후 부종
+                            </a>
                         </li>
                     </ul>
                 </li>

@@ -371,7 +371,7 @@ a[href^="javascript:"]:after, a[href^="#"]:after {
     width: 100%;
     text-align: center;
     background-color: #f2f2f2;
-    padding: 50px;
+    padding: 50px 0px;
     font-size: 13px;
     line-height: 23px;
 }
@@ -710,7 +710,11 @@ a[href^="javascript:"]:after, a[href^="#"]:after {
         width: 100% !important
     }
 }
-
+.content_wrap {
+    width: 1120px;
+    display: block;
+    margin: 0px auto;
+}
 .nav-visible {
     visibility: visible !important;
     -webkit-transform: translate3d(0, 0, 0) !important;
@@ -730,6 +734,14 @@ a[href^="javascript:"]:after, a[href^="#"]:after {
 body {
     padding: 0px;
     margin: 0px;
+}
+#introduce_head {
+    width: 1120px;
+    display: block;
+    margin: 0px auto;
+    padding: 100px;
+    text-align:center;font-family: 'Jeju Myeongjo';font-size:17px;line-height:21px;margin-top:50px
+
 }
 #introduce_content {
     width: 1120px;
@@ -765,26 +777,26 @@ body {
     margin-left: 50px;
 }
 .build div:nth-child(1) {
-    background-image:url('/App/View/sub_2-1-1.jpg');
+    background-image:url('/App/View/img/sub_2-1-1.jpg');
 }
 .build div:nth-child(2) {
-    background-image:url('/App/View/sub_2-3-1.jpg');
+    background-image:url('/App/View/img/sub_2-3-1.jpg');
 }
 .build div:nth-child(3) {
-    background-image:url('/App/View/sub_2-2-1.jpg');
+    background-image:url('/App/View/img/sub_2-2-1.jpg');
 }
 .build2 div:nth-child(1) {
-    background-image:url('/App/View/excersize.jpg');
+    background-image:url('/App/View/img/excersize.jpg');
 }
 .build2 div:nth-child(2) {
-    background-image:url('/App/View/01.jpg');
+    background-image:url('/App/View/img/01.jpg');
 }
 #section {
     display: flex;
 }
 #section > div {
     flex: 1;
-    background-color: #004f87;
+    background-color: #6a8d2b;
     color: #fff;
     height: 260px;
     text-align: center;
@@ -853,9 +865,9 @@ body {
     height: 430px;
     position: absolute;
     background-size: 100%;
-    filter: brightness(0.4) blur(0.1px);
+    filter: brightness(0.8) blur(0.2px);
     background-position: center;
-    background-image: url(/App/View/sub01.jpg);
+    background-image: url(/App/View/img/sub01.jpg);
 }
 #main_contain {
     height: 430px;
@@ -877,3 +889,102 @@ body {
 #introduce {
 
 }
+
+
+
+
+.staff {
+    align-items: stretch;
+    list-style: none;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.staff div {
+    flex: 1;
+    display: inline-block;
+    align-self: flex-start;
+    position: relative;
+    width: 50%;
+    padding-top: 450px;
+    color: black;
+    background-size: 100% 450px;
+    background-repeat: no-repeat;
+}
+.staff div:not(:first-child) {
+    margin-left: 20px;
+}
+.staff div:nth-child(1) {
+    background-image:url('/App/View/img/dr_park.jpg');
+}
+.staff div:nth-child(2) {
+    background-image:url('/App/View/img/about-01.jpg');
+}
+.staff div:nth-child(3) {
+    background-image:url('/App/View/img/dr_seo.jpg');
+}
+.staff div a {
+font-family: 'Jeju Myeongjo';
+line-height: 27px;
+}
+.staff div b {
+    color: white;
+    background-color: #00113e;
+    padding: 20px;
+    opacity: 0.78;
+    border-radius: 3px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.introduce_say {
+    display: block;
+    background-color: #fffaf1;
+    padding: 10px;
+    text-align: center;
+    border-top: 5px solid #8ea9e0;
+}
+#section_title {
+    margin-top: 30px;
+    margin-bottom: 50px;
+    font-size: 29px;
+    width: 100%;
+    border-bottom: 1px dashed #b2aeae;
+    padding-bottom: 26px;
+}
+
+.table_01 {width:100%; padding:10px; }
+.table_01 p{display:none;}
+.table_01 .table0001 .caption {font-size:100px;}
+.table0001{border-spacing:0;}
+.table0001{border:1px solid #ddd; }
+.table0001 thead th {border:1px solid #ddd; background-color:#f8f4f0;  padding:10px; font-size:15px;} 
+.table0001 td {border-bottom:1px solid #ddd; border-left:1px solid #ddd; border-right:1px solid #ddd; text-align:center; padding:10px; font-size:13px;}
+
+@media only screen and (max-width:768px) {
+.table_01 p{display:inline-block; margin:10px;}
+.table_01 .table0001 .caption {font-size:100px;}
+.table0001{border-spacing:0;}
+.table0001{border:1px solid #ddd; }
+.table0001 thead th {border:1px solid #ddd; background-color:#f8f4f0;  padding:10px; font-size:15px;} 
+.table0001 td {border-bottom:1px solid #ddd; border-left:1px solid #ddd; border-right:1px solid #ddd; text-align:center; padding:10px; font-size:13px;}
+
+}
+
+@media screen and (max-width:640px){
+.table_01 .table0001  {width:100%; padding:10px;}
+}
+
+@media screen and (max-width:460px){
+.table_01 .table0001  {width:100%; padding:10px;}}
+
+@media screen and (max-width:455x){
+
+.table_01 .table0001  {width:100%; padding:0;}}
+
+@media screen and (max-width:400px){
+.table_01 .table0001  {width:100%; padding:0;}}
