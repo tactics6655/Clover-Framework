@@ -8,6 +8,7 @@ use Clover\Classes\Reflection\Handler as ReflectionHandler;
 use Clover\Classes\DependencyInjection\Container;
 
 use Closure;
+use Clover\Classes\Data\ArrayObject;
 
 class RouteExecutor
 {
@@ -45,6 +46,8 @@ class RouteExecutor
         $container = $this->container;
 
         $arguments = [...$arguments, (is_array($next_arguments) ? $next_arguments : $next_arguments)];
+
+        $arguments = new ArrayObject($arguments);
 
         if (isset($class) && !empty($class) && class_exists($class)) {
             $callback = new $class;

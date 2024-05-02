@@ -10,6 +10,7 @@ use Clover\Enumeration\LockMode;
 
 use Clover\Classes\FileSystem\Handler as FileSystemHandler;
 use Clover\Classes\Protocol\PHP as PHPProtocol;
+use Clover\Classes\Data\ArrayObject;
 
 use Clover\Exception\StupidIdeaException as StupidIdeaException;
 use Clover\Exception\FileHandler\FileIsNotExistsException as FileIsNotExistsException;
@@ -992,10 +993,11 @@ class Functions
 	 * Gets the interpreted file content.
 	 *
 	 * @param string $filePath
+	 * @param ArrayObject|array $data
 	 *
 	 * @return string
 	 */
-	public static function getInterpretedContent(string $filePath, ?array $data = []): string
+	public static function getInterpretedContent(string $filePath, ArrayObject|array $data = []): string
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1008,8 +1010,8 @@ class Functions
 		}
 
 		ob_start();
-
-		extract($data ?? []);
+		
+		extract(($data instanceof ArrayObject ? $data->getRawData() : $data) ?? []);
 
 		if (isset($filePath)) {
 			if (file_exists($filePath)) {

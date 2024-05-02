@@ -5,6 +5,7 @@ namespace Clover\Framework\Component;
 use Clover\Framework\Component\Response;
 use Clover\Framework\Component\Resource;
 
+use Clover\Classes\Data\ArrayObject;
 use Clover\Classes\DependencyInjection\Container;
 use Clover\Classes\ContentType as ContentType;
 use Clover\Classes\Data\JSONHandler;
@@ -20,7 +21,7 @@ class BaseController
 
     public function debug($body, $resource = array())
     {
-        return new Response('<div style="white-space: break-spaces;font-size: 11px;">'.$body.'</div>', $resource);
+        return new Response('<div style="white-space: break-spaces;font-size: 11px;">'.print_r($body, true).'</div>', $resource);
     }
 
     public function response(mixed $body, $resource = array())
@@ -81,7 +82,7 @@ class BaseController
         return new Response($encoded, $resource, 'json');
     }
 
-    public function render(string $template, array $data = [])
+    public function render(string $template, ArrayObject|array $data = [])
     {
         /** @var Resource $resource */
         $resource = $this->container->get('Resource');

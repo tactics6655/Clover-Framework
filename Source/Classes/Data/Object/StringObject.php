@@ -29,7 +29,7 @@ class StringObject extends BaseObject
 
     public function getHexDecimal(): self
     {
-        preg_match('/^0x[0-9a-f_]++$/i', $this->rawData, $matches);
+        preg_match('/^0x[0-9a-f_]++$/i', $this->getRawData(), $matches);
 
         if (isset($matches)) {
             $this->rawData = $matches[0];
@@ -56,7 +56,7 @@ class StringObject extends BaseObject
      */
     public function lastIndexOf(string $needle, int $offset = 0, bool $ignoreCase = true): int|bool
     {
-        $this->rawData = $ignoreCase ? strrpos($this->rawData, $needle, $offset) : strripos($this->rawData, $needle, $offset);
+        $this->rawData = $ignoreCase ? strrpos($this->getRawData(), $needle, $offset) : strripos($this->getRawData(), $needle, $offset);
 
         return $this->rawData;
     }
@@ -72,7 +72,7 @@ class StringObject extends BaseObject
      */
     public function indexOf($needle, $offset = 0, $ignoreCase = true): bool|int
     {
-        $this->rawData = $ignoreCase ? strpos($this->rawData, $needle, $offset) : stripos($this->rawData, $needle, $offset);
+        $this->rawData = $ignoreCase ? strpos($this->getRawData(), $needle, $offset) : stripos($this->getRawData(), $needle, $offset);
 
         return $this->rawData;
     }
@@ -86,7 +86,7 @@ class StringObject extends BaseObject
      */
     public function trimStart(string|null $characters = " \n\r\t\v\x00"): self
     {
-        $this->rawData = ltrim($this->rawData, $characters);
+        $this->rawData = ltrim($this->getRawData(), $characters);
 
         return $this;
     }
@@ -128,7 +128,7 @@ class StringObject extends BaseObject
      */
     public function trimEnd(string|null $characters = " \n\r\t\v\x00"): self
     {
-        $this->rawData = rtrim($this->rawData, $characters);
+        $this->rawData = rtrim($this->getRawData(), $characters);
 
         return $this;
     }
@@ -142,7 +142,7 @@ class StringObject extends BaseObject
      */
     public function trim(string $characters = " \n\r\t\v\0"): self
     {
-        $this->rawData = trim($this->rawData, $characters);
+        $this->rawData = trim($this->getRawData(), $characters);
 
         return $this;
     }
@@ -167,12 +167,12 @@ class StringObject extends BaseObject
 
     public function startsWith(string $string): int
     {
-        return strpos($this->rawData, $string) === 0;
+        return strpos($this->getRawData(), $string) === 0;
     }
 
     public function endsWith(string $string): int
     {
-        return strpos($this->rawData, $string) === (strlen($this->rawData) - strlen($string));
+        return strpos($this->getRawData(), $string) === (strlen($this->rawData) - strlen($string));
     }
 
     /**
@@ -186,9 +186,9 @@ class StringObject extends BaseObject
     public function substring(int $start, int|null $length = null): self
     {
         if (extension_loaded('mbstring')) {
-            $this->rawData = mb_strcut($this->rawData, $start, $length);
+            $this->rawData = mb_strcut($this->getRawData(), $start, $length);
         } else {
-            $this->rawData = StringHandler::substring($this->rawData, $start, $length);
+            $this->rawData = StringHandler::substring($this->getRawData(), $start, $length);
         }
 
         return $this;
@@ -204,7 +204,7 @@ class StringObject extends BaseObject
      */
     public function substringCount(string $needle, int $offset = 0, ?int $length = null): int
     {
-        return substr_count(haystack: $this->rawData, needle: $needle, offset: $offset, length: $length);
+        return substr_count(haystack: $this->getRawData(), needle: $needle, offset: $offset, length: $length);
     }
 
     /**
@@ -212,7 +212,7 @@ class StringObject extends BaseObject
      */
     public function substringCompare(string $needle, int $offset): int
     {
-        return substr_compare($this->rawData, $needle, $offset);
+        return substr_compare($this->getRawData(), $needle, $offset);
     }
 
     /**
@@ -225,6 +225,20 @@ class StringObject extends BaseObject
         $boolean = StringHandler::isEmpty($this->rawData);
 
         return $boolean;
+    }
+
+    public function toBase64URL()
+    {
+        $this->rawData = sprintf('data:image:gif;base64,%s', $this->encodeToBase64()->getRawData());
+
+        return $this;
+    }
+
+    public function encodeToBase64()
+    {
+        $this->rawData = base64_encode($this->rawData);
+
+        return $this;
     }
 
     /**
@@ -246,7 +260,7 @@ class StringObject extends BaseObject
      */
     public function contains(string $needle): self
     {
-        $this->rawData = StringHandler::contains($this->rawData, $needle);
+        $this->rawData = StringHandler::contains($this->getRawData(), $needle);
 
         return $this;
     }
@@ -286,36 +300,41 @@ class StringObject extends BaseObject
 
     public function replaceCenter($string): self
     {
-        $length = ceil(strlen($this->rawData) / 2) - ceil(strlen($string) / 2);
-        $tail = strlen($this->rawData) - (($length * 2) + strlen($string));
+        $data = $this->getRawData();
+
+        $length = ceil(strlen($data) / 2) - ceil(strlen($string) / 2);
+        $tail = strlen($data) - (($length * 2) + strlen($string));
         $append = $tail > 0 ? str_repeat($string[0], $tail) : "";
         $string .= $append;
 
-        $this->rawData = preg_replace("/^(\w{{$length}}).*(\w{{$length}})/i", "\$1$string\$2", $this->rawData);
+        $data = preg_replace("/^(\w{{$length}}).*(\w{{$length}})/i", "\$1$string\$2", $data);
+
+        $this->setRawData($data);
 
         return $this;
     }
 
     public function appendBoth($string): self
     {
-        $lenth = strlen($string);
-        $this->rawData = $string . $this->rawData . $string;
+        $this->setRawData($string . $this->getRawData() . $string);
 
         return $this;
     }
 
     public function appendWord($string): self
     {
-        $lenth = strlen($string);
-        $this->rawData = preg_replace("/(?!\s)(?!\s\b.{0,1}\b)/i", $string, $this->rawData);
+        $data = preg_replace("/(?!\s)(?!\s\b.{0,1}\b)/i", $string, $this->getRawData());
+
+        $this->setRawData($data);
 
         return $this;
     }
 
     public function appendInner($string): self
     {
-        $lenth = strlen($string);
-        $this->rawData = preg_replace("/(?:\s)(\b.{0,1}\b)(?!\s)/i", "{$string}\$1", $this->rawData);
+        $data = preg_replace("/(?:\s)(\b.{0,1}\b)(?!\s)/i", "{$string}\$1", $this->getRawData());
+
+        $this->setRawData($data);
 
         return $this;
     }
@@ -327,7 +346,9 @@ class StringObject extends BaseObject
      */
     public function capitalizeFirstLetter(): self
     {
-        $this->rawData = ucfirst($this->rawData);
+        $data = ucfirst($this->getRawData());
+
+        $this->setRawData($data);
 
         return $this;
     }
@@ -339,7 +360,9 @@ class StringObject extends BaseObject
      */
     public function tokenize(): self | bool
     {
-        $this->rawData = strtok($this->rawData);
+        $data = strtok($this->getRawData());
+
+        $this->setRawData($data);
 
         if (!$this->rawData) {
             return false;
@@ -358,7 +381,9 @@ class StringObject extends BaseObject
      */
     public function match(string $string, &$matches): self
     {
-        $this->rawData = preg_match($string, $this->rawData, $matches);
+        $data = preg_match($string, $this->getRawData(), $matches);
+
+        $this->setRawData($data);
 
         return $this;
     }
@@ -386,7 +411,7 @@ class StringObject extends BaseObject
      */
     public function replaceOdd(string $replace): self
     {
-        $this->rawData = preg_replace('/.(.)/', "{$replace}\$1", $this->rawData);
+        $this->rawData = preg_replace('/.(.)?/', "{$replace}\$1", $this->rawData);
 
         return $this;
     }
@@ -400,7 +425,7 @@ class StringObject extends BaseObject
      */
     public function cut(int $length): self
     {
-        $this->rawData = substr($this->rawData, 0, $length);
+        $this->rawData = substr($this->getRawData(), 0, $length);
 
         return $this;
     }
@@ -415,7 +440,7 @@ class StringObject extends BaseObject
      */
     public function limit(int $limit, string $trimMarker = ''): self
     {
-        $this->rawData = mb_strimwidth($this->rawData, 0, $limit, $trimMarker);
+        $this->rawData = mb_strimwidth($this->getRawData(), 0, $limit, $trimMarker);
 
         return $this;
     }
@@ -429,7 +454,7 @@ class StringObject extends BaseObject
      */
     public function localeBasedComparison(string $string): int
     {
-        return strcoll($this->rawData, $string);
+        return strcoll($this->getRawData(), $string);
     }
 
     /**
@@ -489,7 +514,7 @@ class StringObject extends BaseObject
      */
     public function similar(string $compare): int
     {
-        return similar_text($this->rawData, $compare);
+        return similar_text($this->getRawData(), $compare);
     }
 
     /**
@@ -513,7 +538,7 @@ class StringObject extends BaseObject
      */
     public function metaphone(int|null $max_phonemes = 0): self
     {
-        $this->rawData = metaphone($this->rawData, $max_phonemes);
+        $this->rawData = metaphone($this->getRawData(), $max_phonemes);
 
         return $this;
     }
@@ -530,7 +555,12 @@ class StringObject extends BaseObject
      */
     public function levenshteinDistance(string $compare, int|null $insertion_cost = 1, int|null $replacement_cost = 1, int|null $deletion_cost = 1): int
     {
-        return levenshtein($this->rawData, $compare, $insertion_cost, $replacement_cost, $deletion_cost);
+        return levenshtein($this->getRawData(), $compare, $insertion_cost, $replacement_cost, $deletion_cost);
+    }
+
+    public function getCharacter($index)
+    {
+        return $this->getRawData()[$index];
     }
 
     public function decrement(): bool|self
@@ -576,7 +606,7 @@ class StringObject extends BaseObject
      */
     public function repeat(int $times = 0): self
     {
-        $this->rawData = str_repeat($this->rawData, $times);
+        $this->rawData = str_repeat($this->getRawData(), $times);
 
         return $this;
     }
@@ -612,7 +642,7 @@ class StringObject extends BaseObject
      */
     public function concat(string $string): self
     {
-        $this->rawData = sprintf("%s%s", $this->rawData, $string);
+        $this->rawData = sprintf("%s%s", $this->getRawData(), $string);
 
         return $this;
     }

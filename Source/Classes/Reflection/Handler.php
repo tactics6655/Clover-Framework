@@ -28,6 +28,7 @@ use ReflectionObject;
 use SensitiveParameter;
 use __PHP_Incomplete_Class;
 use ArrayIterator;
+use Clover\Classes\Data\ArrayObject;
 use Throwable;
 
 class Handler
@@ -529,7 +530,7 @@ class Handler
      * 
      * @return mixed
      */
-    public static function callMethodArray(callable $method, array $arguments = []): mixed
+    public static function callMethodArray(callable $method, ArrayObject|array $arguments = []): mixed
     {
         return call_user_func_array($method, $arguments);
     }
@@ -825,11 +826,11 @@ class Handler
      * 
      * @param object|string|null $instance
      * @param ?Closure|string $method = null
-     * @param array $passParameters = []
+     * @param ArrayObject|array $passParameters = []
      * 
      * @return mixed
      */
-    public static function invoke(object|string|null $instance, null|callable|string $method = null, array $passParameters = [], Container|array $arguments = []): mixed
+    public static function invoke(object|string|null $instance, null|callable|string $method = null, ArrayObject|array $passParameters = [], Container|array $arguments = []): mixed
     {
         $reflection = $method == null ? self::getFunction($instance) : self::getMethod($instance, $method);
         $dependencies = self::getDependencies($reflection, $arguments);
@@ -846,7 +847,7 @@ class Handler
                 return false;
             }
 
-            $dependencies = [...$dependencies, ...array_filter($passParameters)];
+            $dependencies = [...$dependencies, ...array_filter(($passParameters instanceof ArrayObject) ? $passParameters->getRawData() : $passParameters)];
         }
 
         return $reflection->invoke($newInstance, ...$dependencies);

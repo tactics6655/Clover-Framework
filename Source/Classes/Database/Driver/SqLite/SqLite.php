@@ -39,7 +39,59 @@ class SqLite
     {
         $result = $result->fetchArray(SQLITE3_ASSOC);
 
+        if (is_array($result)) {
+            $result = new ArrayObject($result);
+        }
+
         return $result;
+    }
+
+    public function getColumnList($table)
+    {
+        $query = <<<EOD
+            SELECT 
+                * 
+            FROM 
+                PRAGMA_TABLE_INFO('%s')
+            ORDER BY 1
+EOD;
+        
+        $result = $this->query(sprintf($query, $table));
+
+        $rows = new ArrayObject();
+        while ($row = $this->fetchArray($result)) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    public function getTableList()
+    {
+        $query = <<<EOD
+            SELECT 
+                * 
+            FROM 
+                sqlite_master 
+            WHERE type IN ('table', 'view') 
+                AND name NOT LIKE 'sqlite_%' 
+            UNION ALL
+            SELECT 
+                * 
+            FROM 
+                sqlite_temp_master 
+            WHERE type IN ('table', 'view') 
+            ORDER BY 1;
+EOD;
+        
+        $result = $this->query($query);
+
+        $rows = new ArrayObject();
+        while ($row = $this->fetchArray($result)) {
+            $rows[] = $row;
+        }
+
+        return $rows;
     }
 
     public function query($sql): SQLite3Result|bool

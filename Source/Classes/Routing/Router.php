@@ -200,7 +200,7 @@ class Router
 			$callback = join('::', $holder);
 
 			if ($notFoundHandler != null) {
-				$this->setNotFoundHandler($notFoundHandler);
+				$this->setNotFoundHandler(handler: $notFoundHandler);
 			}
 
 			$this->addRoute(method: $method, pattern: $pattern, callback: $callback, middleware: $middleware, host: $host, contentType: $contentType);
@@ -218,7 +218,7 @@ class Router
 			$this->routes[$method] = [];
 		}
 
-		$routeObject = new RouteObject($pattern, $callback, $middleware);
+		$routeObject = new RouteObject(pattern: $pattern, callback: $callback, middleware: $middleware);
 		$routeObject->setHost($host);
 		$routeObject->setContentType($contentType);
 
@@ -230,7 +230,7 @@ class Router
 	 */
 	public function delete($pattern, $callback): self
 	{
-		$this->set(HTTPRequestMethod::DELETE, $pattern, $callback);
+		$this->set(method: HTTPRequestMethod::DELETE, pattern: $pattern, callback: $callback);
 
 		return $this;
 	}
@@ -240,7 +240,7 @@ class Router
 	 */
 	public function put($pattern, $callback): self
 	{
-		$this->set(HTTPRequestMethod::PUT, $pattern, $callback);
+		$this->set(method: HTTPRequestMethod::PUT, pattern: $pattern, callback: $callback);
 
 		return $this;
 	}
@@ -250,7 +250,7 @@ class Router
 	 */
 	public function options($pattern, $callback): self
 	{
-		$this->set(HTTPRequestMethod::OPTIONS, $pattern, $callback);
+		$this->set(method: HTTPRequestMethod::OPTIONS, pattern: $pattern, callback: $callback);
 
 		return $this;
 	}
@@ -260,7 +260,7 @@ class Router
 	 */
 	public function patch($pattern, $callback): self
 	{
-		$this->set(HTTPRequestMethod::PATCH, $pattern, $callback);
+		$this->set(method: HTTPRequestMethod::PATCH, pattern: $pattern, callback: $callback);
 
 		return $this;
 	}

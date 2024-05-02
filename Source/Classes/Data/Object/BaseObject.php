@@ -2,13 +2,20 @@
 
 namespace Clover\Classes\Data;
 
-#[\AllowDynamicProperties]
+use AllowDynamicProperties;
+
+#[AllowDynamicProperties]
 class BaseObject
 {
 
     protected $rawData;
 
     public function __construct($data)
+    {
+        $this->rawData = $data;
+    }
+
+    public function setRawData($data)
     {
         $this->rawData = $data;
     }
@@ -21,6 +28,11 @@ class BaseObject
     public function __toString()
     {
         return implode(" ", $this->rawData);
+    }
+
+    public function typeOfString()
+    {
+        return $this instanceof StringObject;
     }
 
     public function length()

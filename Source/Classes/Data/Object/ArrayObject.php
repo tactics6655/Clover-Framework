@@ -10,6 +10,7 @@ use Iterator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use Traversable;
+use ReturnTypeWillChange;
 
 #[\AllowDynamicProperties]
 class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countable
@@ -22,6 +23,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         $this->rawData = $data;
     }
 
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         if ($offset === null) {
@@ -31,6 +33,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         }
     }
 
+    #[ReturnTypeWillChange]
     public function current(): mixed
     {
         return current($this->rawData);
@@ -46,6 +49,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         return key($this->rawData) !== null;
     }
 
+    #[ReturnTypeWillChange]
     public function next(): void
     {
         next($this->rawData);
@@ -66,6 +70,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         unset($this->rawData[$offset]);
     }
 
+    #[ReturnTypeWillChange]
     public function offsetGet($offset): mixed
     {
         return $this->rawData[$offset] ?? null;
@@ -79,6 +84,13 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     public function addWithKey($key, $item)
     {
         $this->rawData[$key] = $item;
+    }
+
+    public function getByIndex($index)
+    {
+        $this->rawData = $this->rawData[$index];
+
+        return $this;
     }
 
     public function add($item)
@@ -162,7 +174,17 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         return $this;
     }
 
-    public function get($key): self|StringObject
+    public function toString(): StringObject
+    {
+        return new StringObject($this->rawData);
+    }
+
+    public function containKey($key)
+    {
+        return array_key_exists($key, $this->rawData);
+    }
+
+    public function get($key): bool|self|StringObject
     {
         $data = $this->rawData[$key];
 
@@ -182,9 +204,9 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
      */
     public function getKeys(): self
     {
-        $this->rawData = array_keys($this->rawData);
+        $clone = array_keys($this->rawData);
 
-        return $this;
+        return new ArrayObject($clone);
     }
 
     /**
@@ -267,6 +289,14 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     public function sortByKeyInReverseOrder(): self
     {
         krsort($this->rawData);
+
+        return $this;
+    }
+
+    public function reverse()
+    {
+        
+        $this->rawData = array_reverse($this->rawData);
 
         return $this;
     }
@@ -391,7 +421,8 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     public function isEquals($b): bool
     {
-        return count($this->rawData) == count($b->rawData) &&
+        return 
+            count($this->rawData)                   == count($b->rawData) &&
             array_diff($this->rawData, $b->rawData) == array_diff($b->rawData, $this->rawData);
     }
 
@@ -404,9 +435,11 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
      */
     public function sort($flags = SORT_REGULAR): self
     {
-        sort($this->rawData, $flags);
+        $clone = $this->rawData;
 
-        return $this;
+        sort($clone, $flags);
+
+        return new ArrayObject($clone);
     }
 
     /**
@@ -418,9 +451,9 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
      */
     public function join(array|string $separator): StringObject
     {
-        $this->rawData = implode($separator, $this->rawData);
+        $clone = implode($separator, $this->rawData);
 
-        return new StringObject($this->rawData);
+        return new StringObject($clone);
     }
 
     /**
@@ -431,5 +464,12 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     public function size(): int
     {
         return count($this->rawData);
+    }
+
+    public function clear()
+    {
+        $this->rawData = [];
+
+        return $this;
     }
 }
