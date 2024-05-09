@@ -47,12 +47,12 @@ class HttpKernel
 
         $response = $router->handle();
 
-        if (empty($response)) {
-            exit('');
+        if (!$response) {
+            throw new \Exception("This request is not routing correctly");
         }
 
         if (!$response instanceof Response) {
-            throw new \Exception("Response is must be type of response, response data is '{$response}'");
+            throw new \Exception("Response is must be type of response, response data is '{}'");
         }
 
         if ($response->getType() == 'html') {

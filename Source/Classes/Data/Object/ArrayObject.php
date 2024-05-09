@@ -2,6 +2,7 @@
 
 namespace Clover\Classes\Data;
 
+use Clover\Classes\ArraySummarizer;
 use Clover\Classes\Data\BaseObject as BaseObject;
 use Clover\Classes\Data\IntegerObject as IntegerObject;
 use Clover\Classes\Data\BooleanObject as BooleanObject;
@@ -23,9 +24,49 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         $this->rawData = $data;
     }
 
+    function fillRange($start, $end)
+    {
+        $numbers = new ArrayObject(range($start, $end));
+
+        $this->mergeUnique($numbers);
+
+        return $this;
+    }
+
+    function fillPrimes($start, $end)
+    {
+        $primes = [];
+
+        for ($i = $start; $i <= $end; $i++) {
+            if ($i == 2) {
+                $primes[] = 2;
+                continue;
+            }
+
+            $isPrime = true;
+            $sqrt = sqrt($i);
+            for ($j = 2; $j <= $sqrt; $j++) {
+                if ($i % $j == 0) {
+                    $isPrime = false;
+                    break;
+                }
+            }
+
+            if ($isPrime) {
+                $primes[] = $i;
+            }
+        }
+
+        $this->setRawData($primes);
+    }
+
     #[ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
+        if ($offset instanceof StringObject) {
+            $offset = $offset->__toString();
+        }
+
         if ($offset === null) {
             $this->rawData[] = $value;
         } else {
@@ -73,6 +114,10 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     #[ReturnTypeWillChange]
     public function offsetGet($offset): mixed
     {
+        if ($offset instanceof StringObject) {
+            $offset = $offset->__toString();
+        }
+
         return $this->rawData[$offset] ?? null;
     }
 
@@ -83,12 +128,25 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     public function addWithKey($key, $item)
     {
+        if ($key instanceof StringObject) {
+            $key = $key->__toString();
+        }
+        
         $this->rawData[$key] = $item;
     }
 
     public function getByIndex($index)
     {
         $this->rawData = $this->rawData[$index];
+
+        return $this;
+    }
+
+    public function summary()
+    {
+        $arraySummarizer = new ArraySummarizer();
+        $summaryData = $arraySummarizer->summarizeArray(array_unique($this->getRawData()));
+        $this->setRawData($summaryData);
 
         return $this;
     }
@@ -122,6 +180,27 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
     public function mergeUnique($array): self
     {
         $this->rawData = array_unique($this->merge($array)->rawData);
+
+        return $this;
+    }
+
+    public function mergeRecursive($array): self
+    {
+        $this->rawData = array_merge_recursive($this->getRawData(), $array);
+
+        return $this;
+    }
+
+    public function mergeNoClobber($array): self
+    {
+        $this->rawData = array_merge_noclobber($this->getRawData(), $array);
+
+        return $this;
+    }
+
+    public function mergeClobber($array): self
+    {
+        $this->rawData = array_merge_clobber($this->getRawData(), $array);
 
         return $this;
     }
@@ -179,20 +258,43 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         return new StringObject($this->rawData);
     }
 
-    public function containKey($key)
+    public function isContains($string)
+    {
+        return in_array($this->getRawData(), $string);
+    }
+
+    public function pop()
+    {
+        $data = $this->getRawData();
+        $data = array_pop($data);
+
+        $this->setRawData($data);
+
+        return $this->toObject();
+    }
+
+    public function isContainKey($key)
     {
         return array_key_exists($key, $this->rawData);
     }
 
     public function get($key): bool|self|StringObject
     {
+        if ($key instanceof StringObject) {
+            $key = $key->__toString();
+        }
+
         $data = $this->rawData[$key];
 
         if (is_string($data)) {
             return new StringObject($data);
         }
 
-        $this->rawData = $data;
+        if ($data instanceof ArrayObject) {
+            return $data;
+        }
+
+        $this->setRawData($data);
 
         return $this;
     }
@@ -375,6 +477,11 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         return $this->rawData instanceof Traversable;
     }
 
+    public function isCountable(): bool
+    {
+        return is_countable($this->getRawData());
+    }
+
     /**
      * Checks if the given key or index exists in the array
      *
@@ -399,7 +506,11 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     public function __toString()
     {
-        return implode(" ", $this->rawData);
+        if ($this->isCountable() && $this->count() > 0) {
+            return implode(" ", $this->rawData);
+        }
+
+        return $this->rawData;
     }
 
     /**
@@ -440,6 +551,21 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         sort($clone, $flags);
 
         return new ArrayObject($clone);
+    }
+
+    public function isList()
+    {
+        return array_is_list($this->getRawData());
+    }
+
+    public function getRandom($num = 1)
+    {
+        $data = $this->getRawData();
+        $data = array_rand($data, $num);
+
+        $this->setRawData($data);
+
+        return $this->toObject();
     }
 
     /**

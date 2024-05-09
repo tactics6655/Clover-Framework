@@ -26,7 +26,7 @@ class BaseController
 
     public function response(mixed $body, $resource = array())
     {
-        return new Response($body, $resource);
+        return new Response($body, $resource, 'text');
     }
 
     public function addCssFileToHead(string $filename)
@@ -80,6 +80,11 @@ class BaseController
         }
 
         return new Response($encoded, $resource, 'json');
+    }
+
+    public function renderText($content)
+    {
+        return $this->response($content);
     }
 
     public function render(string $template, ArrayObject|array $data = [])

@@ -56,9 +56,15 @@ class StringObject extends BaseObject
      */
     public function lastIndexOf(string $needle, int $offset = 0, bool $ignoreCase = true): int|bool
     {
-        $this->rawData = $ignoreCase ? strrpos($this->getRawData(), $needle, $offset) : strripos($this->getRawData(), $needle, $offset);
+        $data = $this->getRawData();
 
-        return $this->rawData;
+        if ($ignoreCase) {
+            $data = strripos($data, $needle, $offset);
+        } else {
+            $data = strrpos($data, $needle, $offset);
+        }
+
+        return $data;
     }
 
     /**
@@ -72,9 +78,15 @@ class StringObject extends BaseObject
      */
     public function indexOf($needle, $offset = 0, $ignoreCase = true): bool|int
     {
-        $this->rawData = $ignoreCase ? strpos($this->getRawData(), $needle, $offset) : stripos($this->getRawData(), $needle, $offset);
+        $data = $this->getRawData();
 
-        return $this->rawData;
+        if ($ignoreCase) {
+            $data = stripos($data, $needle, $offset);
+        } else {
+            $data = strpos($data, $needle, $offset);
+        }
+
+        return $data;
     }
 
     /**
@@ -102,7 +114,15 @@ class StringObject extends BaseObject
      */
     public function replace(array|string $search, array|string $replace, bool $ignoreCase = true): self
     {
-        $this->rawData = $ignoreCase ? str_replace($search, $replace, $this->rawData) : str_ireplace($search, $replace, $this->rawData);
+        $data = $this->getRawData();
+
+        if ($ignoreCase) {
+            $data = str_ireplace($search, $replace, $data);
+        } else {
+            $data = str_replace($search, $replace, $data);
+        }
+
+        $this->setRawData($data);
 
         return $this;
     }
@@ -317,6 +337,24 @@ class StringObject extends BaseObject
     public function appendBoth($string): self
     {
         $this->setRawData($string . $this->getRawData() . $string);
+
+        return $this;
+    }
+
+    public function prepend($string)
+    {
+        $data = $this->getRawData();
+
+        $this->setRawData($string.$data);
+
+        return $this;
+    }
+
+    public function append($string): self
+    {
+        $data = $this->getRawData();
+
+        $this->setRawData($data.$string);
 
         return $this;
     }

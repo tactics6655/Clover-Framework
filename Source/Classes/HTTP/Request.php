@@ -762,7 +762,6 @@ class Request implements RequestInterface
 		return preg_match("#$regexp#", $agent);
 	}
 
-
 	public static function getCrawlerUserAgent()
 	{
 		$useragent = strtolower(self::getUserAgent());

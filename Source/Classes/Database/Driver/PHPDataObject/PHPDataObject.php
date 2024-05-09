@@ -295,35 +295,38 @@ class PHPDataObject extends PDO
 		return $message;
 	}
 
-	public function fetch($stm, $type)
+	/**
+	 * @param \PDOStatement $statement
+	 */
+	public function fetch($statement, $type)
 	{
 		switch ($type) {
 			case 'all':
-				$res = $stm->fetchAll(PDO::FETCH_ASSOC);
+				$res = $statement->fetchAll(PDO::FETCH_ASSOC);
 				break;
 			case 'one':
-				$res = $stm->fetch()[0] ?? "";
+				$res = $statement->fetch()[0] ?? "";
 				break;
 			case 'self':
-				$res = $stm->fetch(PDO::FETCH_ASSOC);
+				$res = $statement->fetch(PDO::FETCH_ASSOC);
 				break;
 			case 'column':
-				$res = $stm->fetchColumn(PDO::FETCH_ASSOC);
+				$res = $statement->fetchColumn(PDO::FETCH_ASSOC);
 				break;
 			case 'alias':
-				$res = $stm->fetch(PDO::FETCH_NAMED);
+				$res = $statement->fetch(PDO::FETCH_NAMED);
 				break;
 			case 'number':
-				$res = $stm->fetch(PDO::FETCH_NUM);
+				$res = $statement->fetch(PDO::FETCH_NUM);
 				break;
 			case 'both':
-				$res = $stm->fetch(PDO::FETCH_BOTH);
+				$res = $statement->fetch(PDO::FETCH_BOTH);
 				break;
 			case 'object':
-				$res = $stm->fetch(PDO::FETCH_OBJ);
+				$res = $statement->fetch(PDO::FETCH_OBJ);
 				break;
 			default:
-				$res = $stm->fetchAll(PDO::FETCH_ASSOC);
+				$res = $statement->fetchAll(PDO::FETCH_ASSOC);
 				break;
 		}
 

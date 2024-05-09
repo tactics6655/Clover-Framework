@@ -828,7 +828,8 @@ class Handler implements ImageHandlerInterface
 	public static function getInstance(mixed $filePath)
 	{
 		if (self::isResource($filePath)) {
-			return getimagesizefromstring($filePath);
+			return $filePath;
+			//return getimagesizefromstring($filePath);
 		}
 
 		if (is_array(getImageSize($filePath))) {
