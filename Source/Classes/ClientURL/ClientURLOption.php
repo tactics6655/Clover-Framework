@@ -119,7 +119,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_SSLKEY}
 	 *
@@ -131,7 +131,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_SSLCERT}
 	 *
@@ -143,7 +143,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_SSL_CIPHER_LIST}
 	 *
@@ -155,7 +155,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_CAPATH}
 	 *
@@ -167,7 +167,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_CAINFO}
 	 *
@@ -179,7 +179,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_SSL_VERIFYHOST}
 	 *
@@ -239,7 +239,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_POSTFIELDSIZE}
 	 *
@@ -689,7 +689,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_TCP_NODELAY}
 	 *
@@ -774,8 +774,8 @@ class ClientURLOption implements ClientURLOptionInterface
 		$this->setOption(CURLOPT_MAX_RECV_SPEED_LARGE, $bytePerSeconds);
 
 		return $this->returnContext();
-	}	
-	
+	}
+
 	/**
 	 * {@see \CURLOPT_USERPWD}
 	 *
@@ -811,7 +811,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_INFILESIZE}
 	 *
@@ -823,7 +823,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_INFILE}
 	 *
@@ -835,7 +835,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	public function setHeader(string $key, string $value, bool $overwrite = false)
 	{
 		$headerData = [$key, $value];
@@ -1036,7 +1036,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_NOSIGNAL}
 	 *
@@ -1122,7 +1122,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_TIMEOUT_MS}
 	 */
@@ -1132,7 +1132,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_SHARE}
 	 */
@@ -1142,7 +1142,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_PINNEDPUBLICKEY}
 	 */
@@ -1152,7 +1152,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 	/**
 	 * {@see \CURLOPT_UNIX_SOCKET_PATH}
 	 */
@@ -1162,7 +1162,7 @@ class ClientURLOption implements ClientURLOptionInterface
 
 		return $this->returnContext();
 	}
-	
+
 
 	/**
 	 * {@see \CURLOPT_HEADER}

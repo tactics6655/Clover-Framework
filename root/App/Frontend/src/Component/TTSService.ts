@@ -1,4 +1,4 @@
-export default class TTSService {
+export class TTSService {
     getSynthesis () {
         return window.speechSynthesis;
     }

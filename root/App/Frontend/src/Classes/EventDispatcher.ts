@@ -1,6 +1,6 @@
 export default class EventDispatcher {
 
-    private events = [];
+    private events = {};
 
     constructor() {
         this.events = [];
@@ -18,7 +18,7 @@ export default class EventDispatcher {
         this.events[eventName].push(closure);
     }
 
-    isExists(eventName) {
+    isExists(eventName: string) {
         return (typeof this.events[eventName] === 'undefined');
     }
 
@@ -26,7 +26,7 @@ export default class EventDispatcher {
         
     }
 
-    dispatch(eventName, args) {
+    dispatch(eventName: string, args: string) {
         if (this.isExists(eventName)) {
             throw new Error('Event is not callable');
         }

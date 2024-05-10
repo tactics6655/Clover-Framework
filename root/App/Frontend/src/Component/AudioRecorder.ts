@@ -78,7 +78,7 @@ interface AudioRecorderInterface {
     stop() :void;
 }
 
-export default class AudioRecorder implements AudioRecorderInterface {
+export class AudioRecorder implements AudioRecorderInterface {
 
     private state: string;
     private timeslice: number;
@@ -210,20 +210,26 @@ export default class AudioRecorder implements AudioRecorderInterface {
     }
 
     public clearSpectrum() :void {
-        let target_div: any = document.querySelectorAll('#div');
-        if (target_div.length > 0) {
-            target_div = target_div[0];
+        let targetDiv: any = document.querySelectorAll('#div');
+        if (targetDiv.length > 0) {
+            targetDiv = targetDiv[0];
         }
 
-        target_div.innerHTML = '';
-        const canvas = target_div.appendChild(document.createElement("canvas"));
-        canvas.width = target_div.clientWidth;
-        canvas.height = 24;
-        canvas.style.verticalAlign = "middle";
-        const canvasContext = canvas.getContext("2d");
+        if (!targetDiv) {
+            return;
+        }
 
-        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-        canvasContext.fillStyle = 'rgba(255, 0, 0, 0)';
+        try {
+            targetDiv.innerHTML = '';
+            const canvas = targetDiv.appendChild(document.createElement("canvas"));
+            canvas.width = targetDiv.clientWidth;
+            canvas.height = 24;
+            canvas.style.verticalAlign = "middle";
+            const canvasContext = canvas.getContext("2d");
+    
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            canvasContext.fillStyle = 'rgba(255, 0, 0, 0)';
+        } catch (error) {}
     }
 
     public setSpectrum() :void {

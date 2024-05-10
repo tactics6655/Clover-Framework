@@ -345,7 +345,7 @@ class StringObject extends BaseObject
     {
         $data = $this->getRawData();
 
-        $this->setRawData($string.$data);
+        $this->setRawData($string . $data);
 
         return $this;
     }
@@ -354,7 +354,7 @@ class StringObject extends BaseObject
     {
         $data = $this->getRawData();
 
-        $this->setRawData($data.$string);
+        $this->setRawData($data . $string);
 
         return $this;
     }

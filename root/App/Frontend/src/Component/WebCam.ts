@@ -1,4 +1,4 @@
-import UserMedia from './UserMedia';
+import {UserMediaService} from './UserMediaService';
 
 export default class WebCam {
 
@@ -9,8 +9,8 @@ export default class WebCam {
     }
 
     startWebCam (onLoadCallback, onSuccessCallback, onErrorCallback) {
-        if (UserMedia.hasGetUserMedia()) {
-            UserMedia.getDeviceUserMedia({
+        if (UserMediaService.hasGetUserMedia()) {
+            UserMediaService.getDeviceUserMedia({
                 video: true
             }).then(function (mediaStream) {
                 if (typeof onLoadCallback == 'function') {

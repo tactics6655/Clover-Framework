@@ -1,4 +1,4 @@
-export default class NotificationService {
+export class NotificationService {
 
     public isSupported() {
         if (!("Notification" in window)) {

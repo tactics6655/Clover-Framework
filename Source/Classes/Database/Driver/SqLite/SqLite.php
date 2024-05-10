@@ -55,7 +55,7 @@ class SqLite
                 PRAGMA_TABLE_INFO('%s')
             ORDER BY 1
 EOD;
-        
+
         $result = $this->query(sprintf($query, $table));
 
         $rows = new ArrayObject();
@@ -83,7 +83,7 @@ EOD;
             WHERE type IN ('table', 'view') 
             ORDER BY 1;
 EOD;
-        
+
         $result = $this->query($query);
 
         $rows = new ArrayObject();

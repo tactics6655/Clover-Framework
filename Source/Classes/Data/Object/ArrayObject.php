@@ -4,8 +4,6 @@ namespace Clover\Classes\Data;
 
 use Clover\Classes\ArraySummarizer;
 use Clover\Classes\Data\BaseObject as BaseObject;
-use Clover\Classes\Data\IntegerObject as IntegerObject;
-use Clover\Classes\Data\BooleanObject as BooleanObject;
 use Countable;
 use Iterator;
 use RecursiveArrayIterator;
@@ -131,7 +129,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         if ($key instanceof StringObject) {
             $key = $key->__toString();
         }
-        
+
         $this->rawData[$key] = $item;
     }
 
@@ -397,7 +395,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     public function reverse()
     {
-        
+
         $this->rawData = array_reverse($this->rawData);
 
         return $this;
@@ -532,7 +530,7 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
 
     public function isEquals($b): bool
     {
-        return 
+        return
             count($this->rawData)                   == count($b->rawData) &&
             array_diff($this->rawData, $b->rawData) == array_diff($b->rawData, $this->rawData);
     }

@@ -8,36 +8,36 @@ use AllowDynamicProperties;
 class BaseObject
 {
 
-    protected $rawData;
+	protected $rawData;
 
-    public function __construct($data)
-    {
-        $this->rawData = $data;
-    }
-
-    public function setRawData($data)
-    {
-        $this->rawData = $data;
-    }
-
-    public function getRawData()
-    {
-        return $this->rawData;
-    }
-
-    public function __toString()
-    {
-        return implode(" ", $this->rawData);
-    }
-
-    public function typeOfString()
-    {
-        return $this instanceof StringObject;
-    }
-
-    public function typeCasting($type)
+	public function __construct($data)
 	{
-        $data = $this->rawData;
+		$this->rawData = $data;
+	}
+
+	public function setRawData($data)
+	{
+		$this->rawData = $data;
+	}
+
+	public function getRawData()
+	{
+		return $this->rawData;
+	}
+
+	public function __toString()
+	{
+		return implode(" ", $this->rawData);
+	}
+
+	public function typeOfString()
+	{
+		return $this instanceof StringObject;
+	}
+
+	public function typeCasting($type)
+	{
+		$data = $this->rawData;
 
 		switch ($type) {
 			case "string":
@@ -55,54 +55,54 @@ class BaseObject
 			case "array":
 				$data = (array)$data;
 				break;
-            default:
-                return false;
+			default:
+				return false;
 		}
 
-        $this->setRawData($data);
+		$this->setRawData($data);
 
-        return true;
+		return true;
 	}
 
 	public function toObject()
 	{
-        $data = $this->getRawData();
+		$data = $this->getRawData();
 
 		$type = getType($data);
 
 		if ($type == 'string') {
 			return new StringObject($data);
-		} 
-		
+		}
+
 		if ($type == 'integer') {
 			return new IntegerObject($data);
 		}
-		
+
 		if ($type == 'array') {
 			return new ArrayObject($data);
 		}
-		
+
 		if ($type == 'double') {
 			return new DoubleObject($data);
 		}
-		
+
 		if ($type == 'array') {
 			return new ArrayObject($data);
 		}
-		
+
 		if ($type == 'resource') {
 			return new ResourceObject($data);
 		}
-		
+
 		if ($type == 'NULL') {
 			return new NullObject($data);
 		}
-		
+
 		return $data;
 	}
 
-    public function length()
-    {
-        return 0;
-    }
+	public function length()
+	{
+		return 0;
+	}
 }

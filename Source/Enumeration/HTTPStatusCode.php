@@ -131,21 +131,22 @@ enum HTTPStatusCode: int
     const LOOP_DETECTED = 508;
 
     const BANDWIDTH_LIMIT_EXCEEDED = 509;
-    
+
     const NOT_EXTENDED = 510;
 
     const NETWORK_AUTHENTICATION_REQUIRED = 511;
 
     const NETWORK_CONNECT_TIMEOUT_ERROR = 599;
-    
+
     const WEBSERVER_IS_RETURNING_AN_UNKNOWN_ERROR = 520;
 
     const CONNECTION_TIMEOUT = 522;
 
     const A_TIMEOUT_OCCURRED = 524;
 
-    public function Message(): string {
-        return match($this) {
+    public function Message(): string
+    {
+        return match ($this) {
             HTTPStatusCode::CONTINUE => 'Continue',
             HTTPStatusCode::SWITCHING_PROTOCOLS => 'Switching Protocols',
             HTTPStatusCode::PROCESSING => 'Processing',

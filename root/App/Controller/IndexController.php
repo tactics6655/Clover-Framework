@@ -4,17 +4,9 @@ namespace App\Controller;
 
 use App\Middleware\ModuleMiddleware;
 use Clover\Annotation;
-use Clover\Classes\ArraySummarizer;
-use Clover\Classes\Data\ArrayObject;
-use Clover\Classes\Data\IntegerObject;
-use Clover\Classes\Data\StringObject;
-use Clover\Classes\Database\Driver\SqLite as SqLite;
 use Clover\Classes\HTTP\Request;
 use Clover\Framework\Component\BaseController;
-use Clover\Classes\File\Functions as FileFunctions;
-use Clover\Classes\Directory\Handler as DirectoryHandler;
-use Clover\Classes\Image\Handler;
-use Clover\Enumeration\MIME;
+use Clover\Classes\System;
 
 #[Annotation\Prefix('/')]
 class IndexController extends BaseController
@@ -23,6 +15,12 @@ class IndexController extends BaseController
     #[Annotation\Middleware(ModuleMiddleware::class)]
     public function index(Request $request)
     {
-        return $this->renderText('');
+        $this->addJsFileToHead('/App/Frontend/dist/coreJS.js');
+
+        $text = $request->getQueryParamter('test');
+
+        System\Output::printFormat("%s!!", $text);
+
+        return $this->render('/App/View/test.php');
     }
 }

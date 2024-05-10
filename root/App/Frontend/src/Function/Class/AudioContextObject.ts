@@ -1,7 +1,7 @@
 
 import $ from 'jquery';
 
-export default class AudioContextObject {
+export class AudioContextObject {
 	
 	private audioContext;
 

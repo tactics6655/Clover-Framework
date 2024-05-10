@@ -1,5 +1,7 @@
 @import url("//fonts.googleapis.com/css?family=Raleway:400");
+
 @-webkit-keyframes ui-spinner-rotate-right {
+
   /* line 64, ../../src/sass/messenger-spinner.scss */
   0% {
     -webkit-transform: rotate(0deg);
@@ -27,6 +29,7 @@
 }
 
 @-webkit-keyframes ui-spinner-rotate-left {
+
   /* line 72, ../../src/sass/messenger-spinner.scss */
   0% {
     -webkit-transform: rotate(0deg);
@@ -54,6 +57,7 @@
 }
 
 @-moz-keyframes ui-spinner-rotate-right {
+
   /* line 80, ../../src/sass/messenger-spinner.scss */
   0% {
     -moz-transform: rotate(0deg);
@@ -81,6 +85,7 @@
 }
 
 @-moz-keyframes ui-spinner-rotate-left {
+
   /* line 88, ../../src/sass/messenger-spinner.scss */
   0% {
     -moz-transform: rotate(0deg);
@@ -108,6 +113,7 @@
 }
 
 @keyframes ui-spinner-rotate-right {
+
   /* line 96, ../../src/sass/messenger-spinner.scss */
   0% {
     transform: rotate(0deg);
@@ -135,6 +141,7 @@
 }
 
 @keyframes ui-spinner-rotate-left {
+
   /* line 104, ../../src/sass/messenger-spinner.scss */
   0% {
     transform: rotate(0deg);
@@ -166,10 +173,12 @@
   position: relative;
   border-radius: 100%;
 }
+
 /* line 120, ../../src/sass/messenger-spinner.scss */
 ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   display: block;
 }
+
 /* line 124, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side {
   width: 50%;
@@ -177,6 +186,7 @@ ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   overflow: hidden;
   position: absolute;
 }
+
 /* line 130, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side .messenger-spinner-fill {
   border-radius: 999px;
@@ -194,10 +204,12 @@ ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   -o-animation-timing-function: linear;
   animation-timing-function: linear;
 }
+
 /* line 140, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-left {
   left: 0;
 }
+
 /* line 143, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-left .messenger-spinner-fill {
   left: 100%;
@@ -214,10 +226,12 @@ ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   -o-transform-origin: 0 50%;
   transform-origin: 0 50%;
 }
+
 /* line 152, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-right {
   left: 50%;
 }
+
 /* line 155, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-right .messenger-spinner-fill {
   left: -100%;
@@ -243,6 +257,7 @@ ul.messenger-theme-air {
   user-select: none;
   font-family: "Raleway", sans-serif;
 }
+
 /* line 20, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message {
   -webkit-transition: background-color 0.4s;
@@ -266,10 +281,12 @@ ul.messenger-theme-air .messenger-message {
   font-weight: 500;
   padding: 10px 30px 11px 46px;
 }
+
 /* line 33, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message:hover {
   background-color: white;
 }
+
 /* line 36, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-close {
   position: absolute;
@@ -287,19 +304,23 @@ ul.messenger-theme-air .messenger-message .messenger-close {
   border: 0;
   -webkit-appearance: none;
 }
+
 /* line 52, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-close:hover {
   color: #444444;
 }
+
 /* line 55, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-close:active {
   color: #222222;
 }
+
 /* line 58, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions {
   float: none;
   margin-top: 10px;
 }
+
 /* line 62, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions a {
   -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1), inset 0px 1px rgba(255, 255, 255, 0.05);
@@ -318,6 +339,7 @@ ul.messenger-theme-air .messenger-message .messenger-actions a {
   padding: 3px 10px 5px;
   text-transform: capitalize;
 }
+
 /* line 73, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions a:hover {
   -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1), inset 0px 1px rgba(255, 255, 255, 0.15);
@@ -325,6 +347,7 @@ ul.messenger-theme-air .messenger-message .messenger-actions a:hover {
   box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1), inset 0px 1px rgba(255, 255, 255, 0.15);
   color: #444444;
 }
+
 /* line 77, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions a:active {
   -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.18), inset 0px 1px rgba(0, 0, 0, 0.05);
@@ -333,10 +356,12 @@ ul.messenger-theme-air .messenger-message .messenger-actions a:active {
   background: rgba(0, 0, 0, 0.04);
   color: #444444;
 }
+
 /* line 82, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-actions .messenger-phrase {
   display: none;
 }
+
 /* line 85, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message .messenger-message-inner:before {
   -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
@@ -357,16 +382,19 @@ ul.messenger-theme-air .messenger-message .messenger-message-inner:before {
   width: 13px;
   z-index: 20;
 }
+
 /* line 99, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message.alert-success .messenger-message-inner:before {
   background-color: #5fca4a;
 }
+
 /* line 32, ../../src/sass/messenger-spinner.scss */
 ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-soon .messenger-spinner {
   width: 24px;
   height: 24px;
   background: transparent;
 }
+
 /* line 37, ../../src/sass/messenger-spinner.scss */
 ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-soon .messenger-spinner .messenger-spinner-side .messenger-spinner-fill {
   background: #dd6a45;
@@ -377,6 +405,7 @@ ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-soon .mess
   animation-duration: 20s;
   opacity: 1;
 }
+
 /* line 45, ../../src/sass/messenger-spinner.scss */
 ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-soon .messenger-spinner:after {
   content: "";
@@ -389,12 +418,14 @@ ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-soon .mess
   left: 2px;
   display: block;
 }
+
 /* line 32, ../../src/sass/messenger-spinner.scss */
 ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-later .messenger-spinner {
   width: 24px;
   height: 24px;
   background: transparent;
 }
+
 /* line 37, ../../src/sass/messenger-spinner.scss */
 ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-later .messenger-spinner .messenger-spinner-side .messenger-spinner-fill {
   background: #dd6a45;
@@ -405,6 +436,7 @@ ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-later .mes
   animation-duration: 600s;
   opacity: 1;
 }
+
 /* line 45, ../../src/sass/messenger-spinner.scss */
 ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-later .messenger-spinner:after {
   content: "";
@@ -417,14 +449,17 @@ ul.messenger-theme-air .messenger-message.alert-error.messenger-retry-later .mes
   left: 2px;
   display: block;
 }
+
 /* line 109, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message.alert-error .messenger-message-inner:before {
   background-color: #dd6a45;
 }
+
 /* line 113, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-message.alert-info .messenger-message-inner:before {
   background-color: #61c4b8;
 }
+
 /* line 116, ../../src/sass/messenger-theme-air.sass */
 ul.messenger-theme-air .messenger-spinner {
   display: block;

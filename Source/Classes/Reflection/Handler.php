@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Clover\Classes\Reflection;
 
-use Clover\Classes\File\Functions as FileFunctions;
 use Clover\Classes\Debug\TraceObject;
 use Clover\Classes\DependencyInjection\Container;
 
@@ -473,7 +472,7 @@ class Handler
 
         $reflection = self::getClass($class);
         $parameters = self::getParameters($reflection);
-        
+
         foreach ($parameters as $parameter) {
             /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
             $type = $parameter->getType();

@@ -39,7 +39,7 @@ enum MimeTypes {
     MPEG = 'video/mpeg'
 }
 
-export default class MediaPlayer implements MediaPlayerInterface {
+export class MediaPlayer implements MediaPlayerInterface {
 
     private mediaType: any;
     public mediaContext: any;

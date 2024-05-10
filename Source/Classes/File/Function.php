@@ -1010,7 +1010,7 @@ class Functions
 		}
 
 		ob_start();
-		
+
 		extract(($data instanceof ArrayObject ? $data->getRawData() : $data) ?? []);
 
 		if (isset($filePath)) {

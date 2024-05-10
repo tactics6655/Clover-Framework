@@ -3,6 +3,7 @@
 namespace Clover\Framework\Component;
 
 use Clover\Classes\Header;
+use Clover\Classes\System;
 
 class Response
 {
@@ -14,7 +15,7 @@ class Response
 
     private int $statusCode;
 
-    private $protocolVersion = '1.0';
+    private string $protocolVersion = '1.0';
 
     public function __construct($body, $resource = array(), $type = 'html', $statusCode = 200)
     {
@@ -58,7 +59,7 @@ class Response
 
     public function printBody()
     {
-        echo $this->body;
+        System\Output::print($this->body);
     }
 
     public function preAppendBody($body)

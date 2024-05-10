@@ -2,15 +2,11 @@
 
 namespace Clover\Framework\Component;
 
-use Clover\Framework\Component\Renderer;
-use Clover\Framework\Component\Resource;
-
 use Clover\Classes\HTTP\Request as HTTPRequest;
 use Clover\Classes\OperationSystem as OperationSystem;
 use Clover\Classes\DependencyInjection\Container;
 use Clover\Classes\Event\Dispatcher as EventDispatcher;
 use Clover\Classes\XML\SimpleXML;
-use Clover\Classes\File\Functions as FileFunction;
 
 class Mapper
 {
@@ -124,7 +120,7 @@ class Mapper
         $parser = new SimpleXML();
         $parser->fromFile(dirname(__ROOT__) . "/Source/Framework/Configure/default_services.xml");
         $services = $parser->getChildren('container')->getChildren('services')->getData();
-        
+
         /** @var \SimpleXMLElement[] $services */
         foreach ($services as $service) {
             $key = $service->attributes()->key->__toString();

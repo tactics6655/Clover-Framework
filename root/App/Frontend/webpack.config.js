@@ -23,8 +23,8 @@ module.exports = {
 			minRatio: 0.8
 		}),*/
 		/*new WebpackObfuscator ({
-            "rotateStringArray": true
-        })*/
+			"rotateStringArray": true
+		})*/
 	],
 	mode: "production",
 	entry: [
@@ -43,7 +43,7 @@ module.exports = {
 			new TerserPlugin({
 				cache: true,
 				sourceMap: true
-			}), 
+			}),
 			/*new UglifyJsPlugin({
 				include: /\.js$/,
 				uglifyOptions: {
@@ -52,7 +52,7 @@ module.exports = {
 					minimize: true,
 					compress: true,
 					toplevel: true,
-                    screw_ie8: true
+					screw_ie8: true
 				}
 			}),*/
 		],
@@ -80,7 +80,7 @@ module.exports = {
 				vendors: {
 					test: /[\\/]node_modules[\\/]/,
 					priority: -10
-				}, 
+				},
 				default: {
 					minChunks: 2,
 					priority: -20,
@@ -126,20 +126,20 @@ module.exports = {
 			test: /\.[jt]s$/,
 			exclude: /(node_modules)/,
 			use: [
-			  {
-				loader: 'babel-loader',
-				options: {
-				  presets: ['@babel/preset-env'],
+				{
+					loader: 'babel-loader',
+					options: {
+						presets: ['@babel/preset-env'],
+					},
 				},
-			  },
-			  {
-				loader: 'ts-loader',
-				options: {
-				  compilerOptions: {
-					//noEmit: false,
-				  },
+				{
+					loader: 'ts-loader',
+					options: {
+						compilerOptions: {
+							//noEmit: false,
+						},
+					},
 				},
-			  },
 			],
 		}],
 		exprContextCritical: false,

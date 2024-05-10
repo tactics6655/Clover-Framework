@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Clover\Classes;
 
@@ -45,11 +45,11 @@ class ArraySummarizer
             }
 
             $summaryText .= $num1Str;
-            
+
             if (!empty($prefix)) {
                 $summaryText .= ' [' . $prefix . ']';
             }
-            
+
             if ($num1Str != $num2Str) {
                 $summaryText .= $num2Str;
             }
@@ -64,11 +64,14 @@ class ArraySummarizer
         if (empty($numbers)) {
             return '';
         }
+
         sort($numbers);
+
         $ranges = [];
         $start = $numbers[0];
         $prev = $start;
         $diff = null;
+
         for ($i = 1; $i < count($numbers); $i++) {
             $currentDiff = $numbers[$i] - $prev;
             if ($diff === null) {

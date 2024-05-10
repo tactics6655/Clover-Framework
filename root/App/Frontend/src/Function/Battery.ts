@@ -40,6 +40,7 @@ var A;
 		
 		level: function () {
 			var battery;
+			
 			if (battery = this.isGet()) {
 				return battery.level;
 			}

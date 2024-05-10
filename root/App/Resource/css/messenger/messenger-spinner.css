@@ -1,4 +1,5 @@
 @-webkit-keyframes ui-spinner-rotate-right {
+
   /* line 64, ../../src/sass/messenger-spinner.scss */
   0% {
     -webkit-transform: rotate(0deg);
@@ -26,6 +27,7 @@
 }
 
 @-webkit-keyframes ui-spinner-rotate-left {
+
   /* line 72, ../../src/sass/messenger-spinner.scss */
   0% {
     -webkit-transform: rotate(0deg);
@@ -53,6 +55,7 @@
 }
 
 @-moz-keyframes ui-spinner-rotate-right {
+
   /* line 80, ../../src/sass/messenger-spinner.scss */
   0% {
     -moz-transform: rotate(0deg);
@@ -80,6 +83,7 @@
 }
 
 @-moz-keyframes ui-spinner-rotate-left {
+
   /* line 88, ../../src/sass/messenger-spinner.scss */
   0% {
     -moz-transform: rotate(0deg);
@@ -107,6 +111,7 @@
 }
 
 @keyframes ui-spinner-rotate-right {
+
   /* line 96, ../../src/sass/messenger-spinner.scss */
   0% {
     transform: rotate(0deg);
@@ -134,6 +139,7 @@
 }
 
 @keyframes ui-spinner-rotate-left {
+
   /* line 104, ../../src/sass/messenger-spinner.scss */
   0% {
     transform: rotate(0deg);
@@ -165,10 +171,12 @@
   position: relative;
   border-radius: 100%;
 }
+
 /* line 120, ../../src/sass/messenger-spinner.scss */
 ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   display: block;
 }
+
 /* line 124, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side {
   width: 50%;
@@ -176,6 +184,7 @@ ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   overflow: hidden;
   position: absolute;
 }
+
 /* line 130, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side .messenger-spinner-fill {
   border-radius: 999px;
@@ -193,10 +202,12 @@ ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   -o-animation-timing-function: linear;
   animation-timing-function: linear;
 }
+
 /* line 140, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-left {
   left: 0;
 }
+
 /* line 143, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-left .messenger-spinner-fill {
   left: 100%;
@@ -213,10 +224,12 @@ ul.messenger.messenger-spinner-active .messenger-spinner .messenger-spinner {
   -o-transform-origin: 0 50%;
   transform-origin: 0 50%;
 }
+
 /* line 152, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-right {
   left: 50%;
 }
+
 /* line 155, ../../src/sass/messenger-spinner.scss */
 .messenger-spinner .messenger-spinner-side-right .messenger-spinner-fill {
   left: -100%;

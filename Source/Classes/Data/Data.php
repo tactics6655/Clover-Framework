@@ -24,33 +24,32 @@ class Data
 	{
 		if (getType(self::$data) == 'string') {
 			return new StringObject(self::$data);
-		} 
-		
+		}
+
 		if (getType(self::$data == 'integer')) {
 			return new IntegerObject(self::$data);
 		}
-		
+
 		if (getType(self::$data == 'boolean')) {
 			return new BooleanObject(self::$data);
 		}
-		
+
 		if (getType(self::$data == 'double')) {
 			return new DoubleObject(self::$data);
 		}
-		
+
 		if (getType(self::$data == 'array')) {
 			return new ArrayObject(self::$data);
 		}
-		
+
 		if (getType(self::$data == 'resource')) {
 			return new ResourceObject(self::$data);
 		}
-		
+
 		if (getType(self::$data == 'NULL')) {
 			return new NullObject(self::$data);
 		}
-		
+
 		return self::$data;
 	}
-
 }

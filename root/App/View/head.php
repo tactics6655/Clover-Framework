@@ -1,4 +1,3 @@
-
 <div id="shortcut">
     <div>진료시간: 평일 09:00 ~ 20:00, 토일 공휴일 : 09:00 ~ 15:00 진료안내 : 051-327-1199 사상역 2번 출구 100미터 무료주차 : 그랑드주차장</div>
 </div>
@@ -6,7 +5,7 @@
     <div class="gnb_area">
 
         <a href="/"><img class="logo" src="/App/View/img/logo.png" alt="logo"></a>
-			
+
 
         <nav class="gnb" id="gnb">
             <ul class="nav navbar-nav navbar-left">
@@ -42,7 +41,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="dropdown">
                     <a class="first_a">
                         양·한방(입원)치료
@@ -105,7 +104,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="dropdown">
                     <a class="first_a">
                         통증·재활센터
@@ -113,7 +112,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#">
-                            두통
+                                두통
                             </a>
                         </li>
                         <li>
@@ -178,7 +177,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="dropdown">
                     <a class="first_a">
                         암·수술 후 요양
@@ -186,7 +185,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#">
-                            면역약침요법
+                                면역약침요법
                             </a>
                         </li>
                         <li>
@@ -196,7 +195,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="dropdown">
                     <a class="first_a">
                         여성질환·부인과
@@ -204,7 +203,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#">
-                            골반염
+                                골반염
                             </a>
                         </li>
                         <li>
@@ -249,7 +248,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="dropdown">
                     <a class="first_a">
                         한방다이어트
@@ -272,7 +271,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="dropdown">
                     <a class="first_a">
                         한방성형

@@ -1,18 +1,43 @@
 declare const ActiveXObject;
 
+declare const DocumentTouch;
+
 declare global {
+
+    interface DeferredPromise {
+        resolve: (data: any) => {};
+        reject: (error: any) => {};
+        promise: Promise<any>;
+    }
+
+    interface BatteryManager {
+        charging: boolean;
+        chargingTime: number;
+        dischargingTime: number;
+        level: number;
+        onchargingchange: any;
+        onchargingtimechange: any;
+        ondischargingtimechange: any;
+        onlevelchange: any;
+    }
+
     interface console {
         err: any;
     }
+
     interface Date {
         toGMTString: any;
     }
+
     interface HTMLElement {
         mozRequestPointerLock: any;
         getContext: any;
         type: any;
     }
+
     interface Navigator {
+        userLanguage: any;
+        webkitConnection: any;
         connection: any;
         mozConnection: any;
         msVibrate: any;
@@ -29,6 +54,15 @@ declare global {
         mozGetUserMedia: any;
         webkitGetGamepads: any;
     }
+
+    interface Element {
+        getWidth: any;
+        getHeight: any;
+        requestFullScreen: any;
+        toggleFullScreen: any;
+        cancelFullScreen: any;
+    }
+
     interface Document {
         getAttribute: any;
         webkitHidden: any;
@@ -51,11 +85,13 @@ declare global {
         webkitIsFullScreen: any;
         mozFullScreen: any;
     }
+
     interface HTMLElement {
         msRequestFullscreen?: () => Promise<void>;
         mozRequestFullscreen?: () => Promise<void>;
         webkitRequestFullscreen?: () => Promise<void>;
     }
+
     interface Window {
         getUserMedia: any;
         webkitGetUserMedia: any;
@@ -115,242 +151,113 @@ declare global {
         clipboardData: any;
         attachEvent: any;
     }
+
+    interface Number {
+        clamp: any;
+        mod: any;
+    }
+
     interface Notification {
         permissionLevel: any;
     }
+
     interface JQueryStatic {
         browser: any;
         isReady: any;
         core: any;
         log: any;
     }
+
     interface CanvasRenderingContext2D {
         globalAlpha: any;
     }
 }
 
-import NotificationService from "./src/Component/NotificationService";
-import WebCam from "./src/Component/WebCam";
+export { AudioService } from "./src/Component/AudioService";
+export { AudioRecorder } from "./src/Component/AudioRecorder";
+export { ClipboardService } from "./src/Component/ClipboardService";
+export { GeolocationService } from "./src/Component/GeolocationService";
+export { MediaPlayer } from "./src/Component/MediaPlayer";
+export { NotificationService } from "./src/Component/NotificationService";
+export { Pagination } from "./src/Component/Pagination";
+export { ScreenService } from "./src/Component/ScreenService";
+export { TTSService } from "./src/Component/TTSService";
+export { UserMediaService as UserMedia } from "./src/Component/UserMediaService";
+export { PromiseService } from "./src/Component/PromiseService";
+export { LocalStorageService } from "./src/Component/LocalStorageService";
+export { ElementService } from "./src/Component/ElementService";
+export { BrowserService } from "./src/Component/BrowserService";
+export { ValidatorService } from "./src/Component/ValidatorService";
+export { EventService } from "./src/Component/EventService";
+export { URLService } from "./src/Component/URLService";
+export { WebcamService } from "./src/Component/WebcamService";
+export { RequestService } from "./src/Component/RequestService";
+export { JSONService } from "./src/Component/JSONService";
+export { MouseService } from "./src/Component/MouseService";
+export { MediaSessionService } from "./src/Component/MediaSessionService";
+export { MobileDeviceService } from "./src/Component/MobileDeviceService";
+export { BatteryService } from "./src/Component/BatteryService";
+export { CookieService } from "./src/Component/CookieService";
 
-var service = new NotificationService();
+import { ScreenService } from "./src/Component/ScreenService";
+import { ElementService } from "./src/Component/ElementService";
 
-document.addEventListener('DOMContentLoaded', function () {
-    if (!service.isSupported()) {
-        console.log("Service is not supported");
-        return;
-    }
-    
-    if (!service.isPermissionGranted()) {
-        service.requestPermission();
-    }
+if (typeof Number.prototype.mod !== 'function') {
+    Number.prototype.mod = function (n: number) {
+        return ((this % n) + n) % n;
+    };
+}
 
-    service.notify('test', 'test', '', 'test', {});
+if (!String.prototype.trim) {
+    String.prototype.trim = function () {
+        return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+    };
+}
 
-});
+if (typeof Number.prototype.clamp !== 'function') {
+    Number.prototype.clamp = function (min: number, max: number) {
+        return Math.min(Math.max(this, min), max);
+    };
+}
 
-/*declare const ActiveXObject;
-declare global {
-    interface console {
-        err: any;
+if (!Element.prototype.getHeight) {
+    Element.prototype.getHeight = function getHeight() {
+        ElementService.getHeight(this);
     }
-    interface Date {
-        toGMTString: any;
-    }
-    interface HTMLElement {
-        mozRequestPointerLock: any;
-        getContext: any;
-        type: any;
-    }
-    interface Navigator {
-        connection: any;
-        mozConnection: any;
-        msVibrate: any;
-        mozVibrate: any;
-        webkitVibrate: any;
-        getBattery: any;
-        mozNotification: any;
-        requestWakeLock: any;
-        mozPower: any;
-        mozFMRadio: any;
-        webkitGetUserMedia: any;
-        getUserMedia: any;
-        msGetUserMedia: any;
-        mozGetUserMedia: any;
-        webkitGetGamepads: any;
-    }
-    interface Document {
-        getAttribute: any;
-        webkitHidden: any;
-        msHidden: any;
-        onmousewheel: any;
-        selection: any;
-        createEventObject: any;
-        mozPointerLockElement: any;
-        mozExitPointerLock: any;
-        documentMode?: any;
-        msFullscreenElement: any;
-        mozCancelFullScreen: () => void;
-        webkitExitFullscreen: () => void;
-        fullscreenElement: () => void;
-        mozFullScreenElement: () => void;
-        webkitFullscreenElement: () => void;
-        webkitCancelFullScreen: any;
-        msExitFullscreen: any;
-        fullScreen: any;
-        webkitIsFullScreen: any;
-        mozFullScreen: any;
-    }
-    interface HTMLElement {
-        msRequestFullscreen?: () => Promise<void>;
-        mozRequestFullscreen?: () => Promise<void>;
-        webkitRequestFullscreen?: () => Promise<void>;
-    }
-    interface Window {
-        speechRecognition: any;
-        ga: any;
-        jQuery: any;
-        dataURLtoBlob: any;
-        webkitAudioContext: any;
-        mozAudioContext: any;
-        msAudioContext: any;
-        DocumentTouch: any;
-        chrome: any;
-        webkitPerformance: any;
-        sidebar: any;
-        language: any;
-        webkitCreateShadowRoot: any;
-        createShadowRoot: any;
-        mozPerformance: any;
-        mozRequestAnimationFrame: any;
-        msPerformance: any;
-        externalHost: any;
-        webkitRequestAnimationFrame: any;
-        msRequestAnimationFrame: any;
-        oRequestAnimationFrame: any;
-        webkitCancelAnimationFrame: any;
-        msCancelAnimationFrame: any;
-        mozCancelAnimationFrame: any;
-        lang: any;
-        MSPointerEvent: any;
-        adsbygoogle: any;
-        MSBlobBuilder: any;
-        BlobBuilder: any;
-        WebKitBlobBuilder: any;
-        MozBlobBuilder: any;
-        webkitRTCPeerConnection: any;
-        mozRTCPeerConnection: any;
-        webkitMediaSource: any;
-        opera: any;
-        ActiveXObject: any;
-        XDomainRequest: any;
-        webkitNotifications: any;
-        mozIndexedDB: () => void;
-        webkitIndexedDB: () => void;
-        msIndexedDB: () => void;
-        webkitIDBTransaction: () => void;
-        msIDBTransaction: () => void;
-        webkitIDBKeyRange: () => void;
-        msIDBKeyRange: () => void;
-        openDatabase: () => void;
-        SpeechRecognition: () => void;
-        webkitSpeechRecognition: () => void;
-        createObjectURL: any;
-        mozURL: any;
-        msURL: any;
-        clipboardData: any;
-        attachEvent: any;
-    }
-    interface Notification {
-        permissionLevel: any;
-    }
-    interface JQueryStatic {
-        browser: any;
-        isReady: any;
-        core: any;
-        log: any;
-    }
-    interface CanvasRenderingContext2D {
-        globalAlpha: any;
-    }
-}*/
+}
 
-//declare let $:any;
+if (!Element.prototype.setAttribute) {
+    Element.prototype.setAttribute = function setAttribute(attributes) {
+        ElementService.setAttribute(this, attributes);
+    }
+}
 
-/*import 'babel-polyfill';
-import jQuery from 'jquery'
-//require.context('./src/', false, /\$/);
+if (!Element.prototype.removeAttribute) {
+    Element.prototype.removeAttribute = function removeAttribute(attributes) {
+        ElementService.removeAttribute(this, attributes);
+    }
+}
 
-import './src/config'
-import './dist/variables'
-//import mat4 from './src/Extention/gl-matrix-min'
+if (!Element.prototype.getWidth) {
+    Element.prototype.getWidth = function getWidth() {
+        ElementService.getWidth(this);
+    }
+}
 
-import core from './src/Extention/Initialization'
-import Application from './src/Function/Application'
-import Array from './src/Function/Array'
-import Audio from './src/Function/Audio'
-import Base from './src/Function/Base'
-import Battery from './src/Function/Battery'
-import Browser from './src/Function/Browser'
-import Cache from './src/Function/Cache'
-import Canvas from './src/Function/Canvas'
-import ChromeExtend from './src/Function/ChromeExtend'
-import Clipboard from './src/Function/Clipboard'
-import Console from './src/Function/Console'
-import Cookie from './src/Function/Cookie'
-import detectAdblock from './src/Function/detectAdblock'
-import dragDrop from './src/Function/dragDrop'
-import Effect from './src/Function/Effect'
-import Element from './src/Function/Element'
-import Event from './src/Function/Event'
-import File from './src/Function/File'
-import Flash from './src/Function/Flash'
-import Gamepad from './src/Function/Gamepad'
-import Generator from './src/Function/Generator'
-import Geo from './src/Function/Geo'
-import Google from './src/Function/Google'
-import HarmonicGenerator from './src/Function/HarmonicGenerator'
-import ID3 from './src/Function/ID3'
-import Imoticon from './src/Function/Imoticon'
-import JSON from './src/Function/JSON'
-import List from './src/Function/List'
-import Lyrics from './src/Function/Lyrics'
-import Language from './src/Function/Language'
-import MediaSession from './src/Function/MediaSession'
-import MediaSource from './src/Function/MediaSource'
-import Midi from './src/Function/Midi'
-import Mobile from './src/Function/Mobile'
-import Mouse from './src/Function/Mouse'
-import Notify from './src/Function/Notify'
-import OptionList from './src/Function/OptionList'
-import Popup from './src/Function/Popup'
-import Pagination from './src/Function/Pagination'
-import Promise from './src/Function/Promise'
-import Radio from './src/Function/Radio'
-import Request from './src/Function/Request'
-import Screen from './src/Function/Screen'
-import Scroll from './src/Function/Scroll'
-import Selector from './src/Function/Selector'
-import SessionStorage from './src/Function/SessionStorage'
-import ScreenCapture from './src/Function/ScreenCapture'
-import SimpleCrypto from './src/Function/SimpleCrypto'
-import SNS from './src/Function/SNS'
-import Speech from './src/Function/Speech'
-import Storage from './src/Function/Storage'
-import StreamObject from './src/Function/StreamObject'
-import String from './src/Function/String'
-import System from './src/Function/System'
-import Time from './src/Function/Time'
-import Timer from './src/Function/Timer'
-import URL from './src/Function/URL'
-import Validate from './src/Function/Validate'
-import WebDB from './src/Function/WebDB'
-import WebCam from './src/Function/WebCam'
-import WebRealbook from './src/Function/WebRealbook'
-import WebSocket from './src/Function/WebSocket'
-import XML from './src/Function/XML'
+if (!Element.prototype.requestFullScreen) {
+    Element.prototype.requestFullScreen = function requestFullScreen() {
+        ScreenService.requestFullScreen(this);
+    }
+}
 
-import UserMedia from './src/Function/UserMedia'
-import RTC from './src/Function/RTC'
+if (!Element.prototype.toggleFullScreen) {
+    Element.prototype.toggleFullScreen = function toggleFullScreen() {
+        ScreenService.toggleFullScreen(this);
+    }
+}
 
-import AudioRecorder from './src/Component/AudioRecorder'
-import MediaPlayer from './src/Component/MediaPlayer'*/
+if (!Element.prototype.cancelFullScreen) {
+    Element.prototype.cancelFullScreen = function cancelFullScreen() {
+        ScreenService.cancelFullScreen(this);
+    }
+}
