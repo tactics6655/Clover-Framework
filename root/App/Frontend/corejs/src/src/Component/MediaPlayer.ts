@@ -193,7 +193,11 @@ class Visualizer {
 
             canvasContext.lineWidth = dot;
 
-            canvasContext.strokeStyle = '#0096FF';
+            var gradient = canvasContext.createLinearGradient(50,50, 150, 150);
+            gradient.addColorStop(0, "red");
+            gradient.addColorStop(1, "green");
+
+            canvasContext.strokeStyle = gradient;
             canvasContext.moveTo(margin + circle.x, margin + circle.y);
             canvasContext.lineTo(margin + circle.ex, margin + circle.ey);
             
