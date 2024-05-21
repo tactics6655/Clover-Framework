@@ -119,6 +119,148 @@ enum MimeTypes {
     MPEG = 'video/mpeg'
 }
 
+class Visualizer {
+
+    private selector;
+    private context;
+    private canvas;
+    private backgroundFillColor = `rgb(255, 255, 255)`;
+    private spectrumFillColor = 'rgba(255, 0, 0, 0)';
+
+    constructor(selector) {
+        this.selector = selector;
+    }
+
+    setSpectrumFillColor(color) {
+        this.spectrumFillColor = color;
+    }
+
+    setBackgroundFillColor(color) {
+        this.backgroundFillColor = color;
+    }
+
+    circles(cx, cy, rad, dashLength) {
+        var n = rad / dashLength;
+        var alpha = Math.PI * 2 / n;
+        var pointObj = {};
+        var points = [];
+        var i = -1;
+
+        while (i < n) {
+            var theta = alpha * i;
+            var theta2 = alpha * (i + 1);
+
+            points.push({
+                x: (Math.cos(theta) * rad) + cx,
+                y: (Math.sin(theta) * rad) + cy,
+                ex: (Math.cos(theta2) * rad) + cx,
+                ey: (Math.sin(theta2) * rad) + cy
+            });
+
+            i++;
+        }
+
+        return points;
+    }
+
+    draw(frequencies, lineWidth, type = 2) {
+        const canvasContext = this.context;
+        const canvas = this.canvas;
+        const samples = (canvas.height);
+
+        let current = 0;
+        let x = 0;
+        let y = 0;
+        let width = 0;
+        let height = 0;
+
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+        canvasContext.fillStyle = this.backgroundFillColor;
+        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+        canvasContext.lineWidth = lineWidth;
+
+        var circles = this.circles(80, 80, 80, 1);
+        var margin = 20;
+
+        for (let circle of circles) {
+            canvasContext.beginPath();
+            var frequency = frequencies[current];
+            frequency = 50 * (frequency / 256);
+
+            canvasContext.lineWidth = 1;
+
+            const dot = frequency;
+
+            canvasContext.lineWidth = dot;
+
+            canvasContext.strokeStyle = '#0096FF';
+            canvasContext.moveTo(margin + circle.x, margin + circle.y);
+            canvasContext.lineTo(margin + circle.ex, margin + circle.ey);
+            
+            current++;
+            canvasContext.stroke();
+            canvasContext.closePath();
+        }
+        
+
+        for (let frequency of frequencies) {
+            switch (type) {
+                case 0:
+                    x = (current);
+                    y = samples - (frequency / 128) * (samples / 2);
+                    width = canvasContext.lineWidth;
+                    height = ((canvas.height / 2) - y) * 2;
+
+                    canvasContext.fillStyle = this.spectrumFillColor;
+                    canvasContext.fillRect(x, y, width, height);
+                    break;
+                case 1:
+                    x = (current);
+                    y = samples - (frequency / 128) * (samples / 2);
+
+                    if (current == 0) {
+                        canvasContext.strokeStyle = '#0096FF';
+                        canvasContext.beginPath();
+                        canvasContext.moveTo(x, y);
+                    } else {
+                        canvasContext.lineTo(x, y);
+                    }
+
+                    break;
+            }
+        
+            current++;
+        }
+
+        switch (type) {
+            case 0:
+                canvasContext.beginPath();
+            case 1:
+                canvasContext.stroke();
+        }
+    }
+
+    setCanvas(width = -1, height = -1) {
+        let canvasBackground: Element = null;
+        const targetElement: NodeListOf<Element> = document.querySelectorAll(this.selector);
+
+        if (targetElement.length > 0) {
+            canvasBackground = targetElement[0];
+        }
+
+        canvasBackground.innerHTML = '';
+        const newCanvas = document.createElement("canvas");
+
+        this.canvas = canvasBackground.appendChild(newCanvas);
+        this.canvas.width = width == -1 ? canvasBackground.clientWidth : width;
+        this.canvas.height = height == -1 ? canvasBackground.clientHeight : height;
+        this.canvas.style.verticalAlign = "middle";
+
+        this.context = this.canvas.getContext("2d");
+    }
+
+}
+
 class EventListener implements EventListenerInterface {
 
     public events: Array<any>;
@@ -907,43 +1049,13 @@ export class MediaPlayer implements MediaPlayerInterface {
     }
 
     public setSpectrum(selector: string, width: number = -1, height: number = -1, lineWidth: number = 1, margin: 0, backgroundFillColor: string = `rgb(255, 255, 255)`, spectrumFillColor = 'rgba(255, 0, 0, 0)'): void {
-        let canvasBackground: Element = null;
-        const targetElement: NodeListOf<Element> = document.querySelectorAll(selector);
-
-        if (targetElement.length > 0) {
-            canvasBackground = targetElement[0];
-        }
-
-        canvasBackground.innerHTML = '';
-        const canvas = canvasBackground.appendChild(document.createElement("canvas"));
-        canvas.width = width == -1 ? canvasBackground.clientWidth : width;
-        canvas.height = height == -1 ? canvasBackground.clientHeight : height;
-        canvas.style.verticalAlign = "middle";
-        const canvasContext = canvas.getContext("2d");
-
+        const visualizer = new Visualizer(selector);
+        visualizer.setCanvas(width, height);
+        visualizer.setSpectrumFillColor(spectrumFillColor);
+        visualizer.setBackgroundFillColor(backgroundFillColor);
+        
         this.eventListener.addListener(AudioEvent.ON_FREQUENCY, (frequencies: any) => {
-            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-            canvasContext.fillStyle = backgroundFillColor;
-            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-            canvasContext.lineWidth = lineWidth;
-
-            let current = 0;
-
-            for (let frequency of frequencies) {
-                const samples = (canvas.height / canvasContext.lineWidth);
-
-                const x = (current * canvasContext.lineWidth);
-                const y = samples - (frequency / 256) * samples;
-                const width = canvasContext.lineWidth;
-                const height = ((canvas.height / 2) - y) * 2;
-
-                canvasContext.fillStyle = spectrumFillColor;
-                canvasContext.fillRect(x * 5, y, width, height);
-
-                current++;
-            }
-
-            canvasContext.beginPath();
+            visualizer.draw(frequencies, lineWidth);
         });
     }
 
