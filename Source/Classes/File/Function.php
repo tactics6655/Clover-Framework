@@ -1558,6 +1558,8 @@ class Functions
 			return 'XML';
 		}
 
+		print_r($bigEndianUnpack);
+
 		return false;
 	}
 

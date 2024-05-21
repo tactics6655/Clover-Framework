@@ -583,12 +583,12 @@ class Request implements RequestInterface
 		return $string;
 	}
 
-	public static function getQueryParamter($parameter)
+	public static function getQueryParamter($parameter, $default = null)
 	{
 		$string = null;
 
 		if (self::isGetMethod()) {
-			$string = isset($_GET[$parameter]) ? $_GET[$parameter] : null;
+			$string = isset($_GET[$parameter]) ? $_GET[$parameter] : $default;
 			$string = new StringObject($string);
 		}
 

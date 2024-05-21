@@ -1,0 +1,1047 @@
+interface MediaPlayerInterface {
+    isPlaying(): boolean;
+    isPaused(): boolean;
+    isEnded(): boolean;
+    isFullScreen(): boolean;
+    seekBackward(seconds: number): void;
+    seekForward(seconds: number): void;
+    setCurrentTime(time: number): void;
+    setBiquadFilterGainValue(value: number): void;
+    setBiquadFilterDetuneValue(value: number): void;
+    setBiquadFilterFrequencyValue(value: number): void;
+    setEqualPowerPannerModel(): void;
+    setHRTFPannerModel(): void;
+    setPanningModel(modelName: PanningModelType): void;
+    setGainValue(value: number): void;
+    setParseFrequencyTimeout(timeout: number): void;
+    setSource(source: string): void;
+    setDelayValue(value: number): void;
+    getOfflineAudioContext(options: OfflineAudioContextOptions): OfflineAudioContext;
+    getAudioContext(): AudioContext;
+    getCurrentTime(): number;
+    getSampleRate(): number;
+    getSource(): string;
+    createAudioContext(): void;
+    connectPanEffector(): void;
+    connectAnalyser(): void;
+    connectToAudioContext(): void;
+    connectScriptProcessorFilter(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): void;
+    connectIIRFilter(feedforward: number[], feedback: number[]): void;
+    connectDynamicsCompressorFilterFilter(): void;
+    connectBiquadFilter(): void;
+    connectChannelMergerEffector(): void;
+    connectDelayEffector(): void;
+    connectGainEffector(): void;
+    cancelFullScreen(): boolean;
+    requestFullScreen(): boolean;
+    play(): void;
+    pause(): void;
+    hasGetUserMedia(): boolean;
+    requestAnimationFrame(callback: FrameRequestCallback): number;
+    getUserMedia(): any;
+    setUserMediaConstraints(constraints?: MediaStreamConstraints): Promise<MediaStream> | Promise<unknown>;
+    setContext(mediaContext: any): void;
+}
+
+interface MediaSessionInterface {
+    isMediaSessionSupported(): boolean;
+    setMediaSessionPlayHandler(handler: MediaSessionActionHandler): void;
+    setMediaSessionPauseHandler(handler: MediaSessionActionHandler): void;
+    setMediaSessionSeekbackwardHandler(handler: MediaSessionActionHandler): void;
+    setMediaSessionSeekforwardHandler(handler: MediaSessionActionHandler): void;
+    setMediaSessionPrevioustrackHandler(handler: MediaSessionActionHandler): void;
+    setMediaSessionNextrackHandler(handler: MediaSessionActionHandler): void;
+    setMediaSessionPositionState(state?: MediaPositionState): void;
+    setMediaSessionMetadata(init?: MediaMetadataInit): void;
+    setMediaSessionPlaybackState(state: MediaSessionPlaybackState): void;
+    setMediaSessionStateToPlaying(): void;
+    setMediaSessionStateToPaused(): void;
+    setMediaSessionActionHandler(action: MediaSessionAction, handler: MediaSessionActionHandler): void;
+}
+
+interface PictureInPictureInterface {
+    hasPip(): boolean;
+    setPipMode(): Promise<PictureInPictureWindow> | boolean;
+    exitPip(): Promise<void> | boolean;
+}
+
+interface EventListenerInterface {
+    removeListeners(event: string): boolean;
+    removeListener(event: string, callback: Function): boolean;
+    addListener(event: string, callback: Function): void;
+}
+
+enum ErrorMessages {
+    NOT_IMPLEMENTED_API = 'getUserMedia is not implemented in this browser',
+    NOT_INITIALIED = 'Media recorder is not initialized',
+    NOT_STARTED = 'Cannot start MediaRecorder when already recording'
+}
+
+enum AudioEvent {
+    ON_DATA_AVAILABLE = 'ondataavailable',
+    LOADED_METADATA = 'loadedmetadata',
+    ON_STOP = 'onstop',
+    ON_RESUME = 'onresume',
+    ON_PAUSE = 'onpause',
+    ON_START = 'onstart',
+    ON_ERROR = 'onerror',
+    ON_FREQUENCY = 'onfrequency',
+    ON_DETECT = 'ondetect'
+}
+
+enum PlayState {
+    ERROR = 'error',
+    ON_STATUS_CHANGED = 'onstatuschanged',
+    ENDED = 'ended',
+    PAUSE = 'pause',
+    PLAY = 'play',
+    PLAYING = 'playing',
+    LOADED_METADATA = 'loadedmetadata',
+    LOADED_DATA = 'loadeddata',
+    CAN_PLAY = 'canplay',
+    CAN_PLAY_THROUGH = 'canplaythrough',
+    VOLUME_CHANGE = 'volumechange',
+    RATE_CHANGE = 'ratechange',
+    DURATION_CHANGE = 'durationchange',
+    STALLED = 'stalled',
+    EMPTIED = 'emptied',
+    SUSPEND = 'suspend',
+    SEEKING = 'seeking',
+    WAITING = 'waiting'
+}
+
+enum MimeTypes {
+    MP3 = 'audio/mpeg',
+    WAV = 'audio/wav',
+    OGG = 'audio/ogg',
+    WEBM = 'audio/webm',
+    MP4 = 'video/mp4',
+    MPEG = 'video/mpeg'
+}
+
+class EventListener implements EventListenerInterface {
+
+    public events: Array<any>;
+
+    constructor() {
+        this.events = [];
+    }
+
+    public removeListeners(event: string): boolean {
+        if (this.events[event] === undefined) {
+            return false;
+        }
+
+        delete this.events[event];
+
+        return true;
+    }
+
+    public removeListener(event: string, callback: Function): boolean {
+        if (this.events[event] === undefined) {
+            return false;
+        }
+
+        this.events[event].listeners = this.events[event].listeners.filter(listener => {
+            return listener.toString() !== callback.toString();
+        })
+
+        return true;
+    }
+
+    public addListener(event: string, callback: Function): void {
+        if (this.events[event] === undefined) {
+            this.events[event] = {
+                listeners: []
+            }
+        }
+
+        this.events[event].listeners.push(callback);
+    }
+
+    public dispatch(event: string, details: any) {
+        if (this.events[event] === undefined) {
+            return;
+        }
+
+        this.events[event].listeners.forEach((listener) => {
+            listener(details);
+        })
+    }
+
+}
+
+class PictureInPicture implements PictureInPictureInterface {
+
+    private mediaContext: HTMLVideoElement;
+
+    constructor(context: HTMLVideoElement) {
+        this.mediaContext = context;
+    }
+
+    public exitPip(): Promise<void> | boolean {
+        if (!this.hasPip()) {
+            return false;
+        }
+
+        return document.exitPictureInPicture();
+    }
+
+    public setPipMode(): Promise<PictureInPictureWindow> | boolean {
+        if (!this.hasPip()) {
+            return false;
+        }
+
+        if (!(this.mediaContext instanceof HTMLVideoElement)) {
+            return false;
+        }
+
+        return this.mediaContext.requestPictureInPicture();
+    }
+
+    public hasPip(): boolean {
+        return document.pictureInPictureElement !== undefined;
+    }
+
+}
+
+class MediaSession implements MediaSessionInterface {
+    public setMediaSessionPlayHandler(handler: MediaSessionActionHandler): void {
+        this.setMediaSessionActionHandler('play', handler);
+    }
+
+    public setMediaSessionPauseHandler(handler: MediaSessionActionHandler): void {
+        this.setMediaSessionActionHandler('pause', handler);
+    }
+
+    public setMediaSessionSeekbackwardHandler(handler: MediaSessionActionHandler): void {
+        this.setMediaSessionActionHandler('seekbackward', handler);
+    }
+
+    public setMediaSessionSeekforwardHandler(handler: MediaSessionActionHandler): void {
+        this.setMediaSessionActionHandler('seekforward', handler);
+    }
+
+    public setMediaSessionPrevioustrackHandler(handler: MediaSessionActionHandler): void {
+        this.setMediaSessionActionHandler('previoustrack', handler);
+    }
+
+    public setMediaSessionNextrackHandler(handler: MediaSessionActionHandler): void {
+        this.setMediaSessionActionHandler('nexttrack', handler);
+    }
+
+    public setMediaSessionPositionState(state?: MediaPositionState): void {
+        navigator.mediaSession.setPositionState(state);
+    }
+
+    public setMediaSessionMetadata(init?: MediaMetadataInit): void {
+        navigator.mediaSession.metadata = new MediaMetadata(init);
+    }
+
+    public setMediaSessionStateToPlaying(): void {
+        this.setMediaSessionPlaybackState("playing");
+    }
+
+    public setMediaSessionStateToPaused(): void {
+        this.setMediaSessionPlaybackState("paused");
+    }
+
+    public setMediaSessionPlaybackState(state: MediaSessionPlaybackState): void {
+        navigator.mediaSession.playbackState = state;
+    }
+
+    public setMediaSessionActionHandler(action: MediaSessionAction, handler: MediaSessionActionHandler): void {
+        if (!this.isMediaSessionSupported()) {
+            return;
+        }
+
+        navigator.mediaSession.setActionHandler(action, handler);
+    }
+
+    public isMediaSessionSupported(): boolean {
+        if ('MediaSession' in navigator) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+export class MediaPlayer implements MediaPlayerInterface {
+    private parseFrequencyTimeout: number = 1000 / 35;
+    private mediaType: string;
+    private isAudioContextConnected: boolean = false;
+    private mediaElementSource: MediaElementAudioSourceNode;
+    private isSpectrumEnabled = false;
+    private analyser: AnalyserNode;
+    private pannerEffector: PannerNode;
+    private gainEffector: GainNode;
+    private delayEffector: DelayNode;
+    private biquadFilter: BiquadFilterNode;
+    private dynamicsCompressorFilter: DynamicsCompressorNode;
+    private iirFilter: IIRFilterNode;
+    private scriptProcessorFilter: ScriptProcessorNode;
+    private channelMergerFilter: ChannelMergerNode;
+    private spectrumAnalyser: AnalyserNode;
+
+    public mediaContext: HTMLMediaElement | HTMLVideoElement | HTMLAudioElement;
+    public audioContext: AudioContext;
+
+    private mediaSessionHandler: MediaSession;
+    private eventListener: EventListener;
+
+    constructor() {
+        this.mediaSessionHandler = new MediaSession();
+        this.eventListener = new EventListener();
+    }
+
+    public setContext(mediaContext: any): void {
+        this.mediaContext = typeof mediaContext === 'string' ? document.querySelector(mediaContext) : mediaContext;
+        this.mediaType = this.mediaContext.getAttribute('mime-type') ?? MimeTypes.MP4;
+    }
+
+    public setUserMediaConstraints(constraints?: MediaStreamConstraints): Promise<MediaStream> | Promise<unknown> {
+        if (typeof navigator.mediaDevices.getUserMedia === 'function') {
+            return navigator.mediaDevices.getUserMedia(constraints);
+        }
+
+        const getUserMedia = function (constraints?: MediaStreamConstraints) {
+            const getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+            if (!getUserMedia) {
+                return Promise.reject(new Error(ErrorMessages.NOT_IMPLEMENTED_API));
+            }
+
+            return new Promise(function (resolve, reject) {
+                getUserMedia.call(navigator, constraints, resolve, reject);
+            });
+        };
+
+        return getUserMedia(constraints);
+    }
+
+    public getUserMedia(): any {
+        return window.getUserMedia ||
+            window.webkitGetUserMedia ||
+            window.mozGetUserMedia ||
+            window.msGetUserMedia ||
+            navigator.mediaDevices.getUserMedia;
+    }
+
+    public hasGetUserMedia(): boolean {
+        return !!(navigator.mediaDevices.getUserMedia || (navigator as any).getUserMedia || (navigator as any).webkitGetUserMedia || (navigator as any).mozGetUserMedia || (navigator as any).msGetUserMedia);
+    }
+
+    public getOfflineAudioContext(options: OfflineAudioContextOptions): OfflineAudioContext {
+        let context = window.OfflineAudioContext;
+
+        return new (context)(options);
+    }
+
+    public getAudioContext(): AudioContext {
+        let context = window.AudioContext;
+
+        if (window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
+            context = window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+        }
+
+        return new (context)();
+    }
+
+    public createAudioContext(): void {
+        this.audioContext = this.getAudioContext();
+    }
+
+    public connectToAudioContext(): void {
+        if (this.audioContext == null) {
+            this.createAudioContext();
+        }
+
+        this.mediaElementSource = this.audioContext.createMediaElementSource(this.mediaContext);
+        this.mediaElementSource.connect(this.audioContext.destination);
+
+        this.isAudioContextConnected = true;
+    }
+
+    public setEqualPowerPannerModel(): void {
+        this.setPanningModel("equalpower");
+    }
+
+    public setHRTFPannerModel(): void {
+        this.setPanningModel("HRTF");
+    }
+
+    public setPanningModel(modelName: PanningModelType = "equalpower"): void {
+        if (this.pannerEffector == null) {
+            throw new Error('Effecor is not initialized');
+        }
+
+        this.pannerEffector.panningModel = modelName;
+    }
+
+    public setGainValue(value: number = 1): void {
+        if (this.gainEffector == null) {
+            throw new Error('Effecor is not initialized');
+        }
+
+        this.gainEffector.gain.value = value;
+    }
+
+    public getSampleRate(): number {
+        return this.audioContext.sampleRate;
+    }
+
+    public setDelayValue(value: number): void {
+        if (this.gainEffector == null) {
+            throw new Error('Effecor is not initialized');
+        }
+
+        this.delayEffector.delayTime.value = value;
+    }
+
+    public setBiquadFilterGainValue(value: number = 1): void {
+        this.biquadFilter.gain.value = value;
+    }
+
+    public setBiquadFilterDetuneValue(value: number = 1): void {
+        this.biquadFilter.detune.value = value;
+    }
+
+    public setBiquadFilterFrequencyValue(value: number = 1): void {
+        this.biquadFilter.frequency.value = value;
+    }
+
+    public connectPanEffector(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.pannerEffector = this.audioContext.createPanner();
+        this.mediaElementSource.connect(this.pannerEffector);
+        this.pannerEffector.connect(this.audioContext.destination);
+    }
+
+    public connectAnalyser(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.analyser = this.audioContext.createAnalyser();
+        this.mediaElementSource.connect(this.analyser);
+        this.analyser.connect(this.audioContext.destination);
+    }
+
+    public connectScriptProcessorFilter(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.scriptProcessorFilter = this.audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
+        this.mediaElementSource.connect(this.biquadFilter);
+        this.scriptProcessorFilter.connect(this.audioContext.destination);
+    }
+
+    public connectIIRFilter(feedforward: number[], feedback: number[]): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.iirFilter = this.audioContext.createIIRFilter(feedforward, feedback);
+        this.mediaElementSource.connect(this.biquadFilter);
+        this.iirFilter.connect(this.audioContext.destination);
+    }
+
+    public connectDynamicsCompressorFilterFilter(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.dynamicsCompressorFilter = this.audioContext.createDynamicsCompressor();
+        this.mediaElementSource.connect(this.biquadFilter);
+        this.dynamicsCompressorFilter.connect(this.audioContext.destination);
+    }
+
+    public connectBiquadFilter(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.biquadFilter = this.audioContext.createBiquadFilter();
+        this.mediaElementSource.connect(this.biquadFilter);
+        this.biquadFilter.connect(this.audioContext.destination);
+    }
+
+    public connectChannelMergerEffector(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.channelMergerFilter = this.audioContext.createChannelMerger();
+        this.mediaElementSource.connect(this.channelMergerFilter);
+        this.channelMergerFilter.connect(this.audioContext.destination);
+    }
+
+    public connectDelayEffector(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.delayEffector = this.audioContext.createDelay();
+        this.mediaElementSource.connect(this.delayEffector);
+        this.delayEffector.connect(this.audioContext.destination);
+    }
+
+    public connectGainEffector(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.gainEffector = this.audioContext.createGain();
+        this.mediaElementSource.connect(this.gainEffector);
+        this.gainEffector.connect(this.audioContext.destination);
+    }
+
+    public cancelFullScreen(): boolean {
+        let requestMethod = null;
+
+        const hasWebkitRequestFullScreen = (this.mediaContext.webkitRequestFullscreen !== undefined);
+        const hasMozRequestFullScreen = (this.mediaContext.mozRequestFullscreen !== undefined);
+        const hasMsRequstFullScreen = (this.mediaContext.msRequestFullscreen !== undefined);
+
+        if (document.exitFullscreen) {
+            requestMethod = document.exitFullscreen();
+        } else if (this.mediaContext.cancelFullScreen) {
+            requestMethod = this.mediaContext.cancelFullScreen();
+        } else if (hasWebkitRequestFullScreen) {
+            requestMethod = document.webkitCancelFullScreen();
+        } else if (hasMozRequestFullScreen) {
+            requestMethod = document.mozCancelFullScreen();
+        } else if (hasMsRequstFullScreen) {
+            requestMethod = document.msExitFullscreen();
+        }
+
+        if (requestMethod === null || typeof requestMethod !== 'function') {
+            return false;
+        }
+
+        requestMethod.call(this.mediaContext);
+
+        return true;
+    }
+
+    public requestFullScreen(): boolean {
+        if (this.isFullScreen()) {
+            return false;
+        }
+
+        const hasWebkitRequestFullScreen = (this.mediaContext.webkitRequestFullscreen !== undefined);
+        const hasMozRequestFullScreen = (this.mediaContext.mozRequestFullscreen !== undefined);
+        const hasMsRequstFullScreen = (this.mediaContext.msRequestFullscreen !== undefined);
+
+        let requestMethod = null;
+
+        if (hasMozRequestFullScreen) {
+            requestMethod = this.mediaContext.mozRequestFullscreen();
+        } else if (hasWebkitRequestFullScreen) {
+            requestMethod = this.mediaContext.webkitRequestFullscreen();
+        } else if (hasMsRequstFullScreen) {
+            requestMethod = this.mediaContext.msRequestFullscreen();
+        } else if (this.mediaContext.requestFullscreen) {
+            requestMethod = this.mediaContext.requestFullscreen();
+        } else {
+            requestMethod = this.mediaContext.requestFullScreen || this.mediaContext.webkitRequestFullscreen() || this.mediaContext.mozRequestFullscreen || this.mediaContext.msRequestFullscreen;
+        }
+
+        requestMethod.call(this.mediaContext);
+
+        return true;
+    }
+
+    public isFullScreen(): boolean {
+        const hasWebkitRequestFullScreen = (this.mediaContext.webkitRequestFullscreen !== undefined);
+        const hasMozRequestFullScreen = (this.mediaContext.mozRequestFullscreen !== undefined);
+        const hasMsRequstFullScreen = (this.mediaContext.msRequestFullscreen !== undefined);
+
+        if (hasMozRequestFullScreen) {
+            return document.mozFullScreen;
+        }
+
+        if (hasWebkitRequestFullScreen) {
+            return document.webkitIsFullScreen;
+        }
+
+        if (hasMsRequstFullScreen) {
+            return document.msFullscreenElement !== null;
+        }
+
+        return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    }
+
+    public isPlayed(): boolean {
+        return this.mediaContext
+            && !this.isPaused()
+            && !this.isEnded()
+            && this.getReadyState() > 2;
+    }
+
+    public isPlaying(): boolean {
+        return this.mediaContext
+            && this.getCurrentTime() > 0
+            && !this.isPaused()
+            && !this.isEnded()
+            && this.getReadyState() > 2;
+    }
+
+    public getReadyState(): number {
+        return this.mediaContext.readyState;
+    }
+
+    public isPaused(): boolean {
+        return this.mediaContext.paused;
+    }
+
+    public isEnded(): boolean {
+        return this.mediaContext.ended;
+    }
+
+    public seekBackward(seconds: number): void {
+        if (this.getCurrentTime() - seconds > 0) {
+            this.setCurrentTime(this.getCurrentTime() - seconds);
+        } else {
+            this.setCurrentTime(0);
+        }
+    }
+
+    public seekForward(seconds: number): void {
+        if (this.getCurrentTime() + seconds <= this.getCurrentDuration()) {
+            this.setCurrentTime(this.getCurrentTime() + seconds);
+        } else {
+            this.setCurrentTime(this.getCurrentDuration());
+        }
+    }
+
+    public setCurrentTime(time: number): void {
+        this.mediaContext.currentTime = time;
+    }
+
+    public getCurrentTime(): number {
+        return this.mediaContext.currentTime;
+    }
+
+    public setVolume(value: number): void {
+        this.mediaContext.volume = value;
+    }
+
+    public getVolume(): number {
+        return this.mediaContext.volume;
+    }
+
+    public getBuffered(): TimeRanges {
+        return this.mediaContext.buffered;
+    }
+
+    public getCurrentDuration(): number {
+        return this.mediaContext.duration;
+    }
+
+    public getDuration(): any {
+        return new Promise((resolve) => {
+            const self = this;
+
+            if (this.mediaContext.duration !== Infinity) {
+                resolve(self.mediaContext.duration);
+                return;
+            }
+
+            this.mediaContext.currentTime = 1e101;
+            this.mediaContext.ontimeupdate = function () {
+                self.mediaContext.ontimeupdate = () => {
+                    return;
+                }
+
+                self.mediaContext.currentTime = 0;
+                resolve(self.mediaContext.duration);
+            }
+        });
+    }
+
+    public setEvents(): void {
+        const self = this;
+
+        const onStalledEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.STALLED, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.STALLED);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.STALLED, onStalledEvent);
+        this.mediaContext.addEventListener(PlayState.STALLED, onStalledEvent);
+
+        const onEmptiesEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.EMPTIED, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.EMPTIED);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.EMPTIED, onEmptiesEvent);
+        this.mediaContext.addEventListener(PlayState.EMPTIED, onEmptiesEvent);
+
+        const onSuspendEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.SUSPEND, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.SUSPEND);
+        };
+
+        // The suspend event is fired when media data loading has been suspended.
+        this.mediaContext.removeEventListener(PlayState.SUSPEND, onSuspendEvent);
+        this.mediaContext.addEventListener(PlayState.SUSPEND, onSuspendEvent);
+
+        const onDurationChangeEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.DURATION_CHANGE, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.DURATION_CHANGE);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.DURATION_CHANGE, onDurationChangeEvent);
+        this.mediaContext.addEventListener(PlayState.DURATION_CHANGE, onDurationChangeEvent);
+
+        const onRateChangeEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.RATE_CHANGE, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.RATE_CHANGE);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.RATE_CHANGE, onRateChangeEvent);
+        this.mediaContext.addEventListener(PlayState.RATE_CHANGE, onRateChangeEvent);
+
+        const onVolumeChangeEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.VOLUME_CHANGE, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.VOLUME_CHANGE);
+        };
+
+        // The volumechange event is fired when the volume has changed.
+        this.mediaContext.removeEventListener(PlayState.VOLUME_CHANGE, onVolumeChangeEvent);
+        this.mediaContext.addEventListener(PlayState.VOLUME_CHANGE, onVolumeChangeEvent);
+
+        const onCanPlayThroughEvent = (event: Event) => {
+            self.eventListener.dispatch(PlayState.CAN_PLAY_THROUGH, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.CAN_PLAY_THROUGH);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.CAN_PLAY_THROUGH, onCanPlayThroughEvent);
+        this.mediaContext.addEventListener(PlayState.CAN_PLAY_THROUGH, onCanPlayThroughEvent);
+
+        const onSeekingEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.SEEKING, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.SEEKING);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.SEEKING, onSeekingEvent);
+        this.mediaContext.addEventListener(PlayState.SEEKING, onSeekingEvent);
+
+        const onWaitingEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.WAITING, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.WAITING);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.WAITING, onWaitingEvent);
+        this.mediaContext.addEventListener(PlayState.WAITING, onWaitingEvent);
+
+        const onCanPlayEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.CAN_PLAY, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.CAN_PLAY);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.CAN_PLAY, onCanPlayEvent);
+        this.mediaContext.addEventListener(PlayState.CAN_PLAY, onCanPlayEvent);
+
+        const onLoadedDataEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.LOADED_DATA, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.LOADED_DATA);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.LOADED_DATA, onLoadedDataEvent);
+        this.mediaContext.addEventListener(PlayState.LOADED_DATA, onLoadedDataEvent);
+
+        const onLoadedMetaDataEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.LOADED_METADATA, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.LOADED_METADATA);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.LOADED_METADATA, onLoadedMetaDataEvent);
+        this.mediaContext.addEventListener(PlayState.LOADED_METADATA, onLoadedMetaDataEvent);
+
+        const onPlayingEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.PLAYING, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.PLAYING);
+        };
+
+        // The playing event is fired after playback is first started, and whenever it is restarted
+        this.mediaContext.removeEventListener(PlayState.PLAYING, onPlayingEvent);
+        this.mediaContext.addEventListener(PlayState.PLAYING, onPlayingEvent);
+
+        const onPlayEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.PLAY, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.PLAY);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.PLAY, onPlayEvent);
+        this.mediaContext.addEventListener(PlayState.PLAY, onPlayEvent);
+
+        const onPauseEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.PAUSE, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.PAUSE);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.PAUSE, onPauseEvent);
+        this.mediaContext.addEventListener(PlayState.PAUSE, onPauseEvent, false);
+
+        const onStatuschanged = function (state: PlayState) {
+            switch (state) {
+                case PlayState.SEEKING:
+                case PlayState.PLAY:
+                    if (!self.isSpectrumEnabled) {
+                        self.setSpectrumAnalyser();
+                    }
+
+                    self.triggerFrequencyData();
+                    break;
+            }
+        };
+
+        this.eventListener.removeListener(PlayState.ON_STATUS_CHANGED, onStatuschanged);
+        this.eventListener.addListener(PlayState.ON_STATUS_CHANGED, onStatuschanged);
+
+        const onEndedEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.ENDED, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.ENDED);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.ENDED, onEndedEvent);
+        this.mediaContext.addEventListener(PlayState.ENDED, onEndedEvent);
+
+        this.mediaContext.onerror = function (event) {
+            self.eventListener.dispatch(PlayState.ERROR, event);
+        };
+    }
+
+    public isPlayable(): CanPlayTypeResult {
+        return this.mediaContext.canPlayType(this.mediaType);
+    }
+
+    public isAutoPlayable(): any {
+        return this.mediaContext.autoplay;
+    }
+
+    private getNetworkStateConstant(): string {
+        switch (this.getNetworkState()) {
+            case 1:
+                return `NETWORK_EMPTY`;
+            case 2:
+                return `NETWORK_IDLE`;
+            case 3:
+                return `NETWORK_LOADING`;
+            case 4:
+                return `NETWORK_NO_SOURCE`;
+            default:
+                return `UNKNOWN`;
+        }
+    }
+
+    private getNetworkState(): number {
+        return this.mediaContext.networkState;
+    }
+
+    private getCurrentSource(): string {
+        return this.mediaContext.currentSrc;
+    }
+
+    public getTextTracks(): any {
+        return this.mediaContext.textTracks;
+    }
+
+    public fastSeek(time: number): void {
+        this.mediaContext.fastSeek(time);
+    }
+
+    public isMuted(): boolean {
+        return this.mediaContext.muted;
+    }
+
+    public isLooping(): boolean {
+        return this.mediaContext.loop;
+    }
+
+    public clearSpectrum(selector: string, width: number = -1, height: number = -1): void {
+        let targetDiv: any = document.querySelectorAll(selector);
+        if (targetDiv.length > 0) {
+            targetDiv = targetDiv[0];
+        }
+
+        if (!targetDiv) {
+            return;
+        }
+
+        try {
+            targetDiv.innerHTML = '';
+            const canvas = targetDiv.appendChild(document.createElement("canvas"));
+            canvas.width = width == -1 ? targetDiv.clientWidth : width;
+            canvas.height = height == -1 ? targetDiv.clientHeight : height;
+            canvas.style.verticalAlign = "middle";
+            const canvasContext = canvas.getContext("2d");
+
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            canvasContext.fillStyle = 'rgba(255, 0, 0, 0)';
+        } catch (error) { }
+    }
+
+    public setSpectrum(selector: string, width: number = -1, height: number = -1, lineWidth: number = 1, margin: 0, backgroundFillColor: string = `rgb(255, 255, 255)`, spectrumFillColor = 'rgba(255, 0, 0, 0)'): void {
+        let canvasBackground: Element = null;
+        const targetElement: NodeListOf<Element> = document.querySelectorAll(selector);
+
+        if (targetElement.length > 0) {
+            canvasBackground = targetElement[0];
+        }
+
+        canvasBackground.innerHTML = '';
+        const canvas = canvasBackground.appendChild(document.createElement("canvas"));
+        canvas.width = width == -1 ? canvasBackground.clientWidth : width;
+        canvas.height = height == -1 ? canvasBackground.clientHeight : height;
+        canvas.style.verticalAlign = "middle";
+        const canvasContext = canvas.getContext("2d");
+
+        this.eventListener.addListener(AudioEvent.ON_FREQUENCY, (frequencies: any) => {
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            canvasContext.fillStyle = backgroundFillColor;
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+            canvasContext.lineWidth = lineWidth;
+
+            let current = 0;
+
+            for (let frequency of frequencies) {
+                const samples = (canvas.height / canvasContext.lineWidth);
+
+                const x = (current * canvasContext.lineWidth);
+                const y = samples - (frequency / 256) * samples;
+                const width = canvasContext.lineWidth;
+                const height = ((canvas.height / 2) - y) * 2;
+
+                canvasContext.fillStyle = spectrumFillColor;
+                canvasContext.fillRect(x * 5, y, width, height);
+
+                current++;
+            }
+
+            canvasContext.beginPath();
+        });
+    }
+
+    private triggerFrequencyData() {
+        if (this.spectrumAnalyser == null) {
+            return false;
+        }
+
+        const arrayLength = new Uint8Array(this.spectrumAnalyser.frequencyBinCount);
+
+        const trigger = () => {
+            if (!this.isPlayed() && !this.isSeeking()) {
+                return;
+            }
+
+            this.spectrumAnalyser.getByteFrequencyData(arrayLength);
+
+            if (arrayLength) {
+                this.eventListener.dispatch(AudioEvent.ON_FREQUENCY, arrayLength);
+            }
+
+            setTimeout(() => {
+                this.requestAnimationFrame(trigger);
+            }, this.parseFrequencyTimeout);
+        }
+
+        this.requestAnimationFrame(trigger);
+    }
+
+    public cancelAnimationFrame(handle: number) {
+        const cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame;
+
+        cancelAnimationFrame(handle);
+    }
+
+    public requestAnimationFrame(callback: FrameRequestCallback): number {
+        const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
+
+        return requestAnimationFrame(callback);
+    }
+
+    public setParseFrequencyTimeout(timeout: number): void {
+        this.parseFrequencyTimeout = timeout;
+    }
+
+    private setSpectrumAnalyser() {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+
+        this.spectrumAnalyser = this.audioContext.createAnalyser();
+        this.mediaElementSource.connect(this.spectrumAnalyser);
+        this.spectrumAnalyser.minDecibels = -120; // min FFT(fast Fourier transform) dB
+        this.spectrumAnalyser.fftSize = 32 << 9;
+        this.spectrumAnalyser.smoothingTimeConstant = 0.45;
+
+        this.isSpectrumEnabled = true;
+    }
+
+    public setSource(source: string): void {
+        this.mediaContext.src = source;
+    }
+
+    public addTextTrack(kind: TextTrackKind, label?: string, language?: string) {
+        HTMLAudioElement.prototype
+        this.mediaContext.addTextTrack(kind, label, language);
+    }
+
+    public isSeekable(): TimeRanges {
+        return this.mediaContext.seekable;
+    }
+
+    public setMediaKeys(mediaKeys: MediaKeys): Promise<void> {
+        return this.mediaContext.setMediaKeys(mediaKeys);
+    }
+
+    public isSeeking(): boolean {
+        return this.mediaContext.seeking;
+    }
+
+    public isControlEnable() {
+        return this.mediaContext.controls;
+    }
+
+    public setEnableControls(enable: boolean) {
+        this.mediaContext.controls = enable;
+    }
+
+    public getSource(): string {
+        return this.mediaContext.src;
+    }
+
+    public play(): void {
+        this.mediaContext.play();
+    }
+
+    public pause(): void {
+        this.mediaContext.pause();
+    }
+
+};

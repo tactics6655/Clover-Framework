@@ -1,27 +1,17 @@
-test
+<audio id="player" controls src="/App/File/cow.mp3"></audio>
 
-<a id="video" style="width: 500px; height:500px;background-color:#eee">test</a>
+<div style="width:200px;height: 200px; background-color:black" id="spectrum"></div>
 
-<audio id="audio" controls></audio>
+<a id="play">Play</a>
 
 <script>
-    let audioRecorder = new AudioRecorder();
-    audioRecorder.requestPermission().then(function () {
-        audioRecorder.setRecorder();
-        audioRecorder.addEvents();
-        audioRecorder.start();
-    });
-
-    window.addEventListener("load", function () {
-        document.getElementById("video").addEventListener("click", async function () {
-            audioRecorder.stop();
-
-            let blob = audioRecorder.getBlob();
-            let buffer = await blob.arrayBuffer();
-
-            let url = URLService.createBlob(buffer);
-            document.getElementById("audio").src = url;
-        });
-    });
-
+const mediaPlayer = new MediaPlayer();
+mediaPlayer.setContext(document.getElementById("player"));
+mediaPlayer.setEvents();
+mediaPlayer.setSpectrum("#spectrum", -1, -1, 1, 10, 'rgba(255, 0, 0, 0)', `rgb(28, 182, 130)`);
+document.getElementById("play").addEventListener("click", function () {
+    mediaPlayer.connectPanEffector();
+    mediaPlayer.setParseFrequencyTimeout(1000 / 35);
+    mediaPlayer.play();
+});
 </script>

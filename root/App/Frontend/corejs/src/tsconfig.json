@@ -1,0 +1,68 @@
+{
+    "compilerOptions": {
+        "incremental": true,
+        "target": "ES6", 
+        "module": "amd", 
+        "lib": [
+            "dom",
+            "es2017"
+        ], 
+        "allowJs": true, 
+        "checkJs": true, 
+        "jsx": "preserve", 
+        "declaration": true, 
+        "declarationMap": true, 
+        "sourceMap": true, 
+        "outFile": "./", 
+        "outDir": "./", 
+        "rootDir": "./", 
+        "composite": true, 
+        "tsBuildInfoFile": "./", 
+        "removeComments": true, 
+        "importHelpers": true, 
+        "downlevelIteration": true, 
+        "strict": true, 
+        "noImplicitAny": false, 
+        "strictNullChecks": false, 
+        "strictFunctionTypes": false, 
+        "strictBindCallApply": false, 
+        "strictPropertyInitialization": false, 
+        "noImplicitThis": false, 
+        "alwaysStrict": true,
+        "noUnusedLocals": false, 
+        "noUnusedParameters": false, 
+        "noImplicitReturns": false, 
+        "noFallthroughCasesInSwitch": false,
+        "moduleResolution": "node", 
+        "baseUrl": "./", 
+        "paths": {}, 
+        "rootDirs": [], 
+        "typeRoots": [
+            "node_modules/@types"
+        ], 
+        "types": [], 
+        "allowSyntheticDefaultImports": true, 
+        "esModuleInterop": true, 
+        "preserveSymlinks": true, 
+        "allowUmdGlobalAccess": true,
+        "sourceRoot": "", 
+        "mapRoot": "", 
+        "inlineSources": true, 
+        "experimentalDecorators": true, 
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true, 
+        "forceConsistentCasingInFileNames": true 
+    },
+    "include": [
+        "index.ts",
+        "src/Component/*.ts",
+        "src/Component/Class/*.ts",
+        "src/Variables/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "typeAcquisition": {
+        "enable": true
+    }
+}
