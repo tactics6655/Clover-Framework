@@ -386,7 +386,7 @@ class Request implements RequestInterface
 
 	public static function getContentType()
 	{
-		return self::getServerArguments(ServerIndices::CONTENT_TYPE);
+		return self::getServerArguments(ServerIndices::CONTENT_TYPE) ?? "";
 	}
 
 	public static function getSignature()

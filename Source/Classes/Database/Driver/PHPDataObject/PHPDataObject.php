@@ -78,12 +78,12 @@ class PHPDataObject extends PDO
 		return $this->getAttribute(PDO::ATTR_TIMEOUT);
 	}
 
-	public function insertByArray($table, $columns, $values)
+	public function insertByArray($table, \Countable|array $columns, $values)
 	{
-		$column_count = count($columns);
-		$column_separated = implode(",", $columns);
-		$placeholder_separated = implode(",", array_fill(0, $column_count, "?"));
-		$sql = "INSERT INTO $table ($column_separated) VALUES ($placeholder_separated)";
+		$columnCount = count($columns);
+		$separatedColumns = implode(",", $columns);
+		$separatedPlaceholder = implode(",", array_fill(0, $columnCount, "?"));
+		$sql = "INSERT INTO $table ($separatedColumns) VALUES ($separatedPlaceholder)";
 
 		$stmt = $this->prepare($sql);
 		$stmt->execute($values);

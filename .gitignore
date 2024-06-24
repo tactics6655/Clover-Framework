@@ -2,6 +2,9 @@
 /composer.lock
 /Frontend/coreJS/node_modules
 /Binary
+/root/artwhirl/*
+/root/jyogakuen/*
+/root/App/View/jyogakuen/*
 
 .vscode
 .vscode/*

@@ -1,4 +1,5 @@
 interface MediaPlayerInterface {
+    setSpectrum(selector: string): void;
     isPlaying(): boolean;
     isPaused(): boolean;
     isEnded(): boolean;
@@ -94,7 +95,10 @@ enum VisualizerStyle {
     WAVEFORM = 'waveform',
     CIRCULAR = 'circular',
     CIRCLE = 'circle',
-    DONUT = 'donut'
+    DONUT = 'donut',
+    SLIDE_WAVEFORM = 'slide_waveform',
+    ROTATE_CIRCLE = 'rorate_circle',
+    RAINBOW = 'rainbow',
 }
 
 enum PlayState {
@@ -140,7 +144,7 @@ class Visualizer {
         this.selector = selector;
     }
 
-    public setSpectrumFillColor(color) {
+    public setSpectrumFillColor(color): void {
         this.spectrumFillColor = color;
     }
 
@@ -171,24 +175,128 @@ class Visualizer {
         return points;
     }
 
-    public draw(frequencies, lineWidth: number = 1, type: VisualizerStyle) {
+    private rotation  = 0;
+    private dataIndex = 0;
+    private previousDataArray = null;
+    private currentRadius = 0;
+    private targetRadius = 0;
+
+    public draw(frequencies, binaryCount, lineWidth: number = 1, type: VisualizerStyle) {
         const canvasContext = this.context;
         const canvas = this.canvas;
         const samples = (canvas.height);
 
+        if (this.previousDataArray == null) {
+            this.previousDataArray = new Uint8Array(binaryCount);
+        }
+
+        let radius = 0;
         let current = 0;
         let x = 0;
         let y = 0;
         let width = 0;
         let height = 0;
 
-        canvasContext.save();
-        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-        canvasContext.fillStyle = this.backgroundFillColor;
-        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-        canvasContext.lineWidth = lineWidth;
+        if (VisualizerStyle.SLIDE_WAVEFORM != type && type != VisualizerStyle.ROTATE_CIRCLE) {
+            canvasContext.save();
+            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+            canvasContext.fillStyle = this.backgroundFillColor;
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+            canvasContext.lineWidth = lineWidth;
+        }
+
+        const ctx = canvasContext;
+        const bufferLength = binaryCount;
+        const dataArray = frequencies;
+
 
         switch (type) {
+            case VisualizerStyle.RAINBOW:
+                const sliceWidth = canvas.width / bufferLength;
+                ctx.fillStyle = this.backgroundFillColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                let x = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = (dataArray[i] / 255) * canvas.height;
+                    const hue = i / bufferLength * 360;
+                    ctx.fillStyle = 'hsl(' + hue + ', 100%, 60%)';
+                    ctx.fillRect(x, canvas.height - barHeight, sliceWidth, barHeight);
+                    x += sliceWidth;
+                }
+                canvasContext.stroke();
+
+                break;
+            case VisualizerStyle.ROTATE_CIRCLE:
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const maxRadius = Math.min(centerX, centerY) - 20;
+          
+                const lowFrequencyRange = 50;
+                let lowFrequencySum = 0;
+                let lowFrequencyAverage = 0;
+                for (let i = 0; i < lowFrequencyRange; i++) {
+                  lowFrequencySum += dataArray[i];
+                }
+                lowFrequencyAverage = lowFrequencySum / lowFrequencyRange;
+          
+                this.targetRadius = maxRadius;
+
+                for (let prev in this.previousDataArray){
+                    if (lowFrequencyAverage > 100 && lowFrequencyAverage > (prev as any) * 1.2) {
+                        this.targetRadius = this.targetRadius * 1.1; 
+                    } else if (this.targetRadius > maxRadius){
+                        this.targetRadius = this.targetRadius * 0.9; 
+                    }
+                }
+          
+                const self = this;
+
+                function animateRadius() {
+                    self.currentRadius += (self.targetRadius - self.currentRadius) * 0.5;
+          
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, self.currentRadius, 0, 2 * Math.PI);
+                    ctx.fillStyle = self.spectrumFillColor;
+                    ctx.fill();
+          
+                    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, self.currentRadius);
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          
+                    ctx.fillStyle = gradient;
+                    for (let i = 0; i < bufferLength; i++) {
+                      const noise = dataArray[i] / 255;
+                      const r = ((self.currentRadius * 0.1) * (noise * 10)) * noise;
+                      ctx.beginPath();
+                      ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
+                      ctx.fill();
+                      continue;
+                    }
+                }
+
+                animateRadius();
+          
+                this.previousDataArray.set(dataArray);
+
+                break;
+            case VisualizerStyle.SLIDE_WAVEFORM:
+                const imageData = canvasContext.getImageData(1, 0, canvas.width - 1, canvas.height);
+                canvasContext.fillStyle = this.backgroundFillColor;
+                canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+                canvasContext.putImageData(imageData, 0, 0);
+
+                canvasContext.fillStyle = this.spectrumFillColor;
+                const barHeight = (frequencies[this.dataIndex] / 255) * canvas.height;
+                canvasContext.fillRect((canvas.width - 1), canvas.height - barHeight, 1, barHeight);
+
+                this.dataIndex = (this.dataIndex + 1) % binaryCount;
+                canvasContext.stroke();
+
+                current++;
+                break;
             case VisualizerStyle.WAVEFORM:
                 for (let frequency of frequencies) {
                     x = (current);
@@ -248,7 +356,7 @@ class Visualizer {
                 for (let frequency of frequencies) {
                     canvasContext.beginPath();
 
-                    const radius = canvas.width / 5;
+                    radius = canvas.width / 5;
                     const centerX = canvas.width / 2;
                     const centerY = canvas.height / 2;
                     const rads = (Math.PI * 2) / bars;
@@ -272,7 +380,7 @@ class Visualizer {
             case VisualizerStyle.DONUT:
                 const halfWidth = canvas.width / 2;
                 const halfHeight = canvas.height / 2;
-                const radius = canvas.width / 5;
+                radius = canvas.width / 5;
                 const maximumBarSize = Math.floor(360 * Math.PI) / 7;
                 const framePerFrequency = Math.floor(frequencies.length / maximumBarSize);
                 const minumiumHeight = 10;
@@ -499,7 +607,7 @@ export class MediaPlayer implements MediaPlayerInterface {
     private channelMergerFilter: ChannelMergerNode;
     private spectrumAnalyser: AnalyserNode;
     private spectrumBackgroundFillColor = 'rgba(255, 255, 255, 255)';
-    private spectrumFillColor = `rgb(0, 0, 0)`;
+    private spectrumFillColor = `rgb(0, 130, 61)`;
     private spectrumCanvasWidth = -1;
     private spectrumCanvasHeight = -1;
     private spectrumVisualizerStyle: VisualizerStyle = VisualizerStyle.CLASSIC;
@@ -1137,8 +1245,8 @@ export class MediaPlayer implements MediaPlayerInterface {
         visualizer.setSpectrumFillColor(this.spectrumFillColor);
         visualizer.setBackgroundFillColor(this.spectrumBackgroundFillColor);
         
-        this.eventListener.addListener(AudioEvent.ON_FREQUENCY, (frequencies: any) => {
-            visualizer.draw(frequencies, this.visualizerLineWidth, this.spectrumVisualizerStyle);
+        this.eventListener.addListener(AudioEvent.ON_FREQUENCY, (data: any) => {
+            visualizer.draw(data.frequencies, data.binaryCount, this.visualizerLineWidth, this.spectrumVisualizerStyle);
         });
     }
 
@@ -1147,17 +1255,21 @@ export class MediaPlayer implements MediaPlayerInterface {
             return false;
         }
 
-        const arrayLength = new Uint8Array(this.spectrumAnalyser.frequencyBinCount);
+        const binaryCount = this.spectrumAnalyser.frequencyBinCount;
+        const frequencies = new Uint8Array(binaryCount);
 
         const trigger = () => {
             if (!this.isPlayed() && !this.isSeeking()) {
-                return;
+                //return;
             }
 
-            this.spectrumAnalyser.getByteFrequencyData(arrayLength);
+            this.spectrumAnalyser.getByteFrequencyData(frequencies);
 
-            if (arrayLength) {
-                this.eventListener.dispatch(AudioEvent.ON_FREQUENCY, arrayLength);
+            if (frequencies) {
+                this.eventListener.dispatch(AudioEvent.ON_FREQUENCY, {
+                    frequencies: frequencies,
+                    binaryCount: binaryCount
+                });
             }
 
             setTimeout(() => {
@@ -1184,7 +1296,40 @@ export class MediaPlayer implements MediaPlayerInterface {
         this.parseFrequencyTimeout = timeout;
     }
 
-    private setSpectrumAnalyser() {
+    public calculateRMS(data) {
+        let sum = 0;
+
+        for (let i = 0; i < data.length; i++) {
+            sum += data[i] * data[i];
+        }
+
+        return Math.sqrt(sum / data.length);
+    }
+
+    public calculateFlux(data) {
+        let flux = 0;
+
+        for (let i = 1; i < data.length; i++) {
+            const diff = data[i] - data[i - 1];
+            flux += diff * diff;
+        }
+
+        return Math.sqrt(flux / data.length);
+    }
+
+    public calculateCentroid(data) {
+        let sum = 0;
+        let weightedSum = 0;
+    
+        for (let i = 0; i < data.length; i++) {
+            sum += data[i];
+            weightedSum += data[i] * i;
+        }
+    
+        return weightedSum / sum * (this.audioContext.sampleRate / this.analyser.fftSize);
+    }
+
+    private setSpectrumAnalyser(): void {
         if (!this.isAudioContextConnected) {
             this.connectToAudioContext();
         }
@@ -1192,7 +1337,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         this.spectrumAnalyser = this.audioContext.createAnalyser();
         this.mediaElementSource.connect(this.spectrumAnalyser);
         this.spectrumAnalyser.minDecibels = -120; // min FFT(fast Fourier transform) dB
-        this.spectrumAnalyser.fftSize = 32 << 9;
+        this.spectrumAnalyser.fftSize = 2048;//32 << 9;
         this.spectrumAnalyser.smoothingTimeConstant = 0.45;
 
         this.isSpectrumEnabled = true;

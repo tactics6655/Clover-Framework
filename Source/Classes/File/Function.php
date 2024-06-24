@@ -1046,7 +1046,7 @@ class Functions
 			throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($source));
 		}
 
-		if (!self::isFile($destination)) {
+		if (self::isFile($destination)) {
 			throw new TargetIsNotFileException(FileHandlerMessage::getFileIsNotExistsMessage($source));
 		}
 

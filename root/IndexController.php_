@@ -1,0 +1,756 @@
+<?php
+
+namespace App\Controller;
+
+use App\Middleware\ModuleMiddleware;
+use Clover\Annotation;
+use Clover\Classes\Data\ArrayObject;
+use Clover\Classes\Data\StringObject;
+use Clover\Classes\Database\Driver\PHPDataObject;
+use Clover\Classes\Directory\Handler as DirectoryHandler;
+use Clover\Classes\File\Handler as FileHandler;
+use Clover\Classes\File\Functions;
+use Clover\Classes\HTTP\Request;
+use Clover\Framework\Component\BaseController;
+
+#[Annotation\Prefix('/')]
+class IndexController extends BaseController
+{
+
+	#[Annotation\Route(method: 'GET', pattern: '/filter')]
+	#[Annotation\Middleware(ModuleMiddleware::class)]
+	public function filter(Request $request)
+	{
+		$files = DirectoryHandler::getList(__ROOT__.'/res/move', 'FILE');
+		//$files = $files->slice(0, 100);
+		$files->replace('.jpg', '');
+		
+		$files->map(function ($data) {
+			$data = new StringObject($data);
+
+			return new ArrayObject([
+				'origin' => $data.".jpg",
+				'change' => $data->split("_")->slice(2, 2)->join("_").".jpg",
+				"folder" => $data->split("_")->slice(0, 2)->join("/")
+			]);
+		});
+
+		$files->map(function ($data) {
+			$fh = new DirectoryHandler();
+
+			echo __ROOT__."/res/move/".$data['folder'];
+
+			try {
+				$fh->create(__ROOT__."/res/move/".$data['folder'], 0777);
+			} catch (\Exception $e) {}
+			
+			//echo "move ".$data['origin']." ".$data['folder']."/".$data['origin']."<br>";
+
+			FileHandler::move(__ROOT__."/res/move/".$data['origin'], __ROOT__."/res/move/".$data['folder']."/".$data['change']);
+		});
+
+		return $this->debug($files);
+	}
+
+	#[Annotation\Route(method: 'GET', pattern: '/insert')]
+	public function insert(Request $request)
+	{
+		$db = new PHPDataObject();
+		$db->setHostName('host.docker.internal:3308');
+		$db->setUsername('root');
+		$db->setPassword('root!');
+		$db->setDatabase('artwhirl');
+		$db->connect();
+
+		//foreach ((array)$arr->body->gallery->ruins->detail as $ar) {
+		//$db->insertByArray('quest_h_story', \array_keys((array)$ar), \array_values((array)$ar));
+		//}
+
+		return $this->debug('test');
+	}
+
+	#[Annotation\Route(method: 'POST', pattern: '/social/rpc')]
+	public function rpc(Request $request)
+	{
+		$array = array (
+			0 => 
+			(object) array(
+			   'id' => 'viewer',
+			   'data' => 
+			  (object) array(
+				 'isOwner' => true,
+				 'isViewer' => true,
+				 'userType' => '',
+				 'id' => '24066034',
+				 'thumbnailUrl' => 'https://pics.dmm.com/freegame/profile/m/male1/male1_mb.gif',
+				 'displayName' => 'せくすせく',
+			  ),
+			),
+		);
+
+		return $this->responseJson($array);
+	}
+
+	#[Annotation\Route(method: 'GET', pattern: '/gadgets/makeRequest')]
+	public function makeRequest(Request $request)
+	{
+		$array = (object) array(
+			'https://koi-server-master.tencross.site/master/menu/' => 
+		   (object) array(
+			  'rc' => 200,
+			  'body' => '
+		 <link rel="stylesheet" href="https://koi-server-master.tencross.site/master/css/p/announce.css" type="text/css" />
+		 
+		 
+		 
+		 <script type="text/javascript" src="https://koi-server-master.tencross.site/master/js/p/jquery.min.js"></script>
+		 <script type="text/javascript" src="https://koi-server-master.tencross.site/master/js/p/announce.js"></script>
+		 
+		 
+		 
+		 <!-- layout/announce.volt -->
+		 
+		 <div id="info_container">
+			 <table id="announce_top">
+				 <tr>
+					 <td class="announce_select">
+						 <img id="btn1" name="btn1" src="https://koi-server-master.tencross.site/master/img/p/menu/btn_oshirase2.png" alt="お知らせ" width="162" height="38">
+					 </td>
+					 <td class="announce_select">
+						 <img id="btn2" name="btn2" src="https://koi-server-master.tencross.site/master/img/p/menu/btn_help1.png" alt="ヘルプ" width="162" height="38">
+					 </td>
+				 </tr>
+			 </table>
+			 <div id="announce_middle">
+				  <div id="SW1">
+					  <div align="center">
+			 <table id="announce_table"></table>
+		 </div>		 </div>
+		 
+				  <div id="SW2" style="display:none;">
+						  <div>
+			 <table id="help_table">
+				 <tr>
+					 <td id="help_left_container">
+						 <div id="help_menu_area">
+						 <ul id="help_menu">
+							 <li><a href="#tab1" id="tab1_title" class="help_title w_font">重要</a></li>
+							 <li><a href="#tab2" id="tab2_title" class="help_title w_font">あらすじ</a></li>
+							 <li><a href="#tab3" id="tab3_title" class="help_title w_font">世界観・用語</a></li>
+							 <li><a href="#tab4" id="tab4_title" class="help_title w_font">ステータス</a></li>
+							 <li><a href="#tab5" id="tab5_title" class="help_title w_font">探索関連</a></li>
+							 <li><a href="#tab6" id="tab6_title" class="help_title w_font">バトル</a></li>
+							 <li><a href="#tab7" id="tab7_title" class="help_title w_font">プレゼント</a></li>
+							 <li><a href="#tab8" id="tab8_title" class="help_title w_font">推しガール</a></li>
+							 <li><a href="#tab9" id="tab9_title" class="help_title w_font">その他</a></li>
+							 <li><a href="#tab10" id="tab10_title" class="help_title w_font">よくある質問</a></li>
+							 <!--<li><a href="#tab10" id="tab10_title" class="help_title w_font">絵師</a></li>-->
+						 </ul>
+						 </div>
+					 </td>
+					 <td id="help_right_container">
+						 <div id="help_desc_area">
+							  <div id="tab1" class="tab">
+								  <p><p class="help_content_title"></p>
+		 <div class="help_content_body">
+		 ■パソコン版ゲームシステムのHTML5への移行について<br /><br />
+		 
+		 パソコン版のゲームシステムは今までFlashの規格を利用して提供いたしておりましたが、昨今の情勢を踏まえ、このたび新たにゲームシステムをHTML5の規格に移行いたしました。<br /><br />
+		 
+		 ゲームの基本的なルールやゲームデータの内容に変更はございませんが、下記の項目につきましては未実装または移行前と仕様が異なっております。こちらにつきましては今後必要に応じて実装、改修を予定いたしておりますので、いましばらくお時間をいただきたく存じます。<br /><br />
+		 
+		 【移行前との相違点　2019/4/22時点】<br /><br />
+		 
+		 （機能として未実装のもの）<br />
+		 ・マイページの会話キャラの名前表示<br />
+		 ・会話テキストの文字色の変化<br />
+		 ・ギフトの一括受け取り時の内容確認表示<br />
+		 ・推しガール獲得ランキングの集計<br />
+		 ・殿堂入り画面<br />
+		 ・カード合成・売却時のドラッグ選択<br />
+		 ・カードのソート状態の画面遷移後の保持<br />
+		 ・デッキ編成画面のカードステータス表示<br />
+		 ・デッキ編成画面のオンマウスによるアビリティ表示<br />
+		 ・バトルの演出スキップ<br /><br />
+		 
+		 （機能の仕様が異なるもの）<br />
+		 ・ゲーム起動時のロード画面<br />
+		 ・スパルタコーチとこだわりミルクの合成方法<br />
+		 ・デッキ編成画面の一覧表示レイアウト<br />
+		 ・デッキ編成画面の編成レイアウト<br />
+		 ・プレゼント画面の表示レイアウト<br /><br />
+		 <br>
+		 
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab2" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_arasugi.png"></p>
+		 <div class="help_content_body">
+		 時は現代！（の少し先）<br>
+		 人類は滅亡の危機に瀕していた！<br>
+		 史上最悪の絶滅ウィルスにより、この世から男子が激減したのである！<br>
+		 男子を妊娠する確率1/10！<br>
+		 男子が生まれる確率1/10！<br>
+		 男子が育つ確率1/10！<br>
+		 つまり女子に対する男子の存在は絶望の1/1000！<br>
+		 <br>
+		 人々は考えた。このまま人類の終焉まで手をこまねいて良いはずがない。<br>
+		 そこで誕生したのが『超女学園』制度！<br>
+		 <br>
+		 妊娠出産適齢期のうら若き乙女たちを集約する大型教育機関『超女学園』が全国に設けられ、そこを中心に街が栄えた。<br>
+		 男子は生殖適齢期まで手厚く保護され、しかるべき時を迎えると各地の『超女学園』へと編入されていくのだ。<br>
+		 一校に一人だけの男子として……。<br>
+		 <br>
+		 エリート教育を受けて育った男子は実にエリート！<br>
+		 男子はすべての女子の憧れである。王子様である。スーパースターである。<br>
+		 君もそんな男子として『超女学園』への編入が決定した一人だった。<br>
+		 <br>
+		 時は春。桜は舞いふぶき、乙女のスカートはめくれ上がる、希望の季節。<br>
+		 ここだけの話、男子の中で君は落ちこぼれだったのだが……。<br>
+		 なぁに、そんなことは言わなければバレないのである。<br>
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab3" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world1.png"></p>
+		 <div class="help_content_body">
+		 近未来の学園都市。<br>
+		 絶滅ウィルスのパンデミックにより男が非常に希少な時代。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world2.png"></p>
+		 <div class="help_content_body">
+		 男子を激減させる正体不明のウィルスの俗称。<br>
+		 某国の研究機関から漏れたなど様々な憶測が流れているが、事実は不明。<br>
+		 人工授精や遺伝子操作、その他諸々の人為的な措置では対抗できない。<br>
+		 ウィルスに屈しない天然ものの男が一番らしい。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world3.png"></p>
+		 <div class="help_content_body">
+		 ゲーム内で生殖適齢期の男女を指す言葉。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world4.png"></p>
+		 <div class="help_content_body">
+		 千人以上の女生徒を擁するマンモス校。<br>
+		 健全な女子の育成と、男子との交流――『恋の成就』が目的。<br>
+		 学校ごとに規律があり、男子が無節操にやりたい放題できるわけではない。<br>
+		 各地に多数存在し、活動内容によりランク分けされている。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world5.png"></p>
+		 <div class="help_content_body">
+		 男子と心身ともに結ばれることは学園生すべての目標でもある。<br>
+		 ただし安易に結ばれても健康な男子が生まれないという統計が出ており、清く正しく美しい交流を通して男女が結ばれることを目指している。<br>
+		 事実上の一夫多妻制。<br>
+		 結婚制度は崩壊しているので「恋人」が「夫婦」の意味合いも兼ねる。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world6.png"></p>
+		 <div class="help_content_body">
+		 男子は生殖適齢期まで隔離・保護され、手厚い英才教育を受ける。<br>
+		 若い乙女との交流が開始するのは『超女学園』編入後。<br>
+		 そのため男女ともにドキドキ。初々しい。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world7.png"></p>
+		 <div class="help_content_body">
+		 学園に通う男子はすべての女子のためになることが求められる。<br>
+		 しかし圧倒的に女子が多いためそのままでは混沌としてしまう。<br>
+		 そこでできたのが『男子部』。<br>
+		 他の生徒からの相談事の窓口となり、男子のマネージメント等を行う。<br>
+		 『生徒会』による厳しい審査にパスした女子だけが入部を許可される。<br>
+		 男子は強制入部のため主人公も所属する。<br>
+		 主人公の編入した学園は昨年度に男子不在だったため、部員は持て余していた。<br>
+		 ちなみに女子部はない。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_world8.png"></p>
+		 <div class="help_content_body">
+		 生徒による自治の理念が強い『超女学園』の最高権力。<br>
+		 女子が男子に不当な行為をすれば処罰（放校）する権限もある。<br>
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab4" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status1.png"></p>
+		 <div class="help_content_body">
+		 主人公のレベルになります。<br>
+		 女子が男子と結ばれるためには女子力（恋を成就させる力）が求められる一方、男子にも相応の力が求められています。<br>
+		 レベルアップをしていき、より強い男子を目指しましょう。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status2.png"></p>
+		 <div class="help_content_body">
+		 主人公を応援する女子たち、カードとして出現します。<br>
+		 ファンを多く獲得することで学園内での主人公の評価は上がり、女子と恋を成就させやすくなります。<br>
+		 仲良くなる（進化合成）と、ムフフ♥なことが起こるカードも。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status3.png"></p>
+		 <div class="help_content_body">
+		 ファンガチャを引くためのポイントです。<br>
+		 探索やバトル、挨拶等、様々な箇所で入手できます。<br>
+		 ファンガチャを引くと、ファン（カード）を獲得できますので、たくさん集めてください。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status4.png"></p>
+		 <div class="help_content_body">
+		 主にファン（カード）の合成で必要になります。<br>
+		 探索やバトル等、様々な箇所で入手できます。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status5.png"></p>
+		 <div class="help_content_body">
+		 バトルに勝利することで上がっていく称号です。<br>
+		 漢の格を表します。<br>
+		 Rankが上がると、豪華な報酬が獲得できるのでどんどん参加しましょう。<br>
+		 負けてもペナルティはありません、参加報酬を獲得できます。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status7.png"></p>
+		 <div class="help_content_body">
+		 バトルをするために必要なポイントです。<br>
+		 ３０分に1ポイント自動で回復します。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_furiwake.png"></p>
+		 <div class="help_content_body">
+		 現在、フレンド獲得・エリアクリア時・レベルアップ時に獲得できます。<br>
+		 初期は各３０ポイントずつ所持しています。<br>
+		 レベルアップごとに３ポイント、エリアクリアごとに２ポイント獲得できます。<br>
+		 フレンドは一人増えるごとに各ポイントに１ポイントずつ割り当てられます。<br>
+		 最初の３０人まで（それぞれ＋３０ポイントまで）となっています。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status6.png"></p>
+		 <div class="help_content_body">
+		 探索関連で消費するステータスです。<br>
+		 レベルを上げることで、ポイントを割り振り、上限値を上昇させることができます。<br>
+		 ※上限値はポイント振り分けで170、フレンドの人数による加算で30の合計200まで。<br>
+		 1分に1、自動で回復します。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_status8.png"></p>
+		 <div class="help_content_body">
+		 デッキを編成するためのコストです。<br>
+		 レベルを上げることで、ポイントを割り振り、上限値を上昇させることができます。<br>
+		 割り振ることで、たくさんの女の子、レアリティの高い女の子を装備できるようになります。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_ability.png"></p>
+		 <div class="help_content_body">
+		 カードに備わっているスキルを装備するためのポイントです。<br>
+		 レベルを上げることで、ポイントを割り振り、上限値を上昇させることができます。<br>
+		 割り振ることで、たくさんのスキル、強いスキルを装備できるようになります。<br>
+		 ※アビリティは、カード>アビリティ画面で『装備』をしないとバトルで使用出来ません。<br>
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab5" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_tansaku1.png"></p>
+		 <div class="help_content_body">
+		 学園での生活を送りながら女子と交流していくことで、ファンを獲得したり、男子力が上がったり、ステージヒロインとのストーリーが進展していきます。<br>
+		 ♥のあるエリアはステージヒロインのムフフ♥なシーンが存在します。<br>
+		 周囲にお気をつけて、プレイしてください。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_tansaku2.png"></p>
+		 <div class="help_content_body">
+		 探索中に発生します。<br>
+		 出現率は各キャラクターに毎に設定されており、出やすいキャラクター出にくいキャラクターが存在します。<br>
+		 ただ、出現率が特定の条件で変動するという事はなく、例えばクリア済のヒロインが増えると残りのヒロインの出現率が下がるというような設定はありません。<br>
+		 あくまでも一定となります。<br>
+		 また、遭遇後は上手く選択肢を選んでいくと女の子との親密度がUPします。<br>
+		 攻略するとその女の子のカードが獲得できます。<br>
+		 遭遇したら、とりあえず声をかけてみましょう。<br>
+		 最後まで上手く選択肢をクリアーすると、その女の子はプレゼント対象となります。<br>
+		 プレゼントは宝石で行うことができ、付与することでストーリーの再生・カードやアイテムを獲得できます。<br>
+		 ※宝石はガチャやバトルで入手できます。詳細はプレゼントに記載してあります。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_tansaku3.png"></p>
+		 <div class="help_content_body">
+		 困っている女の子を助けて、好感度UP！<br>
+		 …いわゆるボスバトルです。<br>
+		 失敗した場合は、デッキ編成をし直して挑戦しましょう。<br>
+		 達成すると、ムフフ♥なシーンを閲覧できます。<br>
+		 成功した場合は、その女の子のカードがプレミアムガチャで引くことが出来るようになります。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_tansaku4.png"></p>
+		 <div class="help_content_body">
+		 探索と絡んで進行していきます。<br>
+		 一度閲覧したストーリーは、マイページのストーリー再生ボタンから閲覧可能です。<br>
+		 様々なキャラとの交流をお楽しみください。<br>
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab6" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_battle.png"></p>
+		 <div class="help_content_body">
+		 ユーザー間同士で競って男を磨きます。<br>
+		 勝敗に関わらず報酬を獲得できますので、お気軽にご参加ください。<br>
+		 また、バトルに勝利すると希にルーレットチャンスが出現します。<br>
+		 ルーレットは宝石獲得が期待できますので奮って挑戦してみてください。<br>
+		 <br>
+		 ◆バトルルール
+		 <dl>
+		 <dt>・ターン制バトル</dt>
+			 <dd>
+				 バトルは５ターンで構成されています。<br>
+				 先にHPを０にするか、５ターン経過後に残りHPゲージが多いユーザー様が勝利となります。<br>
+				 大勝利…相手のHPを0にした場合、大勝利となりグリーンジュエルを獲得できます<br>
+				 勝利…5ターン経過時に相手より残りHPゲージが多い場合。<br>
+				 敗北…自分の体力が0になった場合、または、5ターン経過時に相手より残りHPゲージが少ない場合。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・アビリティ</dt>
+			 <dd>
+				 カードが所持しているアビリティを駆使してバトルを進行していきます。<br>
+				 アビリティ装備画面で装備して参戦してください。<br>
+				 最初は自動選択がお勧めです。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・AP</dt>
+			 <dd>
+				 アビリティを使用する為に必要なポイントとなります。<br>
+				 強力なアビリティを使用した場合は消費も大きくなります。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・属性効果</dt>
+			 <dd>
+				 画面中央上に属性が表示されます。<br>
+				 属性は毎ターンごとにランダムで出現し、その属性に合ったアビリティを使用すると通常より高い効果（１．２倍）を発揮します。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・ターン経過倍率</dt>
+			 <dd>
+				 ターン経過に合わせ、ダメージ値に0.2倍、0.4倍、0.6倍、0.8倍、1.0倍の倍率がかかります。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・HP</dt>
+			 <dd>
+				 HPの初期値は10,000です。ユーザのレベルが10上がるごとに10,000上昇していきます。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・攻撃ボタン</dt>
+			 <dd>
+				 攻撃系のアビリティを選択します。主に相手にダメージを与えるアビリティとなります。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・支援ボタン</dt>
+			 <dd>
+				 支援系のアビリティを選択します。主に自分の攻撃力・防御力UP、相手の防御力・攻撃力DOWNとなります。<br>
+				 APを回復するアビリティも存在します。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・パスボタン</dt>
+			 <dd>
+				 APを２０回復します。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>・SKIPボタン</dt>
+			 <dd>
+				 押下すると、自動戦闘となり勝敗判定までスキップされます。<br>
+			 </dd>
+		 <br><br>
+		 </dl>
+		 
+		 ◆アビリティの種類<br>
+		 大きく分けて下記に分かれます。<br>
+		 <br>
+		 
+		 <dl>
+		 <dt>◯攻撃</dt>
+			 <dd>
+			 ・アタック系…攻撃力が他のアビリティより低い分使用APも低い攻撃です。<br>
+			 ・ストライク系統…攻撃力が高いが、その分使用APも高い攻撃です。<br>
+			 ・テンション系…攻撃を行うと同時に、自分のステータスを上昇させます。<br>
+			 ・インパクト系…攻撃倍率が5段階の中からランダムで選択されます、当たれば全系統中最強の攻撃倍率となりますが、外れると弱いです。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>◯支援</dt>
+			 <dd>
+			 ・自分ステータスUP…全属性を上昇させるもの、各属性のカードのみ上昇させるものがあります。<br>
+			 ・相手ステータスDOWN…全属性を減少させるもの、各属性のカードのみ減少させるものがあります。<br>
+			 ・AP回復…APを回復します。<br>
+			 </dd>
+		 <br>
+		 
+		 <dt>◯自動発動</dt>
+		 <dd>
+			 ・追加ダメージ発生系…攻撃時に一定確率で発生、ダメージが上昇します。
+			 ・確率ステータスUP系…一定確率で発生、攻撃力、防御力、両方が上昇します。
+			 ・常時ステータスUP系…バトル開始時に常時ステータスがアップした状態となります。
+			 ・AP回復…一定確率で発生、APを回復します。
+		 </dd>
+		 </dl>
+		 <br>
+		 <dl>
+		 <dt>◆アビリティのレベル</dt>
+		 <dd>
+			 各カードのアビリティは最大20までレベルアップすることが可能です。<br>
+			 レベルアップをすると効果が増加します（詳細は各アビリティの説明をご参照ください）。<br>
+			 アビリティのレベルアップは合成や進化時に希に発生します。<br>
+			 レアリティの高いカードや、アビリティレベルの高いカードを素材にすると、アビリティのレベルアップの発生する確率が上がります。<br>
+			 アビリティのレベルが上がるほど、レベルアップの発生確率は低くなっていきます。<br>
+		 </dd>
+		 <br>
+		 
+		 <dt>◆バトル報酬</dt>
+		 <dd>
+		 バトルを行うと報酬（資金とガチャP）がもらえます。<br>
+		 勝っても負けても報酬はもらえますが、勝った方が多くもらえます。<br>
+		 大勝利時には資金とガチャPの他、グリーンジュエルがもらえます。<br>
+		 </dd>
+		 <br>
+		 
+		 <dt>◆ランクアップ報酬</dt>
+		 <dd>
+		 バトルに一定数勝利することでRankが上がります。<br>
+		 Rankは「ランクなし」から開始し、最初のRankUP「男子道10級」でランクアップ報酬が入手できます。<br>
+		 その後は「5級」「1級」「初段」「5段」「10段」と到達するごとに報酬が入手でき、さらにその後はRankが5段階上がるごとに報酬が入手できます。<br>
+		 バトル勝利数を重ね、多くの報酬を入手しましょう。<br>
+		 </dd>
+		 <br>
+		 
+		 <dt>◆ルーレットチャンス</dt>
+		 <dd>
+		 バトルで勝利すると希にルーレットが発生します。<br>
+		 ルーレットで当たったアイテムを入手できます。<br>
+		 <br>
+		 ルーレットには金・銀・銅の3種類が存在します。<br>
+		 </dd>
+		 </dl>
+		 
+		 </div></p>
+							  </div>
+							  <div id="tab7" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_present.png"></p>
+		 <div class="help_content_body">
+		 探索中に知り合った女の子を攻略すると、宝石をプレゼントできるようになります。<br>
+		 プレゼントをすると、その女の子とのストーリーが発展していきます。<br>
+		 プレゼント後には、カードやアイテムなどの報酬をもらうことができます。<br>
+		 カードは進化合成するとその女のこと最後にムフフ♥なシーンが見られます。<br>
+		 ぜひ、挑戦してみてください。<br><br>
+		 ※進化合成に失敗された場合は、「親密度MAX」ボタンより追加で<br>
+		 プレゼントを行っていただくことでカードを入手可能です<br>
+		 ※新たなエピソード等は発生しませんのでご注意ください。<br>
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab8" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_girl.png"></p>
+		 <div class="help_content_body">
+		 自分の気に入った女の子を推しガールとして選択できます。<br>
+		 撰択した女の子に宝石をあげると、愛情ポイントが上昇し、愛情度LvがUPします。<br>
+		 愛情度レベルがUPすると探索で獲得する経験値が、上昇していきます。<br>
+		 余った宝石は、どんどんあげていきましょう。<br>
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab9" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc1.png"></p>
+		 <div class="help_content_body">
+		 獲得したカード、閲覧したHシーンを見ることができます。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc2.png"></p>
+		 <div class="help_content_body">
+		 フレンド申請をすると、最初の３０人まで振り分けポイントを獲得することができます（獲得したポイントは自動的に割り振られます）。<br>
+		 
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc3.png"></p>
+		 <div class="help_content_body">
+		 一日に一回ゲームを開始すると受け取ることができます。<br>
+		 期間限定で、お得なログインボーナスを実施することもありますので、その時はできるだけログインして報酬を受け取りましょう。<br>
+		 また、通常ログインボーナスは7日目の後は1日目に戻ります。<br>
+		 
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc4.png"></p>
+		 <div class="help_content_body">
+		 報酬として受け取ったアイテムは一度ギフト画面に格納されます。<br>
+		 ギフト画面でお受けとりください。<br>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc5.png"></p>
+		 <div class="help_content_body">
+		 <dl id="gacha">
+		 <dt>◆ファンガチャ</dt>
+		 <dd>ファンPを消費して引くことができます。<br></dd>
+		 <dt>◆プレミアムガチャ</dt>
+		 <dd>魔法石を消費して引くことができます。<br>
+		 各レアリティの出現確率は下記の通りです。<br>
+		 <table id="premium_gacha">
+		 <tr><th>R</th><td>59.00%</td></tr>
+		 <tr><th>R+</th><td>27.00%</td></tr>
+		 <tr><th>SR</th><td>8.45%</td></tr>
+		 <tr><th>SR+</th><td>1.80%</td></tr>
+		 <tr><th>SSR</th><td>1.20%</td></tr>
+		 <tr><th>SSR+</th><td>0.50%</td></tr>
+		 <tr><th>LEGEND</th><td>0.05%</td></tr>
+		 <tr><th>SPカード</th><td>2.00%</td></tr>
+		 </table>
+		 
+		 ※SPカードとはステージの最後に登場するヒロイン達のカードとなります。<br>
+		 （今後他のSPカードも追加予定です）<br>
+		 最終進化するとSSR＋まで進化し、その後のストーリー（Hシーンつき）が閲覧できます。<br>
+		 ステージを攻略する毎にそのステージのヒロインがガチャに追加されていきます。
+		 </dd>
+		 
+		 <dt>◆ガチャボーナス</dt>
+		 <dd>１０連プレミアムガチャを引くとガチャボーナスが発生します。<br>
+		 プレミアムガチャ(1回)……ガチャボーナスは発生しません。<br>
+		 １０連プレミアムガチャ……必ずガチャボーナスが発生し、一定の確率でSPカードが当たったり、魅力的なアイテムや宝石を複数個入手できます。<br>
+		 </dd>
+		 </dl>
+		 </div>
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc6.png"></p>
+		 <div class="help_content_body">
+		 合成することでファンとの絆を深め、ファンがより主人公を手助けしてくれるようになります。<br>
+		 <dl>
+		 <dt>・強化合成</dt>
+		 <dd>異なる種類のカードを合成します。<br></dd>
+		 <dt>・進化合成</dt>
+		 <dd>同じカードを合成します。<br>
+		 絵柄が変化していく他、レベルの上限が5ずつ上昇していきます。<br>
+		 ベースカード・素材カードのレベルによって進化後のカードのパラメータ上限値が変わることはありません。
+		 どのタイミングで進化合成いただいても、同じカードであれば進化後のパラメータ上限値は同じです
+		 最終進化まですると、レアリティが変化するものや、一部のカードでムフフ&#9829;なシーンが発生するものもあります。<br>
+		 </dd>
+		 </dl>
+		 ※どちらの合成も素材として設定したカードはなくなりますのでご注意ください。<br>
+		 <br>
+		 
+		 <dl>
+		 <dt>・現在の各カードの進化につきましては以下となります。</dt>
+		 <dd>
+		 『N　N+』<br>
+		 進化可能な段階は１段階。<br>
+		 レアリティ変化はありません。<br><br>
+		 
+		 『R　R+　SR　SR+ SSR』<br>
+		 進化可能な段階は３段階。<br>
+		 レアリティの変化は最終進化時に発生。<br><br>
+		 
+		 『SSR+　LEGEND』<br>
+		 進化可能な段階は３段階。<br>
+		 レアリティ変化はありません。<br><br>
+		 
+		 『SPカード（ステージヒロイン）』<br>
+		 進化可能な段階は４段階。<br>
+		 レアリティは、1回進化するごとに変化していく。<br>
+		 カードごとに設定された段階にＨシーン発生<br>
+		 ※ステージヒロインカードはプレミアムガチャで排出されます。<br><br>
+		 
+		 『SPカード（サブヒロイン）』<br>
+		 進化可能な段階は３。<br>
+		 レアリティの変化は最終進化時に発生<br>
+		 最終進化時にHシーン発生<br>
+		 ※ランダムヒロインカードはガチャでは手に入りません。探索時の遭遇、プレゼントで獲得となります。<br>
+		 </dd>
+		 </dl>
+		 </div>
+		 
+		 
+		 <p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_etc7.png"></p>
+		 
+		 <div class="help_content_body">
+		 アイテムを入手、使用する事で有利にゲームを進める事ができます。<br><br>
+		 ◆魔法石
+		 <dl>
+		 <dt>・体力回復<br></dt>
+		 <dd>魔法石1個消費で体力を全回復します。<br><br></dd>
+		 <dt>・体力回復<br></dt>
+		 <dd>・BP回復<br>魔法石1個消費でBPを全回復します。<br><br></dd>
+		 <dt>・カード上限UP<br></dt>
+		 <dd>魔法石1個でカード上限を10増やせます。現在の上限は2200枚までです。<br><br></dd>
+		 <dt>・ポイント再振り分け<br><br></dt>
+		 <dd>魔法石30個でデッキコスト・体力・アビリティポイントの再振り分けができます。<br><br></dd>
+		 </dl>
+		 <dl>
+		 ◆交換所
+		 <dd>宝石やメダルをアイテムと交換することができます。<br><br></dd>
+		 
+		 <dt>・宝石交換所<br></dt>
+		 <dd>宝石をアイテムと交換することができます。<br></dd>
+		 <dd>交換できるアイテムには個数制限があります。<br></dd>
+		 <dd>一部の１回のみ交換できるアイテム以外は、月が変わると交換個数がリセットされ、再び交換することができます。<br></dd>
+		 <dd>宝石はバトル・イベントの報酬・各種ガチャのオマケなどから入手できます。<br><br></dd>
+		 
+		 <dt>・鳳凰院メダル交換所<br></dt>
+		 <dd>鳳凰院メダルをアイテムと交換することができます。<br></dd>
+		 <dd>交換できるアイテムには個数制限があります。<br></dd>
+		 <dd>月が変わると交換個数がリセットされ、再び交換することができます。<br></dd>
+		 <dd>鳳凰院メダルはイベントの報酬・バトルのルーレット・特定のガチャのオマケなどから入手できます。<br><br></dd>
+		 
+		 <dt>・イベントメダル交換所<br></dt>
+		 <dd>イベント期間中に期間限定で出現する交換所です。<br></dd>
+		 <dd>開催期間中のイベントメダルを報酬と交換することができます。<br></dd>
+		 <dd>交換できる報酬は一部を除き個数制限があります。<br></dd>
+		 <dd>イベントメダル交換所はイベントが終了してから１週間まで利用できます。<br></dd>
+		 <dd>イベントメダルはイベントで入手できます。<br></dd>
+		 <dd>※メダルガチャ形式のイベントでは交換所は出現しません。<br></dd>
+		 </dl>
+		 
+		 </div>
+		 </p>
+							  </div>
+							  <div id="tab10" class="tab">
+								  <p><p class="help_content_title"><img src="https://koi-server-master.tencross.site/master/img/p/menu/title_img/t_qa.png"></p>
+		 <div class="help_content_body">
+		 <span class="r_font">Q</span>：動作が重い<br>
+		 <span class="b_font">A</span>：パソコンのスペックやご使用のブラウザのバージョン、種類により動作が重くなることがございます。<br>
+		 お手数ですが、まずは他のブラウザへの変更や、ブラウザのアップデートをお願いいたします。<br>
+		 <br>
+		 <span class="r_font">Q</span>：進化途中のカードを素材カードにしたらどうなりますか？<br>
+		 <span class="b_font">A</span>：あくまでもベースカードに対して＋１段階の進化になります。<br>
+		 例えば、未進化のカードをベースにして３段階目のカードを素材にして進化を実行すると結果は２段階目のカードとなりますのでご注意ください。<br>
+		 </div></p>
+							  </div>
+						 </div>
+					 </td>
+				 </tr>
+			 </table>
+			 </div>		 </div>
+			 </div>
+		 
+			 <div id="announce_bottom">
+			 <table id="announce_pager"></table>
+			 </div>
+		 </div>
+		 
+		 
+		 ',
+			  'headers' => 
+			 (object) array(
+				'Server' => 'openresty',
+				'Content-Type' => 'text/html; charset=UTF-8',
+				'Connection' => 'keep-alive',
+				'Keep-Alive' => 'timeout=5',
+				'X-Powered-By' => 'PHP/5.4.28',
+				'Access-Control-Allow-Origin' => '*',
+			 ),
+		   ),
+		);
+
+		return $this->responseText("throw 1;<don 't be evil'>".json_encode($array));
+	}
+
+}

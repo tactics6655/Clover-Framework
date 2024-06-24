@@ -43,6 +43,10 @@ class Resource
 
     protected function appendTimestampToResource($file)
     {
+        if (str_starts_with($file, 'http')) {
+            return sprintf("%s", $file);
+        }
+
         $createdDate = FileFunctions::getCreatedDate(__ROOT__ . $file);
 
         return sprintf("%s?t=%d", $file, $createdDate);

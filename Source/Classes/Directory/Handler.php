@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Clover\Classes\Directory;
 
+use Clover\Classes\Data\ArrayObject;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FilesystemIterator;
 use Clover\Implement\DirectoryHandlerInterface;
 use Clover\Implement\FileHandlerInterface;
 use Clover\Exception\DirectoryHandler\DirectoryIsNotExistsException as DirectoryIsNotExistsException;
+use Clover\Exception\DirectoryHandler\DirectoryIsExistsException as DirectoryIsExistsException;
 use Clover\Classes\File\Handler as FileHandler;
 
 class Handler implements DirectoryHandlerInterface
@@ -119,8 +121,8 @@ class Handler implements DirectoryHandlerInterface
 	 */
 	public function make(string $directoryPath, int $permission = 644)
 	{
-		if (!self::isDirectory($directoryPath)) {
-			throw new DirectoryIsNotExistsException();
+		if (self::isDirectory($directoryPath)) {
+			throw new DirectoryIsExistsException('');
 		}
 
 		return $this->create($directoryPath);
@@ -128,8 +130,8 @@ class Handler implements DirectoryHandlerInterface
 
 	public function create(string $directoryPath, int $permission = 644)
 	{
-		if (!self::isDirectory($directoryPath)) {
-			throw new DirectoryIsNotExistsException();
+		if (self::isDirectory($directoryPath)) {
+			throw new DirectoryIsExistsException('');
 		}
 
 		$return = mkdir($directoryPath, $permission, true);
@@ -403,7 +405,7 @@ class Handler implements DirectoryHandlerInterface
 			return false;
 		}
 
-		$directoryList = array();
+		$directoryList = new ArrayObject();
 
 		if ($includeSubDirectory) {
 			$di = new RecursiveDirectoryIterator($path);
