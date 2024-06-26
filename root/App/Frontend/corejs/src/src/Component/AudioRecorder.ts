@@ -429,7 +429,7 @@ export class AudioRecorder implements AudioRecorderInterface {
     }
 
     public removeListener(event: string, callback: any) :boolean {
-        if(this.events[event] === undefined) {
+        if (this.events[event] === undefined) {
             return false;
         }
 

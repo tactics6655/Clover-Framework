@@ -230,7 +230,7 @@ var A;
 		 * @param {element}     : element
 		 **/
 		isFullScreen: function (element) {
-			if( (screen.availHeight || screen.height-30) <= window.innerHeight) {
+			if ( (screen.availHeight || screen.height-30) <= window.innerHeight) {
 				return true;
 			}
 			

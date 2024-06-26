@@ -182,7 +182,7 @@ var A;
 		isPressed: function (command) {
 			if (command === 145) {
 				return true;
-			} else if(command === 129) {
+			} else if (command === 129) {
 				return false;
 			}
 		},
