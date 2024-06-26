@@ -1,4 +1,4 @@
-<!--<audio id="player" controls src="/App/File/audio2.mp3"></audio>
+<audio id="player" controls src="/App/File/audio2.mp3"></audio>
 
 <div style="width:200px;height: 200px;" id="spectrum"></div>
 
@@ -9,7 +9,7 @@ const mediaPlayer = new MediaPlayer();
 mediaPlayer.setContext(document.getElementById("player"));
 mediaPlayer.setEvents();
 mediaPlayer.setVisualizerLineWidth(1);
-mediaPlayer.setVisualizerStyle("circular");
+mediaPlayer.setVisualizerStyle("classic");
 mediaPlayer.setSpectrum("#spectrum");
 
 const onClickEvent = function () {
@@ -18,9 +18,9 @@ const onClickEvent = function () {
     mediaPlayer.play();
 };
 document.getElementById("play").addEventListener("click", onClickEvent);
-</script>-->
+</script>
 
-<?=$ip?>
+<!--<?=$ip?>
 
 <canvas id="canvas" style="width:500px;height:500px"></canvas>
 
@@ -78,4 +78,4 @@ openGL.uniformMatrix4fv(matrixShadowMatrix1, false, modelViewMatrix);
 openGL.drawTriangleArrays(0, 5);
 
 openGL.vertextAttib3f(1.0, 1.0, 1.0);
-</script>
+</script>!-->

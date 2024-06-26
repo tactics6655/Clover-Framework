@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Middleware\ModuleMiddleware;
 use Clover\Annotation;
-use Clover\Classes\File\Functions;
 use Clover\Classes\HTTP\Request;
+use Clover\Classes\System\Output;
 use Clover\Framework\Component\BaseController;
 
 #[Annotation\Prefix('/')]
@@ -17,8 +17,10 @@ class IndexController extends BaseController
     {
         $this->addJsFileToHead('/App/Frontend/corejs/coreJS.min.js');
 
-        $ip = $request->getRemoteIPAddress();
+        $scheme = $request->getScheme();
 
-        return $this->render('/App/View/test.php', [$ip]);
+        Output::print($scheme);
+
+        return $this->render('/App/View/test.php');
     }
 }
