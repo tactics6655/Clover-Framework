@@ -1,50 +1,41 @@
-export default class OpenGLAttributeObject {
-	
-	private gl;
+export class OpenGLAttributeObject {
 
-	constructor(openGL) {
+	private gl: WebGL2RenderingContext;
+
+	constructor(openGL: WebGL2RenderingContext) {
 		this.gl = openGL;
 	}
-	
-	COMPILE_STATUS () {
+
+	get COMPILE_STATUS() {
 		return this.gl.COMPILE_STATUS;
 	}
-	
-	//gl.clear
-	COLOR_BUFFER_BIT () {
+
+	get COLOR_BUFFER_BIT() {
 		return this.gl.COLOR_BUFFER_BIT;
 	}
-	
-	//gl.clear
-	DEPTH_BUFFER_BIT () {
+
+	get DEPTH_BUFFER_BIT() {
 		return this.gl.DEPTH_BUFFER_BIT;
 	}
-	
-	//gl.depthFunc
-	LEQUAL () {
+
+	get LEQUAL() {
 		return this.gl.LEQUAL;
 	}
-	
-	//gl.enable
-	DEPTH_TEST () {
+
+	get DEPTH_TEST() {
 		return this.gl.DEPTH_TEST;
 	}
-	
-	//gl.getProgramParameter( ,LINK_STATUS);
-	LINK_STATUS () {
+
+	get LINK_STATUS() {
 		return this.gl.LINK_STATUS;
 	}
-	
-	//gl.bufferData( , ,STATIC_DRAW);
-	STATIC_DRAW () {
+
+	get STATIC_DRAW() {
 		return this.gl.STATIC_DRAW;
 	}
-	
-	//gl.bufferData(ARRAY_BUFFER , ,);
-	ARRAY_BUFFER () {
+
+	get ARRAY_BUFFER() {
 		return this.gl.ARRAY_BUFFER;
 	}
-	
-	
-	
+
 }

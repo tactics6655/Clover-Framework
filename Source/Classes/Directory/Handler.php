@@ -14,8 +14,9 @@ use Clover\Classes\File\Handler as FileHandler;
 
 class Handler implements DirectoryHandlerInterface
 {
-	private $fileHandler;
-	private $directoryDepth;
+	private FileHandlerInterface $fileHandler;
+
+	private int $directoryDepth;
 
 	public function __construct(FileHandlerInterface $fileHandler = null)
 	{
@@ -82,18 +83,18 @@ class Handler implements DirectoryHandlerInterface
 	/**
 	 * Check that path is directory
 	 *
-	 * @param string $directoryPath
+	 * @param string $path
 	 *
 	 * @return boolean
 	 */
-	public static function isDirectory(string $directoryPath)
+	public static function isDirectory(string $path)
 	{
-		$return = is_dir($directoryPath);
+		$return = is_dir($path);
 
 		return $return;
 	}
 
-	public static function makeMultiple(array $pathList, int $mode = 644)
+	public static function makeMultiple(array $pathList, int $mode = 644): bool
 	{
 		/** @var string $path */
 		foreach ($pathList as $path) {
@@ -114,6 +115,8 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @param string $directoryPath
 	 * @param int    $permission
+	 * 
+	 * @throws DirectoryIsNotExistsException
 	 *
 	 * @return boolean
 	 */
@@ -141,6 +144,8 @@ class Handler implements DirectoryHandlerInterface
 	 * Get file counts of directory
 	 *
 	 * @param string $directoryPath
+	 * 
+	 * @throws DirectoryIsNotExistsException
 	 *
 	 * @return int
 	 */
@@ -160,7 +165,9 @@ class Handler implements DirectoryHandlerInterface
 	 * Check that directory is empty
 	 *
 	 * @param string $directoryPath
-	 *
+	 * 
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return boolean
 	 */
 	public function isEmpty(string $directoryPath): bool
@@ -177,6 +184,8 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @param string $directoryPath
 	 *
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return boolean
 	 */
 	public function delete(string $directoryPath)
@@ -196,13 +205,13 @@ class Handler implements DirectoryHandlerInterface
 
 		$iterator->setMaxDepth(-1); // Absolutely delete folders
 
-		/** @var RecursiveDirectoryIterator $fileInformation */
-		foreach ($iterator as $fileInformation) {
-			if (!$fileInformation->isDir()) {
+		/** @var RecursiveDirectoryIterator $file */
+		foreach ($iterator as $file) {
+			if (!$file->isDir()) {
 				continue;
 			}
 
-			if (unlink($fileInformation->getRealPath()) === false) {
+			if (unlink($file->getRealPath()) === false) {
 				return false;
 			}
 		}
@@ -216,6 +225,8 @@ class Handler implements DirectoryHandlerInterface
 	 * @param string $directoryPath
 	 * @param string $copyPath
 	 *
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return void
 	 */
 	public function copy(string $directoryPath, string $copyPath)
@@ -245,6 +256,8 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @param string $directoryPath
 	 *
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return int
 	 */
 	public static function getSize(string $directoryPath)
@@ -253,16 +266,16 @@ class Handler implements DirectoryHandlerInterface
 			throw new DirectoryIsNotExistsException();
 		}
 
-		$size = 0;
+		$sizes = 0;
 
 		$skipDots = new RecursiveDirectoryIterator($directoryPath, RecursiveDirectoryIterator::SKIP_DOTS);
 
 		/** @var RecursiveDirectoryIterator $file */
 		foreach (new RecursiveIteratorIterator($skipDots) as $file) {
-			$size += $file->getSize();
+			$sizes += $file->getSize();
 		}
 
-		return $size;
+		return $sizes;
 	}
 
 	/**
@@ -270,7 +283,7 @@ class Handler implements DirectoryHandlerInterface
 	 *
 	 * @return int
 	 */
-	public function getMaxDepth()
+	public function getMaxDepth(): int
 	{
 		return $this->directoryDepth;
 	}
@@ -284,7 +297,7 @@ class Handler implements DirectoryHandlerInterface
 	 */
 	public function setMaxDepth(int $depth): bool
 	{
-		if ($this->getMaxDepth() === $this->directoryDepth) {
+		if ($this->getMaxDepth() < $this->directoryDepth) {
 			return false;
 		}
 
@@ -299,6 +312,8 @@ class Handler implements DirectoryHandlerInterface
 	 * @param string $directoryPath
 	 * @param string $replacement
 	 *
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return boolean
 	 */
 	public function rename(string $directoryPath, string $string, string $replacement)
@@ -346,6 +361,8 @@ class Handler implements DirectoryHandlerInterface
 	 * @param string $replacement
 	 * @param string $string
 	 *
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return boolean
 	 */
 	public function renameInnerFiles(string $directoryPath, $replacement, $string = null)
@@ -396,14 +413,14 @@ class Handler implements DirectoryHandlerInterface
 		return true;
 	}
 
-	public static function getList($path = './', $type = null, $includePath = false, $includeSubDirectory = false)
+	public static function getList($path = './', $type = null, $includePath = false, $includeSubDirectory = false): array
 	{
 		$handle = opendir($path);
 		if (!$handle) {
 			return false;
 		}
 
-		$directoryList = array();
+		$directories = [];
 
 		if ($includeSubDirectory) {
 			$di = new RecursiveDirectoryIterator($path);
@@ -421,13 +438,13 @@ class Handler implements DirectoryHandlerInterface
 				}
 
 				if ($includePath) {
-					$directoryList[] = $filename;
+					$directories[] = $filename;
 				} else {
-					$directoryList[] = $file->getFilename();
+					$directories[] = $file->getFilename();
 				}
 			}
 
-			return $directoryList;
+			return $directories;
 		}
 
 		while (false !== ($file = readdir($handle))) {
@@ -448,13 +465,13 @@ class Handler implements DirectoryHandlerInterface
 			}
 
 			if ($includePath) {
-				$directoryList[] = $filePath;
+				$directories[] = $filePath;
 			} else {
-				$directoryList[] = $file;
+				$directories[] = $file;
 			}
 		}
 
-		return $directoryList;
+		return $directories;
 	}
 
 	/**
@@ -463,9 +480,11 @@ class Handler implements DirectoryHandlerInterface
 	 * @param string  $directoryPath
 	 * @param boolean $sort
 	 *
+	 * @throws DirectoryIsNotExistsException
+	 * 
 	 * @return array
 	 */
-	public function getFileList($directoryPath = './', $sort = false)
+	public function getFileList($directoryPath = './', $sort = false): array
 	{
 		if (!self::isDirectory($directoryPath)) {
 			throw new DirectoryIsNotExistsException();
@@ -498,7 +517,7 @@ class Handler implements DirectoryHandlerInterface
 		return $fileList;
 	}
 
-	public function empty(string $directoryPath)
+	public function empty(string $directoryPath): bool
 	{
 		if (!self::isDirectory($directoryPath)) {
 			throw new DirectoryIsNotExistsException();

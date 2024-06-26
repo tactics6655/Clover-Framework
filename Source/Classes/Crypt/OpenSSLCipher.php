@@ -15,9 +15,18 @@ class OpenSSLCipher
 		self::$algorithm = $algorithm;
 	}
 
-	public static function encrypt($string, $key, $options = OPENSSL_RAW_DATA)
+	/**
+	 * Encrypt
+	 * 
+	 * @param string $data
+	 * @param string $passphrase
+	 * @param int $options
+	 * 
+	 * @throws Exception
+	 */
+	public static function encrypt(string $data, string $passphrase, int $options = OPENSSL_RAW_DATA)
 	{
-		if (mb_strlen($key, '8bit') !== 32) {
+		if (mb_strlen($passphrase, '8bit') !== 32) {
 			throw new Exception('Needs a 256-bit key!');
 		}
 
@@ -25,9 +34,9 @@ class OpenSSLCipher
 		$iv     = OpenSSL::generatePseudoRandomStringOfBytes($ivsize);
 
 		$ciphertext = OpenSSL::encrypt(
-			$string,
+			$data,
 			self::$algorithm,
-			$key,
+			$passphrase,
 			$options,
 			$iv
 		);

@@ -33,12 +33,12 @@ class Resource
 
     public function addGenericCssFile($file)
     {
-        $this->adoptedCssFiles[] = array(
+        $this->adoptedCssFiles[] = [
             'rel' => 'stylesheet',
             'href' => $this->appendTimestampToResource($file),
             'type' => 'text/css',
             'media' => 'all'
-        );
+        ];
     }
 
     protected function appendTimestampToResource($file)
@@ -50,7 +50,7 @@ class Resource
 
     public function addGenericJavascriptFile($file)
     {
-        $this->adoptedScriptFiles[] = array('src' => $this->appendTimestampToResource($file));
+        $this->adoptedScriptFiles[] = ['src' => $this->appendTimestampToResource($file)];
     }
 
     public function addJavascriptFile($map)

@@ -23,6 +23,7 @@ class QueueableRequestHandler extends Queue
 
                 return ReflectionHandler::callMethod($middleware, $next);
             };
+
             parent::$stock->enqueue($closure);
         }
     }

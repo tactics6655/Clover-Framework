@@ -217,9 +217,10 @@ class Visualizer {
                 }
 
                 if (this.toggle) {
-                    const imageData = canvasContext.getImageData(0, 0, this.x, canvas.height);
+                    (document as any).title = this.x;
+                    const imageData = canvasContext.getImageData(0, 0, canvas.width - (this.x - 1), canvas.height);
                     //canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-                    canvasContext.clearRect(0, 0, this.x, canvas.height);
+                    //canvasContext.clearRect(0, 0, canvas.width - (this.x - 1), canvas.height);
                     canvasContext.putImageData(imageData, 0, 0);
                 }
 

@@ -1,7 +1,7 @@
 declare const $;
 
-export default class OPenGLObject {
-	
+export class Canvas2D {
+
 	private canvas;
 	private context;
 	private fontSize;
@@ -10,65 +10,66 @@ export default class OPenGLObject {
 	constructor(CanvasID) {
 		try {
 			this.canvas = document.getElementById(CanvasID);
-		} catch(e) {
+		} catch (e) {
 			throw "Cannot found Canvas Object";
 		}
-		
+
 		this.context = null;
 		this.fontSize = "12";
 		this.fontFamily = "Arial";
 	}
-	
-	setFullScreenSize () {
+
+	setFullScreenSize() {
 		this.canvas.height = window.innerHeight;
 		this.canvas.width = window.innerWidth;
 	}
-	
-	initialize () {
+
+	initialize() {
 		this.context = this.canvas.getContext("2d");
 	}
-	
-	setFontStyle () {
+
+	setFontStyle() {
 		let fontSize = '';
 		if (typeof this.fontSize !== 'undefined') {
 			fontSize = this.fontSize + "pt ";
 		}
+		
 		this.context.font = fontSize + this.fontFamily;
 	}
-	
-	setFontSize (fontsize) {
+
+	setFontSize(fontsize) {
 		this.fontSize = fontsize;
 		this.setFontStyle();
 	}
-	
-	setFontFamily (font) {
+
+	setFontFamily(font) {
 		this.fontFamily = font;
 		this.setFontStyle();
 	}
-	
-	setStrokeStyle (stroke) {
+
+	setStrokeStyle(stroke) {
 		this.canvas.strokeStyle = stroke;
 	}
-	
-	setFillStyle (style) {
+
+	setFillStyle(style) {
 		this.context.fillStyle = style;
 	}
-	
-	fillText (text, x, y) {
+
+	fillText(text, x, y) {
 		this.context.fillText(text, x, y);
 	}
-	
-	getImage (URL) {
+
+	getImage(URL) {
 		return $.core.Element.preloadImage(URL);
 	}
-	
-	fillRect (x, y, width, height) {
+
+	fillRect(x, y, width, height) {
 		this.canvas.fillRect(x, y, width, height);
 	}
-	
-	drawImage (img, sx, sy, swidth, sheight, x, y, width, height) {
+
+	drawImage(img, sx, sy, swidth, sheight, x, y, width, height) {
 		this.canvas.drawImage(img, sx, sy, swidth, sheight, x, y, width, height);
 	}
-	
-	
+
+
 }

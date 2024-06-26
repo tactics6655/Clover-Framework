@@ -32,33 +32,56 @@ class RouteExecutor
         $this->container = $container;
     }
 
+    private function getContainer()
+    {
+        return $this->container;
+    }
+
+    private function getCallback()
+    {
+        return $this->callback;
+    }
+
+    private function getMethod()
+    {
+        return $this->method;
+    }
+
+    private function getClass()
+    {
+        return $this->class;
+    }
+
+    private function getArguments()
+    {
+        return $this->arguments;
+    }
+
     /**
      * Call a callback from this route
      * 
      * @return mixed
      */
-    public function __invoke(mixed $next_arguments = []): mixed
+    public function __invoke(mixed $nextArguments = []): mixed
     {
-        $class = $this->class;
-        $callback = $this->callback;
-        $method = $this->method;
-        $arguments = $this->arguments ?? [];
-        $container = $this->container;
-
-        $arguments = [...$arguments, (is_array($next_arguments) ? $next_arguments : $next_arguments)];
-
-        $arguments = new ArrayObject($arguments);
+        $class = $this->getClass();
+        $callback = $this->getCallback();
+        $method = $this->getMethod();
+        $arguments = new ArrayObject();
+        $arguments = $this->getArguments() ?? [];
+        $arguments = [...$arguments, $nextArguments];
+        $container = $this->getContainer();
 
         if (isset($class) && !empty($class) && class_exists($class)) {
-            $callback = new $class;
+            $callback = new ($class);
         }
 
         if (!isset($method) && empty($method)) {
-            return ReflectionHandler::callMethodArray($callback, ($arguments));
+            return ReflectionHandler::callMethodArray($callback, $arguments);
         }
 
         if (is_object($callback)) {
-            return ReflectionHandler::invoke($callback, $method, ($arguments), $container);
+            return ReflectionHandler::invoke($callback, $method, $arguments, $container);
         }
 
         return false;

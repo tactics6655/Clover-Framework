@@ -17,7 +17,7 @@ class Response
 
     private string $protocolVersion = '1.0';
 
-    public function __construct($body, $resource = array(), $type = 'html', $statusCode = 200)
+    public function __construct($body, $resource = [], $type = 'html', $statusCode = 200)
     {
         $this->body = $body;
         $this->resource = $resource;

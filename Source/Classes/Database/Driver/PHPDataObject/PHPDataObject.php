@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Clover\Classes\Database\Driver;
 
+use Clover\Classes\Data\ArrayObject;
 use PDO;
 use Exception;
 
@@ -76,6 +77,19 @@ class PHPDataObject extends PDO
 	public function getTimeout()
 	{
 		return $this->getAttribute(PDO::ATTR_TIMEOUT);
+	}
+
+	public function getUpdateQuery($table, $columns, $values)
+	{
+		$setter = new ArrayObject();
+		$columns = new ArrayObject($columns);
+		foreach ($columns as $index => $column) {
+			$setter->addWithKey($column, $values[$index]);
+		}
+
+		$query = "UPDATE $table SET {$setter->join(',')}";
+
+		return $query;
 	}
 
 	public function insertByArray($table, $columns, $values)

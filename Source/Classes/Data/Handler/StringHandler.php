@@ -86,7 +86,7 @@ class StringHandler
 	public static function indexOf(string $haystack, string $needle, int $offset = 0, Encoding $encoding = Encoding::UTF_8)
 	{
 		if (function_exists('mb_strpos')) {
-			return mb_strpos($haystack, $needle, $offset, '');
+			return mb_strpos($haystack, $needle, $offset, $encoding->name);
 		}
 
 		return strpos($haystack, $needle, $offset);
@@ -284,7 +284,7 @@ class StringHandler
 		$result = '';
 
 		for ($i = $length - 1; $i >= 0; $i--) {
-			$result .= chr(floor($string / pow(256, $i)));
+			$result .= chr((int)floor($string / pow(256, $i)));
 		}
 
 		return $result;

@@ -15,9 +15,9 @@ class ErrorHandler
     {
         $handler = new static();
 
-        ExceptionHandler::setExceptionHandler(array($handler, 'handleException'));
-        ExceptionHandler::setErrorHandler(array($handler, 'handleError'));
-        ExceptionHandler::registerShutdownFunction(array($handler, 'handleShutdown'));
+        ExceptionHandler::setExceptionHandler([$handler, 'handleException']);
+        ExceptionHandler::setErrorHandler([$handler, 'handleError']);
+        ExceptionHandler::registerShutdownFunction([$handler, 'handleShutdown']);
     }
 
     public function handleShutdown()
@@ -38,8 +38,21 @@ class ErrorHandler
             'linenumber' => $lineNumber
         ];
 
-        $content = $this->compile(__DIR__ . '/../../Template/Error.php', $arguments);
-        exit($content);
+        switch ($errorRaised) {
+            case E_ERROR: //1
+                $content = $this->compile(__DIR__ . '/../../Template/Error.php', $arguments);
+                exit($content);
+                break;
+            case E_WARNING: // 2
+            case E_PARSE: //4
+            case E_NOTICE: //8
+            case E_CORE_WARNING: //32
+            case E_DEPRECATED: //8192
+            case E_STRICT: // 2048
+            case E_USER_ERROR: //256
+            default:
+                break;
+        }
     }
 
     private function compile($path, ?array $arguments)
@@ -66,13 +79,6 @@ class ErrorHandler
             'traces' => $traces,
             'className' => $className
         ];
-
-        //echo 0 ?!("1"?! ( ""?""(""):!""?!"1"??"2":"C"?!"":""?""??""?!""??"2":"C"??"2":"C"??"2") :"C"??"2"):"C";
-
-        //echo 0 ?!0xFF??0xCF:0x89;
-
-        //echo (0 ?!(0?!(((99)??0??99??0)):99):'CC');
-        //echo 0 ?!0xCF??0x89:0xFF;
 
         echo $this->compile(__DIR__ . '/../../Template/Exception.php', $arguments);
     }

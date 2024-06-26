@@ -587,7 +587,49 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
      */
     public function size(): int
     {
-        return count($this->rawData);
+        $rawData = $this->rawData;
+
+        if ($rawData instanceof Countable) {
+            return count($this->rawData);
+        }
+
+        if (!empty($rawData)) {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public function forIn($callback): void
+    {
+        $size = $this->size();
+
+        for ($i = 0; $i < $size; $i++) {
+            $data = $this->getByIndex($i);
+
+            $callback($data);
+        }
+    }
+
+    public function forInWithIndex($callback): void
+    {
+        $size = $this->size();
+
+        for ($i = 0; $i < $size; $i++) {
+            $data = $this->getByIndex($i);
+
+            $callback($i, $data);
+        }
+    }
+
+    public function sizeGreaterThan($size): bool
+    {
+        return $this->size() > $size;
+    }
+
+    public function sizeSmallerThan($size): bool
+    {
+        return $this->size() < $size;
     }
 
     public function clear()

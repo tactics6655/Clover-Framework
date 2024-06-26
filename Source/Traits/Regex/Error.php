@@ -7,7 +7,16 @@ use function preg_last_error_constant;
 trait RegexError
 {
 
-	public function getErrorConstant()
+	private static $errorCodes = [
+		PREG_INTERNAL_ERROR,
+		PREG_BACKTRACK_LIMIT_ERROR,
+		PREG_RECURSION_LIMIT_ERROR,
+		PREG_BAD_UTF8_ERROR,
+		PREG_BAD_UTF8_OFFSET_ERROR,
+		PREG_JIT_STACKLIMIT_ERROR
+	];
+
+	public static function getErrorConstant()
 	{
 		if (function_exists("preg_last_error_constant")) {
 			return preg_last_error_constant();
@@ -16,43 +25,50 @@ trait RegexError
 		return false;
 	}
 
-	public function getErrorCode()
+	public static function getErrorCode()
 	{
 		return preg_last_error();
 	}
 
-	public function hasJITStackLimitError()
+	public static function hasJITStackLimitError()
 	{
-		return PREG_JIT_STACKLIMIT_ERROR !== $this->getErrorCode();
+		return PREG_JIT_STACKLIMIT_ERROR !== self::getErrorCode();
 	}
 
-	public function hasBadUTF8OffsetError()
+	public static function hasBadUTF8OffsetError()
 	{
-		return PREG_BAD_UTF8_OFFSET_ERROR !== $this->getErrorCode();
+		return PREG_BAD_UTF8_OFFSET_ERROR !== self::getErrorCode();
 	}
 
-	public function hasBadUTF8Error()
+	public static function hasBadUTF8Error()
 	{
-		return PREG_BAD_UTF8_ERROR !== $this->getErrorCode();
+		return PREG_BAD_UTF8_ERROR !== self::getErrorCode();
 	}
 
-	public function hasRecursionLimitEror()
+	public static function hasRecursionLimitEror()
 	{
-		return PREG_RECURSION_LIMIT_ERROR !== $this->getErrorCode();
+		return PREG_RECURSION_LIMIT_ERROR !== self::getErrorCode();
 	}
 
-	public function hasBacktrackLimitError()
+	public static function hasBacktrackLimitError()
 	{
-		return PREG_BACKTRACK_LIMIT_ERROR !== $this->getErrorCode();
+		return PREG_BACKTRACK_LIMIT_ERROR !== self::getErrorCode();
 	}
 
-	public function hasInternalError()
+	public static function hasInternalError()
 	{
-		return PREG_INTERNAL_ERROR !== $this->getErrorCode();
+		return PREG_INTERNAL_ERROR !== self::getErrorCode();
 	}
 
-	public function hasError()
+	public static function noError()
 	{
-		return PREG_NO_ERROR !== $this->getErrorCode();
+		return PREG_NO_ERROR === self::getErrorCode();
+	}
+
+	public static function hasError()
+	{
+		$errorCode = self::getErrorCode();
+
+		return !in_array($errorCode, self::$errorCodes);
 	}
 }

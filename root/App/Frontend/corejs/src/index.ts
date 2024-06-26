@@ -207,6 +207,11 @@ export { GamePadService } from "./src/Component/GamePadService";
 import { ScreenService } from "./src/Component/ScreenService";
 import { ElementService } from "./src/Component/ElementService";
 
+export { AudioContextObject } from "./src/Component/Class/AudioContextObject";
+export { Canvas2D } from "./src/Component/Class/Canvas2D";
+export { OpenGLAttributeObject } from "./src/Component/Class/OpenGLAttributeObject";
+export { OpenGLObject } from "./src/Component/Class/OpenGLObject";
+
 if (typeof Number.prototype.mod !== 'function') {
     Number.prototype.mod = function (n: number) {
         return ((this % n) + n) % n;
