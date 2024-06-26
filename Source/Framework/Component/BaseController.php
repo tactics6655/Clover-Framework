@@ -24,7 +24,12 @@ class BaseController
         return new Response('<div style="white-space: break-spaces;font-size: 11px;">' . print_r($body, true) . '</div>', $resource);
     }
 
-    public function response(mixed $body, $resource = [])
+    public function responseText(mixed $body)
+    {
+        return new Response($body, [], 'text');
+    }
+
+    public function response(mixed $body, $resource = array())
     {
         return new Response($body, $resource, 'html');
     }

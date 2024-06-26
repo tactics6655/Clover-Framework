@@ -3,6 +3,7 @@
 namespace Clover\Framework\Component;
 
 use App\Controller\IndexController;
+use Clover\Classes\ContentType;
 use Clover\Classes\Routing\Router as Router;
 use Clover\Classes\File\Functions as FileFunctions;
 use Clover\Classes\Directory\Handler as DirectoryHandler;
@@ -53,6 +54,10 @@ class HttpKernel
 
         if (!$response instanceof Response) {
             throw new \Exception("Response is must be type of response, response data is '{}'");
+        }
+
+        if ($response->getType() == 'json') {
+            header('Content-Type: application/json; charset=utf-8');
         }
 
         if ($response->getType() == 'html') {

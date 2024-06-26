@@ -11,16 +11,16 @@ use Clover\Classes\HTML\Handler as HTMLHandler;
     <meta http-equiv="Content-Type" content="charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <? if (!empty($scriptMap)) : ?>
-        <? foreach ($scriptMap as $resource) : ?>
-            <?= HTMLHandler::generateElement('script', '', $resource); ?>
+<? if (isset($scriptMap)) : ?>
+    <? foreach ($scriptMap as $resource) : ?>
+<?= HTMLHandler::generateElement('script', '', $resource); ?>
 
         <? endforeach; ?>
     <? endif; ?>
 
-    <? if (!empty($cssMap)) : ?>
-        <? foreach ($cssMap as $resource) : ?>
-            <?= HTMLHandler::generateElement('link', '', $resource, true); ?>
+<? if (isset($cssMap)) : ?>
+    <? foreach ($cssMap as $resource) : ?>
+<?= HTMLHandler::generateElement('link', '', $resource, true); ?>
 
         <? endforeach; ?>
     <? endif; ?>

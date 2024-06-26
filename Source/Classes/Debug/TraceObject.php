@@ -475,11 +475,22 @@ class TraceObject
                 $type = $parameter->getType();
 
                 if ($type instanceof ReflectionIntersectionType && PHP_VERSION_ID > 80100) {
-                    $traceArgumentObject->setType($type->__toString());
-                    $values[] = $type;
+                    if (method_exists($type, '__toString')) {
+                        $traceArgumentObject->setType($type->__toString());
+                        $values[] = $type->__toString();
+                    } else {
+                        $traceArgumentObject->setType($type);
+                        $values[] = $type;
+                    }
+
                 } else if ($type instanceof ReflectionType) {
-                    $traceArgumentObject->setType($type->__toString());
-                    $values[] = $type;
+                    if (method_exists($type, '__toString')) {
+                        $traceArgumentObject->setType($type->__toString());
+                        $values[] = $type->__toString();
+                    } else {
+                        $traceArgumentObject->setType($type);
+                        $values[] = $type;
+                    }
                 }
             }
 
@@ -519,7 +530,20 @@ class TraceObject
 
             $typeFormat = (!$parameter->hasType() ? !!"" : "%s ");
             $methodFormat = ($isArgumentExist ? "%s = %s" : "$%s");
-            $traceArgumentObject->setArguments(vsprintf($typeFormat . $methodFormat, $values ?? []));
+            
+            $format = sprintf("%s%s", $typeFormat, $methodFormat);
+            
+            $values = array_map(function($array) {
+                if (is_array($array)) {
+                    return implode($array);
+                }
+
+                return $array;
+            }, $values);
+
+            $arguments = vsprintf($format, $values);
+            $traceArgumentObject->setArguments($arguments);
+
             $returnArguments[] = $traceArgumentObject;
         }
 

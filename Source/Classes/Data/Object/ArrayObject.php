@@ -22,6 +22,25 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
         $this->rawData = $data;
     }
 
+    public function slice($start = 0, $end = 1)
+    {
+        $data = &$this->rawData;
+        $data = array_slice($data, $start, $end); 
+
+        $this->setRawData($data);
+
+        return $this;
+    }
+
+    public function replace($search, $replace)
+    {
+        array_walk($this->rawData, function (&$value) use ($search, $replace) {
+            $value = str_replace($search, $replace, $value);    
+        }); 
+
+        return $this;
+    }
+
     function fillRange($start, $end)
     {
         $numbers = new ArrayObject(range($start, $end));
