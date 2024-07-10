@@ -191,6 +191,10 @@ class Handler
             [$class, $method] = $callback;
         }
 
+        if (!isset($class)) {
+            return throw new Exception('Target class is empty');
+        }
+
         if (count(explode("\\", $class)) == 1) {
             $matchNamespace = self::getMatchedNameSpacesFromDeclaredClasses($class);
 

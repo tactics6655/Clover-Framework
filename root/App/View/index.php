@@ -17,6 +17,7 @@
 
 <section class="base-information">
   <div class="container">
+    <img src="/App/View/graphic-banner.webp">
     <div class="left">
       <h1 class="title">
           MVC 풀스택 PHP 프레임워크
@@ -32,7 +33,7 @@
         <hr class="divider">
 
         <div class="second">
-          Clover Framework의 CoreJavascript를 통하여 위치정보 확인, 오디오 플레이어, 오디오 녹음, 브라우저 알림, 웹DB, TTS, 팝업 등의 기능을 간략한 코드를 통하여 구현할 수 있습니다.
+          Clover Framework의 CoreJS를 통하여 위치정보 확인, 오디오 플레이어, 오디오 녹음, 브라우저 알림, 웹DB, TTS, 팝업 등의 기능을 간략한 코드를 통하여 구현할 수 있습니다.
         </div>
     </div>
   </div>
@@ -64,8 +65,7 @@
           의존성 주입
         </div>
 
-        <pre class="php hljs "><code>
-&lt;?xml version=&quot;1.0&quot; ?&gt;
+        <pre class="php hljs "><code>&lt;?xml version=&quot;1.0&quot; ?&gt;
 &lt;container&gt;
     &lt;services&gt;
         &lt;service key=&quot;Renderer&quot; class=&quot;Clover\Framework\Component\Renderer&quot;/&gt;
@@ -86,9 +86,9 @@
           익숙한 MVC 패턴과 Annotation을 통한 라우트 경로 설정, Middleware 같은 기능을 통하여 편리하게 어플리케이션을 제작하세요.
         </div>
         
-        <pre class="php hljs "><code>
-class IndexController extends BaseController
+        <pre class="php hljs "><code>class IndexController extends BaseController
 {
+	#[Annotation\Middleware('DefaultMiddleware')]
 	#[Annotation\Route(method: &#39;GET&#39;, pattern: &#39;/&#39;)]
 	public function index()
 	{
@@ -97,18 +97,17 @@ class IndexController extends BaseController
 }</code></pre>
 
         <div class="title">
-          CoreJavascript
+          CoreJS
         </div>
 
         <div class="description">
-          CoreJavascript에는 EventDispatcher를 통한 컴포넌트가 기본적으로 제공됩니다.
+          CoreJS에는 EventDispatcher를 통한 컴포넌트가 기본적으로 제공됩니다.
           <br/>
           <br/>
           AudioRecorder, AudioPlayer, Clipboard, FileService, GamePad, MediaPlayer, Pagination, ScreenService, NotificationService, EventService, WebsocketService, RequestService, MediaSessionService, OpenGL 등등 다양한 기능을 제공합니다.
         </div>
 
-        <pre class="php hljs "><code>
-const mediaPlayer = new MediaPlayer();
+        <pre class="php hljs "><code>const mediaPlayer = new MediaPlayer();
 mediaPlayer.setContext(document.getElementById(&quot;player&quot;));
 mediaPlayer.setEvents();
 mediaPlayer.setVisualizerStyle(&quot;circular&quot;);

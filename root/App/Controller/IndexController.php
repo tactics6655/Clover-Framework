@@ -13,9 +13,11 @@ use Clover\Classes\File\Functions;
 use Clover\Classes\HTTP\Request;
 use Clover\Framework\Component\BaseController;
 
+#[Annotation\NotFound('IndexController::notFound')]
 #[Annotation\Prefix('/')]
 class IndexController extends BaseController
 {
+	#[Annotation\Middleware('DefaultMiddleware')]
 	#[Annotation\Route(method: 'GET', pattern: '/')]
 	public function index()
 	{
@@ -29,5 +31,10 @@ class IndexController extends BaseController
 		$this->addJsFileToHead('/App/Resource/js/highlight/highlight.min.js');
 
 		return $this->render('/App/View/index.php');
+	}
+
+	public function notFound()
+	{
+		return $this->debug("404 Not Found");
 	}
 }

@@ -35,6 +35,14 @@ class Multibyte
     }
 
     /**
+     * Check if strings are valid for the specified encoding
+     */
+    public static function checkEncoding(array|string|null $value = null, string|null $encoding = null)
+    {
+        return mb_check_encoding($value, $encoding);
+    }
+
+    /**
      * Get string length
      */
     public static function length(string $string, string|null $encoding = null): int

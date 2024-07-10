@@ -89,7 +89,7 @@ class Handler
 	/**
 	 * Tells whether the file was uploaded via HTTP POST
 	 */
-	public static function isTempUploaded($name)
+	public static function isTemporaryUploaded($name)
 	{
 		return is_uploaded_file($_FILES[$name][UploadedFile::TEMPORARY_NAME]);
 	}

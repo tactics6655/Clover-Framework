@@ -50,7 +50,7 @@ class ActivationFunctions
 		return $x * (1 - $x);
 	}
 
-	public function tanh($x)
+	public function hyperbolicTangent($x)
 	{
 		if (function_exists('tanh')) {
 			return tanh($x);

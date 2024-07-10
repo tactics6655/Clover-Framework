@@ -106,6 +106,7 @@ enum PlayState {
     ON_STATUS_CHANGED = 'onstatuschanged',
     ENDED = 'ended',
     PAUSE = 'pause',
+    ABORT = 'abort',
     PLAY = 'play',
     PLAYING = 'playing',
     LOADED_METADATA = 'loadedmetadata',
@@ -119,7 +120,10 @@ enum PlayState {
     EMPTIED = 'emptied',
     SUSPEND = 'suspend',
     SEEKING = 'seeking',
-    WAITING = 'waiting'
+    WAITING = 'waiting',
+    ENCRYPTED = 'encrypted',
+    SEEKED = 'seeked',
+    TIMEUPDATE = 'timeupdate'
 }
 
 enum MimeTypes {
@@ -698,7 +702,7 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     public setPanningModel(modelName: PanningModelType = "equalpower"): void {
         if (this.pannerEffector == null) {
-            throw new Error('Effecor is not initialized');
+            throw new Error('Effector is not initialized');
         }
 
         this.pannerEffector.panningModel = modelName;
@@ -706,7 +710,7 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     public setGainValue(value: number = 1): void {
         if (this.gainEffector == null) {
-            throw new Error('Effecor is not initialized');
+            throw new Error('Effector is not initialized');
         }
 
         this.gainEffector.gain.value = value;
@@ -718,7 +722,7 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     public setDelayValue(value: number): void {
         if (this.gainEffector == null) {
-            throw new Error('Effecor is not initialized');
+            throw new Error('Effector is not initialized');
         }
 
         this.delayEffector.delayTime.value = value;
@@ -902,11 +906,63 @@ export class MediaPlayer implements MediaPlayerInterface {
         return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
     }
 
+    public getPreloadProperty(): string {
+        return this.mediaContext.preload;
+    }
+
+    public getRemotePlayback(): RemotePlayback {
+        return this.mediaContext.remote;
+    }
+
+    public getDefaultPlaybackRate(): number {
+        return this.mediaContext.defaultPlaybackRate;
+    }
+
+    public setDisableRemotePlayback(disable: boolean) {
+        this.mediaContext.disableRemotePlayback = disable;
+    }
+
+    public setDefaultPlaybackRate(): void {
+        this.setPlaybackRate(this.getDefaultPlaybackRate());
+    }
+
+    public setPlaybackRate(rate: number): void {
+        this.mediaContext.playbackRate = rate;
+    }
+
+    public setPreservesPitch(preserve: boolean): void {
+        this.mediaContext.preservesPitch = preserve;
+    }
+
+    public haveFutureData(): boolean {
+        return this.getReadyState() == this.mediaContext.HAVE_FUTURE_DATA;
+    }
+
+    public haveEnoughData(): boolean {
+        return this.getReadyState() == this.mediaContext.HAVE_ENOUGH_DATA;
+    }
+
+    public haveCurrentData(): boolean {
+        return this.getReadyState() == this.mediaContext.HAVE_CURRENT_DATA;
+    }
+
+    public haveMetaData(): boolean {
+        return this.getReadyState() == this.mediaContext.HAVE_METADATA;
+    }
+
+    public haveNothing(): boolean {
+        return this.getReadyState() == this.mediaContext.HAVE_NOTHING;
+    }
+
+    public haveLeastData(): boolean {
+        return this.getReadyState() > this.mediaContext.HAVE_CURRENT_DATA;
+    }
+
     public isPlayed(): boolean {
         return this.mediaContext
             && !this.isPaused()
             && !this.isEnded()
-            && this.getReadyState() > 2;
+            && this.haveLeastData();
     }
 
     public isPlaying(): boolean {
@@ -914,7 +970,7 @@ export class MediaPlayer implements MediaPlayerInterface {
             && this.getCurrentTime() > 0
             && !this.isPaused()
             && !this.isEnded()
-            && this.getReadyState() > 2;
+            && this.haveLeastData();
     }
 
     public getReadyState(): number {
@@ -969,7 +1025,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         return this.mediaContext.duration;
     }
 
-    public getDuration(): any {
+    public getDuration(): Promise<unknown> | void {
         return new Promise((resolve) => {
             const self = this;
 
@@ -1066,6 +1122,33 @@ export class MediaPlayer implements MediaPlayerInterface {
 
         this.mediaContext.removeEventListener(PlayState.SEEKING, onSeekingEvent);
         this.mediaContext.addEventListener(PlayState.SEEKING, onSeekingEvent);
+        
+        const onEncryptedEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.ENCRYPTED, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.ENCRYPTED);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.ENCRYPTED, onEncryptedEvent);
+        this.mediaContext.addEventListener(PlayState.ENCRYPTED, onEncryptedEvent);
+        
+        const onTimeUpdateEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.TIMEUPDATE, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.TIMEUPDATE);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.TIMEUPDATE, onTimeUpdateEvent);
+        this.mediaContext.addEventListener(PlayState.TIMEUPDATE, onTimeUpdateEvent);
+
+        const onSeekedEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.SEEKED, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.SEEKED);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.SEEKED, onSeekedEvent);
+        this.mediaContext.addEventListener(PlayState.SEEKED, onSeekedEvent);
 
         const onWaitingEvent = function (event: Event) {
             self.eventListener.dispatch(PlayState.WAITING, event);
@@ -1122,6 +1205,15 @@ export class MediaPlayer implements MediaPlayerInterface {
         this.mediaContext.removeEventListener(PlayState.PLAY, onPlayEvent);
         this.mediaContext.addEventListener(PlayState.PLAY, onPlayEvent);
 
+        const onAbortEvent = function (event: Event) {
+            self.eventListener.dispatch(PlayState.ABORT, event);
+
+            self.eventListener.dispatch(PlayState.ON_STATUS_CHANGED, PlayState.ABORT);
+        };
+
+        this.mediaContext.removeEventListener(PlayState.ABORT, onAbortEvent);
+        this.mediaContext.addEventListener(PlayState.ABORT, onAbortEvent);
+
         const onPauseEvent = function (event: Event) {
             self.eventListener.dispatch(PlayState.PAUSE, event);
 
@@ -1171,13 +1263,13 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     private getNetworkStateConstant(): string {
         switch (this.getNetworkState()) {
-            case 1:
+            case this.mediaContext.NETWORK_EMPTY:
                 return `NETWORK_EMPTY`;
-            case 2:
+            case this.mediaContext.NETWORK_IDLE:
                 return `NETWORK_IDLE`;
-            case 3:
+            case this.mediaContext.NETWORK_LOADING:
                 return `NETWORK_LOADING`;
-            case 4:
+            case this.mediaContext.NETWORK_NO_SOURCE:
                 return `NETWORK_NO_SOURCE`;
             default:
                 return `UNKNOWN`;
@@ -1231,11 +1323,11 @@ export class MediaPlayer implements MediaPlayerInterface {
         } catch (error) { }
     }
 
-    public setVisualizerStyle(style: VisualizerStyle) {
+    public setVisualizerStyle(style: VisualizerStyle): void {
         this.spectrumVisualizerStyle = style;
     }
 
-    public setVisualizerLineWidth(width) {
+    public setVisualizerLineWidth(width: number): void {
         this.visualizerLineWidth = width;
     }
 
@@ -1250,7 +1342,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         });
     }
 
-    private triggerFrequencyData() {
+    private triggerFrequencyData(): void | boolean {
         if (this.spectrumAnalyser == null) {
             return false;
         }
@@ -1296,7 +1388,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         this.parseFrequencyTimeout = timeout;
     }
 
-    public calculateRMS(data) {
+    public calculateRMS(data: Array<number>) {
         let sum = 0;
 
         for (let i = 0; i < data.length; i++) {
@@ -1306,7 +1398,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         return Math.sqrt(sum / data.length);
     }
 
-    public calculateFlux(data) {
+    public calculateFlux(data: Array<number>) {
         let flux = 0;
 
         for (let i = 1; i < data.length; i++) {
@@ -1317,7 +1409,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         return Math.sqrt(flux / data.length);
     }
 
-    public calculateCentroid(data) {
+    public calculateCentroid(data: Array<number>): number {
         let sum = 0;
         let weightedSum = 0;
     

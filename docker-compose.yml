@@ -16,7 +16,7 @@ services:
             - "3308:3306"
         volumes:
             - ./var_lib_mysql/:/var/lib/mysql
-            - "./my.ini:/etc/mysql/my.ini"
+            - "./mysql.ini:/etc/mysql/my.ini"
         env_file: .env
         networks:
             - my_network
