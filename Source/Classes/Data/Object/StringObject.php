@@ -8,6 +8,7 @@ use Clover\Classes\Data\BaseObject as BaseObject;
 use Clover\Classes\Reflection\Handler as ReflectionHandler;
 use Clover\Classes\Data\Multibyte as Multibyte;
 use Clover\Enumeration\Encoding;
+use Clover\Exception\Argument\ArgumentEmptyException;
 
 use function mb_strcut;
 
@@ -171,6 +172,8 @@ class StringObject extends BaseObject
      * Split a string by a string
      * 
      * @param string $separator
+     * 
+     * @throws ArgumentEmptyException 
      * 
      * @return ArrayObject
      */
@@ -415,15 +418,28 @@ class StringObject extends BaseObject
      * @param string $string
      * @param &$matches
      * 
-     * @return StringObject
+     * @return int|false
      */
-    public function match(string $string, &$matches): self
+    public function match(string $string, &$matches): int|false
     {
         $data = preg_match($string, $this->getRawData(), $matches);
 
-        $this->setRawData($data);
+        return $data;
+    }
 
-        return $this;
+    /**
+     * Perform a global regular expression match
+     * 
+     * @param string $string
+     * @param &$matches
+     * 
+     * @return int|false
+     */
+    public function matchAll(string $string, &$matches): int|false
+    {
+        $data = preg_match_all($string, $this->getRawData(), $matches);
+
+        return $data;
     }
 
     /**

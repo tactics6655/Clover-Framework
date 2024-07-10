@@ -25,7 +25,7 @@ class ArrayResult
 
 	public function getSingleton(array $result)
 	{
-		return new \static($result);
+		return new static($result);
 	}
 
 	public function hasResult()

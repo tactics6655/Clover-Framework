@@ -303,7 +303,7 @@ class Visualizer {
                 break;
             case VisualizerStyle.WAVEFORM:
                 for (let frequency of frequencies) {
-                    x = (current);
+                    x = (current) * lineWidth;
                     y = samples - (frequency / 128) * (samples / 2);
                     width = canvasContext.lineWidth;
                     height = ((canvas.height / 2) - y) * 2;
@@ -370,6 +370,11 @@ class Visualizer {
                     const endX = centerX + Math.cos(rads * current) * (radius + (frequency * 0.2));
                     const endY = centerY + Math.sin(rads * current) * (radius + (frequency * 0.2));
 
+                    const gradient = canvasContext.createLinearGradient(0, 0, 170, 0);
+                    gradient.addColorStop(0, "cyan");
+                    gradient.addColorStop(1, "green");
+                    canvasContext.fillStyle = gradient;
+
                     canvasContext.strokeStyle = this.spectrumFillColor;
                     canvasContext.lineWidth = lineWidth;
                     canvasContext.lineCap = "round";
@@ -397,15 +402,15 @@ class Visualizer {
                     x = 0;
                     y = radius - (frequency / 12);
                     width = 2;
-                    height = frequency / 3 + minumiumHeight;
-
-                    const gradient = canvasContext.createLinearGradient(0, 0, 0, 300);
-                    gradient.addColorStop(0, this.spectrumFillColor);
+                    height = frequency / 6 + minumiumHeight;
 
                     canvasContext.save();
-                    canvasContext.fillStyle = gradient;
                     canvasContext.translate(halfWidth + 7, halfHeight + 7);
                     canvasContext.rotate(alfa - degree);
+                    const gradient = canvasContext.createLinearGradient(0, 0, 170, 0);
+                    gradient.addColorStop(0, "cyan");
+                    gradient.addColorStop(1, "green");
+                    canvasContext.fillStyle = gradient;
                     canvasContext.fillRect(x, y, width, height);
                     canvasContext.restore();
 

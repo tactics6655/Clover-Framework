@@ -23,6 +23,7 @@ class StackableRequestHandler extends Stack
 
                 return ReflectionHandler::callMethod($middleware, $next);
             };
+
             parent::$stock[] = $closure;
         }
     }

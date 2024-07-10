@@ -88,9 +88,11 @@ class Handler
         $reflectionClass = new ReflectionClass($class);
 
         foreach ($reflectionClass->getAttributes($attributeName) as $attribute) {
-            if ($attribute->getName() === $attributeName) {
-                return true;
+            if ($attribute->getName() !== $attributeName) {
+                continue;
             }
+
+            return true;
         }
 
         return false;
@@ -154,9 +156,13 @@ class Handler
     /**
      * Returns an array of all declared traits
      */
-    public static function getDeclaredTraits(): array
+    public static function getDeclaredTraits(): array|null
     {
-        return get_declared_traits();
+        if (function_exists('get_declared_traits')) {
+            return get_declared_traits();
+        }
+
+        return null;
     }
 
     /**
@@ -231,15 +237,30 @@ class Handler
         return null;
     }
 
+    public static function isTraitExists(string $trait, bool $autoload = true)
+    {
+        return trait_exists($trait, $autoload);
+    }
+
     public static function getPropertyDeclaringClass(ReflectionProperty $property): ReflectionClass
     {
         $name = $property->name;
         $declaringClass = $property->getDeclaringClass();
 
         foreach ($declaringClass->getTraits() as $trait) {
-            if (trait_exists($trait->getName()) && $trait->hasProperty($name) && $trait->getProperty($name)->getDocComment() === $property->getDocComment()) {
-                return self::getPropertyDeclaringClass($trait->getProperty($name));
+            if (!self::isTraitExists($trait->getName())) {
+                continue;
             }
+
+            if (!$trait->hasProperty($name)) {
+                continue;
+            }
+
+            if ($trait->getProperty($name)->getDocComment() !== $property->getDocComment()) {
+                continue;
+            }
+
+            return self::getPropertyDeclaringClass($trait->getProperty($name));
         }
 
         return $declaringClass;
@@ -529,7 +550,7 @@ class Handler
      * Call a callback with an array of parameters
      * 
      * @param callable $method
-     * @param array $arguments = []
+     * @param ArrayObject|array $arguments = []
      * 
      * @return mixed
      */

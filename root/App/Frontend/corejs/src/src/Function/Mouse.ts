@@ -109,7 +109,7 @@ var A;
 		
 		isLocked: function (id) {
 			var canvas = document.getElementById(id);
-			if(document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
+			if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
 				return true;
 			} else {
 				return false;

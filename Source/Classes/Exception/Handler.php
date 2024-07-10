@@ -15,7 +15,7 @@ class Handler
 			} else {
 				return false;
 			}
-		});
+		}, E_ERROR);
 	}
 
 	public static function setErrorHandler($callback, $error_level = E_ALL)

@@ -7,6 +7,7 @@ namespace Clover\Classes\HTTP;
 use Clover\Implement\RequestInterface;
 use Clover\Classes\Data\URLObject as URLObject;
 use Clover\Classes\Data\StringObject as StringObject;
+use Clover\Classes\Web\TheOnionRouting;
 use Clover\Enumeration\HTTPRequestMethod;
 use Clover\Enumeration\ServerIndices;
 use Clover\Enumeration\HTTPStatusCode;
@@ -184,7 +185,9 @@ class Request implements RequestInterface
 
 	public static function getUrlPathSegments($preset = null)
 	{
-		return explode('/', trim($preset ?? self::getUrlPath(), '/'));
+		$url = new StringObject($preset ?? self::getUrlPath());
+
+		return $url->trim("/")->split("/");
 	}
 
 	public static function getUrlPath(): string
@@ -361,8 +364,10 @@ class Request implements RequestInterface
 
 	/**
 	 * Name and revision of the information protocol via which the page was requested
+	 * 
+	 * @return string
 	 */
-	public static function getServerProtocol()
+	public static function getServerProtocol(): string
 	{
 		return self::getServerArguments(ServerIndices::SERVER_PROTOCOL);
 	}
@@ -372,7 +377,7 @@ class Request implements RequestInterface
 	 *
 	 * @return boolean
 	 */
-	public static function isForwardedSecure()
+	public static function isForwardedSecure(): bool
 	{
 		$forwarededProtocol = self::getHTTPXForwardedProtocol();
 
@@ -500,6 +505,11 @@ class Request implements RequestInterface
 		return new URLObject($remoteAddress);
 	}
 
+	public static function isTorExitNode()
+	{
+		return TheOnionRouting::isExitNode();
+	}
+
 	public static function parseAcceptLanguage(?string $field = null)
 	{
 		$field = $field ?? self::getAcceptLanguage();
@@ -598,7 +608,7 @@ class Request implements RequestInterface
 	public static function getExtractedPostParameters()
 	{
 		if (self::getMethod() === HTTPRequestMethod::POST) {
-			$extracted = array();
+			$extracted = [];
 
 			foreach ($_POST as $key => $val) {
 				$extracted[$key] = $val;

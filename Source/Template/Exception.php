@@ -22,7 +22,8 @@
                         <a class="annotation"><?= $trace->getAnnotation() ?></a>
                     <? endif; ?>
                     <div class="long_wrap">
-                        <?= $trace->hasFile() ? sprintf('%s', $trace->getFile()) : $trace->getClass() ?><? if ($trace->hasClass() && $trace->hasLine()) : ?>:<a class="line"><?= $trace->getLine() ?></a><? endif; ?>
+                        <?= $trace->hasFile() ? sprintf('%s', $trace->getFile()) : $trace->getClass() ?><? if ($trace->hasClass() && $trace->hasLine()) : ?>:
+                        <a class="line"><?= $trace->getLine() ?></a><? endif; ?>
                     </div>
                     <? if ($trace->hasCode()) : ?>
                         <pre class="code"><?= $trace->getCode() ?></pre>
@@ -84,9 +85,9 @@
         font-size: 11px;
         line-height: 11px;
         border-bottom: 1px solid #e4e4e4;
-        padding: 12px;
-        background-color: #353535;
-        background-image: linear-gradient(147deg, #000000, #070707 25%, transparent 25%, transparent);
+        padding: 10px;
+        background-color: #6893b8;
+        /*background-image: linear-gradient(132deg, #0f4573, #6893b8 16%, transparent 11%, transparent);*/
         background-repeat: no-repeat;
         border-top: 4px solid #4384ae;
         background-size: 168px 38px;
@@ -101,6 +102,7 @@
         line-height: 11px;
         font-weight: 500;
         color: #fff;
+        text-shadow: 1px 1px 3px black;
     }
 
     #debugger>#trace>.item>.short_wrap>.return_type {
@@ -205,12 +207,12 @@
         background-size: 8px 8px;
     }
 
-    .highlight {
+    a.highlight {
         background-color: #f3ff86;
-        display: -webkit-box;
         color: red;
         font-weight: bold;
         padding: 3px 0px;
+        display: inline-block;
         border-radius: 5px;
         border: 1px dashed #f07979;
     }

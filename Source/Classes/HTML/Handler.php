@@ -6,7 +6,7 @@ namespace Clover\Classes\HTML;
 
 class Handler
 {
-	public static function getInputTag($type, $name, $value, $list = array())
+	public static function getInputTag($type, $name, $value, $list = [])
 	{
 		$html = "";
 

@@ -10,82 +10,85 @@ export class JSONService {
         return false;
     }
     
-    public static autoDecode (str) {
-        if (str === null) {
+    public static autoDecode (value: any) {
+        if (value === null) {
             return 'null';
         }
     
         if (!this.isSupported ()) {
-            return str;
+            return value;
         }
 
-        if (this.isJSON(str)) {
-            return this.decode(str);
+        if (this.isJSON(value)) {
+            return this.decode(value);
         }
 
-        const evalJson = this.SecureEvalJSON(str);
+        const evalJson = this.secureEval(value);
+        
         if (!evalJson) {
-            return str;
+            return value;
         }
         
         return evalJson;
     }
     
-    public static SecureEvalJSON (str) {
-        if (!str) {
+    public static secureEval (value: string) {
+        if (!value) {
             return false;
         }
 
-        var _secure =
-            str.replace( /\\["\\\/bfnrtu]/g, '@' )
+        const secured =
+            value.replace( /\\["\\\/bfnrtu]/g, '@' )
             .replace( /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
             .replace( /(?:^|:|,)(?:\s*\[)+/g, '');
             
-        if (/^[\],:{}\s]*$/.test(_secure)) {
-            return eval('(' + str + ')');
+        if (/^[\],:{}\s]*$/.test(secured)) {
+            return eval('(' + value + ')');
         } 
         
         return false;
     }
     
-    public static strToJSON (str) {
+    public static fromString (str) {
         return JSON.parse(eval(str)[0]);
     }
     
-    public static ConverToStr (obj) {
+    public static toString (obj) {
         var result = "";
         
         if (typeof JSON != "undefined") {
             result = this.stringify(obj);
         } else {
-            var arr = [];
+            let pair = [];
+
             for (var i in obj) {
-                arr.push("'" + i + "':'" + obj[i] + "'");
+                pair.push("'" + i + "':'" + obj[i] + "'");
             }
-            result = "{" + arr.join(",") + "}";
+
+            result = "{" + pair.join(",") + "}";
         }
         
         return result;
     }
     
-    public static isJSON (m) {
-        if (ValidatorService.isObject(m)) {
+    public static isJSON (value: any) {
+        if (ValidatorService.isObject(value)) {
             try {
-                m = JSON.stringify(m);
+                value = JSON.stringify(value);
             } catch (err) {
                 return false;
             }
         }
         
-        if (ValidatorService.isStr(m)) {
+        if (ValidatorService.isStr(value)) {
             try {
-                m = JSON.parse(m);
+                value = JSON.parse(value);
             } catch (err) {
                 return false;
             }
         }
         
-        if (!ValidatorService.isObject(m)) {
+        if (!ValidatorService.isObject(value)) {
             return false;
         }
         

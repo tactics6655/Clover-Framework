@@ -28,9 +28,9 @@ class File extends Header
 
 	public static function responseWithCharset($application, $characterSet)
 	{
-		$characterSet = array("charset" => $characterSet);
+		$characterSet = ['charset' => $characterSet];
 
-		self::responseWithKeyAndArray("Content-Type:" . $application, $characterSet);
+		self::responseWithKeyAndArray('Content-Type:' . $application, $characterSet);
 	}
 
 	public static function responseWithOption($application, Encoding $characterSet)

@@ -220,7 +220,6 @@ class Session
 	 */
 	public static function destroy()
 	{
-		$_SESSION = [];
 		session_destroy();
 	}
 
@@ -230,29 +229,16 @@ class Session
 	 * @param string  $key
 	 * @param string  $value
 	 * @param boolean $overwrite
-	 * @param boolean $valid
 	 *
 	 * @return boolean
 	 */
-	public static function set($key, $value, $overwrite = true, $valid = false): bool
+	public static function set($key, $value, $overwrite = true): bool
 	{
-		$setSessionData = function ($key, $value) {
-			$_SESSION[$key] = $value;
-		};
-
-		if (isset($_SESSION[$key])) {
-			if ($overwrite === true) {
-				$setSessionData($key, $value);
-			} else {
-				return false;
-			}
-		} else {
-			$setSessionData($key, $value);
-		}
-
-		if ($valid === true && $_SESSION[$key] !== $value) {
+		if (isset($_SESSION[$key]) && !$overwrite) {
 			return false;
-		}
+		} 
+
+		$_SESSION[$key] = $value;
 
 		return true;
 	}

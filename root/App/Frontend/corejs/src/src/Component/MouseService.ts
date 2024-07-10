@@ -46,16 +46,18 @@ export class MouseService {
     }
     
     isLocked (id) {
-        var canvas = document.getElementById(id);
-        if(document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
+        const canvas = document.getElementById(id);
+
+        if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
             return true;
-        } else {
-            return false;
-        }
+        } 
+
+        return false;
     }
     
     requestPointerLock (id) {
-        var canvas = document.getElementById(id);
+        const canvas = document.getElementById(id);
+
         canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
         canvas.requestPointerLock();
     }

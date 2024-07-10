@@ -11,6 +11,7 @@ use Clover\Classes\Directory\Handler as DirectoryHandler;
 use Clover\Classes\File\Handler as FileHandler;
 use Clover\Classes\File\Functions;
 use Clover\Classes\HTTP\Request;
+use Clover\Classes\System\Output;
 use Clover\Framework\Component\BaseController;
 
 #[Annotation\NotFound('IndexController::notFound')]

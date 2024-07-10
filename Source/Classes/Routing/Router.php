@@ -11,14 +11,11 @@ use Clover\Classes\HTTP\Request as HTTPRequest;
 use Clover\Classes\File\Functions as FileFunctions;
 use Clover\Classes\Reflection\Handler as ReflectionHandler;
 use Clover\Classes\Directory\Handler as DirectoryHandler;
-
 use Clover\Annotation\Route as RouteAnnotation;
-
 use Clover\Implement\EventDispatcherInterface;
-
 use Clover\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
-
 use Closure;
+use Clover\Classes\Data\ArrayObject;
 
 class Router
 {
@@ -180,16 +177,16 @@ class Router
 	{
 		$classNames = FileFunctions::getClassNames($path);
 
-		/** @var ?RouteAnnotation[] $annotationList */
-		$annotationList = [];
+		/** @var ?RouteAnnotation[] $annotations */
+		$annotations = [];
 
 		/** @var string[] $classNames */
 		foreach ($classNames as $className) {
-			$annotationList = array_merge($annotationList, $this->annotationReader->read($className));
+			$annotations = array_merge($annotations, $this->annotationReader->read($className));
 		}
 
 		/** @var RouteAnnotation $annotation */
-		foreach ($annotationList as $annotation) {
+		foreach ($annotations as $annotation) {
 			$host = $annotation->host ?? "*";
 			$method = $annotation->method ?? "";
 			$pattern = $annotation->pattern ?? "";
@@ -290,6 +287,39 @@ class Router
 	}
 
 	/**
+	 * Gets an routes
+	 * 
+	 * @param string $method
+	 * 
+	 * @return Route|array
+	 */
+	private function getRoutes(): array
+	{
+		return $this->routes;
+	}
+
+	public function map(): ArrayObject
+	{
+		$routeRules = new ArrayObject();
+
+		/** @var Route[Route[]] $routes */
+		$routeMap = $this->getRoutes();
+
+		foreach ($routeMap as $method => $routes) {
+			/** @var Route[] $routes */
+			foreach ($routes as $route) {
+				$pattern = $route->getPattern();
+
+				$routeRules->add([
+					'pattern' => $pattern
+				]);
+			}
+		}
+
+		return $routeRules;
+	}
+
+	/**
 	 * Handle a matched callback
 	 * 
 	 * @return mixed
@@ -316,7 +346,7 @@ class Router
 				continue;
 			}
 
-			/** Pass middlewares when parent middelware are exists */
+			/** Pass middlewares when parent middleware are exists */
 			if (isset($this->middlewares)) {
 				$route->setMiddlewares($this->middlewares);
 			}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Clover\Classes\Data;
 
+use Clover\Classes\Regex;
 use Clover\Exception\MemoryAllocatedException;
 
 use Clover\Classes\Data\StringHandler;
@@ -88,13 +89,13 @@ class HTMLHandler extends StringHandler
 	public static function filterVariable(mixed $string, $type)
 	{
 		switch ($type) {
-			case (preg_match('/^MaxLength\((.*\))$/', $type, $matches) ? true : false):
+			case (preg_match('/^MaxLength\((.*\))$/', $type, $matches)):
 				if (strlen($string) > $matches[1]) {
 					$string = false;
 				}
 
 				break;
-			case (preg_match('/^Bracket\((.*\))$/', $type, $matches) ? true : false):
+			case (preg_match('/^Bracket\((.*\))$/', $type, $matches)):
 				if (isset($matches[1])) {
 					$regex = $matches[1];
 					if (preg_match('/^[A-Za-z0-9]+$/i', $regex, $matches)) {
@@ -129,7 +130,7 @@ class HTMLHandler extends StringHandler
 
 				break;
 			case 'PhoneNumber':
-				if (preg_match('/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/g', $string, $matches)) {
+				if (preg_match('/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/', $string, $matches)) {
 					if (isset($matches[1])) {
 						$string = $matches[1];
 					} else {
@@ -141,7 +142,7 @@ class HTMLHandler extends StringHandler
 
 				break;
 			case 'URL':
-				if (preg_match("/^(http\:\/\/)*[.a-zA-Z0-9-]+\.[a-zA-Z]+$/g", $string, $matches)) {
+				if (preg_match("/^(http\:\/\/)*[.a-zA-Z0-9-]+\.[a-zA-Z]+$/", $string, $matches)) {
 					if (isset($matches[1])) {
 						$string = $matches[1];
 					} else {
@@ -153,7 +154,7 @@ class HTMLHandler extends StringHandler
 
 				break;
 			case 'Email':
-				if (preg_match("/^[^@]+@[._a-zA-Z0-9-]+\.[a-zA-Z]+$/g", $string, $matches)) {
+				if (preg_match("/^[^@]+@[._a-zA-Z0-9-]+\.[a-zA-Z]+$/", $string, $matches)) {
 					if (isset($matches[1])) {
 						$string = $matches[1];
 					} else {
@@ -165,7 +166,7 @@ class HTMLHandler extends StringHandler
 
 				break;
 			case 'URLParameter':
-				if (preg_match('/([^=&?]+)=([^&#]*)/g', $string, $matches)) {
+				if (preg_match('/([^=&?]+)=([^&#]*)/', $string, $matches)) {
 					if (count($matches) === 1) {
 						if (isset($matches[1])) {
 							$string = $matches[1];
@@ -236,7 +237,7 @@ class HTMLHandler extends StringHandler
 				$string = strip_tags($string);
 				break;
 			case 'JSON':
-				if (!$this->isJson($string)) {
+				if (!JSONHandler::isJSON($string)) {
 					$string = false;
 				}
 
@@ -303,18 +304,18 @@ class HTMLHandler extends StringHandler
 		return htmlspecialchars($string, ENT_COMPAT | ENT_HTML401, 'UTF-8', false);
 	}
 
-	public function unhtmlSpecialChars($string)
+	public static function unhtmlSpecialChars($string)
 	{
-		$entity = array('&quot;', '&#039;', '&#39;', '&lt;', '&gt;', '&amp;');
-		$symbol = array('"', "'", "'", '<', '>', '&');
+		$entity = ['&quot;', '&#039;', '&#39;', '&lt;', '&gt;', '&amp;'];
+		$symbol = ['"', "'", "'", '<', '>', '&'];
 		return str_replace($entity, $symbol, $string);
 	}
 
-	public function autolink($string, $file = '')
+	public static function autolink($string)
 	{
 		$regexp = array(
 			'/[a-z\d\-_.+]+@([a-z\d\-]+\.)+[a-z]{2,7}/i',
-			'/(?<!")(https?|ftp):\/\/([a-z\d\-]+\.)+[a-z]{2,7}([\w!#$%()*+,\-.\/:;=?@~\[\]]|&amp|&#039|&#39)*/'
+			'/(?<!")(https?|ftp):\/\/([a-z\d\-]+\.)+[a-z]{2,7}([\w!#$%()*+,\-.\/:;=?&@~\[\]]|&amp|&#039|&#39)*/'
 		);
 
 		$anchor = array(
@@ -325,7 +326,7 @@ class HTMLHandler extends StringHandler
 		return preg_replace($regexp, $anchor, $string);
 	}
 
-	public function replace($match)
+	public static function replace($match)
 	{
 		list($target, $name, $attr) = $match;
 		$name = strToLower($name);
@@ -355,7 +356,7 @@ class HTMLHandler extends StringHandler
 		return "<$name$attr>$value</$name>";
 	}
 
-	public function entityToTag($string, $names)
+	public static function entityToTag($string, $names)
 	{
 		$attr = ' ([a-z]+)=&quot;([\w!#$%()*+,\-.\/:;=?@~\[\] ]|&amp|&#039|&#39)+&quot;';
 		$name_list = explode(',', $names);
@@ -411,7 +412,7 @@ class HTMLHandler extends StringHandler
 		return preg_replace('/\r\n?|\n/', '<br />', $string);
 	}
 
-	public function stripTags($string, $tags = '')
+	public static function stripTags($string, $tags = '')
 	{
 		if ($tags === '') {
 			return strip_tags($string);

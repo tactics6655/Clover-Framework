@@ -166,6 +166,9 @@ class Functions
 	 *
 	 * @param string $fileName
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return string
 	 */
 	public static function getLastModifiedTime(string $fileName): bool|int
@@ -234,6 +237,8 @@ class Functions
 	 * Gets whether the file is locked.
 	 *
 	 * @param string $filePath
+	 * 
+	 * @throws TargetIsNotFileException
 	 *
 	 * @return bool
 	 */
@@ -299,6 +304,8 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws InvalidFileHandler
+	 * 
 	 * @return bool
 	 */
 	public static function unlock($fileHandler): void
@@ -316,6 +323,8 @@ class Functions
 	 * @param string $filePath
 	 * @param int    $mode
 	 *
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return bool
 	 */
 	public static function setPermission(string $filePath, int $mode): bool
@@ -349,6 +358,8 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws InvalidFileHandler
+	 * 
 	 * @return bool|void
 	 */
 	public static function lock($fileHandler, $mode = LockMode::ACQUIRE_SHARED_LOCK)
@@ -377,6 +388,8 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return bool
 	 */
 	public static function isEmpty(string $filePath): bool
@@ -428,6 +441,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return void
 	 */
 	public static function requireOnce(string $filePath): void
@@ -450,6 +466,8 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * 
 	 * @return mixed
 	 */
 	public static function getLastAccessDate($filePath)
@@ -476,6 +494,8 @@ class Functions
 	 * @param string $filePath
 	 * @param string $content
 	 *
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return bool
 	 */
 	public static function appendContent(string $filePath, string $content = null, bool $stream = false, bool $overwrite = true): bool
@@ -511,6 +531,10 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * @throws StupidIdeaException
+	 * 
 	 * @return string
 	 */
 	public static function getType(string $filePath): string
@@ -567,7 +591,7 @@ class Functions
 	 */
 	public static function getFileEncoding(string $filePath): string
 	{
-		$executeResult = array();
+		$executeResult = [];
 		exec('file -i ' . $filePath, $executeResult);
 
 		if (isset($executeResult[0])) {
@@ -583,6 +607,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return boolean
 	 */
 	public static function isCorrectInode($filePath): bool
@@ -609,6 +636,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return mixed
 	 */
 	public static function getInode(string $filePath)
@@ -662,6 +692,8 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FunctionIsNotExistsException
+	 * 
 	 * @return string
 	 */
 	public static function getMIMEContentTypeFromAlaMimetypeExtension($filePath)
@@ -684,6 +716,10 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FunctionIsNotExistsException
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return string
 	 */
 	public static function getMIMEContentTypeFromMagicMIME($filePath)
@@ -710,6 +746,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return bool
 	 */
 	public static function parseINI(string $filePath)
@@ -732,6 +771,8 @@ class Functions
 	 *
 	 * @param string|resource $fileHandler
 	 *
+	 * @throws InvalidFileHandler
+	 * 
 	 * @return bool
 	 */
 	public static function getPointerLocation($fileHandler)
@@ -781,6 +822,8 @@ class Functions
 	 * @param string $filePath
 	 * @param string $destination
 	 *
+	 * @throws FileIsNotExistsException
+	 * 
 	 * @return bool
 	 */
 	public static function createCache(string $filePath, string $destination)
@@ -809,6 +852,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return bool
 	 */
 	public static function isReadable(string $filePath): bool
@@ -834,6 +880,8 @@ class Functions
 	 * @param string $filePath
 	 * @param string $containDirectory
 	 *
+	 * @throws StupidIdeaException
+	 * 
 	 * @return bool
 	 */
 	public static function isFile(string $filePath, string $containDirectory = null): bool
@@ -891,6 +939,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return int
 	 */
 	public static function getSize(string $filePath, bool $humanReadable = false, ?FileSizeUnit $type = NULL): int
@@ -995,6 +1046,9 @@ class Functions
 	 * @param string $filePath
 	 * @param ArrayObject|array $data
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return string
 	 */
 	public static function getInterpretedContent(string $filePath, ArrayObject|array $data = []): string
@@ -1013,19 +1067,13 @@ class Functions
 
 		extract(($data instanceof ArrayObject ? $data->getRawData() : $data) ?? []);
 
-		if (isset($filePath)) {
-			if (file_exists($filePath)) {
-				@include $filePath;
-			} else {
-				throw new FileIsNotExistsException(FileHandlerMessage::getFileIsNotExistsMessage($filePath));
-			}
-		}
+		@include $filePath;
 
-		$return = ob_get_contents();
+		$buffer = ob_get_contents();
 
 		ob_end_clean();
 
-		return $return;
+		return $buffer;
 	}
 
 
@@ -1035,6 +1083,9 @@ class Functions
 	 * @param string $filePath
 	 * @param string $destination
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return string
 	 */
 	public static function move(string $source, string $destination): bool
@@ -1170,6 +1221,8 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * 
 	 * @return bool
 	 */
 	public static function isExecutable($filePath)
@@ -1220,6 +1273,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return bool
 	 */
 	public static function delete(string $filePath): bool
@@ -1243,6 +1299,8 @@ class Functions
 	 * @param string $filePath
 	 * @param string $destination
 	 *
+	 * @throws FileIsNotExistsException
+	 * 
 	 * @return bool
 	 */
 	public static function copy(string $filePath, string $destination): bool
@@ -1568,6 +1626,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return string
 	 */
 	public static function getContent(string $filePath): string
@@ -1595,6 +1656,9 @@ class Functions
 	 *
 	 * @param string $filePath
 	 *
+	 * @throws FileIsNotExistsException
+	 * @throws TargetIsNotFileException
+	 * 
 	 * @return string
 	 */
 	public static function download(string $filePath, int $bufferSize = 0): bool
@@ -1614,12 +1678,10 @@ class Functions
 			return false;
 		}
 
-		if ($fileHandler) {
-			while (!feof($fileHandler)) {
-				print(@fread($fileHandler, $bufferSize > 0 ? $bufferSize : (1024 * 8)));
-				ob_flush();
-				flush();
-			}
+		while (!feof($fileHandler)) {
+			print(@fread($fileHandler, $bufferSize > 0 ? $bufferSize : (1024 * 8)));
+			ob_flush();
+			flush();
 		}
 
 		fclose($fileHandler);
@@ -1636,21 +1698,21 @@ class Functions
 	 */
 	public static function getExtension(string $filePath): string
 	{
-		$return = null;
+		$extension = null;
 
 		$filePath = self::convertToNomalizePath($filePath);
 
 		if (function_exists("pathinfo")) {
-			$return = self::getExtensionByFilePath($filePath);
+			$extension = self::getExtensionByFilePath($filePath);
 		} else {
 			$dotExists = strrchr($filePath, '.');
 
 			if ($dotExists !== false) {
-				$return = substr($dotExists, 1);
+				$extension = substr($dotExists, 1);
 			}
 		}
 
-		return $return;
+		return $extension;
 	}
 
 	/**

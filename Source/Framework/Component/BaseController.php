@@ -19,7 +19,7 @@ class BaseController
         $this->container = $container;
     }
 
-    public function debug($body, $resource = array())
+    public function debug($body, $resource = [])
     {
         return new Response('<div style="white-space: break-spaces;font-size: 11px;">' . print_r($body, true) . '</div>', $resource);
     }

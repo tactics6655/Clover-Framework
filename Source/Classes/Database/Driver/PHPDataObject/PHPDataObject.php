@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Clover\Classes\Database\Driver;
 
+use Clover\Classes\Data\ArrayObject;
 use PDO;
 use Exception;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Clover\Classes\Routing;
 
+use Clover\Classes\Data\ArrayObject as ArrayObject;
 use Clover\Classes\Reflection\Handler as ReflectionHandler;
 use Clover\Implement\MiddlewareInterface;
 use Clover\Classes\Data\StringObject;
@@ -11,6 +12,7 @@ use Clover\Classes\Routing\RouteExecutor;
 use Clover\Classes\DependencyInjection\Container;
 use Clover\Classes\Routing\StackableRequestHandler;
 use Clover\Enumeration\Regex;
+use Clover\Classes\Regex as Regexr;
 
 use Closure;
 
@@ -61,12 +63,12 @@ class Route
      * 
      * @return void
      */
-    public function setMiddlewares($middleware)
+    public function setMiddlewares($middleware): void
     {
         $this->middlewares = $middleware ?? [];
     }
 
-    public function hasMiddleware()
+    public function hasMiddleware(): bool
     {
         return count($this->middlewares) > 0;
     }
@@ -78,7 +80,7 @@ class Route
      * 
      * @return void
      */
-    public function setNotFoundHandler(?Closure $notFoundHandler)
+    public function setNotFoundHandler(?Closure $notFoundHandler): void
     {
         $this->notFoundHandler = $notFoundHandler;
     }
@@ -100,7 +102,7 @@ class Route
      * 
      * @return void
      */
-    public function setContentType($contentType)
+    public function setContentType($contentType): void
     {
         $this->contentType = $contentType;
     }
@@ -110,7 +112,7 @@ class Route
      * 
      * @return string
      */
-    private function getContentType(): string
+    public function getContentType(): string
     {
         return $this->contentType;
     }
@@ -122,7 +124,7 @@ class Route
      * 
      * @return void
      */
-    public function setHost($host)
+    public function setHost($host): void
     {
         $this->host = $host;
     }
@@ -132,7 +134,7 @@ class Route
      * 
      * @return string
      */
-    private function getHost(): string
+    public function getHost(): string
     {
         return $this->host;
     }
@@ -144,7 +146,7 @@ class Route
      * 
      * @return void
      */
-    public function setCallback(Closure|string|array $callback)
+    public function setCallback(Closure|string|array $callback): void
     {
         $this->callback = $callback;
     }
@@ -154,7 +156,7 @@ class Route
      * 
      * @return Closure[]
      */
-    public function getMiddlewares()
+    public function getMiddlewares(): array
     {
         return $this->middlewares;
     }
@@ -166,7 +168,7 @@ class Route
      * 
      * @return void
      */
-    public function setContainer(Container $container)
+    public function setContainer(Container $container): void
     {
         $this->container = $container;
     }
@@ -198,7 +200,7 @@ class Route
      * 
      * @return bool
      */
-    private function isEmptyPattern(): bool
+    private function isPatternEmpty(): bool
     {
         return $this->pattern->isEmpty();
     }
@@ -208,7 +210,7 @@ class Route
      * 
      * @return StringObject|null
      */
-    private function getPattern(): StringObject|null
+    public function getPattern(): StringObject|null
     {
         return $this->pattern;
     }
@@ -244,47 +246,46 @@ class Route
     {
         switch (strtoupper($type)) {
             case Regex::NUMBER->name:
-                return preg_match('/^[0-9]{1,}$/i', $value, $match) === 1;
+                return Regexr::match('/^[0-9]{1,}$/i', $value)->hasResult();
             case Regex::ALPHABET->name:
-                return preg_match('/^[A-Za-z]{1,}$/', $value, $match) === 1;
+                return Regexr::match('/^[A-Za-z]{1,}$/', $value)->hasResult();
             case Regex::ALPHABET_NUMBER->name:
-                return preg_match('/^[A-Za-z0-9]{1,}$/', $value, $match) === 1;
+                return Regexr::match('/^[A-Za-z0-9]{1,}$/', $value)->hasResult();
             case Regex::PHONE_NUMBER->name:
-                return preg_match('/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/', $value, $match) === 1;
+                return Regexr::match('/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/', $value)->hasResult();
             case Regex::JAPANESE->name:
-                return preg_match('/^([ぁ-んァ-ヶー一-龠])$/', $value, $match) === 1;
+                return Regexr::match('/^([ぁ-んァ-ヶー一-龠])$/', $value)->hasResult();
             case Regex::KANJI->name:
-                return preg_match('/^[一-龠]$/', $value, $match) === 1;
+                return Regexr::match('/^[一-龠]$/', $value)->hasResult();
             case Regex::HIRAGANA->name:
-                return preg_match('/^([ぁ-ん]+)$/', $value, $match) === 1;
+                return Regexr::match('/^([ぁ-ん]+)$/', $value)->hasResult();
             case Regex::KATAKANA->name:
-                return preg_match('/^([ァ-ヶー]+)$/', $value, $match) === 1;
+                return Regexr::match('/^([ァ-ヶー]+)$/', $value)->hasResult();
             case Regex::EMAIL->name:
-                return preg_match("/^[^\"'@]+@[._a-zA-Z0-9-]+\.[a-zA-Z]+$/", $value, $match) === 1;
+                return Regexr::match("/^[^\"'@]+@[._a-zA-Z0-9-]+\.[a-zA-Z]+$/", $value)->hasResult();
             case Regex::KOREAN->name:
-                return preg_match("/^[\uAC00-\uD7A3]$/", $value, $match) === 1;
+                return Regexr::match("/^[\uAC00-\uD7A3]$/", $value)->hasResult();
             case Regex::BASE64->name:
-                return preg_match("/^data:[^,]+,/", $value, $match) === 1;
+                return Regexr::match("/^data:[^,]+,/", $value)->hasResult();
             case Regex::KOREAN_ENGLISH->name:
-                return preg_match("/[\uAC00-\uD7A3a-zA-Z]/", $value, $match) === 1;
+                return Regexr::match("/[\uAC00-\uD7A3a-zA-Z]/", $value)->hasResult();
             default:
-                $isValid = @preg_match($type, '') === false;
-
-                return $isValid && preg_match($type, $value, $match) === 1;
+                $regexr = sprintf("/%s/", $type);
+                return Regexr::isValid($regexr) && Regexr::match($regexr, $value)->hasResult();
         }
     }
 
     /**
      * Match a pattern by url segments
      * 
-     * @param array $urlSegments
+     * @param ArrayObject $urlSegments
      * @param string $host
      * 
      * @return bool
      */
-    public function match(array $urlSegments, string $currentHost, string $currentContentType): bool
+    public function match(ArrayObject $urlSegments, string $currentHost, string $currentContentType): bool
     {
-        if ($this->isEmptyPattern()) {
+        if ($this->isPatternEmpty()) {
             return false;
         }
 
@@ -306,7 +307,7 @@ class Route
             return false;
         }
 
-        if ($count < count($urlSegments)) {
+        if ($urlSegments->sizeGreaterThan($count)) {
             return false;
         }
 
@@ -314,7 +315,7 @@ class Route
             $segment = $urlSegments[$i] ?? null;
             $routeSegment = $separatedSegments->get($i);
 
-            if (preg_match('/^({\w*})\??((:\(?[^\/]+\)?)?)$/', $routeSegment->__toString(), $match)) {
+            if ($routeSegment->match('/^({\w*})\??((:\(?[^\/]+\)?)?)$/', $match)) {
                 [$raw, $parameter, $type] = $match;
 
                 if ($segment == null) {

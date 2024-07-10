@@ -427,7 +427,7 @@ class TraceObject
         return !empty($existMethods);
     }
 
-    private function parseCode(): void
+    private function parseCode($highlight = true): void
     {
         if (!$this->hasFile()) {
             return;
@@ -436,9 +436,9 @@ class TraceObject
         $startLine = $this->getLine() - 10 < 0 ? 0 : $this->getLine() - 10;
         $endLine = (int)($startLine + 15);
 
-        $readedContent = FileFunctions::read($this->file);
+        $readedContent = $highlight ? show_source($this->file, true) : FileFunctions::read($this->file);
 
-        $codes = explode("\r\n", htmlspecialchars($readedContent));
+        $codes = explode("\r\n", $highlight ? $readedContent : htmlspecialchars($readedContent));
         if (isset($codes[$this->line - 1])) {
             $codes[$this->line - 1] = "<a class='highlight'>{$codes[$this->line - 1]}</a>";
         }

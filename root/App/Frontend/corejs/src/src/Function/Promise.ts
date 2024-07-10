@@ -11,7 +11,7 @@ var A;
 	A = core.Promise = {
 		
 		isSupport: function () {
-			if(typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1) {
+			if (typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1) {
 				return false;
 			}
 			

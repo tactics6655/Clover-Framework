@@ -36,6 +36,13 @@ class Dispatcher implements EventDispatcherInterface
 		}
 	}
 
+	public function addSubscriber(SubscriberInterface $subscribe)
+	{
+		foreach ($subscribe->getSubscribedEvents() as $name => $event) {
+			$this->addListener($name, [$subscribe, $event]);
+		}
+	}
+
 	/**
 	 * Call listeners
 	 * 

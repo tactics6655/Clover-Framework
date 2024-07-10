@@ -24,7 +24,14 @@ class ClientURL implements ClientURLInterface
 	/** @var \Clover\Classes\ClientURLLastTransferInformation */
 	public ClientURLLastTransferInformation $information;
 
-	public function __construct(bool $useLocalMethod = true, string $url = '')
+	/**
+	 * Construct of class
+	 * 
+	 * @param bool $useLocalMethod = true
+	 * 
+	 * @throws \ErrorException
+	 */
+	public function __construct(bool $useLocalMethod = true)
 	{
 		if (!$this->isSupported()) {
 			throw new \ErrorException('The CURL library is not loaded');

@@ -8,23 +8,18 @@ use Clover\Classes\HTTP\Request as RequestHandler;
 class TheOnionRouting
 {
 
-	private static $internetProtocolClass;
-	private static $requestHandlerClass;
-
 	public function __construct()
 	{
-		self::$internetProtocolClass = new InternetProtocol();
-		self::$requestHandlerClass = new RequestHandler();
 	}
 
-	public function isExitNode()
+	public static function isExitNode()
 	{
-		$ipAddress = self::$requestHandlerClass::getRemoteIPAddress();
-		$serverPort = self::$requestHandlerClass::getPort();
-		$reverseIP = self::$internetProtocolClass::toReverseOctet($_SERVER['REMOTE_ADDR']);
+		$ipAddress = RequestHandler::getRemoteIPAddress();
+		$serverPort = RequestHandler::getPort();
+		$reverseIP = InternetProtocol::toReverseOctet($ipAddress);
 
 		$torExitNodeHostName = sprintf("%s.%s.%s.ip-port.exitlist.torproject.org", $reverseIP, $serverPort, $reverseIP);
-		$hostName = self::$internetProtocolClass::getByHostname($torExitNodeHostName);
+		$hostName = InternetProtocol::getByHostname($torExitNodeHostName);
 
 		return $hostName === '127.0.0.2';
 	}

@@ -2,89 +2,89 @@
 import $ from 'jquery';
 
 export class AudioContextObject {
-	
+
 	private audioContext;
 
 	constructor(AudioContextObject) {
 		this.audioContext = AudioContextObject;
 	}
-	
+
 	setBus() {
 	}
-	
+
 	get getBusLists() {
 		return '';
 	}
-	
+
 	setEventDispatcher() {
 	}
-	
+
 	get getEventDispatcherListners() {
 		return '';
 	}
-	
+
 	setSubscriber() {
 	}
-	
+
 	get getSubscriber() {
 		return '';
 	}
-	
-	get getObject () {
+
+	get getObject() {
 		return this.audioContext;
 	}
-	
+
 	/*
 		Read only
 	*/
-	get getCurrentTime () {
+	get getCurrentTime() {
 		return $.core.Audio.getContextCurrentTime(this.audioContext);
 	}
-	
+
 	/*
 		Read only
 	*/
-	get getListener () {
+	get getListener() {
 		return $.core.Audio.getContextListener(this.audioContext);
 	}
-	
+
 	/*
 		Read only
 	*/
-	get getSampleRate () {
+	get getSampleRate() {
 		return $.core.Audio.contextGetSamplesRate(this.audioContext);
 	}
-	
-	get createGain () {
+
+	get createGain() {
 		return $.core.Audio.createGain(this.audioContext);
 	}
-	
-	get createPeriodicWave () {
+
+	get createPeriodicWave() {
 		return $.core.Audio.createPeriodicWave(this.audioContext);
 	}
-	
-	get createDelay () {
+
+	get createDelay() {
 		return $.core.Audio.createDelay(this.audioContext);
 	}
-	
-	get createPanner () {
+
+	get createPanner() {
 		return $.core.Audio.createPanner(this.audioContext);
 	}
-	
-	get createStereoPanner () {
+
+	get createStereoPanner() {
 		return $.core.Audio.createStereoPanner(this.audioContext);
 	}
-	
-	get createOscillator () {
+
+	get createOscillator() {
 		return $.core.Audio.createOscillator(this.audioContext);
 	}
-	
-	get createAnalyser () {
+
+	get createAnalyser() {
 		return $.core.Audio.createAnalyser(this.audioContext);
 	}
-	
-	get createBuffSource () {
+
+	get createBuffSource() {
 		return $.core.Audio.createBuffSource(this.audioContext);
 	}
-	
+
 }
