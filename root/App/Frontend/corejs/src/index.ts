@@ -93,6 +93,7 @@ declare global {
     }
 
     interface Window {
+        WebKitPlaybackTargetAvailabilityEvent: any;
         getUserMedia: any;
         webkitGetUserMedia: any;
         mozGetUserMedia: any;

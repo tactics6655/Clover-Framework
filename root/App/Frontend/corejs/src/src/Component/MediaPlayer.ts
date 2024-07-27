@@ -911,8 +911,16 @@ export class MediaPlayer implements MediaPlayerInterface {
         return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
     }
 
+    public isAirPlayAvailable(): boolean {
+        return typeof window.WebKitPlaybackTargetAvailabilityEvent != 'undefined';
+    }
+
     public getPreloadProperty(): string {
         return this.mediaContext.preload;
+    }
+
+    public isRemotePlaybackAvailable(): boolean {
+        return 'remote' in HTMLMediaElement.prototype;
     }
 
     public getRemotePlayback(): RemotePlayback {
