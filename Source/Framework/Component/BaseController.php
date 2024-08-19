@@ -42,6 +42,37 @@ class BaseController
         $resource->addGenericCssFile($filename);
     }
 
+    
+    public function addWebpackAssetsToHead(string $path)
+    {
+        /** @var Resource $resource */
+        $resource = $this->container->get('Resource');
+
+        $assets = $this->getWebpackAssets(__ROOT__.$path);
+
+        foreach ($assets as $asset) {
+            $dotPosition = strrpos($asset, '.');
+
+            if ($dotPosition === false) {
+                continue;
+            }
+
+            $extension = substr($asset, $dotPosition + 1);
+
+            if (array_search($extension, ['js']) !== false) {
+                $resource->addGenericJavascriptFile(dirname($path).$asset);
+            } else if (array_search($extension, ['css']) !== false) {
+                $resource->addGenericCssFile(dirname($path).$asset);
+            }
+        }
+    }
+
+    public function getWebpackAssets($path) {
+        $manifest = json_decode(file_get_contents($path), true);
+    
+        return $manifest;
+    }
+    
     public function addJsFileToHead(string $filename)
     {
         /** @var Resource $resource */
