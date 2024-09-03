@@ -27,7 +27,7 @@ return [
     ],
     'php' => [
         'type' => 'text/html',
-        'array' => array('application/x-httpd-php', 'text/html')
+        'array' => ['application/x-httpd-php', 'text/html']
     ],
     'htm' => [
         'type' => 'text/html'
@@ -37,7 +37,7 @@ return [
     ],
     'csv' => [
         'type' => 'text/csv',
-        'array' => array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel')
+        'array' => ['text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel']
     ],
     'css' => [
         'type' => 'text/css'
@@ -89,7 +89,7 @@ return [
     ],
     'ico' => [
         'type' => 'image/x-icon',
-        'array' => array('image/x-icon', 'image/vnd.microsoft.icon')
+        'array' => ['image/x-icon', 'image/vnd.microsoft.icon']
     ],
     'djvu' => [
         'type' => 'image/vnd.djvu'
@@ -102,11 +102,11 @@ return [
     ],
     'jpg' => [
         'type' => 'image/jpeg',
-        'array' => array('image/jpeg', 'image/pjpeg')
+        'array' => ['image/jpeg', 'image/pjpeg']
     ],
     'jpeg' => [
         'type' => 'image/jpeg',
-        'array' => array('image/jpeg', 'image/pjpeg')
+        'array' => ['image/jpeg', 'image/pjpeg']
     ],
 
     /* Video */
@@ -173,7 +173,7 @@ return [
     ],
     'mp3' => [
         'type' => 'audio/mp3',
-        'array' => array('audio/mpeg', 'audio/mpg', 'audio/mpeg3', 'audio/mp3')
+        'array' => ['audio/mpeg', 'audio/mpg', 'audio/mpeg3', 'audio/mp3']
     ],
     'ram' => [
         'type' => 'audio/x-pn-realaudio'
@@ -246,7 +246,7 @@ return [
     ],
     'zip' => [
         'type' => 'application/zip',
-        'array' => array('application/x-zip', 'application/zip', 'application/x-zip-compressed')
+        'array' => ['application/x-zip', 'application/zip', 'application/x-zip-compressed']
     ],
     'arc' => [
         'type' => 'application/octet-stream'
@@ -262,7 +262,7 @@ return [
 
     'word' => [
         'type' => 'application/msword',
-        'array' => array('application/msword', 'application/octet-stream')
+        'array' => ['application/msword', 'application/octet-stream']
     ],
     'docx' => [
         'type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -314,7 +314,7 @@ return [
     ],
     'psd' => [
         'type' => 'application/x-photoshop',
-        'array' => array("image/vnd.adobe.photoshop")
+        'array' => ["image/vnd.adobe.photoshop"]
     ],
     'ai' => [
         'type' => 'application/postscript'
@@ -381,7 +381,7 @@ return [
     ],
     'json' => [
         'type' => 'application/json',
-        'array' => array('application/json', 'text/json')
+        'array' => ['application/json', 'text/json']
     ],
     'jsonld' => [
         'type' => 'application/ld+json'
@@ -396,7 +396,8 @@ return [
         'type' => 'application/xhtml+xml'
     ],
     'xml' => [
-        'type' => 'application/xml'
+        'type' => 'application/xml',
+        'array' => ['text/xml']
     ],
     'js' => [
         'type' => 'application/x-javascript'
