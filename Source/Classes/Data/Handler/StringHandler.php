@@ -168,6 +168,10 @@ class StringHandler
 		return strtolower($text);
 	}
 
+	public static function toUnderScore($text) {
+		return  strtr($text, ' ', '_');
+	}
+
 	public static function removeNullByte($input)
 	{
 		$clean = str_replace("\x00", '', $input);

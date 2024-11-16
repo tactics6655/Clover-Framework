@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "paths": {
+            "@corejs/*": ["/src/*"]
+        },
         "incremental": true,
         "target": "ES6", 
         "module": "amd", 
@@ -34,7 +37,6 @@
         "noFallthroughCasesInSwitch": false,
         "moduleResolution": "node", 
         "baseUrl": "./", 
-        "paths": {}, 
         "rootDirs": [], 
         "typeRoots": [
             "node_modules/@types"

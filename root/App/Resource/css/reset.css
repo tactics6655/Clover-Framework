@@ -61,7 +61,7 @@ html {
 html, body {
 	min-height: 100%;
 	display: block;
-	overflow-x: hidden;
+	/*overflow-x: hidden;*/
 }
 audio, canvas, progress, video {
 	display: inline-block

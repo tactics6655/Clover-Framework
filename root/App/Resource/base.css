@@ -331,3 +331,8 @@ footer {
   * {
     line-height: 1.43 !important;
   }
+  a { color: inherit; } 
+
+  a:link {
+    color: none;
+  }

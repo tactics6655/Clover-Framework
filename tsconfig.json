@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@corejs/*": ["/root/App/Frontend/corejs/src/*"]
+      }
+    }
+  }

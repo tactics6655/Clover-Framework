@@ -4,7 +4,7 @@ use Clover\Classes\HTML\Handler as HTMLHandler;
 ?>
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 
 <head>
     <meta charset="utf-8">

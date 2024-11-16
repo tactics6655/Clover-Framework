@@ -590,7 +590,7 @@ class Request implements RequestInterface
 			$string = isset($_POST[$parameter]) ? $_POST[$parameter] : null;
 		}
 
-		return $string;
+		return new StringObject($string);
 	}
 
 	public static function getQueryParamter($parameter, $default = null)

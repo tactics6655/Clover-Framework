@@ -357,9 +357,11 @@ a[href^="javascript:"]:after, a[href^="#"]:after {
 #gnb > ul > li {
     height: 105px;
 }
-.logo {
+.gnb_area > a {
     height: 69px;
     margin: 18px 0px;
+    float :left;
+    align-content: center;
 }
 #gnb li, .mobile_gnb_area li {
     position: relative;
@@ -740,7 +742,9 @@ body {
     display: block;
     margin: 0px auto;
     padding: 100px;
-    text-align:center;font-family: 'Jeju Myeongjo';font-size:17px;line-height:21px;margin-top:50px
+    text-align:center;
+    /*font-family: 'Jeju Myeongjo';*/
+    font-size:17px;line-height:21px;margin-top:50px
 
 }
 #introduce_content {
@@ -872,6 +876,8 @@ body {
 #main_contain {
     height: 430px;
     position: relative;
+    background-color: #181818;
+    background: linear-gradient(126deg, #2F40AD 29.424476623535156%, #394FB7 40.656089782714844%, #2A3BA9 54.323577880859375%, #394FB7 66.76197052001953%, #354AB5 100%)
 }
 #description_text {
     height: 100%;
@@ -884,7 +890,6 @@ body {
     z-index: 1;
     position: absolute;
     color: #fff;
-    font-family: 'Jeju Myeongjo';
 }
 #introduce {
 
@@ -988,3 +993,7 @@ line-height: 27px;
 
 @media screen and (max-width:400px){
 .table_01 .table0001  {width:100%; padding:0;}}
+* {
+    
+  font-family: "Noto Sans JP", sans-serif;
+}

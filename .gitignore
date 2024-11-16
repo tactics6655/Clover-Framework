@@ -1,14 +1,14 @@
 /vendor
 /composer.lock
-/Frontend/coreJS/node_modules
+/root/App/Frontend/coreJS/src/node_modules/*
 /Binary
-/html/artwhirl/*
-/html/jyogakuen/*
-/html/App/View/jyogakuen/*
-/html/App/Controller/*
-/html/File/*
-/html/App/Frontend/corejs/compiled/*
-/html/App/Middleware/*
+/root/artwhirl/*
+/root/jyogakuen/*
+/root/App/View/jyogakuen/*
+/root/App/Controller/*
+/root/File/*
+/root/App/Frontend/corejs/compiled/*
+/root/App/Middleware/*
 
 .vscode
 .vscode/*

@@ -212,7 +212,7 @@ import { OpenGLObject } from "./src/Component/Class/OpenGLObject";
 
 import hljs from 'highlight.js';
 import './../../../Resource/css/reset/reset.css';
-import './../../../Resource/base.css';
+//import './../../../Resource/base.css';
 import './../../../Resource/js/highlight/styles/vs2015.min.css';
 
 import React, { useEffect, useRef, Component } from 'react';

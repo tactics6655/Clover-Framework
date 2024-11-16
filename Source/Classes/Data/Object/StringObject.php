@@ -28,6 +28,11 @@ class StringObject extends BaseObject
         return $this->rawData;
     }
 
+    /**
+     * Returns the string in hexadecimal format.
+     *
+     * @return StringObject
+     */
     public function getHexDecimal(): self
     {
         preg_match('/^0x[0-9a-f_]++$/i', $this->getRawData(), $matches);
@@ -39,6 +44,11 @@ class StringObject extends BaseObject
         return $this;
     }
 
+    /**
+     * Detects and returns the encoding of the string.
+     *
+     * @return StringObject
+     */
     public function getEncoding(): self
     {
         $this->rawData = Multibyte::detectCharacterEncoding($this->rawData);
@@ -48,12 +58,12 @@ class StringObject extends BaseObject
 
     /**
      * Find the position of the last occurrence of a substring in a string
-     * 
-     * @param string $needle
-     * @param int $offset
-     * @param bool $ignoreCase
-     * 
-     * @return int|bool
+     *
+     * @param string $needle The substring to search for.
+     * @param int $offset The position in the string to start searching.
+     * @param bool $ignoreCase Whether to ignore case sensitivity in the search.
+     *
+     * @return int|bool The position of the last occurrence of the substring, or false if not found.
      */
     public function lastIndexOf(string $needle, int $offset = 0, bool $ignoreCase = true): int|bool
     {
@@ -69,12 +79,12 @@ class StringObject extends BaseObject
     }
 
     /**
-     * Find the position of the first occurrence of a substring in a string
-     * 
-     * @param string $needle
-     * @param int $offset
-     * @param bool $ignoreCase
-     * 
+     * Finds the position of the first occurrence of a substring in the string.
+     *
+     * @param string $needle The substring to search for.
+     * @param int $offset The position to start searching from.
+     * @param bool $ignoreCase Whether to ignore case sensitivity.
+     *
      * @return bool|int
      */
     public function indexOf($needle, $offset = 0, $ignoreCase = true): bool|int
@@ -91,10 +101,10 @@ class StringObject extends BaseObject
     }
 
     /**
-     * Strip whitespace (or other characters) from the beginning of a string.
-     * 
-     * @param string|null $characters
-     * 
+     * Removes specified characters from the beginning of the string.
+     *
+     * @param string|null $characters The set of characters to remove.
+     *
      * @return StringObject
      */
     public function trimStart(string|null $characters = " \n\r\t\v\x00"): self
@@ -106,12 +116,12 @@ class StringObject extends BaseObject
 
     /**
      * Replace all occurrences of the search string with the replacement string
-     * 
-     * @param array|string $search
-     * @param array|string $replace
-     * @param bool $ignoreCase
-     * 
-     * @return StringObject
+     *
+     * @param array|string $search The value(s) to replace.
+     * @param array|string $replace The replacement value(s).
+     * @param bool $ignoreCase Whether to ignore case sensitivity in the replacement.
+     *
+     * @return StringObject The current object with the modified string.
      */
     public function replace(array|string $search, array|string $replace, bool $ignoreCase = true): self
     {
@@ -130,8 +140,8 @@ class StringObject extends BaseObject
 
     /**
      * Reverse a string
-     * 
-     * @return StringObject
+     *
+     * @return StringObject The current object with the reversed string.
      */
     public function reverse(): self
     {
@@ -169,12 +179,12 @@ class StringObject extends BaseObject
     }
 
     /**
-     * Split a string by a string
-     * 
-     * @param string $separator
-     * 
-     * @throws ArgumentEmptyException 
-     * 
+     * Splits the string into an array using a specified delimiter.
+     *
+     * @param string $separator The delimiter to split the string by.
+     *
+     * @throws ArgumentEmptyException
+     *
      * @return ArrayObject
      */
     public function split(string $separator): ArrayObject
@@ -188,11 +198,25 @@ class StringObject extends BaseObject
         return new ArrayObject($array);
     }
 
+    /**
+     * Determines if the string starts with the given substring.
+     *
+     * @param string $string The substring to check for.
+     *
+     * @return int Returns 1 if the string starts with the substring, 0 otherwise.
+     */
     public function startsWith(string $string): int
     {
         return strpos($this->getRawData(), $string) === 0;
     }
 
+    /**
+     * Determines if the string ends with the given substring.
+     *
+     * @param string $string The substring to check for.
+     *
+     * @return int Returns 1 if the string ends with the substring, 0 otherwise.
+     */
     public function endsWith(string $string): int
     {
         return strpos($this->getRawData(), $string) === (strlen($this->rawData) - strlen($string));
@@ -200,11 +224,11 @@ class StringObject extends BaseObject
 
     /**
      * Return part of a string
-     * 
-     * @param int $start
-     * @param int|null $length
-     * 
-     * @return StringObject
+     *
+     * @param int $start The starting position.
+     * @param int|null $length The length of the substring. Defaults to the remainder of the string.
+     *
+     * @return StringObject The current object with the modified string.
      */
     public function substring(int $start, int|null $length = null): self
     {
@@ -559,6 +583,13 @@ class StringObject extends BaseObject
         return $this;
     }
 
+    public function toUnderScore(): self
+    {
+        $this->rawData = StringHandler::toUnderScore($this->rawData);
+
+        return $this;
+    }
+    
     /**
      * Calculate the similarity between two strings
      * 

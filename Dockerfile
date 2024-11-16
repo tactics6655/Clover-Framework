@@ -35,7 +35,8 @@ RUN docker-php-ext-configure exif \
   && docker-php-ext-install pdo_mysql \
   && docker-php-ext-install opcache \
   && docker-php-ext-install iconv \
-  && docker-php-ext-install zip
+  && docker-php-ext-install zip \
+  && docker-php-ext-install mysqli
 
 RUN docker-php-ext-enable opcache
 
