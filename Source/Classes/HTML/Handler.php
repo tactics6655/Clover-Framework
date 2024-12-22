@@ -13,7 +13,7 @@ class Handler
 		switch ($type) {
 			case "option":
 				foreach ($list as $val) {
-					$html .= "<option " . (($value == $val) ? "selected " : "") . "value=\"{$val}\">{$val}</option>";
+					$html .= "<option ".(($value == $val) ? "selected " : "")."value=\"{$val}\">{$val}</option>";
 				}
 
 				$html = "<select name=\"{$name}\">{$html}</select>";
@@ -50,7 +50,7 @@ class Handler
 				break;
 			case "radio":
 				foreach ($list as $val) {
-					$html .= "<input " . (($value == $val) ? "checked " : "") . "name=\"{$name}\" type=\"radio\" value=\"{$val}\">{$val}</input>";
+					$html .= "<input ".(($value == $val) ? "checked " : "")."name=\"{$name}\" type=\"radio\" value=\"{$val}\">{$val}</input>";
 				}
 
 				break;
@@ -69,7 +69,7 @@ class Handler
 		foreach ($attributes as $key => $val) {
 			$pair = sprintf("'%s'", $val);
 			if ($result) {
-				$result = $result . ',' . $pair;
+				$result = $result.','.$pair;
 			} else {
 				$result = $pair;
 			}
@@ -90,7 +90,7 @@ class Handler
 		if (empty($attributes)) {
 			$html .= '';
 		} else if (is_string($attributes)) {
-			$html .= ' ' . $attributes;
+			$html .= ' '.$attributes;
 		} else if (is_array($attributes)) {
 			foreach ($attributes as $key => $val) {
 				if (isset($key) && !is_bool($val)) {
@@ -100,7 +100,7 @@ class Handler
 				}
 			}
 
-			$html .= ' ' . implode(' ', $pairs);
+			$html .= ' '.implode(' ', $pairs);
 		}
 
 		return $close ? sprintf('%s>', $html) : sprintf('%s>%s</%s>', $html, $content, $type);

@@ -12,11 +12,38 @@ class Session
 	 *
 	 * @return void
 	 */
-	public static function start($options = [])
+	public static function start($options = []): bool
 	{
-		if (self::isExtensionLoaded()) {
-			session_start($options);
+		if (!self::isExtensionLoaded()) {
+			return false;
 		}
+
+		return session_start($options);
+	}
+
+	public static function getCurrentName()
+	{
+		return session_name();
+	}
+
+	public static function getModuleName()
+	{
+		return session_module_name();
+	}
+
+	public static function setModuleName(string|null $module = null)
+	{
+		return session_module_name($module);
+	}
+
+	public static function setName(string|null $name = null)
+	{
+		return session_name($name);
+	}
+
+	public static function setCookieParameters(int $lifetime_or_options, string|null $path = null, string|null $domain = null, bool|null $secure = null, bool|null $httponly = null)
+	{
+		session_set_cookie_params($lifetime_or_options, $path, $domain, $secure, $httponly);
 	}
 
 	/**
@@ -40,9 +67,12 @@ class Session
 	 */
 	public static function getStatus()
 	{
-		$status = session_status();
+		return session_status();
+	}
 
-		return $status;
+	public static function isBooted()
+	{
+		return self::getStatus() === PHP_SESSION_NONE;
 	}
 
 	/**
@@ -174,7 +204,7 @@ class Session
 		return session_reset();
 	}
 
-	public static function getCookieParams()
+	public static function getCookieParameters()
 	{
 		return session_get_cookie_params();
 	}
@@ -236,7 +266,7 @@ class Session
 	{
 		if (isset($_SESSION[$key]) && !$overwrite) {
 			return false;
-		} 
+		}
 
 		$_SESSION[$key] = $value;
 
