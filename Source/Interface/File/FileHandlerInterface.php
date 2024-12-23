@@ -59,7 +59,7 @@ interface FileHandlerInterface
 
 	public static function isWritable(string $filePath): bool;
 
-	public static function getSize(string $filePath, bool $humanReadable): int;
+	public static function getSize(string $filePath, bool $humanReadable): int|string;
 
 	public static function getInode(string $filePath);
 

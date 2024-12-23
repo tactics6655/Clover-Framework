@@ -279,28 +279,7 @@ if (!Element.prototype.cancelFullScreen) {
     }
 }
 
-const AudioPlayer: React.FC = () => {
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const spectrumRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (audioRef.current && spectrumRef.current) {
-            const mediaPlayer = new MediaPlayer();
-            mediaPlayer.setContext(document.getElementById("audio"));
-            mediaPlayer.setEvents();
-            mediaPlayer.setVisualizerLineWidth(1);
-            mediaPlayer.setVisualizerStyle(VisualizerStyle.ROTATE_CIRCLE);
-            mediaPlayer.setSpectrum("#spectrum");          
-        }
-    });
-
-    return (
-        <div>
-            <audio id="audio" controls src="/App/File/preview.mp3" ref={audioRef}></audio>
-            <div style={{width:'200px', height: '200px'}} id="spectrum" ref={spectrumRef}></div>
-        </div>
-    );
-}
+import {AudioPlayer} from './src/ReactComponent/AudioPlayer';
 
 function renderApp() {
     const rootElement = document.getElementById('player');
@@ -310,7 +289,7 @@ function renderApp() {
 
     root.render(
         <React.StrictMode>
-            <AudioPlayer />
+            <AudioPlayer source="/App/File/cow_1.mp3" />
         </React.StrictMode>
     );
 }

@@ -75,7 +75,9 @@ interface EventListenerInterface {
 enum ErrorMessages {
     NOT_IMPLEMENTED_API = 'getUserMedia is not implemented in this browser',
     NOT_INITIALIED = 'Media recorder is not initialized',
-    NOT_STARTED = 'Cannot start MediaRecorder when already recording'
+    NOT_STARTED = 'Cannot start MediaRecorder when already recording',
+    EFFECTOR_IS_NOT_INITIALISED = 'Effector is not initialized',
+    MEDIA_SESSION_IS_NOT_SUPPORTED = 'MediaSession is not supported'
 }
 
 enum AudioEvent {
@@ -560,11 +562,23 @@ class MediaSession implements MediaSessionInterface {
         this.setActionHandler('nexttrack', handler);
     }
 
+    public setPlaybackRatePositionState(playbackRate?: number): void {
+        this.setPositionState({playbackRate: playbackRate});
+    }
+
+    public setDurationPositionState(duration?: number): void {
+        this.setPositionState({duration: duration});
+    }
+
     public setPositionState(state?: MediaPositionState): void {
         navigator.mediaSession.setPositionState(state);
     }
 
     public setMetadata(init?: MediaMetadataInit): void {
+        if (!this.isMediaSessionSupported()) {
+            return;
+        }
+
         navigator.mediaSession.metadata = new MediaMetadata(init);
     }
 
@@ -707,7 +721,7 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     public setPanningModel(modelName: PanningModelType = "equalpower"): void {
         if (this.pannerEffector == null) {
-            throw new Error('Effector is not initialized');
+            throw new Error(ErrorMessages.EFFECTOR_IS_NOT_INITIALISED);
         }
 
         this.pannerEffector.panningModel = modelName;
@@ -715,7 +729,7 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     public setGainValue(value: number = 1): void {
         if (this.gainEffector == null) {
-            throw new Error('Effector is not initialized');
+            throw new Error(ErrorMessages.EFFECTOR_IS_NOT_INITIALISED);
         }
 
         this.gainEffector.gain.value = value;
@@ -727,7 +741,7 @@ export class MediaPlayer implements MediaPlayerInterface {
 
     public setDelayValue(value: number): void {
         if (this.gainEffector == null) {
-            throw new Error('Effector is not initialized');
+            throw new Error(ErrorMessages.EFFECTOR_IS_NOT_INITIALISED);
         }
 
         this.delayEffector.delayTime.value = value;
@@ -1001,17 +1015,21 @@ export class MediaPlayer implements MediaPlayerInterface {
     public seekBackward(seconds: number): void {
         if (this.getCurrentTime() - seconds > 0) {
             this.setCurrentTime(this.getCurrentTime() - seconds);
-        } else {
-            this.setCurrentTime(0);
-        }
+
+            return;
+        } 
+
+        this.setCurrentTime(0);
     }
 
     public seekForward(seconds: number): void {
         if (this.getCurrentTime() + seconds <= this.getCurrentDuration()) {
             this.setCurrentTime(this.getCurrentTime() + seconds);
-        } else {
-            this.setCurrentTime(this.getCurrentDuration());
-        }
+
+            return;
+        } 
+
+        this.setCurrentTime(this.getCurrentDuration());
     }
 
     public setCurrentTime(time: number): void {
@@ -1057,6 +1075,14 @@ export class MediaPlayer implements MediaPlayerInterface {
                 resolve(self.mediaContext.duration);
             }
         });
+    }
+
+    public setMediaSessionMetaData(init?: MediaMetadataInit): void {
+        if (!this.mediaSessionHandler.isMediaSessionSupported()) {
+            throw new Error(ErrorMessages.MEDIA_SESSION_IS_NOT_SUPPORTED);
+        }
+
+        this.mediaSessionHandler.setMetadata(init);
     }
 
     public setEvents(): void {
@@ -1442,7 +1468,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         this.spectrumAnalyser = this.audioContext.createAnalyser();
         this.mediaElementSource.connect(this.spectrumAnalyser);
         this.spectrumAnalyser.minDecibels = -120; // min FFT(fast Fourier transform) dB
-        this.spectrumAnalyser.fftSize = 2048;//32 << 9;
+        this.spectrumAnalyser.fftSize = 2048; //32 << 9;
         this.spectrumAnalyser.smoothingTimeConstant = 0.45;
 
         this.isSpectrumEnabled = true;

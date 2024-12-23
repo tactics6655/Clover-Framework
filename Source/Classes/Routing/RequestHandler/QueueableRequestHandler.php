@@ -9,6 +9,14 @@ use Clover\Classes\Reflection\Handler as ReflectionHandler;
 
 class QueueableRequestHandler extends Queue
 {
+    /**
+     * Add middleware on queue stack
+     * 
+     * @param mixed $middlewares
+     * @param mixed $container
+     * 
+     * @return void
+     */
     public function addMiddlewares($middlewares, $container)
     {
         foreach ($middlewares as $middleware) {

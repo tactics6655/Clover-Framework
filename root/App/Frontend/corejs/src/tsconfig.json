@@ -57,6 +57,7 @@
     "include": [
         "index.tsx",
         "src/Component/*.ts",
+        "src/ReactComponent/*.tsx",
         "src/Component/Class/*.ts",
         "src/Variables/*.ts"
     ],

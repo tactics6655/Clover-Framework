@@ -4,33 +4,31 @@ namespace Clover\Classes;
 
 class Maya
 {
-	private static $self   = null;
-	private $addon_text    = null;
+	private static $context = null;
+	private $appendText = null;
 	private $global_static = 0;
-	private $textStartIndex        = 0;
-	private $textEndIndex        = 0;
-	private $debug         = true;
+	private $textStartIndex = 0;
+	private $textEndIndex = 0;
+	private $debug = true;
 
 	public $currentPosition = 0;
-	public $textLength      = 0;
+	public $textLength = 0;
 
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
-	public static function &getself()
+	public static function &getInstance()
 	{
-		static $obj = null;
-		if (!$obj) {
-			$obj = new maya();
+		static $instance = null;
+		if (!$instance) {
+			$instance = new maya();
 		}
 
-		return $obj;
+		return $instance;
 	}
 
-	public function line_execute_match_left($start, $rule, $text, $mode)
+	public function leftMatch($start, $rule, $text, $mode)
 	{
-		$self = self::getself();
+		$self = self::getInstance();
 
 		$check_rule = strpos($rule, '||');
 
@@ -59,9 +57,9 @@ class Maya
 		return -1;
 	}
 
-	public function line_execute_match_right($start, $rule, $text, $mode)
+	public function rightMatch($start, $rule, $text, $mode)
 	{
-		$self                = self::getself();
+		$self = self::getInstance();
 		$self->global_static = false;
 
 		$check_rule_split = strpos($rule, '||');
@@ -71,9 +69,9 @@ class Maya
 			foreach ($check_rule as $val) {
 				switch ($mode) {
 					case "like":
-						$check_arr = ($this->addon_text == null) ?
+						$check_arr = ($this->appendText == null) ?
 							strpos(substr($text, $self->textStartIndex), $val) :
-							strpos(substr($text, $self->textStartIndex), $self->addon_text . $val);
+							strpos(substr($text, $self->textStartIndex), $self->appendText . $val);
 
 						if ($check_arr !== false) {
 							return $start + 1;
@@ -81,11 +79,11 @@ class Maya
 
 						break;
 					case "equal":
-						$rep_a = ($this->addon_text == null) ?
+						$rep_a = ($this->appendText == null) ?
 							substr(substr($text, $self->textStartIndex), strlen(substr($text, $self->textStartIndex)) - strlen($val), strlen($val)) :
-							substr(substr($text, $self->textStartIndex), (strlen(substr($text, $self->textStartIndex)) - strlen($val)) - strlen($this->addon_text), strlen($val) + strlen($this->addon_text));
+							substr(substr($text, $self->textStartIndex), (strlen(substr($text, $self->textStartIndex)) - strlen($val)) - strlen($this->appendText), strlen($val) + strlen($this->appendText));
 
-						$rep_b = ($this->addon_text == null) ? $val : $this->addon_text . $val;
+						$rep_b = ($this->appendText == null) ? $val : $this->appendText . $val;
 
 						if ($rep_a == $rep_b) {
 							return $start + 1;
@@ -102,9 +100,9 @@ class Maya
 			$check_rule = $rule;
 
 			if ($mode == 'like') {
-				$check_rule = ($this->addon_text == null) ?
+				$check_rule = ($this->appendText == null) ?
 					strpos(substr($text, $this->textStartIndex), $check_rule) :
-					strpos(substr($text, $this->textStartIndex), $this->addon_text . $check_rule);
+					strpos(substr($text, $this->textStartIndex), $this->appendText . $check_rule);
 
 				if ($check_rule !== false) {
 					$self->textStartIndex = $check_rule;
@@ -121,13 +119,11 @@ class Maya
 		}
 	}
 
-	public function line_execute_match_callback()
-	{
-	}
+	public function line_execute_match_callback() {}
 
 	public function line_pass($start, $rule, $text, $passage = 0)
 	{
-		$self = self::getself();
+		$self = self::getInstance();
 
 		$check_rule = strpos($rule, '||');
 
@@ -158,14 +154,14 @@ class Maya
 
 	public function line_add($start, $rule)
 	{
-		$this->addon_text = $rule;
+		$this->appendText = $rule;
 
 		return $start + 1;
 	}
 
 	public function line_execute($start, $rule, $pattern, $text)
 	{
-		$self        = self::getself();
+		$self        = self::getInstance();
 		$pattern_pos = strpos($rule, $pattern);
 		$escape_pos  = substr($rule, $pattern_pos + 1, 1);
 
@@ -180,11 +176,11 @@ class Maya
 				case '+':
 					return $self->line_add($pattern_pos, substr($rule, $start, $pattern_pos));
 				case '$':
-					return $self->line_execute_match_left($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
+					return $self->leftMatch($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
 				case '#':
-					return $self->line_execute_match_right($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'like');
+					return $self->rightMatch($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'like');
 				case '!':
-					return $self->line_execute_match_right($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
+					return $self->rightMatch($pattern_pos, substr($rule, $start, $pattern_pos), $text, 'equal');
 				case '@':
 					return $self->line_pass($pattern_pos, substr($rule, $start, $pattern_pos), $text);
 				default:
@@ -193,30 +189,30 @@ class Maya
 		}
 	}
 
-	public static function execute($rule, $text, $type, $debug = false)
+	public static function execute($rule, $text, $debug = false)
 	{
-		$self = self::getself();
+		$self = self::getInstance();
 
 		$self->debug  = $debug;
 		$self->textStartIndex = 0;
 
-		$match_rule_init = ['!', '#', '@', '$', '+'];
+		$matchRuleCharacters = ['!', '#', '@', '$', '+'];
 
-		$rule_len = strlen($rule);
-		$text_len = strlen($text);
+		$ruleLength = strlen($rule);
+		$textLength = strlen($text);
 
-		if ($rule_len == 0) {
+		if ($ruleLength == 0) {
 			return;
 		}
 
-		if ($text_len == 0) {
+		if ($textLength == 0) {
 			return;
 		}
 
-		for ($i = 0; $i < $rule_len; $i++) {
+		for ($i = 0; $i < $ruleLength; $i++) {
 			$pattern_pass = substr($rule, $i, 1);
 
-			if (!in_array($pattern_pass, $match_rule_init)) {
+			if (!in_array($pattern_pass, $matchRuleCharacters)) {
 				continue;
 			}
 

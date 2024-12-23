@@ -308,7 +308,7 @@ class Handler implements FileHandlerInterface
 		return FileFunctions::delete($filePath);
 	}
 
-	public static function getSize(string $filePath, bool $humanReadable = false, ?FileSizeUnit $type = NULL): int
+	public static function getSize(string $filePath, bool $humanReadable = false, string $type = NULL): int|string
 	{
 		return FileFunctions::getSize($filePath, $humanReadable, $type);
 	}

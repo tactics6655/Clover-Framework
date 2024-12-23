@@ -8,6 +8,8 @@ use Exception;
 use Clover\Classes\Exception\Handler as ExceptionHandler;
 use Clover\Classes\File\Functions as FileFunction;
 use Clover\Classes\Reflection\Handler as ReflectionHandler;
+use Clover\Classes\File\Handler as FileHandler;
+use Clover\Enumeration\FileSizeUnit;
 
 class ErrorHandler
 {
@@ -67,7 +69,9 @@ class ErrorHandler
         $file = $e->getFile();
         $line = $e->getLine();
         $traces = $e->getTrace();
+        $previous = $e->getPrevious();
         $className = get_class($e);
+        $fileSize = FileHandler::getSize($file, true, FileSizeUnit::SHORT);
 
         $traces = ReflectionHandler::parseTrace($traces);
 
@@ -77,7 +81,9 @@ class ErrorHandler
             'file' => $file,
             'line' => $line,
             'traces' => $traces,
-            'className' => $className
+            'className' => $className,
+            'previous' => $previous,
+            'fileSize' => $fileSize
         ];
 
         echo $this->compile(__DIR__ . '/../../Template/Exception.php', $arguments);
