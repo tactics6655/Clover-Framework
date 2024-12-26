@@ -10,8 +10,14 @@
 /root/App/Frontend/corejs/compiled/*
 /root/App/Middleware/*
 
+Thumbs.db
+.DS_Store
 .vscode
 .vscode/*
+.idea
+*.sublime-workspace
+*.sublime-project
+.codeintel
 
 !.vscode/tasks.json
 !.vscode/launch.json

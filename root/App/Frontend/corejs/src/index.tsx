@@ -178,7 +178,7 @@ import { AudioService } from "./src/Component/AudioService";
 import { AudioRecorder } from "./src/Component/AudioRecorder";
 import { ClipboardService } from "./src/Component/ClipboardService";
 import { GeolocationService } from "./src/Component/GeolocationService";
-import { MediaPlayer, VisualizerStyle } from "./src/Component/MediaPlayer";
+import { MediaPlayer } from "./src/Component/MediaPlayer";
 import { NotificationService } from "./src/Component/NotificationService";
 import { Pagination } from "./src/Component/Pagination";
 import { ScreenService } from "./src/Component/ScreenService";

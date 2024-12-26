@@ -5,31 +5,36 @@ namespace Clover\Classes\XML;
 class XMLParser
 {
 
-	private $parser;
+	private \XMLParser $parser;
 
-	public function __construct()
+	public function __construct(string|null $encoding = null)
 	{
-		$this->parser = xml_parser_create();
+		$this->parser = xml_parser_create($encoding);
 		$this->setObject();
 	}
 
 	public function setObject()
 	{
-		xml_set_object($this->parser, $this);
+		return xml_set_object($this->parser, $this);
 	}
 
 	public function parse($plainText)
 	{
-		xml_parse($this->parser, $plainText);
+		return xml_parse($this->parser, $plainText);
+	}
+
+	public function freeParser()
+	{
+		return xml_parser_free($this->parser);
 	}
 
 	public function setElementHandler(callable $startTag, callable $endTag)
 	{
-		xml_set_element_handler($this->parser, $startTag, $endTag);
+		return xml_set_element_handler($this->parser, $startTag, $endTag);
 	}
 
 	public function setCharacterDataHandler($object)
 	{
-		xml_set_character_data_handler($this->parser, $object);
+		return xml_set_character_data_handler($this->parser, $object);
 	}
 }

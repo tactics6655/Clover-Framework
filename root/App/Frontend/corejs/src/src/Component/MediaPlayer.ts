@@ -1,76 +1,12 @@
-interface MediaPlayerInterface {
-    setSpectrum(selector: string): void;
-    isPlaying(): boolean;
-    isPaused(): boolean;
-    isEnded(): boolean;
-    isFullScreen(): boolean;
-    seekBackward(seconds: number): void;
-    seekForward(seconds: number): void;
-    setCurrentTime(time: number): void;
-    setBiquadFilterGainValue(value: number): void;
-    setBiquadFilterDetuneValue(value: number): void;
-    setBiquadFilterFrequencyValue(value: number): void;
-    setEqualPowerPannerModel(): void;
-    setHRTFPannerModel(): void;
-    setPanningModel(modelName: PanningModelType): void;
-    setGainValue(value: number): void;
-    setParseFrequencyTimeout(timeout: number): void;
-    setSource(source: string): void;
-    setDelayValue(value: number): void;
-    getOfflineAudioContext(options: OfflineAudioContextOptions): OfflineAudioContext;
-    getAudioContext(): AudioContext;
-    getCurrentTime(): number;
-    getSampleRate(): number;
-    getSource(): string;
-    createAudioContext(): void;
-    connectPanEffector(): void;
-    connectAnalyser(): void;
-    connectToAudioContext(): void;
-    connectScriptProcessorFilter(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): void;
-    connectIIRFilter(feedforward: number[], feedback: number[]): void;
-    connectDynamicsCompressorFilterFilter(): void;
-    connectBiquadFilter(): void;
-    connectChannelMergerEffector(): void;
-    connectDelayEffector(): void;
-    connectGainEffector(): void;
-    cancelFullScreen(): boolean;
-    requestFullScreen(): boolean;
-    play(): void;
-    pause(): void;
-    hasGetUserMedia(): boolean;
-    requestAnimationFrame(callback: FrameRequestCallback): number;
-    getUserMedia(): any;
-    setUserMediaConstraints(constraints?: MediaStreamConstraints): Promise<MediaStream> | Promise<unknown>;
-    setContext(mediaContext: any): void;
-}
+import { EventListener } from '../Classes/EventListener';
 
-interface MediaSessionInterface {
-    isMediaSessionSupported(): boolean;
-    setPlayHandler(handler: MediaSessionActionHandler): void;
-    setPauseHandler(handler: MediaSessionActionHandler): void;
-    setSeekbackwardHandler(handler: MediaSessionActionHandler): void;
-    setSeekforwardHandler(handler: MediaSessionActionHandler): void;
-    setPrevioustrackHandler(handler: MediaSessionActionHandler): void;
-    setNextrackHandler(handler: MediaSessionActionHandler): void;
-    setPositionState(state?: MediaPositionState): void;
-    setMetadata(init?: MediaMetadataInit): void;
-    setPlaybackState(state: MediaSessionPlaybackState): void;
-    setStateToPlaying(): void;
-    setStateToPaused(): void;
-    setActionHandler(action: MediaSessionAction, handler: MediaSessionActionHandler): void;
-}
+import { MediaPlayerInterface } from 'src/Interface/MediaPlayerInterface';
 
-interface PictureInPictureInterface {
-    hasPip(): boolean;
-    setPipMode(): Promise<PictureInPictureWindow> | boolean;
-    exitPip(): Promise<void> | boolean;
-}
+import { MediaSession } from './Class/MediaSession';
 
-interface EventListenerInterface {
-    removeListeners(event: string): boolean;
-    removeListener(event: string, callback: Function): boolean;
-    addListener(event: string, callback: Function): void;
-}
+import { Visualizer, VisualizerStyle } from './Class/Visualizer';
+
+export { VisualizerStyle };
 
 enum ErrorMessages {
     NOT_IMPLEMENTED_API = 'getUserMedia is not implemented in this browser',
@@ -90,17 +26,6 @@ enum AudioEvent {
     ON_ERROR = 'onerror',
     ON_FREQUENCY = 'onfrequency',
     ON_DETECT = 'ondetect'
-}
-
-export enum VisualizerStyle {
-    CLASSIC = 'classic',
-    WAVEFORM = 'waveform',
-    CIRCULAR = 'circular',
-    CIRCLE = 'circle',
-    DONUT = 'donut',
-    SLIDE_WAVEFORM = 'slide_waveform',
-    ROTATE_CIRCLE = 'rorate_circle',
-    RAINBOW = 'rainbow',
 }
 
 enum PlayState {
@@ -137,479 +62,6 @@ enum MimeTypes {
     MPEG = 'video/mpeg'
 }
 
-class Visualizer {
-
-    private selector;
-    private context: CanvasRenderingContext2D;
-    private canvas: HTMLCanvasElement;
-    private backgroundFillColor = '';
-    private spectrumFillColor = '';
-    private space = 2;
-
-    constructor(selector) {
-        this.selector = selector;
-    }
-
-    public setSpectrumFillColor(color): void {
-        this.spectrumFillColor = color;
-    }
-
-    public setBackgroundFillColor(color) {
-        this.backgroundFillColor = color;
-    }
-
-    public circles(cx, cy, rad, dashLength) {
-        var n = rad / dashLength;
-        var alpha = Math.PI * 2 / n;
-        var points = [];
-        var i = -1;
-
-        while (i < n) {
-            var theta = alpha * i;
-            var theta2 = alpha * (i + 1);
-
-            points.push({
-                x: (Math.cos(theta) * rad) + cx,
-                y: (Math.sin(theta) * rad) + cy,
-                ex: (Math.cos(theta2) * rad) + cx,
-                ey: (Math.sin(theta2) * rad) + cy
-            });
-
-            i++;
-        }
-
-        return points;
-    }
-
-    private rotation  = 0;
-    private dataIndex = 0;
-    private previousDataArray = null;
-    private currentRadius = 0;
-    private targetRadius = 0;
-
-    public draw(frequencies, binaryCount, lineWidth: number = 1, type: VisualizerStyle) {
-        const canvasContext = this.context;
-        const canvas = this.canvas;
-        const samples = (canvas.height);
-
-        if (this.previousDataArray == null) {
-            this.previousDataArray = new Uint8Array(binaryCount);
-        }
-
-        let radius = 0;
-        let current = 0;
-        let x = 0;
-        let y = 0;
-        let width = 0;
-        let height = 0;
-
-        if (VisualizerStyle.SLIDE_WAVEFORM != type && type != VisualizerStyle.ROTATE_CIRCLE) {
-            canvasContext.save();
-            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-            canvasContext.fillStyle = this.backgroundFillColor;
-            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-            canvasContext.lineWidth = lineWidth;
-        }
-
-        const ctx = canvasContext;
-        const bufferLength = binaryCount;
-        const dataArray = frequencies;
-
-
-        switch (type) {
-            case VisualizerStyle.RAINBOW:
-                const sliceWidth = canvas.width / bufferLength;
-                ctx.fillStyle = this.backgroundFillColor;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                let x = 0;
-                for (let i = 0; i < bufferLength; i++) {
-                    const barHeight = (dataArray[i] / 255) * canvas.height;
-                    const hue = i / bufferLength * 360;
-                    ctx.fillStyle = 'hsl(' + hue + ', 100%, 60%)';
-                    ctx.fillRect(x, canvas.height - barHeight, sliceWidth, barHeight);
-                    x += sliceWidth;
-                }
-                canvasContext.stroke();
-
-                break;
-            case VisualizerStyle.ROTATE_CIRCLE:
-                const centerX = canvas.width / 2;
-                const centerY = canvas.height / 2;
-                const maxRadius = Math.min(centerX, centerY) - 20;
-          
-                const lowFrequencyRange = 50;
-                let lowFrequencySum = 0;
-                let lowFrequencyAverage = 0;
-                for (let i = 0; i < lowFrequencyRange; i++) {
-                  lowFrequencySum += dataArray[i];
-                }
-                lowFrequencyAverage = lowFrequencySum / lowFrequencyRange;
-          
-                this.targetRadius = maxRadius;
-
-                for (let prev in this.previousDataArray){
-                    if (lowFrequencyAverage > 100 && lowFrequencyAverage > (prev as any) * 1.2) {
-                        this.targetRadius = this.targetRadius * 1.1; 
-                    } else if (this.targetRadius > maxRadius){
-                        this.targetRadius = this.targetRadius * 0.9; 
-                    }
-                }
-          
-                const self = this;
-
-                function animateRadius() {
-                    self.currentRadius += (self.targetRadius - self.currentRadius) * 0.5;
-          
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-          
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, self.currentRadius, 0, 2 * Math.PI);
-                    ctx.fillStyle = self.spectrumFillColor;
-                    ctx.fill();
-          
-                    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, self.currentRadius);
-                    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-          
-                    ctx.fillStyle = gradient;
-                    for (let i = 0; i < bufferLength; i++) {
-                      const noise = dataArray[i] / 255;
-                      const r = ((self.currentRadius * 0.1) * (noise * 10)) * noise;
-                      ctx.beginPath();
-                      ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
-                      ctx.fill();
-                      continue;
-                    }
-                }
-
-                animateRadius();
-          
-                this.previousDataArray.set(dataArray);
-
-                break;
-            case VisualizerStyle.SLIDE_WAVEFORM:
-                const imageData = canvasContext.getImageData(1, 0, canvas.width - 1, canvas.height);
-                canvasContext.fillStyle = this.backgroundFillColor;
-                canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-                canvasContext.putImageData(imageData, 0, 0);
-
-                canvasContext.fillStyle = this.spectrumFillColor;
-                const barHeight = (frequencies[this.dataIndex] / 255) * canvas.height;
-                canvasContext.fillRect((canvas.width - 1), canvas.height - barHeight, 1, barHeight);
-
-                this.dataIndex = (this.dataIndex + 1) % binaryCount;
-                canvasContext.stroke();
-
-                current++;
-                break;
-            case VisualizerStyle.WAVEFORM:
-                for (let frequency of frequencies) {
-                    x = (current) * lineWidth;
-                    y = samples - (frequency / 128) * (samples / 2);
-                    width = canvasContext.lineWidth;
-                    height = ((canvas.height / 2) - y) * 2;
-
-                    canvasContext.fillStyle = this.spectrumFillColor;
-                    canvasContext.fillRect(x * this.space, y, width, height);
-
-                    current++;
-                }
-                break;
-            case VisualizerStyle.CLASSIC:
-                for (let frequency of frequencies) {
-                    x = (current) * this.space;
-                    y = samples - (frequency / 128) * (samples / 2);
-
-                    if (current == 0) {
-                        canvasContext.strokeStyle = this.spectrumFillColor;
-                        canvasContext.beginPath();
-                        canvasContext.moveTo(x, y);
-                    } else {
-                        canvasContext.lineTo(x, y);
-                    }
-
-                    current++;
-                }
-
-                break;
-            case VisualizerStyle.CIRCLE:
-                const circles = this.circles(50, 50, 50, 1);
-
-                for (let circle of circles) {
-                    const centerX = canvas.width / 3;
-                    const centerY = canvas.height / 3;
-
-                    canvasContext.beginPath();
-                    let frequency = frequencies[current];
-                    frequency = 50 * (frequency / 256);
-
-                    canvasContext.strokeStyle = this.spectrumFillColor;
-                    canvasContext.lineWidth = frequency;
-                    canvasContext.lineCap = "butt";
-                    canvasContext.moveTo(centerX + circle.x, centerY + circle.y);
-                    canvasContext.lineTo(centerX + circle.ex, centerY + circle.ey);
-                    canvasContext.stroke();
-                    canvasContext.closePath();
-                    
-                    current++;
-                }
-
-                break;
-            case VisualizerStyle.CIRCULAR:
-                const bars = 100;
-
-                for (let frequency of frequencies) {
-                    canvasContext.beginPath();
-
-                    radius = canvas.width / 5;
-                    const centerX = canvas.width / 2;
-                    const centerY = canvas.height / 2;
-                    const rads = (Math.PI * 2) / bars;
-                
-                    const x = centerX + Math.cos(rads * current) * (radius + lineWidth);
-                    const y = centerY + Math.sin(rads * current) * (radius + lineWidth);
-                    const endX = centerX + Math.cos(rads * current) * (radius + (frequency * 0.2));
-                    const endY = centerY + Math.sin(rads * current) * (radius + (frequency * 0.2));
-
-                    const gradient = canvasContext.createLinearGradient(0, 0, 170, 0);
-                    gradient.addColorStop(0, "cyan");
-                    gradient.addColorStop(1, "green");
-                    canvasContext.fillStyle = gradient;
-
-                    canvasContext.strokeStyle = this.spectrumFillColor;
-                    canvasContext.lineWidth = lineWidth;
-                    canvasContext.lineCap = "round";
-                    canvasContext.shadowBlur = 1;
-                    canvasContext.moveTo(x, y);
-                    canvasContext.lineTo(endX, endY);
-                    canvasContext.stroke();
-            
-                    current++;
-                }
-                break;
-            case VisualizerStyle.DONUT:
-                const halfWidth = canvas.width / 2;
-                const halfHeight = canvas.height / 2;
-                radius = canvas.width / 5;
-                const maximumBarSize = Math.floor(360 * Math.PI) / 7;
-                const framePerFrequency = Math.floor(frequencies.length / maximumBarSize);
-                const minumiumHeight = 10;
-
-                for (let i = 0; i < maximumBarSize; i++) {
-                    const frequency = frequencies[i * framePerFrequency];
-                    const alfa = (current * 2 * Math.PI) / maximumBarSize;
-                    const degree = (180) * Math.PI / 180;
-
-                    x = 0;
-                    y = radius - (frequency / 12);
-                    width = 2;
-                    height = frequency / 6 + minumiumHeight;
-
-                    canvasContext.save();
-                    canvasContext.translate(halfWidth + 7, halfHeight + 7);
-                    canvasContext.rotate(alfa - degree);
-                    const gradient = canvasContext.createLinearGradient(0, 0, 170, 0);
-                    gradient.addColorStop(0, "cyan");
-                    gradient.addColorStop(1, "green");
-                    canvasContext.fillStyle = gradient;
-                    canvasContext.fillRect(x, y, width, height);
-                    canvasContext.restore();
-
-                    current++;
-                }
-                break;
-        }
-
-        switch (type) {
-            case VisualizerStyle.WAVEFORM:
-                canvasContext.beginPath();
-            case VisualizerStyle.CLASSIC:
-            case VisualizerStyle.CIRCLE:
-                canvasContext.stroke();
-        }
-    }
-
-    public setCanvas(width = -1, height = -1) {
-        let canvasBackground: Element = null;
-        const targetElement: NodeListOf<Element> = document.querySelectorAll(this.selector);
-
-        if (targetElement.length > 0) {
-            canvasBackground = targetElement[0];
-        }
-
-        canvasBackground.innerHTML = '';
-        const newCanvas = document.createElement("canvas");
-
-        this.canvas = canvasBackground.appendChild(newCanvas);
-        this.canvas.width = width == -1 ? canvasBackground.clientWidth : width;
-        this.canvas.height = height == -1 ? canvasBackground.clientHeight : height;
-        this.canvas.style.verticalAlign = "middle";
-
-        this.context = this.canvas.getContext("2d");
-    }
-
-}
-
-class EventListener implements EventListenerInterface {
-
-    public events: Array<any>;
-
-    constructor() {
-        this.events = [];
-    }
-
-    public removeListeners(event: string): boolean {
-        if (this.events[event] === undefined) {
-            return false;
-        }
-
-        delete this.events[event];
-
-        return true;
-    }
-
-    public removeListener(event: string, callback: Function): boolean {
-        if (this.events[event] === undefined) {
-            return false;
-        }
-
-        this.events[event].listeners = this.events[event].listeners.filter(listener => {
-            return listener.toString() !== callback.toString();
-        })
-
-        return true;
-    }
-
-    public addListener(event: string, callback: Function): void {
-        if (this.events[event] === undefined) {
-            this.events[event] = {
-                listeners: []
-            }
-        }
-
-        this.events[event].listeners.push(callback);
-    }
-
-    public dispatch(event: string, details: any) {
-        if (this.events[event] === undefined) {
-            return;
-        }
-
-        this.events[event].listeners.forEach((listener) => {
-            listener(details);
-        })
-    }
-
-}
-
-class PictureInPicture implements PictureInPictureInterface {
-
-    private mediaContext: HTMLVideoElement;
-
-    constructor(context: HTMLVideoElement) {
-        this.mediaContext = context;
-    }
-
-    public exitPip(): Promise<void> | boolean {
-        if (!this.hasPip()) {
-            return false;
-        }
-
-        return document.exitPictureInPicture();
-    }
-
-    public setPipMode(): Promise<PictureInPictureWindow> | boolean {
-        if (!this.hasPip()) {
-            return false;
-        }
-
-        if (!(this.mediaContext instanceof HTMLVideoElement)) {
-            return false;
-        }
-
-        return this.mediaContext.requestPictureInPicture();
-    }
-
-    public hasPip(): boolean {
-        return document.pictureInPictureElement !== undefined;
-    }
-
-}
-
-class MediaSession implements MediaSessionInterface {
-    public setPlayHandler(handler: MediaSessionActionHandler): void {
-        this.setActionHandler('play', handler);
-    }
-
-    public setPauseHandler(handler: MediaSessionActionHandler): void {
-        this.setActionHandler('pause', handler);
-    }
-
-    public setSeekbackwardHandler(handler: MediaSessionActionHandler): void {
-        this.setActionHandler('seekbackward', handler);
-    }
-
-    public setSeekforwardHandler(handler: MediaSessionActionHandler): void {
-        this.setActionHandler('seekforward', handler);
-    }
-
-    public setPrevioustrackHandler(handler: MediaSessionActionHandler): void {
-        this.setActionHandler('previoustrack', handler);
-    }
-
-    public setNextrackHandler(handler: MediaSessionActionHandler): void {
-        this.setActionHandler('nexttrack', handler);
-    }
-
-    public setPlaybackRatePositionState(playbackRate?: number): void {
-        this.setPositionState({playbackRate: playbackRate});
-    }
-
-    public setDurationPositionState(duration?: number): void {
-        this.setPositionState({duration: duration});
-    }
-
-    public setPositionState(state?: MediaPositionState): void {
-        navigator.mediaSession.setPositionState(state);
-    }
-
-    public setMetadata(init?: MediaMetadataInit): void {
-        if (!this.isMediaSessionSupported()) {
-            return;
-        }
-
-        navigator.mediaSession.metadata = new MediaMetadata(init);
-    }
-
-    public setStateToPlaying(): void {
-        this.setPlaybackState("playing");
-    }
-
-    public setStateToPaused(): void {
-        this.setPlaybackState("paused");
-    }
-
-    public setPlaybackState(state: MediaSessionPlaybackState): void {
-        navigator.mediaSession.playbackState = state;
-    }
-
-    public setActionHandler(action: MediaSessionAction, handler: MediaSessionActionHandler): void {
-        if (!this.isMediaSessionSupported()) {
-            return;
-        }
-
-        navigator.mediaSession.setActionHandler(action, handler);
-    }
-
-    public isMediaSessionSupported(): boolean {
-        if ('MediaSession' in navigator) {
-            return true;
-        }
-
-        return false;
-    }
-}
 
 export class MediaPlayer implements MediaPlayerInterface {
     private mediaContext: HTMLMediaElement | HTMLVideoElement | HTMLAudioElement;
@@ -637,6 +89,7 @@ export class MediaPlayer implements MediaPlayerInterface {
     private mediaSessionHandler: MediaSession;
     private eventListener: EventListener;
     private visualizerLineWidth: number = 1;
+    private stereoPannerFilter: StereoPannerNode;
 
     constructor() {
         this.mediaSessionHandler = new MediaSession();
@@ -785,7 +238,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         }
 
         this.scriptProcessorFilter = this.audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
-        this.mediaElementSource.connect(this.biquadFilter);
+        this.mediaElementSource.connect(this.scriptProcessorFilter);
         this.scriptProcessorFilter.connect(this.audioContext.destination);
     }
 
@@ -795,8 +248,18 @@ export class MediaPlayer implements MediaPlayerInterface {
         }
 
         this.iirFilter = this.audioContext.createIIRFilter(feedforward, feedback);
-        this.mediaElementSource.connect(this.biquadFilter);
+        this.mediaElementSource.connect(this.iirFilter);
         this.iirFilter.connect(this.audioContext.destination);
+    }
+
+    public connectStereoPannerFilter(): void {
+        if (!this.isAudioContextConnected) {
+            this.connectToAudioContext();
+        }
+        
+        this.stereoPannerFilter = this.audioContext.createStereoPanner();
+        this.mediaElementSource.connect(this.stereoPannerFilter);
+        this.stereoPannerFilter.connect(this.audioContext.destination);
     }
 
     public connectDynamicsCompressorFilterFilter(): void {
@@ -805,7 +268,7 @@ export class MediaPlayer implements MediaPlayerInterface {
         }
 
         this.dynamicsCompressorFilter = this.audioContext.createDynamicsCompressor();
-        this.mediaElementSource.connect(this.biquadFilter);
+        this.mediaElementSource.connect(this.dynamicsCompressorFilter);
         this.dynamicsCompressorFilter.connect(this.audioContext.destination);
     }
 
@@ -829,12 +292,12 @@ export class MediaPlayer implements MediaPlayerInterface {
         this.channelMergerFilter.connect(this.audioContext.destination);
     }
 
-    public connectDelayEffector(): void {
+    public connectDelayEffector(maxDelayTime?: number): void {
         if (!this.isAudioContextConnected) {
             this.connectToAudioContext();
         }
 
-        this.delayEffector = this.audioContext.createDelay();
+        this.delayEffector = this.audioContext.createDelay(maxDelayTime);
         this.mediaElementSource.connect(this.delayEffector);
         this.delayEffector.connect(this.audioContext.destination);
     }
