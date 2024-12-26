@@ -14,6 +14,7 @@ use Clover\Classes\Directory\Handler as DirectoryHandler;
 use Clover\Annotation\Route as RouteAnnotation;
 use Clover\Implement\EventDispatcherInterface;
 use Clover\Enumeration\HTTPRequestMethod as HTTPRequestMethod;
+use Clover\Classes\HTTP\Router\Middleware;
 use Closure;
 use Clover\Classes\Data\ArrayObject;
 
@@ -54,13 +55,27 @@ class Router
 	/**
 	 * Set a middleware for using globally
 	 * 
-	 * @param Middleware[] $middleware
+	 * @param Middleware[] $middlewares
 	 * 
 	 * @return Router
 	 */
-	public function setMiddlewares(...$middleware): self
+	public function setMiddlewares(...$middlewares): self
 	{
-		$this->middlewares = $middleware;
+		$this->middlewares = $middlewares;
+
+		return $this;
+	}
+
+	/**
+	 * Append a middleware
+	 * 
+	 * @param Middleware $middleware
+	 * 
+	 * @return Router
+	 */
+	public function appendMiddleware($middleware): self
+	{
+		$this->middlewares[] = $middleware;
 
 		return $this;
 	}

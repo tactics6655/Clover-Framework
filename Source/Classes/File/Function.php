@@ -944,7 +944,7 @@ class Functions
 	 * 
 	 * @return int
 	 */
-	public static function getSize(string $filePath, bool $humanReadable = false, ?FileSizeUnit $type = NULL): int
+	public static function getSize(string $filePath, bool $humanReadable = false, string $type = NULL): int|string
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 

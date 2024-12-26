@@ -612,6 +612,10 @@ class ArrayObject extends BaseObject implements \ArrayAccess, Iterator, Countabl
             return count($this->rawData);
         }
 
+        if (is_array($rawData)) {
+            return count($this->rawData);
+        }
+
         if (!empty($rawData)) {
             return 1;
         }

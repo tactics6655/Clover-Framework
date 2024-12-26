@@ -12,6 +12,7 @@ class StackableRequestHandler extends Stack
     public function addMiddlewares($middlewares, $container)
     {
         foreach ($middlewares as $middleware) {
+            // Preve stock in stack
             $next = parent::$stock->top();
 
             $closure = function () use ($middleware, $next, $container) {

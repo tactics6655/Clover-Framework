@@ -13,7 +13,6 @@ use Clover\Classes\Header;
 
 class BaseController
 {
-
     public function __construct(private ?Container $container = null)
     {
         $this->container = $container;
@@ -42,13 +41,12 @@ class BaseController
         $resource->addGenericCssFile($filename);
     }
 
-    
     public function addWebpackAssetsToHead(string $path)
     {
         /** @var Resource $resource */
         $resource = $this->container->get('Resource');
 
-        $assets = $this->getWebpackAssets(__ROOT__.$path);
+        $assets = $this->getWebpackAssets(sprintf("%s%s", __ROOT__, $path));
 
         foreach ($assets as $asset) {
             $dotPosition = strrpos($asset, '.');
@@ -58,11 +56,12 @@ class BaseController
             }
 
             $extension = substr($asset, $dotPosition + 1);
+            $assetPath = sprintf("%s%s", dirname($path), $asset);
 
             if (array_search($extension, ['js']) !== false) {
-                $resource->addGenericJavascriptFile(dirname($path).$asset);
+                $resource->addGenericJavascriptFile($assetPath);
             } else if (array_search($extension, ['css']) !== false) {
-                $resource->addGenericCssFile(dirname($path).$asset);
+                $resource->addGenericCssFile($assetPath);
             }
         }
     }

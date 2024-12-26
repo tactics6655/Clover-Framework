@@ -43,7 +43,7 @@ class ArrayResult
 		return $this->subject;
 	}
 
-	public function getMatches(): array
+	public function getMatches(): mixed
 	{
 		return $this->matches;
 	}

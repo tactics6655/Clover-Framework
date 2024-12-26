@@ -5,7 +5,7 @@
 <body>
     <div id="debugger">
         <div id="header">
-            <div id="file">500 Error (<?= $className ?>) > <?= $file ?>:<?= $line ?></div>
+            <div id="file">500 Error (<?= $className ?>) > <?= $file ?>:<?= $line ?> (<?= $fileSize;?>)</div>
             <div id="message"><?= $message ?></div>
         </div>
 
@@ -14,9 +14,11 @@
             <? foreach ($traces as $trace) : ?>
                 <div class="item">
                     <div class="short_wrap">
-                        <a class="short_name">
-                            <b><?= $trace->getText() ?></b>
-                        </a>
+                        <? if ($trace->hasText()) : ?>
+                            <a class="short_name">
+                                <b><?= $trace->getText() ?></b>
+                            </a>
+                        <? endif; ?>
                     </div>
                     <? if ($trace->hasAnnotation()) : ?>
                         <a class="annotation"><?= $trace->getAnnotation() ?></a>

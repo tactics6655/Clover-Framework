@@ -56,6 +56,11 @@ class Route
         }
     }
 
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
     /**
      * Set a middleware for using on route
      * 
@@ -173,6 +178,11 @@ class Route
         $this->container = $container;
     }
 
+    public function getContainer(): Container
+    {
+        return $this->container;
+    }
+
     /**
      * Get a callback
      * 
@@ -226,7 +236,7 @@ class Route
 
         [$class, $method] = ReflectionHandler::getCallMethodFromString($callback);
 
-        return new RouteExecutor($class, $method, $callback, $this->arguments, $this->container);
+        return new RouteExecutor($class, $method, $callback, $this->getArguments(), $this->getContainer());
     }
 
     /**
@@ -238,7 +248,10 @@ class Route
     {
         $stackRequestHandler = new StackableRequestHandler();
         $stackRequestHandler->pushItem($this->getExecutor());
-        $stackRequestHandler->addMiddlewares($this->middlewares, $this->container);
+        if ($this->hasMiddleware()) {
+            $stackRequestHandler->addMiddlewares($this->getMiddlewares(), $this->getContainer());
+        }
+
         return $stackRequestHandler->handle();
     }
 
@@ -279,7 +292,8 @@ class Route
      * Match a pattern by url segments
      * 
      * @param ArrayObject $urlSegments
-     * @param string $host
+     * @param string $currentHost
+     * @param string $currentContentType
      * 
      * @return bool
      */
