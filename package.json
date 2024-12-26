@@ -9,7 +9,7 @@
     "webpack-watch": "webpack -w"
   },
   "dependencies": {
-    "@vue/cli": "^4.5.13",
+    "@vue/cli": "^4.2.2",
     "axios": "^1.6.7",
     "jquery": "^3.6.0",
     "jsdom": "^19.0.0",

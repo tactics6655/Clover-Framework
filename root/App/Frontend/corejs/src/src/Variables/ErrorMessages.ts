@@ -1,0 +1,1 @@
+export const USER_MEDIA_IS_NOT_SUPPORTED = 'User media is not supported in this browser';
