@@ -18,7 +18,7 @@ class Dispatcher implements EventDispatcherInterface
 	 * @param object event
 	 * @param string eventName
 	 */
-	public function dispatch(object $event, string $eventName = null)
+	public function dispatch(object $event, ?string $eventName = null)
 	{
 		if (is_object($event)) {
 			$eventName = $eventName ?? get_class($event);

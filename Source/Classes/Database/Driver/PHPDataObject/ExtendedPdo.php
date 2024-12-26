@@ -12,6 +12,8 @@ class ExtendedPdo extends PDO
     protected array $args = [];
     protected bool $driverSpecific = false;
 
+    private
+
     public function __construct(
         string $dsn,
         ?string $username = null,

@@ -5,7 +5,7 @@ namespace Clover\Implement;
 interface EventDispatcherInterface
 {
 
-	public function dispatch(object $event, string $eventName = null);
+	public function dispatch(object $event, ?string $eventName = null);
 
 	public function removeListener(string $eventName, callable $listener);
 

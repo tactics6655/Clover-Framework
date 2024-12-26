@@ -114,7 +114,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function write(string $filePath, string $content = null, string $mode = 'w'): bool
+	public static function write(string $filePath, ?string $content = null, string $mode = 'w'): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -498,7 +498,7 @@ class Functions
 	 * 
 	 * @return bool
 	 */
-	public static function appendContent(string $filePath, string $content = null, bool $stream = false, bool $overwrite = true): bool
+	public static function appendContent(string $filePath, ?string $content = null, bool $stream = false, bool $overwrite = true): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -884,7 +884,7 @@ class Functions
 	 * 
 	 * @return bool
 	 */
-	public static function isFile(string $filePath, string $containDirectory = null): bool
+	public static function isFile(string $filePath, ?string $containDirectory = null): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -944,7 +944,7 @@ class Functions
 	 * 
 	 * @return int
 	 */
-	public static function getSize(string $filePath, bool $humanReadable = false, string $type = NULL): int|string
+	public static function getSize(string $filePath, bool $humanReadable = false, ?string $type = NULL): int|string
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 
@@ -1204,7 +1204,7 @@ class Functions
 	 *
 	 * @return bool
 	 */
-	public static function isEqualByLine(string $filePath, string $string = null): bool
+	public static function isEqualByLine(string $filePath, ?string $string = null): bool
 	{
 		$filePath = self::convertToNomalizePath($filePath);
 

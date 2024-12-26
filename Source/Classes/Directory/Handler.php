@@ -20,7 +20,7 @@ class Handler implements DirectoryHandlerInterface
 
 	private int $directoryDepth;
 
-	public function __construct(FileHandlerInterface $fileHandler = null)
+	public function __construct(?FileHandlerInterface $fileHandler = null)
 	{
 		if ($fileHandler instanceof FileHandlerInterface) {
 			$this->fileHandler = $fileHandler;
