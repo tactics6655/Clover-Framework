@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Clover\Classes\Database\Driver;
 
 use Clover\Classes\Data\ArrayObject;
+use Clover\Classes\Database\Driver\ExtendedPdo as ExtendedPdo;
 use PDO;
 use Exception;
 
-class PHPDataObject extends PDO
+class PHPDataObject extends ExtendedPdo
 {
 
 	private ?array $options = null;
@@ -52,7 +53,7 @@ class PHPDataObject extends PDO
 		$this->password = $password;
 	}
 
-	public function connect()
+	public function createConnection()
 	{
 		try {
 			$dns = ('mysql:' . implode(';', isset($this->database) ? [
@@ -86,8 +87,12 @@ class PHPDataObject extends PDO
 		$separatedPlaceholder = implode(",", array_fill(0, $columnCount, "?"));
 		$sql = "INSERT INTO $table ($separatedColumns) VALUES ($separatedPlaceholder)";
 
+		var_dump($separatedPlaceholder);
+		var_dump($separatedColumns);
+		var_dump($values);
+
 		$stmt = $this->prepare($sql);
-		$stmt->execute($values);
+		$stmt->execute(array_values($values));
 	}
 
 	public function getLocalizedErrorMessage($e)
